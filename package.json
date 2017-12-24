@@ -1,0 +1,54 @@
+{
+    "name": "vscode-solution-explorer",
+    "displayName": "vscode-solution-explorer",
+    "description": "Visual Studio .sln file explorer for Visual Studio Code",
+    "version": "0.0.1",
+    "publisher": "fernandoescolar",
+    "engines": {
+        "vscode": "^1.19.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onView:solutionExplorer"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "views": {
+            "explorer": [
+                {
+                    "id": "solutionExplorer",
+                    "name": "Solition Explorer"
+                } 
+            ]
+        },
+        "commands": [
+            {
+                "command": "solutionExplorer.refresh",
+                "title": "Refresh"
+            },
+            {
+                "command": "extension.sayHello",
+                "title": "Hello World"
+            },
+            {
+                "command": "openSolutionItem",
+                "title": "Open File"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}
