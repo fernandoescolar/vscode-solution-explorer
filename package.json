@@ -4,7 +4,7 @@
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
     "version": "0.0.1",
     "publisher": "fernandoescolar",
-    "icon": "images/icon.png",
+    "icon": "https://github.com/fernandoescolar/vscode-solution-explorer/raw/master/images/icon.png",
     "engines": {
         "vscode": "^1.19.0"
     },
