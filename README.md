@@ -6,7 +6,7 @@ This extension adds a Visual Studio Solution File explorer panel in Visual Studi
 
 Adds a Solution Explorer panel where you can find a Visual Studio Solution File Explorer. 
 
-\!\[Solution Explorer\]\(images/vscode-solution-explorer.png\)
+![Solution Explorer](images/vscode-solution-explorer.png)
 
 ## Requirements
 
