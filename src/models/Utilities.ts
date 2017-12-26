@@ -2,7 +2,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as ItemFactory from './ItemFactory'
 import Item from '../items/Item';
-import SoluctionChildItem from './SolutionChildItem';
+import SolutionLine from './SolutionLine';
+import ProjectInfo from './ProjectInfo';
+import PackageInfo from './PackageInfo';
 
 export function getDirectorySolutions(dirPath: string): Item[] {
     var solutions = searchFilesInDir(dirPath, '.sln', false);
@@ -41,14 +43,14 @@ export function parseSolution(solutionPath: string) : Item[] {
     var result: Item[] = [];
     var workspaceRoot = path.dirname(solutionPath);
     var lines = fs.readFileSync(solutionPath, 'utf8').split('\n');
-    var projects: SoluctionChildItem[] = [], relations = [], isNestedProject = false;
+    var projects: SolutionLine[] = [], relations = [], isNestedProject = false;
 
     lines.forEach(line => {
         if (line.trim().startsWith('Project(')) {
             var projectRegEx = /Project\("(.*)"\)\s*=\s*"(.*)"\s*,\s*"(.*)"\s*,\s*"(.*)"/g;
             var m = projectRegEx.exec(line);
             if (m) {
-                projects.push(new SoluctionChildItem(
+                projects.push(new SolutionLine(
                     m[1],
                     m[2],
                     path.join(workspaceRoot, m[3].replace(/\\/g, '/')),
@@ -119,8 +121,17 @@ export function getDirectoryItems (dirPath: string): Item[] {
         }
     }
 
-    directories.sort()
-    files.sort();
+    directories.sort((a, b) => {
+        var x = a.toLowerCase();
+        var y = b.toLowerCase();
+        return x < y ? -1 : x > y ? 1 : 0;
+    });
+    
+    files.sort((a, b) => {
+        var x = a.toLowerCase();
+        var y = b.toLowerCase();
+        return x < y ? -1 : x > y ? 1 : 0;
+    });
 
     directories.forEach(i => {
         var folderPath = path.join(dirPath, i);
@@ -131,6 +142,24 @@ export function getDirectoryItems (dirPath: string): Item[] {
         var filePath = path.join(dirPath, i);
         result.push(ItemFactory.createFileItem(i, filePath));
     });
+
+    return result;
+}
+
+export function parseCspCsProject(projectPath: string): ProjectInfo {
+    var result = new ProjectInfo(projectPath);
+    var content = fs.readFileSync(projectPath, 'utf8');
+    var packageRegEx = /<PackageReference\s+Include=\"(.*)\"\s+Version=\"(.*)\"/g;
+    var projectRegEx = /<ProjectReference\s+Include=\"(.*)\"/g;
+    var m;
+    
+    while ((m = packageRegEx.exec(content)) !== null) {
+        result.packages.push(new PackageInfo(m[1], m[2]));
+    }
+
+    while ((m = projectRegEx.exec(content)) !== null) {
+        result.references.push(m[1]);
+    }
 
     return result;
 }

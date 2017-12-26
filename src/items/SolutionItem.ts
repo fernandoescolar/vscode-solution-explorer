@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
-import Item from './Item'
 import * as Utilities from '../models/Utilities'
+import Item from './Item'
 
 
 export default class SolutionItem extends Item {
@@ -15,6 +15,13 @@ export default class SolutionItem extends Item {
 	};
 
 	public getChildren(): Item[] {
-		return Utilities.parseSolution(this.path);
+		var result = Utilities.parseSolution(this.path);
+		result.sort((a, b) => {
+			var x = a.label.toLowerCase();
+			var y = b.label.toLowerCase();
+			return x < y ? -1 : x > y ? 1 : 0;
+		});
+
+		return result;
 	}
 }

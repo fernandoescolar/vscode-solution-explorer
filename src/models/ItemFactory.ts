@@ -1,6 +1,6 @@
 import * as fs from 'fs' 
 import * as path from 'path'
-import SolutionChildItem from './SolutionChildItem'
+import SolutionLine from './SolutionLine'
 import Item from '../items/Item'
 import SolutionItem from '../items/SolutionItem'
 import SolutionFolderItem from '../items/SolutionFolderItem'
@@ -27,7 +27,7 @@ export function createSolutionItem(solutionPath: string): Item {
     return new SolutionItem(solutionPath);
 } 
 
-export function createSolutionChildItem(item: SolutionChildItem) : Item {
+export function createSolutionChildItem(item: SolutionLine) : Item {
     if (item.typeId === solutionFolderGuid) return new SolutionFolderItem(item.name);
     if (item.typeId === cpsCsProjectGuid) return new CspCsProjectItem(item.name, item.path);
     return new UnknownProjectItem(item.name, item.path);
