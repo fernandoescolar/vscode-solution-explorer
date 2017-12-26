@@ -3,8 +3,22 @@
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
     "version": "0.0.1",
+    "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
+    "author": {
+        "email": "f.escolar@hotmail.com",
+        "name": "Fernando Escolar",
+        "url": "http://fernandoescolar.github.io"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/fernandoescolar/vscode-solution-explorer"
+    },
+    "bugs": {
+        "url": "https://github.com/fernandoescolar/vscode-solution-explorer/issues",
+        "email": "f.escolar@hotmail.com"
+    },
     "engines": {
         "vscode": "^1.19.0"
     },
