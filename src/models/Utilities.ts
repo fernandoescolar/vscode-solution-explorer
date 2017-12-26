@@ -158,7 +158,7 @@ export function parseCspCsProject(projectPath: string): ProjectInfo {
     }
 
     while ((m = projectRegEx.exec(content)) !== null) {
-        result.references.push(m[1]);
+        result.references.push(m[1].replace(/\\/g, '/'));
     }
 
     return result;

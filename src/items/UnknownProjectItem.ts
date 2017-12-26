@@ -1,5 +1,6 @@
 import Item from './Item'
 import ProjectItem from './ProjectItem'
+import StaticTextItem from './StaticTextItem';
 
 export default class UnknownProjectItem extends ProjectItem {
 	constructor(name: string, projectPath:string) {
@@ -7,6 +8,8 @@ export default class UnknownProjectItem extends ProjectItem {
 	}
 
 	public getChildren(): Item[] {
-		return [];
+		return [
+			new StaticTextItem('unkown project type')
+		];
 	}
 }

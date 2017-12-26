@@ -4,7 +4,7 @@ import Item from './Item'
 
 export default class ProjectReferencesItem extends Item {
 	constructor() {
-		super("references", vscode.TreeItemCollapsibleState.Collapsed, null);
+		super("projects", vscode.TreeItemCollapsibleState.Collapsed, null);
 		this.children = [];
 	}
 
