@@ -19,24 +19,33 @@
             "explorer": [
                 {
                     "id": "solutionExplorer",
-                    "name": "Solition Explorer"
+                    "name": "Solution Explorer"
                 } 
             ]
         },
         "commands": [
             {
                 "command": "solutionExplorer.refresh",
-                "title": "Refresh"
+                "title": "Refresh",
+                "icon": {
+					"light": "icons/refresh-light.svg",
+					"dark": "icons/refresh-dark.svg"
+				}
             },
-            {
-                "command": "extension.sayHello",
-                "title": "Hello World"
-            },
-            {
+            { 
                 "command": "openSolutionItem",
                 "title": "Open File"
             }
-        ]
+        ],
+        "menus": {
+            "view/title": [
+                {
+					"command": "solutionExplorer.refresh",
+					"when": "view == solutionExplorer",
+					"group": "navigation"
+				}
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

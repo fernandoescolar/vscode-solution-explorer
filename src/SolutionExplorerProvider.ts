@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import Item from './items/Item'
-import * as ItemFactory from './items/ItemFactory' 
+import * as Utilities from './models/Utilities' 
 
 export class SolutionExplorerProvider implements vscode.TreeDataProvider<Item> {
 
@@ -28,17 +28,13 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<Item> {
 		}
 
 		if (!element) {
-			var result: Item[] = ItemFactory.getDirectorySolutions(this.workspaceRoot);
+			var result: Item[] = Utilities.getDirectorySolutions(this.workspaceRoot);
 			if (result.length <= 0)
 				vscode.window.showInformationMessage('No .sln found in workspace');
 
 			return Promise.resolve(result);
-		}
-		
-		if (element && element.children && element.children.length > 0) {
-			return Promise.resolve(element.children);
-		} else if (element.path) {
-			return Promise.resolve(ItemFactory.getDirectoryItems(element.path));
+		} else {
+			return Promise.resolve(element.getChildren());
 		}
 	}
 }

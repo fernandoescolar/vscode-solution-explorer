@@ -5,7 +5,7 @@ import Item from './Item'
 
 export default class FileItem extends Item {
 	constructor(name: string, filepath: string) {
-		super(filepath, name, vscode.TreeItemCollapsibleState.None, filepath, []);
+		super(name, vscode.TreeItemCollapsibleState.None, filepath);
 
 		var extension = filepath.split('.').pop();
 		var iconpath = path.join(__filename, '..', '..', '..', 'icons', extension + '.svg');
@@ -27,4 +27,8 @@ export default class FileItem extends Item {
 		arguments: [this.path],
 		title: 'Open File'
 	};
+
+	public getChildren(): Item[] {
+		return null;
+	}
 }
