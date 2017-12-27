@@ -32,6 +32,11 @@ It only works with CSP projects in C#...
 
 There is a lot of work to do.
 
+### 0.0.3
+
+Refactoring: all source code has changed.
+New "references" icon in solution explorer.
+
 ### 0.0.2
 
 Updated project information, repository and logo.
