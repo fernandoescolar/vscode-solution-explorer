@@ -8,8 +8,8 @@ import * as TreeItemFactory from "./TreeItemFactory";
 export class ProjectFolderTreeItem extends TreeItem {
     private children: TreeItem[] = null;
 
-    constructor(name: string, path:string, private readonly project: Project) {
-        super(name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, path);
+    constructor(name: string, path:string, private readonly project: Project, parent: TreeItem) {
+        super(name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, parent, path);
     }
 
     public getChildren(): Thenable<TreeItem[]> {
@@ -19,8 +19,17 @@ export class ProjectFolderTreeItem extends TreeItem {
 
         this.children = [];
 
-        TreeItemFactory.CreateItemsFromProject(this.project, this.path).forEach(item => this.children.push(item));
+        TreeItemFactory.CreateItemsFromProject(this, this.project, this.path).forEach(item => this.children.push(item));
         
         return Promise.resolve(this.children);
+    }
+
+
+    public refresh(): void {
+        this.children = null;
+    }
+    
+    public createFile(name: string): void {
+        this.project.createFile(this.path, name);
     }
 }

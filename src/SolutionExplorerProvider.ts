@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as sln from './tree';
 import * as Utilities from './model/Utilities'
 import { SolutionFile } from './model/Solutions';
+import { TreeItem } from './tree';
 
 export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.TreeItem> {
 
@@ -15,8 +16,12 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	constructor(private workspaceRoot: string) {
 	}
 
-	refresh(): void {
-		this._onDidChangeTreeData.fire();
+	refresh(item?: TreeItem): void {
+		if (item) {
+			this._onDidChangeTreeData.fire(item);
+		} else {
+			this._onDidChangeTreeData.fire();
+		}
 	}
 
 	getTreeItem(element: sln.TreeItem): vscode.TreeItem {

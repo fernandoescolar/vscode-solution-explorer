@@ -4,8 +4,8 @@ import { ProjectInSolution } from "../model/Solutions";
 import { Project } from "../model/Projects";
 
 export class ProjectReferencedProjectTreeItem extends TreeItem {
-    constructor(name: string) {
-        super(name, TreeItemCollapsibleState.None, ContextValues.ProjectReferencedProjects);
+    constructor(name: string, parent: TreeItem) {
+        super(name, TreeItemCollapsibleState.None, ContextValues.ProjectReferencedProjects, parent);
     }
 
     public getChildren(): Thenable<TreeItem[]> {

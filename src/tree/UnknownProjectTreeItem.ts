@@ -10,6 +10,6 @@ export class UnknownProjectTreeItem extends TreeItem {
     }
 
     getChildren(): Thenable<TreeItem[]> {
-        return Promise.resolve([ new ErrorTreeItem('Unknown project type') ]);
+        return Promise.resolve([ new ErrorTreeItem('Unknown project type', this) ]);
     }
 }

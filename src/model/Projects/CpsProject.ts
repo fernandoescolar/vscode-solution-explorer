@@ -48,6 +48,45 @@ export class CpsProject extends Project {
             folders: folders
         };
     }
+
+    renameFile(filepath: string, name: string): void {
+        let folder = path.dirname(filepath);
+        let newFilepath = path.join(folder, name);
+        fs.renameSync(filepath, newFilepath);
+    }
+
+    deleteFile(filepath: string): void {
+        if (fs.existsSync(filepath)) {
+            fs.unlinkSync(filepath);
+        }
+    }
+
+    createFile(folderpath: string, filename: string): void {
+        let projectPath = path.dirname(this.FullPath);
+        let filepath = path.join(projectPath, folderpath, filename);
+        if (!fs.existsSync(filepath)) {
+            fs.writeFileSync(filepath, "");
+        }
+    }
+
+    renameFolder(folderpath: string, name: string): void {
+        let projectPath = path.dirname(this.FullPath);
+        let fullfolderpath = path.join(projectPath, folderpath);
+        let newfolderpath = path.join(path.dirname(projectPath), name);
+        fs.renameSync(fullfolderpath, newfolderpath);
+    }
+
+    deleteFolder(folderpath: string): void {
+        let projectPath = path.dirname(this.FullPath);
+        let fullfolderpath = path.join(projectPath, folderpath);
+        fs.rmdirSync(fullfolderpath);
+    }
+
+    createFolder(folderpath: string): void {
+        let projectPath = path.dirname(this.FullPath);
+        let fullfolderpath = path.join(projectPath, folderpath);
+        fs.mkdirSync(fullfolderpath);
+    }
     
     private parseProject(projectPath: string){
         let content = fs.readFileSync(projectPath, 'utf8');

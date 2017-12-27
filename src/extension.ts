@@ -13,8 +13,47 @@ export function activate(context: vscode.ExtensionContext) {
 
     vscode.window.registerTreeDataProvider('solutionExplorer', solutionExplorerProvider);
     vscode.commands.registerCommand('solutionExplorer.refresh', () => solutionExplorerProvider.refresh());
-    
-    vscode.commands.registerCommand('openSolutionItem', (node: any) => {
+    vscode.commands.registerCommand('solutionExplorer.renameFile', item => {
+      if (!item.rename) return;
+      vscode.window.showInputBox({ placeHolder: item.label })
+        .then(value => {
+          if (value !== null && value !== undefined) {
+            try {
+              item.rename(value);
+              item.parent.refresh();
+              solutionExplorerProvider.refresh(item.parent);
+            } catch(ex) {
+              vscode.window.showInformationMessage('Can not rename file: ' + ex);
+            }
+          }
+        });
+    });
+    vscode.commands.registerCommand('solutionExplorer.deleteFile', item => {
+      if (!item.delete) return;
+        try {
+          item.delete();
+          item.parent.refresh();
+          solutionExplorerProvider.refresh(item.parent);
+        } catch(ex) {
+          vscode.window.showInformationMessage('Can not delete file: ' + ex);
+        }
+    });
+    vscode.commands.registerCommand('solutionExplorer.createFile', item => {
+      if (!item.createFile) return;
+      vscode.window.showInputBox({ placeHolder: 'New filename' })
+        .then(value => {
+          if (value !== null && value !== undefined) {
+            try {
+              item.createFile(value);
+              item.refresh();
+              solutionExplorerProvider.refresh(item);
+            } catch(ex) {
+              vscode.window.showInformationMessage('Can not create file: ' + ex);
+            }
+          }
+        });
+    });
+    vscode.commands.registerCommand('solutionExplorer.openFile', (node: any) => {
       vscode.workspace.openTextDocument(node).then(document => {
         vscode.window.showTextDocument(document);
       });

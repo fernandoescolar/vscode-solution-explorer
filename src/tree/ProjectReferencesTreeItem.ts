@@ -7,8 +7,8 @@ import { ProjectReferencedPackagesTreeItem } from "./ProjectReferencedPackagesTr
 export class ProjectReferencesTreeItem extends TreeItem {
     private children: TreeItem[] = null;
 
-    constructor(private readonly project: Project) {
-        super("references", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferences);
+    constructor(private readonly project: Project, parent: TreeItem) {
+        super("references", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferences, parent);
     }
 
     public getChildren(): Thenable<TreeItem[]> {
@@ -17,9 +17,13 @@ export class ProjectReferencesTreeItem extends TreeItem {
         }
 
         this.children = [];
-        this.children.push(new ProjectReferencedProjectsTreeItem(this.project));
-        this.children.push(new ProjectReferencedPackagesTreeItem(this.project));
+        this.children.push(new ProjectReferencedProjectsTreeItem(this.project, this));
+        this.children.push(new ProjectReferencedPackagesTreeItem(this.project, this));
 
         return Promise.resolve(this.children);
     }
+
+    public refresh(): void {
+        this.children = null;
+	}
 }

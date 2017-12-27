@@ -17,9 +17,13 @@ export class SolutionTreeItem extends TreeItem {
 
         this.children = [];
         this.solution.Projects.forEach(p => {
-            if (!p.ParentProjectGuid) this.children.push(TreeItemFactory.CreateFromProject(p));
+            if (!p.ParentProjectGuid) this.children.push(TreeItemFactory.CreateFromProject(this, p));
         });
 
         return Promise.resolve(this.children);
     }
+
+    public refresh(): void {
+        this.children = null;
+	}
 }

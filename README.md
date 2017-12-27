@@ -35,7 +35,10 @@ There is a lot of work to do.
 ### 0.0.3
 
 Refactoring: all source code has changed.
+
 New "references" icon in solution explorer.
+
+Added context menu commands to create, delete and modify files.
 
 ### 0.0.2
 

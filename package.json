@@ -48,8 +48,20 @@
 				}
             },
             { 
-                "command": "openSolutionItem",
+                "command": "solutionExplorer.openFile",
                 "title": "Open File"
+            },
+            {
+				"command": "solutionExplorer.renameFile",
+				"title": "Rename"
+            },
+            {
+				"command": "solutionExplorer.deleteFile",
+				"title": "Delete"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "title": "Create file"
             }
         ],
         "menus": {
@@ -58,6 +70,24 @@
 					"command": "solutionExplorer.refresh",
 					"when": "view == solutionExplorer",
 					"group": "navigation"
+				}
+            ],
+            "view/item/context": [
+                {
+					"command": "solutionExplorer.renameFile",
+					"when": "view == solutionExplorer && viewItem == project-file"
+                },
+                {
+					"command": "solutionExplorer.deleteFile",
+					"when": "view == solutionExplorer && viewItem == project-file"
+                },
+                {
+					"command": "solutionExplorer.createFile",
+					"when": "view == solutionExplorer && viewItem == project"
+				},
+                {
+					"command": "solutionExplorer.createFile",
+					"when": "view == solutionExplorer && viewItem == project-folder"
 				}
             ]
         }
