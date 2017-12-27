@@ -61,12 +61,14 @@ export class CpsProject extends Project {
         }
     }
 
-    createFile(folderpath: string, filename: string): void {
+    createFile(folderpath: string, filename: string): string {
         let projectPath = path.dirname(this.FullPath);
         let filepath = path.join(projectPath, folderpath, filename);
         if (!fs.existsSync(filepath)) {
             fs.writeFileSync(filepath, "");
         }
+
+        return filepath;
     }
 
     renameFolder(folderpath: string, name: string): void {

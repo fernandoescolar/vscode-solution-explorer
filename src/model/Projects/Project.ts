@@ -21,7 +21,7 @@ export abstract class Project {
 
     abstract deleteFile(filepath: string): void;
 
-    abstract createFile(folderpath: string, filename: string): void;
+    abstract createFile(folderpath: string, filename: string): string;
 
     abstract renameFolder(folderpath: string, name: string): void;
 

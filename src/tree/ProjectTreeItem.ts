@@ -29,7 +29,11 @@ export class ProjectTreeItem extends TreeItem {
         this.children = null;
     }
     
-    public createFile(name: string): void {
-        this.project.createFile('', name);
+    public createFile(name: string): string {
+        return this.project.createFile('', name);
+    }
+
+    public createFolder(name: string): void {
+        this.project.createFolder(name);
     }
 }

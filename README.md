@@ -38,7 +38,7 @@ Refactoring: all source code has changed.
 
 New "references" icon in solution explorer.
 
-Added context menu commands to create, delete and modify files.
+Added context menu commands to create, delete and modify project files and folders.
 
 ### 0.0.2
 

@@ -62,6 +62,18 @@
             {
                 "command": "solutionExplorer.createFile",
                 "title": "Create file"
+            },
+            {
+				"command": "solutionExplorer.renameFolder",
+				"title": "Rename"
+            },
+            {
+				"command": "solutionExplorer.deleteFolder",
+				"title": "Delete"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "title": "Create folder"
             }
         ],
         "menus": {
@@ -87,6 +99,30 @@
 				},
                 {
 					"command": "solutionExplorer.createFile",
+					"when": "view == solutionExplorer && viewItem == project-file"
+				},
+                {
+					"command": "solutionExplorer.createFile",
+					"when": "view == solutionExplorer && viewItem == project-folder"
+                },
+                {
+					"command": "solutionExplorer.renameFolder",
+					"when": "view == solutionExplorer && viewItem == project-folder"
+                },
+                {
+					"command": "solutionExplorer.deleteFolder",
+					"when": "view == solutionExplorer && viewItem == project-folder"
+                },
+                {
+					"command": "solutionExplorer.createFolder",
+					"when": "view == solutionExplorer && viewItem == project"
+                },
+                {
+					"command": "solutionExplorer.createFolder",
+					"when": "view == solutionExplorer && viewItem == project-file"
+				},
+                {
+					"command": "solutionExplorer.createFolder",
 					"when": "view == solutionExplorer && viewItem == project-folder"
 				}
             ]
