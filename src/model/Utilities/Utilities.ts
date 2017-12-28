@@ -31,10 +31,10 @@ export async function getDirectoryItems (dirPath: string): Promise<DirectorySear
         var filename = path.join(dirPath, items[i]);
         var stat = await fs.lstat(filename);
         if (stat.isDirectory()){
-            directories.push(items[i]);
+            directories.push(filename);
         }
         else {
-            files.push(items[i])
+            files.push(filename);
         }
     }
 

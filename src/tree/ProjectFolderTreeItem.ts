@@ -5,12 +5,13 @@ import { ProjectInSolution } from "../model/Solutions";
 import { Project } from "../model/Projects";
 import { ProjectReferencedProjectTreeItem } from "./ProjectReferencedProjectTreeItem";
 import * as TreeItemFactory from "./TreeItemFactory";
+import { ProjectFolder } from "../model/Projects/ProjectFolder";
 
 export class ProjectFolderTreeItem extends TreeItem {
     private children: TreeItem[] = null;
 
-    constructor(name: string, path:string, private readonly project: Project, parent: TreeItem) {
-        super(name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, parent, path);
+    constructor(private readonly projectFolder: ProjectFolder, private readonly project: Project, parent: TreeItem) {
+        super(projectFolder.Name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, parent, project.FullPath);
     }
 
     public getChildren(): Thenable<TreeItem[]> {
@@ -46,7 +47,8 @@ export class ProjectFolderTreeItem extends TreeItem {
     private async createChildren(): Promise<TreeItem[]> {
         this.children = [];
 
-        let items = await TreeItemFactory.CreateItemsFromProject(this, this.project, this.path);
+        let virtualPath = this.projectFolder.FullPath.replace(path.dirname(this.project.FullPath), '');
+        let items = await TreeItemFactory.CreateItemsFromProject(this, this.project, virtualPath);
         items.forEach(item => this.children.push(item));
         
         return this.children;

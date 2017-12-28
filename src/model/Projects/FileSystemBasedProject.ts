@@ -3,22 +3,27 @@ import * as path from "path";
 import { Project } from "./Project";
 import { ProjectInSolution } from "../Solutions";
 import * as Utilities from "../Utilities";
+import { ProjectFile } from "./ProjectFile";
+import { ProjectFolder } from "./ProjectFolder";
 
 export abstract class FileSystemBasedProject extends Project {
     constructor(projectInSolution: ProjectInSolution) {
         super(projectInSolution);
     }
 
-    public async getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: string[], folders: string[] }> {
+    public async getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[], folders: ProjectFolder[] }> {
         let folderPath = path.dirname(this.projectInSolution.FullPath);
         if (virtualPath)
             folderPath = path.join(folderPath, virtualPath);
         
         let result = await Utilities.getDirectoryItems(folderPath);
-        return {
-            files: result.Files,
-            folders: result.Directories
-        };
+        let files: ProjectFile[] = [];
+        let folders: ProjectFolder[] = [];
+
+        result.Files.forEach(filepath => files.push(new ProjectFile(filepath)));
+        result.Directories.forEach(folderpath => folders.push(new ProjectFolder(folderpath)));
+
+        return { files, folders };
     }
 
     public async renameFile(filepath: string, name: string): Promise<void> {

@@ -2,10 +2,11 @@ import * as vscode from "vscode";
 import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
 import { ContextValues } from "./ContextValues";
 import { Project } from "../model/Projects";
+import { ProjectFile } from "../model/Projects/ProjectFile";
 
 export class ProjectFileTreeItem extends TreeItem {
-    constructor(name: string, path: string, private readonly project: Project, parent: TreeItem) {
-        super(name, TreeItemCollapsibleState.None, ContextValues.ProjectFile, parent, path);
+    constructor(private readonly projectFile: ProjectFile, private readonly project: Project, parent: TreeItem) {
+        super(projectFile.Name, TreeItemCollapsibleState.None, ContextValues.ProjectFile, parent, projectFile.FullPath);
     }
 
     command = {

@@ -38,6 +38,8 @@ BugFixed: when it found an unkonwn project type it doesn't crash.
 
 Refactor: using async and await for solution and project operations.
 
+Added WebSite project type support.
+
 ### 0.0.3
 
 Refactoring: all source code has changed.

@@ -1,5 +1,7 @@
 import { ProjectInSolution } from "../Solutions";
 import { PackageReference } from "./PackageReference";
+import { ProjectFile } from "./ProjectFile";
+import { ProjectFolder } from "./ProjectFolder";
 
 export abstract class Project {
     private hasReferences: boolean = true;
@@ -23,7 +25,7 @@ export abstract class Project {
 
     public abstract getPackageReferences() : Promise<PackageReference[]>;
 
-    public abstract getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: string[], folders: string[] }>;
+    public abstract getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[], folders: ProjectFolder[] }>;
 
     public abstract renameFile(filepath: string, name: string): Promise<void>;
 

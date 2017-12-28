@@ -4,6 +4,8 @@ import { FileSystemBasedProject } from "./FileSystemBasedProject";
 import { ProjectInSolution } from "../Solutions";
 import { PackageReference } from "./PackageReference";
 import * as Utilities from "../Utilities";
+import { ProjectFile } from "./ProjectFile";
+import { ProjectFolder } from "./ProjectFolder";
 
 export class CpsProject extends FileSystemBasedProject {
     private references: string[] = [];
@@ -24,27 +26,24 @@ export class CpsProject extends FileSystemBasedProject {
         return this.packages;
     }
 
-    public async getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: string[], folders: string[] }> {
+    public async getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[], folders: ProjectFolder[] }> {
         let result = await super.getProjectFilesAndFolders();
-        let files = [];
-        let folders = [];
+        let files: ProjectFile[] = [];
+        let folders: ProjectFolder[] = [];
 
         result.files.forEach(file => {
-            if (!this.FullPath.endsWith(file))
+            if (!this.FullPath.endsWith(file.FullPath))
                 files.push(file);
         });
 
         result.folders.forEach(folder => {
-            if (folder != 'bin'
-                && folder != 'obj'
-                && folder != 'node_modules')
+            if (folder.Name.toLocaleLowerCase() != 'bin'
+                && folder.Name.toLocaleLowerCase() != 'obj'
+                && folder.Name.toLocaleLowerCase() != 'node_modules')
                 folders.push(folder);
         });
         
-        return {
-            files: files,
-            folders: folders
-        };
+        return { files, folders };
     }
 
     private async checkProjectLoaded() {
