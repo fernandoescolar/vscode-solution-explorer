@@ -1,9 +1,9 @@
-import * as fs from "fs";
-import * as path from "path";
 import { ProjectInSolution } from "../Solutions";
 import { PackageReference } from "./PackageReference";
 
 export abstract class Project {
+    private hasReferences: boolean = true;
+
     constructor(protected readonly projectInSolution: ProjectInSolution) {
     }
 
@@ -11,21 +11,29 @@ export abstract class Project {
         return this.projectInSolution.FullPath;
     }
 
-    abstract getProjectReferences() : string[];
+    public get HasReferences(): boolean {
+        return this.hasReferences;
+    }
 
-    abstract getPackageReferences() : PackageReference[];
+    protected setHasReferences(value: boolean) {
+        this.hasReferences = value;
+    }
 
-    abstract getProjectFilesAndFolders(virtualPath?: string): { files: string[], folders: string[] };
+    public abstract getProjectReferences() : Promise<string[]>;
 
-    abstract renameFile(filepath: string, name: string): void;
+    public abstract getPackageReferences() : Promise<PackageReference[]>;
 
-    abstract deleteFile(filepath: string): void;
+    public abstract getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: string[], folders: string[] }>;
 
-    abstract createFile(folderpath: string, filename: string): string;
+    public abstract renameFile(filepath: string, name: string): Promise<void>;
 
-    abstract renameFolder(folderpath: string, name: string): void;
+    public abstract deleteFile(filepath: string): Promise<void>;
 
-    abstract deleteFolder(folderpath: string): void;
+    public abstract createFile(folderpath: string, filename: string): Promise<string>;
 
-    abstract createFolder(folderpath: string): void;
+    public abstract renameFolder(folderpath: string, name: string): Promise<void>;
+
+    public abstract deleteFolder(folderpath: string): Promise<void>;
+
+    public abstract createFolder(folderpath: string): Promise<void>;
 }

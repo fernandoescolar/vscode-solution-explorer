@@ -32,6 +32,12 @@ It only works with CSP projects in C#...
 
 There is a lot of work to do.
 
+### 0.0.4
+
+BugFixed: when it found an unkonwn project type it doesn't crash.
+
+Refactor: using async and await for solution and project operations.
+
 ### 0.0.3
 
 Refactoring: all source code has changed.

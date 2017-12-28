@@ -17,23 +17,31 @@ export class ProjectTreeItem extends TreeItem {
             return Promise.resolve(this.children);
         }
 
-        this.children = [];
-        this.children.push(new ProjectReferencesTreeItem(this.project, this));
-
-        TreeItemFactory.CreateItemsFromProject(this, this.project).forEach(item => this.children.push(item));
-
-        return Promise.resolve(this.children);
+        return this.createChildren();
     }
 
     public refresh(): void {
         this.children = null;
     }
     
-    public createFile(name: string): string {
+    public createFile(name: string): Promise<string> {
         return this.project.createFile('', name);
     }
 
-    public createFolder(name: string): void {
-        this.project.createFolder(name);
+    public createFolder(name: string): Promise<void> {
+        return this.project.createFolder(name);
+    }
+
+    private async createChildren(): Promise<TreeItem[]> {
+        this.children = [];
+
+        if (this.project.HasReferences) {
+            this.children.push(new ProjectReferencesTreeItem(this.project, this));
+        }
+
+        let items = await TreeItemFactory.CreateItemsFromProject(this, this.project);
+        items.forEach(item => this.children.push(item));
+        
+        return this.children;
     }
 }

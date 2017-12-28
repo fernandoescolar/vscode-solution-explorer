@@ -1,10 +1,10 @@
-import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as sln from './tree';
-import * as Utilities from './model/Utilities'
-import { SolutionFile } from './model/Solutions';
-import { TreeItem } from './tree';
+import * as vscode from "vscode";
+import * as fs from "./async/fs";
+import * as path from "path";
+import * as sln from "./tree";
+import * as Utilities from "./model/Utilities";
+import { SolutionFile } from "./model/Solutions";
+import { TreeItem } from "./tree";
 
 export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.TreeItem> {
 
@@ -16,52 +16,52 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	constructor(private workspaceRoot: string) {
 	}
 
-	refresh(item?: TreeItem): void {
+	public register() {
+		vscode.window.registerTreeDataProvider('solutionExplorer', this);
+	}
+
+	public refresh(item?: TreeItem): void {
 		if (item) {
 			this._onDidChangeTreeData.fire(item);
 		} else {
+			this.children = null;
 			this._onDidChangeTreeData.fire();
 		}
 	}
 
-	getTreeItem(element: sln.TreeItem): vscode.TreeItem {
+	public getTreeItem(element: sln.TreeItem): vscode.TreeItem {
 		return element;
 	}
 
-	getChildren(element?: sln.TreeItem): Thenable<sln.TreeItem[]> {
+	public getChildren(element?: sln.TreeItem): Thenable<sln.TreeItem[]> {
 		if (!this.workspaceRoot) {
 			vscode.window.showInformationMessage('No .sln found in workspace');
 			return Promise.resolve([]);
 		}
-
-		if (!element) {
-			return new Promise((resolve, reject) => {
-				if (this.children) return resolve(this.children);
-
-				this.children = [];
-				Utilities.searchFilesInDir(this.workspaceRoot, '.sln').then(solutionPaths => {
-					let promises = [];
-					if (solutionPaths.length <= 0)
-						reject('No .sln found in workspace');
-
-					solutionPaths.forEach(s => {
-						promises.push(new Promise( resolve => {
-							SolutionFile.Parse(s).then(solution => {
-								let item = sln.CreateFromSolution(solution);
-								this.children.push(item);
-								resolve();
-							})
-						}));
-					});
-
-					Promise.all(promises).then( _ => {
-						resolve(this.children);
-					});
-				});
-			});
-		} else {
+		if (element)
 			return element.getChildren();
+		if (!element && this.children) 
+			return Promise.resolve(this.children);
+		if (!element && !this.children) 
+			return this.createSolutionItems();
+
+		return null;
+	}
+
+	private async createSolutionItems(): Promise<sln.TreeItem[]> {
+		let solutionPaths = await Utilities.searchFilesInDir(this.workspaceRoot, '.sln');
+		if (solutionPaths.length <= 0)
+			throw 'No .sln found in workspace';
+
+		this.children = [];
+		for(let i = 0; i < solutionPaths.length; i++) {
+			let s = solutionPaths[i];
+			let solution = await SolutionFile.Parse(s);
+			let item = sln.CreateFromSolution(solution);
+			this.children.push(item);
 		}
+
+		return this.children;
 	}
 }
 

@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
-import * as TreeItemIconProvider from './TreeItemIconProvider';
+import * as vscode from "vscode";
+import * as TreeItemIconProvider from "./TreeItemIconProvider";
 
-export { TreeItemCollapsibleState, Command } from 'vscode';
+export { TreeItemCollapsibleState, Command } from "vscode";
 export abstract class TreeItem extends vscode.TreeItem {
 	constructor(
 		public label: string,

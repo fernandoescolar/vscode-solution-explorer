@@ -3,9 +3,9 @@
  * https://github.com/Microsoft/msbuild/blob/master/src/Build/Construction/Solution/ProjectInSolution.cs
  */
 
-import { SolutionFile } from './SolutionFile'
-import { SolutionProjectType } from './SolutionProjectType';
-import { ProjectConfigurationInSolution } from './ProjectConfigurationInSolution';
+import { SolutionFile } from "./SolutionFile"
+import { SolutionProjectType } from "./SolutionProjectType";
+import { ProjectConfigurationInSolution } from "./ProjectConfigurationInSolution";
 
 export class ProjectInSolution {
     constructor(public readonly Solution: SolutionFile) {

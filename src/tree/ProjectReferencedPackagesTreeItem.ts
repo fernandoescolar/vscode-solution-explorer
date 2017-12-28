@@ -15,8 +15,17 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem {
             return Promise.resolve(this.children);
         }
 
+        return this.createChildren();
+    }
+
+    public refresh(): void {
+        this.children = null;
+    }
+    
+    private async createChildren(): Promise<TreeItem[]> {
         this.children = [];
-        var refs = this.project.getPackageReferences();
+        
+        var refs = await this.project.getPackageReferences();
         refs.sort((a, b) => {
             var x = a.Name.toLowerCase();
             var y = b.Name.toLowerCase();
@@ -26,10 +35,6 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem {
             this.children.push(new ProjectReferencedPackageTreeItem(ref, this));
         });
 
-        return Promise.resolve(this.children);
+        return this.children;
     }
-
-    public refresh(): void {
-        this.children = null;
-	}
 }

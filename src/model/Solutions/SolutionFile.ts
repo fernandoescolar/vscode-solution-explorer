@@ -3,12 +3,12 @@
  * https://github.com/Microsoft/msbuild/blob/master/src/Build/Construction/Solution/SolutionFile.cs
  */
 
-import * as path from 'path'
-import * as fs from 'fs'
-import { ProjectInSolution } from './ProjectInSolution'
-import { SolutionConfigurationInSolution } from './SolutionConfigurationInSolution'
-import { SolutionProjectType } from './SolutionProjectType';
-import { ProjectConfigurationInSolution } from './ProjectConfigurationInSolution';
+import * as path from "path";
+import * as fs from "fs";
+import { ProjectInSolution } from "./ProjectInSolution";
+import { SolutionConfigurationInSolution } from "./SolutionConfigurationInSolution";
+import { SolutionProjectType } from "./SolutionProjectType";
+import { ProjectConfigurationInSolution } from "./ProjectConfigurationInSolution";
 
 const vbProjectGuid = "{F184B08F-C81C-45F6-A57F-5ABD9991F28F}";
 const csProjectGuid = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}";

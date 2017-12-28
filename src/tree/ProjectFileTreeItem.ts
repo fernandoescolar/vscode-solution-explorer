@@ -18,13 +18,11 @@ export class ProjectFileTreeItem extends TreeItem {
         return Promise.resolve(null);
     }
 
-    public rename(name: string): void {
-        this.project.renameFile(this.path, name);
-        this.path = this.path.replace(this.label, name);
-        this.label = name;
+    public async rename(name: string): Promise<void> {
+        return this.project.renameFile(this.path, name);
     }
     
-    public delete(): void {
-        this.project.deleteFile(this.path);
+    public delete(): Promise<void> {
+        return this.project.deleteFile(this.path);
     }
 }

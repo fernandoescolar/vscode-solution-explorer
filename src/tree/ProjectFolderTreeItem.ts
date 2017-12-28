@@ -18,11 +18,7 @@ export class ProjectFolderTreeItem extends TreeItem {
             return Promise.resolve(this.children);
         }
 
-        this.children = [];
-
-        TreeItemFactory.CreateItemsFromProject(this, this.project, this.path).forEach(item => this.children.push(item));
-        
-        return Promise.resolve(this.children);
+        return this.createChildren();
     }
 
 
@@ -30,20 +26,29 @@ export class ProjectFolderTreeItem extends TreeItem {
         this.children = null;
     }
     
-    public createFile(name: string): string {
+    public createFile(name: string): Promise<string> {
         return this.project.createFile(this.path, name);
     }
 
-    public rename(name: string): void {
-        this.project.renameFolder(this.path, name);
+    public rename(name: string): Promise<void> {
+        return this.project.renameFolder(this.path, name);
     }
 
-    public delete(): void {
-        this.project.deleteFolder(this.path);
+    public delete(): Promise<void> {
+        return this.project.deleteFolder(this.path);
     }
 
-    public createFolder(name: string): void {
+    public createFolder(name: string): Promise<void> {
         let folderpath = path.join(this.path, name);
-        this.project.createFolder(folderpath);
+        return this.project.createFolder(folderpath);
+    }
+
+    private async createChildren(): Promise<TreeItem[]> {
+        this.children = [];
+
+        let items = await TreeItemFactory.CreateItemsFromProject(this, this.project, this.path);
+        items.forEach(item => this.children.push(item));
+        
+        return this.children;
     }
 }

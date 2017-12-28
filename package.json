@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -35,7 +35,7 @@
                 {
                     "id": "solutionExplorer",
                     "name": "Solution Explorer"
-                } 
+                }
             ]
         },
         "commands": [
@@ -43,33 +43,33 @@
                 "command": "solutionExplorer.refresh",
                 "title": "Refresh",
                 "icon": {
-					"light": "icons/refresh-light.svg",
-					"dark": "icons/refresh-dark.svg"
-				}
+                    "light": "icons/refresh-light.svg",
+                    "dark": "icons/refresh-dark.svg"
+                }
             },
-            { 
+            {
                 "command": "solutionExplorer.openFile",
                 "title": "Open File"
             },
             {
-				"command": "solutionExplorer.renameFile",
-				"title": "Rename"
+                "command": "solutionExplorer.renameFile",
+                "title": "Rename"
             },
             {
-				"command": "solutionExplorer.deleteFile",
-				"title": "Delete"
+                "command": "solutionExplorer.deleteFile",
+                "title": "Delete"
             },
             {
                 "command": "solutionExplorer.createFile",
                 "title": "Create file"
             },
             {
-				"command": "solutionExplorer.renameFolder",
-				"title": "Rename"
+                "command": "solutionExplorer.renameFolder",
+                "title": "Rename"
             },
             {
-				"command": "solutionExplorer.deleteFolder",
-				"title": "Delete"
+                "command": "solutionExplorer.deleteFolder",
+                "title": "Delete"
             },
             {
                 "command": "solutionExplorer.createFolder",
@@ -79,52 +79,52 @@
         "menus": {
             "view/title": [
                 {
-					"command": "solutionExplorer.refresh",
-					"when": "view == solutionExplorer",
-					"group": "navigation"
-				}
+                    "command": "solutionExplorer.refresh",
+                    "when": "view == solutionExplorer",
+                    "group": "navigation"
+                }
             ],
             "view/item/context": [
                 {
-					"command": "solutionExplorer.renameFile",
-					"when": "view == solutionExplorer && viewItem == project-file"
+                    "command": "solutionExplorer.renameFile",
+                    "when": "view == solutionExplorer && viewItem == project-file"
                 },
                 {
-					"command": "solutionExplorer.deleteFile",
-					"when": "view == solutionExplorer && viewItem == project-file"
+                    "command": "solutionExplorer.deleteFile",
+                    "when": "view == solutionExplorer && viewItem == project-file"
                 },
                 {
-					"command": "solutionExplorer.createFile",
-					"when": "view == solutionExplorer && viewItem == project"
-				},
-                {
-					"command": "solutionExplorer.createFile",
-					"when": "view == solutionExplorer && viewItem == project-file"
-				},
-                {
-					"command": "solutionExplorer.createFile",
-					"when": "view == solutionExplorer && viewItem == project-folder"
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == solutionExplorer && viewItem == project"
                 },
                 {
-					"command": "solutionExplorer.renameFolder",
-					"when": "view == solutionExplorer && viewItem == project-folder"
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == solutionExplorer && viewItem == project-file"
                 },
                 {
-					"command": "solutionExplorer.deleteFolder",
-					"when": "view == solutionExplorer && viewItem == project-folder"
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == solutionExplorer && viewItem == project-folder"
                 },
                 {
-					"command": "solutionExplorer.createFolder",
-					"when": "view == solutionExplorer && viewItem == project"
+                    "command": "solutionExplorer.renameFolder",
+                    "when": "view == solutionExplorer && viewItem == project-folder"
                 },
                 {
-					"command": "solutionExplorer.createFolder",
-					"when": "view == solutionExplorer && viewItem == project-file"
-				},
+                    "command": "solutionExplorer.deleteFolder",
+                    "when": "view == solutionExplorer && viewItem == project-folder"
+                },
                 {
-					"command": "solutionExplorer.createFolder",
-					"when": "view == solutionExplorer && viewItem == project-folder"
-				}
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == solutionExplorer && viewItem == project"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == solutionExplorer && viewItem == project-file"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == solutionExplorer && viewItem == project-folder"
+                }
             ]
         }
     },
@@ -136,9 +136,11 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^7.0.43",
+        "@types/xml2js": "^0.4.2",
         "typescript": "^2.6.1",
         "vscode": "^1.1.6",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "xml2js": "^0.4.19"
     }
 }
