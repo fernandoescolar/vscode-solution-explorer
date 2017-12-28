@@ -18,6 +18,9 @@ function getIconPathFromExtension(path: string, alternative: string) {
     let iconpath = getFileIconPath(extension + '.svg');
     if (fs.existsSync(iconpath))
         return getIconPath(extension + '.svg');
+    iconpath = getFileIconPath(extension + '.png');
+    if (fs.existsSync(iconpath))
+        return getIconPath(extension + '.png');
 
     return getIconPath(alternative);
 }
