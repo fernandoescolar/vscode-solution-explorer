@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.0.4",
+    "version": "0.0.6",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -61,7 +61,11 @@
             },
             {
                 "command": "solutionExplorer.createFile",
-                "title": "Create file"
+                "title": "Create file",
+                "icon": {
+                    "light": "icons/file_add.png",
+                    "dark": "icons/file_add.png"
+                }
             },
             {
                 "command": "solutionExplorer.renameFolder",
