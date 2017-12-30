@@ -5,8 +5,10 @@ import { Project } from "../model/Projects";
 import { ProjectFile } from "../model/Projects/ProjectFile";
 
 export class ProjectFileTreeItem extends TreeItem {
+    private children: TreeItem[];
+
     constructor(private readonly projectFile: ProjectFile, private readonly project: Project, parent: TreeItem) {
-        super(projectFile.Name, TreeItemCollapsibleState.None, ContextValues.ProjectFile, parent, projectFile.FullPath);
+        super(projectFile.Name, projectFile.HasDependents ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None, ContextValues.ProjectFile, parent, projectFile.FullPath);
     }
 
     command = {
@@ -16,7 +18,14 @@ export class ProjectFileTreeItem extends TreeItem {
 	};
 
     public getChildren(): Thenable<TreeItem[]> {
-        return Promise.resolve(null);
+        if (!this.children && this.projectFile.Dependents) {
+            this.children = [];
+            this.projectFile.Dependents.forEach(d => {
+                this.children.push(new ProjectFileTreeItem(d, this.project, this));
+            });
+        }
+
+        return Promise.resolve(this.children);
     }
 
     public async rename(name: string): Promise<void> {

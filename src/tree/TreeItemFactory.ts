@@ -25,6 +25,11 @@ export function CreateFromProject(parent: TreeItem, project: ProjectInSolution):
             || project.ProjectTypeId == ProjectTypeIds.cpsProjectGuid) {
             let p = new CpsProject(project);
             return new ProjectTreeItem(p, project, parent);
+        } else if (project.ProjectTypeId == ProjectTypeIds.csProjectGuid
+            || project.ProjectTypeId == ProjectTypeIds.fsProjectGuid
+            || project.ProjectTypeId == ProjectTypeIds.vbProjectGuid) {
+            let p = new OldProject(project);
+            return new ProjectTreeItem(p, project, parent);
         }
     } else if (project.ProjectType == SolutionProjectType.WebProject) {
         project.FullPath = project.FullPath + '.web-project';
@@ -32,9 +37,7 @@ export function CreateFromProject(parent: TreeItem, project: ProjectInSolution):
         return new ProjectTreeItem(p, project, parent);
     }
 
-    let p = new OldProject(project);
-    return new ProjectTreeItem(p, project, parent);
-    //return new UnknownProjectTreeItem(project, parent);
+    return new UnknownProjectTreeItem(project, parent);
 }
 
 export async function CreateItemsFromProject(parent: TreeItem, project: Project, virtualPath?: string): Promise<TreeItem[]> {

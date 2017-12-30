@@ -6,4 +6,6 @@ export class ProjectFile {
     public Name: string;
 
     public HasDependents: boolean = false;
+
+    public Dependents: ProjectFile[] = [];
 }

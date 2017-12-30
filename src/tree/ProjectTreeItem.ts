@@ -4,6 +4,7 @@ import { ProjectInSolution } from "../model/Solutions";
 import { Project } from "../model/Projects";
 import { ProjectReferencesTreeItem } from "./ProjectReferencesTreeItem";
 import * as TreeItemFactory from "./TreeItemFactory";
+import * as path from 'path';
 
 export class ProjectTreeItem extends TreeItem {
     private children: TreeItem[] = null;
@@ -25,11 +26,13 @@ export class ProjectTreeItem extends TreeItem {
     }
     
     public createFile(name: string): Promise<string> {
-        return this.project.createFile('', name);
+        let folderPath = path.dirname(this.project.FullPath);
+        return this.project.createFile(folderPath, name);
     }
 
     public createFolder(name: string): Promise<void> {
-        return this.project.createFolder(name);
+        let folderPath = path.join(path.dirname(this.project.FullPath), name);
+        return this.project.createFolder(folderPath);
     }
 
     private async createChildren(): Promise<TreeItem[]> {

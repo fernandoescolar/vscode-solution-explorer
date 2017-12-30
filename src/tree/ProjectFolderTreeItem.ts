@@ -11,7 +11,7 @@ export class ProjectFolderTreeItem extends TreeItem {
     private children: TreeItem[] = null;
 
     constructor(private readonly projectFolder: ProjectFolder, private readonly project: Project, parent: TreeItem) {
-        super(projectFolder.Name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, parent, project.FullPath);
+        super(projectFolder.Name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, parent, projectFolder.FullPath);
     }
 
     public getChildren(): Thenable<TreeItem[]> {
@@ -48,6 +48,9 @@ export class ProjectFolderTreeItem extends TreeItem {
         this.children = [];
 
         let virtualPath = this.projectFolder.FullPath.replace(path.dirname(this.project.FullPath), '');
+        if (virtualPath.startsWith('/'))
+            virtualPath = virtualPath.substring(1);
+            
         let items = await TreeItemFactory.CreateItemsFromProject(this, this.project, virtualPath);
         items.forEach(item => this.children.push(item));
         

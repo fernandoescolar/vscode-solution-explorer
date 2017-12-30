@@ -26,10 +26,10 @@ export abstract class FileSystemBasedProject extends Project {
         return { files, folders };
     }
 
-    public async renameFile(filepath: string, name: string): Promise<void> {
+    public renameFile(filepath: string, name: string): Promise<void> {
         let folder = path.dirname(filepath);
         let newFilepath = path.join(folder, name);
-        await fs.rename(filepath, newFilepath);
+        return fs.rename(filepath, newFilepath);
     }
 
     public async deleteFile(filepath: string): Promise<void> {
@@ -39,8 +39,7 @@ export abstract class FileSystemBasedProject extends Project {
     }
 
     public async createFile(folderpath: string, filename: string): Promise<string> {
-        let projectPath = path.dirname(this.FullPath);
-        let filepath = path.join(projectPath, folderpath, filename);
+        let filepath = path.join(folderpath, filename);
         if (!(await fs.exists(filepath))) {
             await fs.writeFile(filepath, "");
         }
@@ -48,22 +47,16 @@ export abstract class FileSystemBasedProject extends Project {
         return filepath;
     }
 
-    public async renameFolder(folderpath: string, name: string): Promise<void> {
-        let projectPath = path.dirname(this.FullPath);
-        let fullfolderpath = path.join(projectPath, folderpath);
-        let newfolderpath = path.join(path.dirname(fullfolderpath), name);
-        await fs.rename(fullfolderpath, newfolderpath);
+    public renameFolder(folderpath: string, name: string): Promise<void> {
+        let newfolderpath = path.join(path.dirname(folderpath), name);
+        return fs.rename(folderpath, newfolderpath);
     }
 
-    public async deleteFolder(folderpath: string): Promise<void> {
-        let projectPath = path.dirname(this.FullPath);
-        let fullfolderpath = path.join(projectPath, folderpath);
-        await fs.rmdir(fullfolderpath);
+    public deleteFolder(folderpath: string): Promise<void> {
+        return fs.rmdir(folderpath);
     }
 
     public async createFolder(folderpath: string): Promise<void> {
-        let projectPath = path.dirname(this.FullPath);
-        let fullfolderpath = path.join(projectPath, folderpath);
-        await fs.mkdir(fullfolderpath);
+        await fs.mkdir(folderpath);
     }
 }
