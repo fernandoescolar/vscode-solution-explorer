@@ -13,6 +13,7 @@ export async function searchFilesInDir(startPath:string, extension: string) : Pr
         let filename = path.join(startPath, files[i]);
         let stat = await fs.lstat(filename);
         if (filename.endsWith(extension)) {
+            filename = filename.replace(/\\/g, '/');
             result.push(filename);
         }
     }
@@ -30,6 +31,7 @@ export async function getDirectoryItems (dirPath: string): Promise<DirectorySear
     for(var i = 0; i < items.length; i++){
         var filename = path.join(dirPath, items[i]);
         var stat = await fs.lstat(filename);
+        filename = filename.replace(/\\/g, '/');
         if (stat.isDirectory()){
             directories.push(filename);
         }
