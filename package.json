@@ -144,7 +144,9 @@
         "@types/node": "^7.0.43",
         "@types/xml2js": "^0.4.2",
         "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
+        "vscode": "^1.1.6"
+    },
+    "dependencies": {
         "xml2js": "^0.4.19"
     }
 }
