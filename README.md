@@ -40,6 +40,10 @@ There are not settings for now...
 
 There is a lot of work to do.
 
+### 0.0.7
+
+Fixing lost dependencies.
+
 ### 0.0.6
 
 Cleaning extension binaries.
