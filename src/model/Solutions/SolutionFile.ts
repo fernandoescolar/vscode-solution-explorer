@@ -86,7 +86,7 @@ export class SolutionFile {
             let solution = new SolutionFile();
             solution.fullPath = solutionFullPath;
             solution.folderPath = path.dirname(solutionFullPath);
-            solution.name = solutionFullPath.split('/').pop().replace('.sln', '');
+            solution.name = solutionFullPath.split(path.sep).pop().replace('.sln', '');
             
             fs.readFile(solutionFullPath, 'utf8', (err, data) => {
                 solution.lines = data.split('\n');
@@ -216,7 +216,7 @@ export class SolutionFile {
         proj.ProjectTypeId = m[1].trim();
         proj.ProjectName = m[2].trim();
         proj.RelativePath = m[3].trim();
-        proj.FullPath = path.join(this.FolderPath, m[3].replace(/\\/g, '/')).trim();
+        proj.FullPath = path.join(this.FolderPath, m[3].replace(/\\/g, path.sep)).trim();
         proj.ProjectGuid = m[4].trim();
         this.projects[proj.ProjectGuid] = proj;
 

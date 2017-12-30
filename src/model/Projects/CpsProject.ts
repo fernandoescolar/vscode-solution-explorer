@@ -64,7 +64,7 @@ export class CpsProject extends FileSystemBasedProject {
         }
     
         while ((m = projectRegEx.exec(content)) !== null) {
-            this.references.push(m[1].replace(/\\/g, '/').trim());
+            this.references.push(m[1].replace(/\\/g, path.sep).trim());
         }
     }
 }

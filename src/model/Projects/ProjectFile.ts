@@ -1,6 +1,8 @@
+import * as path from "path";
+
 export class ProjectFile {
     constructor(public FullPath: string) {
-        this.Name = this.FullPath.split('/').pop();
+        this.Name = this.FullPath.split(path.sep).pop();
     }
 
     public Name: string;

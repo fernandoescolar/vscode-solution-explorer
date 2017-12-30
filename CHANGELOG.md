@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+### 0.0.5
+
+Fixing paths in order it runs in windows (sorry, i'd not tested :( )
+
 ## 0.0.4
 
 BugFixed: when it found an unkonwn project type it doesn't crash.

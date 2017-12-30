@@ -37,7 +37,7 @@ export class OldProject extends FileSystemBasedProject {
 
         let currentLevel = this.filesTree;
         if (virtualPath) {
-            let pathParts = virtualPath.split('/');
+            let pathParts = virtualPath.split(path.sep);
             pathParts.forEach(part => {
                 let existingPathIndex = currentLevel.findIndex(i => i.name == part);
                 if (existingPathIndex >= 0) {
@@ -190,8 +190,8 @@ export class OldProject extends FileSystemBasedProject {
                     element.Folder.forEach(ref => {
                         addFile(ref);
 
-                        let folder = ref.$.Include.replace(/\\/g, '/');
-                        if (folder.endsWith('/'))
+                        let folder = ref.$.Include.replace(/\\/g, path.sep);
+                        if (folder.endsWith(path.sep))
                             folder = folder.substring(0, folder.length - 1);
                         folders.push(folder);
                     });
@@ -220,8 +220,8 @@ export class OldProject extends FileSystemBasedProject {
     private parseToTree(files: string[]): any {
         let tree = [];
         files.forEach(filepath => {
-            filepath = filepath.replace(/\\/g, '/');
-            let pathParts = filepath.split('/');
+            filepath = filepath.replace(/\\/g, path.sep);
+            let pathParts = filepath.split(path.sep);
             let currentLevel = tree;
             let currentFullPath = path.dirname(this.FullPath);
             pathParts.forEach(part => {
@@ -344,7 +344,7 @@ export class OldProject extends FileSystemBasedProject {
 
     private getRelativePath(fullpath: string): string {
         let relativePath = fullpath.replace(path.dirname(this.FullPath), '');
-        if (relativePath.startsWith('/'))
+        if (relativePath.startsWith(path.sep))
             relativePath = relativePath.substring(1);
 
         return relativePath;

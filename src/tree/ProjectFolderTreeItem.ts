@@ -48,7 +48,7 @@ export class ProjectFolderTreeItem extends TreeItem {
         this.children = [];
 
         let virtualPath = this.projectFolder.FullPath.replace(path.dirname(this.project.FullPath), '');
-        if (virtualPath.startsWith('/'))
+        if (virtualPath.startsWith(path.sep))
             virtualPath = virtualPath.substring(1);
             
         let items = await TreeItemFactory.CreateItemsFromProject(this, this.project, virtualPath);
