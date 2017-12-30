@@ -14,14 +14,16 @@ function getIconPath(lightFilename: string, darkFilename: string = null): { ligh
 }
 
 function getIconPathFromExtension(path: string, alternative: string) {
-    let extension = path.split('.').pop();
-    let iconpath = getFileIconPath(extension + '.svg');
-    if (fs.existsSync(iconpath))
-        return getIconPath(extension + '.svg');
-    iconpath = getFileIconPath(extension + '.png');
-    if (fs.existsSync(iconpath))
-        return getIconPath(extension + '.png');
-
+    if (path) {
+        let extension = path.split('.').pop();
+        let iconpath = getFileIconPath(extension + '.svg');
+        if (fs.existsSync(iconpath))
+            return getIconPath(extension + '.svg');
+        iconpath = getFileIconPath(extension + '.png');
+        if (fs.existsSync(iconpath))
+            return getIconPath(extension + '.png');
+    }
+    
     return getIconPath(alternative);
 }
 
