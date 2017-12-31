@@ -39,9 +39,12 @@ export class SolutionExplorerCommands {
         if (!item.delete) return;
 
         try {
-            await item.delete();
-            item.parent.refresh();
-            this.provider.refresh(item.parent);
+            let option = await vscode.window.showWarningMessage('Are you sure you want to delete file "'+ item.label + '"?', 'Yes');
+            if (option == 'Yes') {
+                await item.delete();
+                item.parent.refresh();
+                this.provider.refresh(item.parent);
+            }
         } catch(ex) {
             vscode.window.showInformationMessage('Can not delete file: ' + ex);
         }
@@ -85,9 +88,12 @@ export class SolutionExplorerCommands {
     private async deleteFolder(item: any): Promise<void> {
         if (!item.delete) return;
         try {
-            await item.delete();
-            item.parent.refresh();
-            this.provider.refresh(item.parent);
+            let option = await vscode.window.showWarningMessage('Are you sure you want to delete folder "'+ item.label + '"?', 'Yes');
+            if (option == 'Yes') {
+                await item.delete();
+                item.parent.refresh();
+                this.provider.refresh(item.parent);
+            }
         } catch(ex) {
             vscode.window.showInformationMessage('Can not delete folder: ' + ex);
         }
