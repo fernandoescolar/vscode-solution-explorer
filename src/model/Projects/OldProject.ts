@@ -338,8 +338,12 @@ export class OldProject extends FileSystemBasedProject {
 
     private checkCurrentItemGroup(): void {
         if (this.currentItemGroup && this.document.Project.ItemGroup.indexOf(this.currentItemGroup) >= 0) return;
-        this.currentItemGroup = {};
-        this.document.Project.ItemGroup.push(this.currentItemGroup);
+        if (this.document.Project.ItemGroup.length > 0) {
+            this.currentItemGroup = this.document.Project.ItemGroup[this.document.Project.ItemGroup.length - 1];
+        } else {
+            this.currentItemGroup = {};
+            this.document.Project.ItemGroup.push(this.currentItemGroup);
+        }
     }
 
     private getRelativePath(fullpath: string): string {

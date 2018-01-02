@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.0.8
+
+Fixing a bug getting the content of a dotnet project sub-folder.
+
 ## 0.0.7
 
 Fixing lost dependencies.

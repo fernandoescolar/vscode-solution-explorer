@@ -40,6 +40,10 @@ There are not settings for now...
 
 There is a lot of work to do.
 
+### 0.0.8
+
+Fixing a bug getting the content of a dotnet project sub-folder.
+
 ### 0.0.7
 
 Fixing lost dependencies.
@@ -47,37 +51,5 @@ Fixing lost dependencies.
 ### 0.0.6
 
 Cleaning extension binaries.
-
-### 0.0.5
-
-Fixing paths in order it runs in windows (sorry, i'd not tested :( )
-
-### 0.0.4
-
-BugFixed: when it found an unkonwn project type it doesn't crash.
-
-Refactor: using async and await for solution and project operations.
-
-Added WebSite project type support.
-
-Added projects before vs2017 (csproj, vbproj and fsproj) support.
-
-### 0.0.3
-
-Refactoring: all source code has changed.
-
-New "references" icon in solution explorer.
-
-Added context menu commands to create, delete and modify project files and folders.
-
-### 0.0.2
-
-Updated project information, repository and logo.
-
-### 0.0.1
-
-Initial release.
-
-Only Visual Studio Common Project System (VS2017 -> dotnet core) support.
 
 **Enjoy!**

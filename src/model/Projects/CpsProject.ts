@@ -27,7 +27,7 @@ export class CpsProject extends FileSystemBasedProject {
     }
 
     public async getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[], folders: ProjectFolder[] }> {
-        let result = await super.getProjectFilesAndFolders();
+        let result = await super.getProjectFilesAndFolders(virtualPath);
         let files: ProjectFile[] = [];
         let folders: ProjectFolder[] = [];
 
