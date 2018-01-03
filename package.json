@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -130,6 +130,39 @@
                     "when": "view == solutionExplorer && viewItem == project-folder"
                 }
             ]
+        },
+        "configuration": {
+            "type": "object",
+            "title": "vscode-solution-explorer configuration",
+            "properties": {
+                "vssolution.showInExplorer": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show the solution explorer in the explorer pane."
+                },
+                "vssolution.netcoreIgnore": {
+                    "type": "array",
+                    "items": { 
+                        "type": "string" 
+                    },
+                    "default": [ "bin", "node_modules", "obj", ".ds_store" ],
+                    "description": "Folder and filenames to ignore when get a dotnet core project content"
+                },
+                "vssolution.xxprojItemTypes": {
+                    "type": [
+                        "string",
+                        "string"
+                    ],
+                    "default": {
+                        "*": "Content",
+                        "cs": "Compile",
+                        "vb": "Compile",
+                        "fs": "Compile",
+                        "ts": "TypeScriptCompile"
+                    },
+                    "description": "Type of XML element to put in the xxproj files."
+                }
+            }
         }
     },
     "scripts": {

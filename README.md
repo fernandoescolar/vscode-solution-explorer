@@ -30,15 +30,46 @@ Branded icons are licensed under their copyright license.
 
 ## Extension Settings
 
-There are not settings for now... 
+- `vssolution.showInExplorer` Show the solution explorer in the explorer pane.
+
+- `vssolution.netcoreIgnore` Folder and file names to ignore when get a dotnet core project content
+
+- `vssolution.xxprojItemTypes` Type of XML element to put in the xxproj files.
+
+###### Example
+
+```javascript
+{
+    "vssolution.netcoreIgnore": [
+        "bin",
+        "node_modules",
+        "obj",
+        ".ds_store"
+    ],
+
+    "vssolution.showInExplorer": true,
+
+    "vssolution.xxprojItemTypes": {
+        "*": "Content",
+        "cs": "Compile",
+        "vb": "Compile",
+        "fs": "Compile",
+        "ts": "TypeScriptCompile"
+    }
+}
+```
 
 ## Known Issues
 
-...
+Please report your issues: [vscode-solution-explorer GitHub page](https://github.com/fernandoescolar/vscode-solution-explorer/issues)
 
 ## Release Notes
 
 There is a lot of work to do.
+
+### 0.0.9
+
+Added configuration settings.
 
 ### 0.0.8
 
@@ -47,9 +78,5 @@ Fixing a bug getting the content of a dotnet project sub-folder.
 ### 0.0.7
 
 Fixing lost dependencies.
-
-### 0.0.6
-
-Cleaning extension binaries.
 
 **Enjoy!**

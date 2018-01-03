@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as fs from "./async/fs";
 import * as path from "path";
 import * as sln from "./tree";
+import * as SolutionExplorerConfiguration from "./SolutionExplorerConfiguration";
 import * as Utilities from "./model/Utilities";
 import { SolutionFile } from "./model/Solutions";
 import { TreeItem } from "./tree";
@@ -17,7 +18,8 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	}
 
 	public register() {
-		vscode.window.registerTreeDataProvider('solutionExplorer', this);
+		if (SolutionExplorerConfiguration.getShowInExplorer())
+			vscode.window.registerTreeDataProvider('solutionExplorer', this);
 	}
 
 	public refresh(item?: TreeItem): void {

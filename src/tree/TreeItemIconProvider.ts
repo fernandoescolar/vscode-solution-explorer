@@ -32,6 +32,9 @@ export function findIconPath(name: string, path: string, contextValue: string): 
         return getIconPath('sln.svg');
     } else
     if (contextValue == ContextValues.SolutionFolder || contextValue == ContextValues.ProjectFolder) {
+        if (path && path.endsWith("wwwroot"))
+            return getIconPath('wwwroot.svg');
+
         return getIconPath('folder.svg');
     } else 
     if (contextValue == ContextValues.Project) {

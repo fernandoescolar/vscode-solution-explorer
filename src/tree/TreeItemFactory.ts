@@ -28,19 +28,8 @@ export async function CreateFromProject(parent: TreeItem, project: ProjectInSolu
 
 export async function CreateItemsFromProject(parent: TreeItem, project: Project, virtualPath?: string): Promise<TreeItem[]> {
     let items = await project.getProjectFilesAndFolders(virtualPath);
-    items.folders.sort((a, b) => {
-        var x = a.Name.toLowerCase();
-        var y = b.Name.toLowerCase();
-        return x < y ? -1 : x > y ? 1 : 0;
-    });
-
-    items.files.sort((a, b) => {
-        var x = a.Name.toLowerCase();
-        var y = b.Name.toLowerCase();
-        return x < y ? -1 : x > y ? 1 : 0;
-    });
-
     let result: TreeItem[] = [];
+    
     items.folders.forEach(folder => {
         result.push(new ProjectFolderTreeItem(folder, project, parent));
     });

@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as fs from "../../../async/fs";
 import * as xml from "../../../async/xml";
+import * as SolutionExplorerConfiguration from "../../../SolutionExplorerConfiguration";
 import * as Utilities from "../../Utilities";
 import { ProjectInSolution } from "../../Solutions";
 import { ProjectFile } from "../ProjectFile";
@@ -39,15 +40,15 @@ export class CpsProject extends FileSystemBasedProject {
         let files: ProjectFile[] = [];
         let folders: ProjectFolder[] = [];
 
+        let ignore = SolutionExplorerConfiguration.getNetCoreIgnore();
         result.files.forEach(file => {
-            if (!this.FullPath.endsWith(file.FullPath))
+            if (!this.FullPath.endsWith(file.FullPath) && ignore.indexOf(file.Name.toLocaleLowerCase()) < 0)
                 files.push(file);
         });
 
+        
         result.folders.forEach(folder => {
-            if (folder.Name.toLocaleLowerCase() != 'bin'
-                && folder.Name.toLocaleLowerCase() != 'obj'
-                && folder.Name.toLocaleLowerCase() != 'node_modules')
+            if (ignore.indexOf(folder.Name.toLocaleLowerCase()) < 0)
                 folders.push(folder);
         });
         

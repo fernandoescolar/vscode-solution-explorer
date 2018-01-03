@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as fs from "../../../async/fs";
 import * as xml from "../../../async/xml";
+import * as SolutionExplorerConfiguration from "../../../SolutionExplorerConfiguration";
 import * as Utilities from "../../Utilities";
 import { ProjectInSolution } from "../../Solutions";
 import { ProjectFile } from "../ProjectFile";
@@ -73,6 +74,18 @@ export class StandardProject extends FileSystemBasedProject {
             }    
         }
 
+        folders.sort((a, b) => {
+            var x = a.Name.toLowerCase();
+            var y = b.Name.toLowerCase();
+            return x < y ? -1 : x > y ? 1 : 0;
+        });
+    
+        files.sort((a, b) => {
+            var x = a.Name.toLowerCase();
+            var y = b.Name.toLowerCase();
+            return x < y ? -1 : x > y ? 1 : 0;
+        });
+
         return { files, folders };
     }
 
@@ -102,7 +115,16 @@ export class StandardProject extends FileSystemBasedProject {
         let folderRelativePath = this.getRelativePath(folderpath);
         let relativePath = path.join(folderRelativePath, filename);
         let extension = relativePath.split('.').pop().toLocaleLowerCase();
-        let type = ['cs', 'vb', 'fs'].indexOf(extension) >= 0 ? 'Compile' : 'Content';
+
+        let type = 'None';
+        let itemTypes = SolutionExplorerConfiguration.getItemTypes();
+        if (itemTypes[extension]) {
+            type = itemTypes[extension];
+        } else {
+            type = itemTypes['*'];
+        }
+
+        if (!type) type = 'None';
 
         if (folderRelativePath) { 
             // maybe the folder was empty
@@ -198,6 +220,9 @@ export class StandardProject extends FileSystemBasedProject {
                 if (element.Content) {
                     element.Content.forEach(addFile);
                 }
+                if (element.TypeScriptCompile) {
+                    element.TypeScriptCompile.forEach(addFile);
+                }
                 if (element.None) {
                     element.None.forEach(addFile);
                 }
@@ -277,6 +302,9 @@ export class StandardProject extends FileSystemBasedProject {
             if (element.Content) {
                 element.Content.forEach(findPattern);
             }
+            if (element.TypeScriptCompile) {
+                element.TypeScriptCompile.forEach(findPattern);
+            }
             if (element.None) {
                 element.None.forEach(findPattern);
             }
@@ -306,6 +334,9 @@ export class StandardProject extends FileSystemBasedProject {
             if (element.Content) {
                 element.Content.forEach(findPattern);
             }
+            if (element.TypeScriptCompile) {
+                element.TypeScriptCompile.forEach(findPattern);
+            }
             if (element.None) {
                 element.None.forEach(findPattern);
             }
@@ -315,7 +346,7 @@ export class StandardProject extends FileSystemBasedProject {
         });
     }
 
-    private removeInNodes(pattern: string, isFolder: boolean = false, types: string[] = ['Compile', 'Content', 'None', 'Folder']): void {
+    private removeInNodes(pattern: string, isFolder: boolean = false, types: string[] = ['Compile', 'Content', 'TypeScriptCompile', 'None', 'Folder']): void {
         pattern = pattern.replace(/\//g, '\\') + (isFolder ? '\\' : '');
         this.document.Project.ItemGroup.forEach(element => {
             types.forEach(type => {
