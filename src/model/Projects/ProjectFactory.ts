@@ -31,8 +31,8 @@ export class ProjectFactory {
     private static async DetermineStandardProject(project: ProjectInSolution): Promise<Project> {
         let document =  await ProjectFactory.LoadProjectDocument(project.FullPath);
 
-        if (document.Project.$.Sdk == "Microsoft.NET.Sdk"
-            && !document.Project.ItemGroup)
+        if (document.Project.$.Sdk 
+            && document.Project.$.Sdk.startsWith("Microsoft.NET.Sdk"))
             return new CpsProject(project, document);
 
         return new StandardProject(project, document);
