@@ -57,7 +57,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 		for(let i = 0; i < solutionPaths.length; i++) {
 			let s = solutionPaths[i];
 			let solution = await SolutionFile.Parse(s);
-			let item = sln.CreateFromSolution(solution);
+			let item = await sln.CreateFromSolution(solution);
 			this.children.push(item);
 		}
 

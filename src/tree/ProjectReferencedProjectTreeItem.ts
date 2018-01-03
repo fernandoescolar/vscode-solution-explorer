@@ -1,11 +1,11 @@
 import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
 import { ContextValues } from "./ContextValues";
 import { ProjectInSolution } from "../model/Solutions";
-import { Project } from "../model/Projects";
+import { Project, ProjectReference } from "../model/Projects";
 
 export class ProjectReferencedProjectTreeItem extends TreeItem {
-    constructor(name: string, parent: TreeItem) {
-        super(name, TreeItemCollapsibleState.None, ContextValues.ProjectReferencedProjects, parent);
+    constructor(projectReference: ProjectReference, parent: TreeItem) {
+        super(projectReference.Name, TreeItemCollapsibleState.None, ContextValues.ProjectReferencedProjects, parent);
     }
 
     public getChildren(): Thenable<TreeItem[]> {

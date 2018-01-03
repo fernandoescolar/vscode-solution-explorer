@@ -1,7 +1,8 @@
 import { ProjectInSolution } from "../Solutions";
-import { PackageReference } from "./PackageReference";
 import { ProjectFile } from "./ProjectFile";
 import { ProjectFolder } from "./ProjectFolder";
+import { PackageReference } from "./PackageReference";
+import { ProjectReference } from "./ProjectReference";
 
 export abstract class Project {
     private hasReferences: boolean = true;
@@ -21,7 +22,7 @@ export abstract class Project {
         this.hasReferences = value;
     }
 
-    public abstract getProjectReferences() : Promise<string[]>;
+    public abstract getProjectReferences() : Promise<ProjectReference[]>;
 
     public abstract getPackageReferences() : Promise<PackageReference[]>;
 

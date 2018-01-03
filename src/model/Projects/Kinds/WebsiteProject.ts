@@ -1,14 +1,15 @@
+import { ProjectInSolution } from "../../Solutions";
+import { PackageReference } from "../PackageReference";
+import { ProjectReference } from "../ProjectReference";
 import { FileSystemBasedProject } from "./FileSystemBasedProject";
-import { ProjectInSolution } from "../Solutions";
-import { PackageReference } from "./PackageReference";
 
-export class WebProject extends FileSystemBasedProject {
+export class WebsiteProject extends FileSystemBasedProject {
     constructor(projectInSolution: ProjectInSolution) {
         super(projectInSolution);
         this.setHasReferences(false);
     }
 
-    public getProjectReferences(): Promise<string[]> {
+    public getProjectReferences(): Promise<ProjectReference[]> {
         return Promise.resolve(null);
     }
 

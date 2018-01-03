@@ -1,10 +1,10 @@
-import * as fs from "../../async/fs";
 import * as path from "path";
-import { Project } from "./Project";
-import { ProjectInSolution } from "../Solutions";
-import * as Utilities from "../Utilities";
-import { ProjectFile } from "./ProjectFile";
-import { ProjectFolder } from "./ProjectFolder";
+import * as fs from "../../../async/fs";
+import * as Utilities from "../../Utilities";
+import { ProjectInSolution } from "../../Solutions";
+import { Project } from "../Project";
+import { ProjectFile } from "../ProjectFile";
+import { ProjectFolder } from "../ProjectFolder";
 
 export abstract class FileSystemBasedProject extends Project {
     constructor(projectInSolution: ProjectInSolution) {

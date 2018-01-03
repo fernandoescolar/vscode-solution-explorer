@@ -1,16 +1,18 @@
-import * as fs from "../../async/fs";
 import * as path from "path";
+import * as fs from "../../../async/fs";
+import * as xml from "../../../async/xml";
+import * as Utilities from "../../Utilities";
+import { ProjectInSolution } from "../../Solutions";
+import { ProjectFile } from "../ProjectFile";
+import { ProjectFolder } from "../ProjectFolder";
+import { PackageReference } from "../PackageReference";
+import { ProjectReference } from "../ProjectReference";
 import { FileSystemBasedProject } from "./FileSystemBasedProject";
-import { ProjectInSolution } from "../Solutions";
-import { PackageReference } from "./PackageReference";
-import * as Utilities from "../Utilities";
-import * as xml from "../../async/xml";
-import { ProjectFile } from "./ProjectFile";
-import { ProjectFolder } from "./ProjectFolder";
 
-export class OldProject extends FileSystemBasedProject {
+export class StandardProject extends FileSystemBasedProject {
     private loaded: boolean = false;
-    private references: string[] = [];
+    private loadedPackages: boolean = false;
+    private references: ProjectReference[] = [];
     private packages: PackageReference[] = [];
     private document: any = null;
     private folders: string[] = [];
@@ -18,11 +20,16 @@ export class OldProject extends FileSystemBasedProject {
     private dependents: { [id: string]: string[] };
     private currentItemGroup: any = null;
 
-    constructor(projectInSolution: ProjectInSolution) {
+    constructor(projectInSolution: ProjectInSolution, document?: any) {
         super(projectInSolution);
+
+        if (document) {
+            this.parseDocument(document);
+            this.loaded = true;
+        }
     }
 
-    public async getProjectReferences(): Promise<string[]> {
+    public async getProjectReferences(): Promise<ProjectReference[]> {
         await this.checkProjectLoaded();
         return this.references;
     }
@@ -141,12 +148,15 @@ export class OldProject extends FileSystemBasedProject {
     }
 
     private async checkProjectLoaded(): Promise<void> {
-        if (this.loaded) return;
-
-        let content = await fs.readFile(this.FullPath, 'utf8');
-        await this.parseProject(content);
-        await this.parsePackages();
-        this.loaded = true;
+        if (!this.loaded) {
+            let content = await fs.readFile(this.FullPath, 'utf8');
+            await this.parseProject(content);
+            this.loaded = true;
+        }
+        if (!this.loadedPackages) {
+            await this.parsePackages();
+            this.loadedPackages = true;
+        }
     }
 
     private async saveProject(): Promise<void> {
@@ -156,8 +166,13 @@ export class OldProject extends FileSystemBasedProject {
     }
 
     private async parseProject(content: string): Promise<void> {
-        this.document =  await xml.ParseToJson(content);
-        
+        let document =  await xml.ParseToJson(content);
+        this.parseDocument(document);
+    }
+    
+    public parseDocument(document: any): void {
+        this.loaded = true;
+        this.document = document;
         let files: string[] = [];
         let folders: string[] = [];
         let dependents: { [id: string]: string[] } = {};
@@ -174,7 +189,7 @@ export class OldProject extends FileSystemBasedProject {
             this.document.Project.ItemGroup.forEach(element => {
                 if (element.Reference) {
                     element.Reference.forEach(ref => {
-                        this.references.push(ref.$.Include);
+                        this.references.push(new ProjectReference(ref.$.Include));
                     });
                 }
                 if (element.Compile) {

@@ -28,8 +28,8 @@ export class ProjectReferencedProjectsTreeItem extends TreeItem {
         
         var refs = await this.project.getProjectReferences();
         refs.sort((a, b) => {
-            var x = a.toLowerCase();
-            var y = b.toLowerCase();
+            var x = a.Name.toLowerCase();
+            var y = b.Name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
         refs.forEach(ref => {

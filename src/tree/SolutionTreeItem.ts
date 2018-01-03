@@ -14,16 +14,24 @@ export class SolutionTreeItem extends TreeItem {
         if (this.children != null) {
             return Promise.resolve(this.children);
         }
-
-        this.children = [];
-        this.solution.Projects.forEach(p => {
-            if (!p.ParentProjectGuid) this.children.push(TreeItemFactory.CreateFromProject(this, p));
-        });
-
-        return Promise.resolve(this.children);
+        
+        return this.createChildren();
     }
 
     public refresh(): void {
         this.children = null;
-	}
+    }
+    
+    private async createChildren(): Promise<TreeItem[]> {
+        this.children = [];
+        for (let i = 0; i < this.solution.Projects.length; i++){
+            let p = this.solution.Projects[i];
+            if (!p.ParentProjectGuid) {
+                let item = await TreeItemFactory.CreateFromProject(this, p);
+                this.children.push(item);
+            }
+        }
+
+        return this.children;
+    }
 }

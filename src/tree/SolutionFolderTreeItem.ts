@@ -15,15 +15,23 @@ export class SolutionFolderTreeItem extends TreeItem {
             return Promise.resolve(this.children);
         }
 
-        this.children = [];
-        this.project.Solution.Projects.forEach(p => {
-            if (p.ParentProjectGuid == this.project.ProjectGuid) this.children.push(TreeItemFactory.CreateFromProject(this, p));
-        });
-
-        return Promise.resolve(this.children);
+        return this.createChildren();
     }
 
     public refresh(): void {
         this.children = null;
-	}
+    }
+    
+    private async createChildren(): Promise<TreeItem[]> {
+        this.children = [];
+        for (let i = 0; i < this.project.Solution.Projects.length; i++){
+            let p = this.project.Solution.Projects[i];
+            if (p.ParentProjectGuid == this.project.ProjectGuid) {
+                let item = await TreeItemFactory.CreateFromProject(this, p);
+                this.children.push(item);
+            }
+        }
+
+        return this.children;
+    }
 }
