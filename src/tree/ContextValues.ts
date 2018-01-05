@@ -8,4 +8,5 @@ export class ContextValues {
     public static readonly ProjectFolder: string = 'project-folder';
     public static readonly ProjectFile: string = 'project-file';
     public static readonly Error: string = 'error';
+    public static readonly NoSolution: string = 'no-solution';
 }
