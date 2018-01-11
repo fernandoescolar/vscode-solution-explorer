@@ -67,6 +67,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.0.10
+
+Refactor commands using command pattern.
+
 ### 0.0.9
 
 Added configuration settings.

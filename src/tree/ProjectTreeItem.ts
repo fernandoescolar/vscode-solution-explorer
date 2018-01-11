@@ -5,8 +5,9 @@ import { Project } from "../model/Projects";
 import { ProjectReferencesTreeItem } from "./ProjectReferencesTreeItem";
 import * as TreeItemFactory from "./TreeItemFactory";
 import * as path from 'path';
+import { IFileCreator, IFolderCreator, IRefreshable } from "./index";
 
-export class ProjectTreeItem extends TreeItem {
+export class ProjectTreeItem extends TreeItem implements IFileCreator, IFolderCreator, IRefreshable {
     private children: TreeItem[] = null;
 
     constructor(private readonly project: Project, private readonly projectInSolution: ProjectInSolution, parent: TreeItem) {

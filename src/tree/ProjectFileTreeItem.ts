@@ -3,8 +3,9 @@ import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
 import { ContextValues } from "./ContextValues";
 import { Project } from "../model/Projects";
 import { ProjectFile } from "../model/Projects/ProjectFile";
+import { IDeletable, IRenameable } from "./index";
 
-export class ProjectFileTreeItem extends TreeItem {
+export class ProjectFileTreeItem extends TreeItem implements IDeletable, IRenameable {
     private children: TreeItem[];
 
     constructor(private readonly projectFile: ProjectFile, private readonly project: Project, parent: TreeItem) {
@@ -13,7 +14,7 @@ export class ProjectFileTreeItem extends TreeItem {
 
     command = {
 		command: 'solutionExplorer.openFile',
-		arguments: [this.path],
+		arguments: [this],
 		title: 'Open File'
 	};
 

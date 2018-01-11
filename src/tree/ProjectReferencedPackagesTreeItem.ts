@@ -2,8 +2,9 @@ import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
 import { ContextValues } from "./ContextValues";
 import { Project } from "../model/Projects";
 import { ProjectReferencedPackageTreeItem } from "./ProjectReferencedPackageTreeItem";
+import { IRefreshable } from "./index";
 
-export class ProjectReferencedPackagesTreeItem extends TreeItem {
+export class ProjectReferencedPackagesTreeItem extends TreeItem implements IRefreshable {
     private children: TreeItem[] = null;
 
     constructor(private readonly project: Project, parent: TreeItem) {

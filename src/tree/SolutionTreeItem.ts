@@ -2,8 +2,9 @@ import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
 import * as TreeItemFactory from "./TreeItemFactory";
 import { ContextValues } from "./ContextValues";
 import { SolutionFile } from "../model/Solutions";
+import { IRefreshable } from "./index";
 
-export class SolutionTreeItem extends TreeItem {
+export class SolutionTreeItem extends TreeItem implements IRefreshable {
     private children: TreeItem[] = null;
     
     constructor(private readonly solution: SolutionFile) {

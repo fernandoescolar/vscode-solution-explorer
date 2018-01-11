@@ -3,8 +3,9 @@ import { ContextValues } from "./ContextValues";
 import { ProjectInSolution } from "../model/Solutions";
 import { Project } from "../model/Projects";
 import { ProjectReferencedProjectTreeItem } from "./ProjectReferencedProjectTreeItem";
+import { IRefreshable } from "./index";
 
-export class ProjectReferencedProjectsTreeItem extends TreeItem {
+export class ProjectReferencedProjectsTreeItem extends TreeItem implements IRefreshable {
     private children: TreeItem[] = null;
 
     constructor(private readonly project: Project, parent: TreeItem) {

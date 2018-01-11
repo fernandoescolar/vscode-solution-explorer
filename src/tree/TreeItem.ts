@@ -16,7 +16,4 @@ export abstract class TreeItem extends vscode.TreeItem {
 	}
 
 	public abstract getChildren(): Thenable<TreeItem[]>;
-
-	public refresh(): void {
-	}
 }
