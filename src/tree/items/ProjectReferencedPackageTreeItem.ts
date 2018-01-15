@@ -1,6 +1,6 @@
-import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
-import { ContextValues } from "./ContextValues";
-import { PackageReference } from "../model/Projects";
+import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { ContextValues } from "../ContextValues";
+import { PackageReference } from "../../model/Projects";
 
 
 export class ProjectReferencedPackageTreeItem extends TreeItem {

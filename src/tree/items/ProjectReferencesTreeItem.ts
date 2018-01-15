@@ -1,9 +1,9 @@
-import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
-import { ContextValues } from "./ContextValues";
-import { Project } from "../model/Projects";
+import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { ContextValues } from "../ContextValues";
+import { Project } from "../../model/Projects";
 import { ProjectReferencedProjectsTreeItem } from "./ProjectReferencedProjectsTreeItem";
 import { ProjectReferencedPackagesTreeItem } from "./ProjectReferencedPackagesTreeItem";
-import { IRefreshable } from "./index";
+import { IRefreshable } from "../index";
 
 export class ProjectReferencesTreeItem extends TreeItem implements IRefreshable {
     private children: TreeItem[] = null;

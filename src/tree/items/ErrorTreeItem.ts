@@ -1,5 +1,5 @@
-import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
-import { ContextValues } from "./ContextValues";
+import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { ContextValues } from "../ContextValues";
 
 export class ErrorTreeItem extends TreeItem {
 

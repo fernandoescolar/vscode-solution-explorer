@@ -1,12 +1,12 @@
 import * as path from "path";
-import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
-import { ContextValues } from "./ContextValues";
-import { ProjectInSolution } from "../model/Solutions";
-import { Project } from "../model/Projects";
+import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { ContextValues } from "../ContextValues";
+import { ProjectInSolution } from "../../model/Solutions";
+import { Project } from "../../model/Projects";
 import { ProjectReferencedProjectTreeItem } from "./ProjectReferencedProjectTreeItem";
-import * as TreeItemFactory from "./TreeItemFactory";
-import { ProjectFolder } from "../model/Projects/ProjectFolder";
-import { IFileCreator, IFolderCreator, IDeletable, IRenameable, IRefreshable } from "./index";
+import * as TreeItemFactory from "../TreeItemFactory";
+import { ProjectFolder } from "../../model/Projects/ProjectFolder";
+import { IFileCreator, IFolderCreator, IDeletable, IRenameable, IRefreshable } from "../index";
 
 export class ProjectFolderTreeItem extends TreeItem implements IFileCreator, IFolderCreator, IDeletable, IRenameable, IRefreshable {
     private children: TreeItem[] = null;

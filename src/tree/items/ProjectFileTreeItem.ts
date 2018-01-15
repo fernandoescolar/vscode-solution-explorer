@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
-import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
-import { ContextValues } from "./ContextValues";
-import { Project } from "../model/Projects";
-import { ProjectFile } from "../model/Projects/ProjectFile";
-import { IDeletable, IRenameable } from "./index";
+import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { ContextValues } from "../ContextValues";
+import { Project } from "../../model/Projects";
+import { ProjectFile } from "../../model/Projects/ProjectFile";
+import { IDeletable, IRenameable } from "../index";
 
 export class ProjectFileTreeItem extends TreeItem implements IDeletable, IRenameable {
     private children: TreeItem[];

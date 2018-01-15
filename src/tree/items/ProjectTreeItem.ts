@@ -1,11 +1,11 @@
-import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
-import { ContextValues } from "./ContextValues";
-import { ProjectInSolution } from "../model/Solutions";
-import { Project } from "../model/Projects";
+import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { ContextValues } from "../ContextValues";
+import { ProjectInSolution } from "../../model/Solutions";
+import { Project } from "../../model/Projects";
 import { ProjectReferencesTreeItem } from "./ProjectReferencesTreeItem";
-import * as TreeItemFactory from "./TreeItemFactory";
+import * as TreeItemFactory from "../TreeItemFactory";
 import * as path from 'path';
-import { IFileCreator, IFolderCreator, IRefreshable } from "./index";
+import { IFileCreator, IFolderCreator, IRefreshable } from "../index";
 
 export class ProjectTreeItem extends TreeItem implements IFileCreator, IFolderCreator, IRefreshable {
     private children: TreeItem[] = null;
@@ -38,6 +38,7 @@ export class ProjectTreeItem extends TreeItem implements IFileCreator, IFolderCr
 
     private async createChildren(): Promise<TreeItem[]> {
         this.children = [];
+
         if (this.project.hasReferences) {
             this.children.push(new ProjectReferencesTreeItem(this.project, this));
         }

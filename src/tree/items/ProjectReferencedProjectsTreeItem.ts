@@ -1,14 +1,15 @@
-import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
-import { ContextValues } from "./ContextValues";
-import { Project } from "../model/Projects";
-import { ProjectReferencedPackageTreeItem } from "./ProjectReferencedPackageTreeItem";
-import { IRefreshable } from "./index";
+import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { ContextValues } from "../ContextValues";
+import { ProjectInSolution } from "../../model/Solutions";
+import { Project } from "../../model/Projects";
+import { ProjectReferencedProjectTreeItem } from "./ProjectReferencedProjectTreeItem";
+import { IRefreshable } from "../index";
 
-export class ProjectReferencedPackagesTreeItem extends TreeItem implements IRefreshable {
+export class ProjectReferencedProjectsTreeItem extends TreeItem implements IRefreshable {
     private children: TreeItem[] = null;
 
     constructor(private readonly project: Project, parent: TreeItem) {
-        super("packages", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferencedPackages, parent);
+        super("projects", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferencedProjects, parent);
     }
 
     public getChildren(): Thenable<TreeItem[]> {
@@ -26,14 +27,14 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem implements IRefr
     private async createChildren(): Promise<TreeItem[]> {
         this.children = [];
         
-        var refs = await this.project.getPackageReferences();
+        var refs = await this.project.getProjectReferences();
         refs.sort((a, b) => {
             var x = a.name.toLowerCase();
             var y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
         refs.forEach(ref => {
-            this.children.push(new ProjectReferencedPackageTreeItem(ref, this));
+            this.children.push(new ProjectReferencedProjectTreeItem(ref, this));
         });
 
         return this.children;

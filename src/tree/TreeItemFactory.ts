@@ -2,12 +2,12 @@ import * as path from "path";
 import { ProjectInSolution, SolutionProjectType, SolutionFile, ProjectTypeIds } from "../model/Solutions";
 import { Project, ProjectFactory } from "../model/Projects";
 import { TreeItem } from "./TreeItem";
-import { SolutionFolderTreeItem } from "./SolutionFolderTreeItem";
-import { UnknownProjectTreeItem } from "./UnknownProjectTreeItem";
-import { ProjectTreeItem } from "./ProjectTreeItem";
-import { SolutionTreeItem } from "./SolutionTreeItem";
-import { ProjectFolderTreeItem } from "./ProjectFolderTreeItem";
-import { ProjectFileTreeItem } from "./ProjectFileTreeItem";
+import { SolutionFolderTreeItem } from "./items/SolutionFolderTreeItem";
+import { UnknownProjectTreeItem } from "./items/UnknownProjectTreeItem";
+import { ProjectTreeItem } from "./items/ProjectTreeItem";
+import { SolutionTreeItem } from "./items/SolutionTreeItem";
+import { ProjectFolderTreeItem } from "./items/ProjectFolderTreeItem";
+import { ProjectFileTreeItem } from "./items/ProjectFileTreeItem";
 
 export function CreateFromSolution(solution: SolutionFile): Promise<TreeItem> {
     return Promise.resolve(new SolutionTreeItem(solution));

@@ -1,6 +1,6 @@
-import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
-import { ContextValues } from "./ContextValues";
-import { ProjectInSolution } from "../model/Solutions";
+import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { ContextValues } from "../ContextValues";
+import { ProjectInSolution } from "../../model/Solutions";
 import { ErrorTreeItem } from "./ErrorTreeItem";
 
 export class UnknownProjectTreeItem extends TreeItem {

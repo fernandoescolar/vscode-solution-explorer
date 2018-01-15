@@ -1,8 +1,8 @@
-import { TreeItem, TreeItemCollapsibleState } from "./TreeItem";
-import * as TreeItemFactory from "./TreeItemFactory";
-import { ContextValues } from "./ContextValues";
-import { ProjectInSolution } from "../model/Solutions";
-import { IRefreshable } from "./index";
+import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import * as TreeItemFactory from "../TreeItemFactory";
+import { ContextValues } from "../ContextValues";
+import { ProjectInSolution } from "../../model/Solutions";
+import { IRefreshable } from "../index";
 
 export class SolutionFolderTreeItem extends TreeItem implements IRefreshable {
     private children: TreeItem[] = null;
