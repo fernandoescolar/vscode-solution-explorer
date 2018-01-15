@@ -3,11 +3,11 @@ import { ISubscription } from "./ISubscription";
 import { EventTypes } from "./EventTypes";
 
 class Handler {
-    constructor(private readonly messageType: string | EventTypes, private readonly callback: Function) {
+    constructor(private readonly eventType: string | EventTypes, private readonly callback: Function) {
     }
 
     handle(event: IEvent) {
-        if (event.EventType === this.messageType) {
+        if (event.eventType === this.eventType) {
             this.callback.call(null, event);
         }
     }
@@ -24,7 +24,7 @@ export class EventAggregator {
             throw new Error('Event type is invalid.');
         }
      
-        let handlers = this.eventHandlers[event.EventType];
+        let handlers = this.eventHandlers[event.eventType];
         if (handlers) {
             handlers = handlers.slice();
             handlers.forEach(handler => {
