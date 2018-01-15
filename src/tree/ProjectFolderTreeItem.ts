@@ -12,7 +12,7 @@ export class ProjectFolderTreeItem extends TreeItem implements IFileCreator, IFo
     private children: TreeItem[] = null;
 
     constructor(private readonly projectFolder: ProjectFolder, private readonly project: Project, parent: TreeItem) {
-        super(projectFolder.Name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, parent, projectFolder.FullPath);
+        super(projectFolder.name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, parent, projectFolder.fullPath);
     }
 
     public getChildren(): Thenable<TreeItem[]> {
@@ -48,7 +48,7 @@ export class ProjectFolderTreeItem extends TreeItem implements IFileCreator, IFo
     private async createChildren(): Promise<TreeItem[]> {
         this.children = [];
 
-        let virtualPath = this.projectFolder.FullPath.replace(path.dirname(this.project.FullPath), '');
+        let virtualPath = this.projectFolder.fullPath.replace(path.dirname(this.project.fullPath), '');
         if (virtualPath.startsWith(path.sep))
             virtualPath = virtualPath.substring(1);
             

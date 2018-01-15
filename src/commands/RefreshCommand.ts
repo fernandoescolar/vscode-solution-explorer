@@ -9,11 +9,11 @@ export class RefreshCommand extends CommandBase {
         super();
     }
 
-    protected ShouldRun(item: TreeItem): boolean {
+    protected shouldRun(item: TreeItem): boolean {
         return !item || isRefreshable(item);
     }
 
-    protected RunCommand(item: TreeItem, args: string[]): Promise<string[]> {       
+    protected runCommand(item: TreeItem, args: string[]): Promise<string[]> {       
         if (item) {
             let refreshable = <IRefreshable> (<any>item);
             refreshable.refresh();

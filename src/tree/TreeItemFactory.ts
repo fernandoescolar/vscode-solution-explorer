@@ -14,11 +14,11 @@ export function CreateFromSolution(solution: SolutionFile): Promise<TreeItem> {
 }
 
 export async function CreateFromProject(parent: TreeItem, project: ProjectInSolution): Promise<TreeItem> {
-    if (project.ProjectType == SolutionProjectType.SolutionFolder) {
+    if (project.projectType == SolutionProjectType.SolutionFolder) {
         return new SolutionFolderTreeItem(project, parent);
     } 
 
-    let p = await ProjectFactory.Parse(project);
+    let p = await ProjectFactory.parse(project);
     if (p) {
         return new ProjectTreeItem(p, project, parent);
     }

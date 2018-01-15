@@ -1,4 +1,4 @@
 export class PackageReference {
-    constructor(public Name: string, public Version: string){
+    constructor(public readonly name: string, public readonly version: string){
     }
 }

@@ -8,29 +8,29 @@ import { SolutionProjectType } from "./SolutionProjectType";
 import { ProjectConfigurationInSolution } from "./ProjectConfigurationInSolution";
 
 export class ProjectInSolution {
-    constructor(public readonly Solution: SolutionFile) {
+    constructor(public readonly solution: SolutionFile) {
     }
 
-    public ProjectTypeId: string;
-    public ProjectType: SolutionProjectType;
-    public ProjectName: string;
-    public RelativePath: string;
-    public FullPath: string;
-    public ProjectGuid: string;
-    public ParentProjectGuid: string;
-    public Dependencies: string[] = [];
-    public WebProperties: { [id: string] : string } = {};
-    public Configuration: { [id: string] : ProjectConfigurationInSolution } = {};
+    public projectTypeId: string;
+    public projectType: SolutionProjectType;
+    public projectName: string;
+    public relativePath: string;
+    public fullPath: string;
+    public projectGuid: string;
+    public parentProjectGuid: string;
+    public dependencies: string[] = [];
+    public webProperties: { [id: string] : string } = {};
+    public configuration: { [id: string] : ProjectConfigurationInSolution } = {};
 
-    public AddDependency(parentGuid): void {
-        this.Dependencies.push(parentGuid);
+    public addDependency(parentGuid): void {
+        this.dependencies.push(parentGuid);
     }
 
-    public AddWebProperty(name: string, value: string): void {
-        this.WebProperties[name] = value;
+    public addWebProperty(name: string, value: string): void {
+        this.webProperties[name] = value;
     }
 
-    public SetProjectConfiguration(name: string, configuration: ProjectConfigurationInSolution) {
-        this.Configuration[name] = configuration;
+    public setProjectConfiguration(name: string, configuration: ProjectConfigurationInSolution) {
+        this.configuration[name] = configuration;
     }
 }

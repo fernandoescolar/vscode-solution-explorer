@@ -28,8 +28,8 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem implements IRefr
         
         var refs = await this.project.getPackageReferences();
         refs.sort((a, b) => {
-            var x = a.Name.toLowerCase();
-            var y = b.Name.toLowerCase();
+            var x = a.name.toLowerCase();
+            var y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
         refs.forEach(ref => {

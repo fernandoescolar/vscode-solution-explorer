@@ -6,7 +6,7 @@ import { ErrorTreeItem } from "./ErrorTreeItem";
 export class UnknownProjectTreeItem extends TreeItem {
 
     constructor(private readonly project: ProjectInSolution, parent: TreeItem) {
-        super(project.ProjectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, parent, project.FullPath);
+        super(project.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, parent, project.fullPath);
     }
 
     getChildren(): Thenable<TreeItem[]> {

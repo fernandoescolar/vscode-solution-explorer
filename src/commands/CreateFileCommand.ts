@@ -14,11 +14,11 @@ export class CreateFileCommand extends CommandBase {
         ];
     }
 
-    protected ShouldRun(item: TreeItem): boolean {
+    protected shouldRun(item: TreeItem): boolean {
         return isFileCreator(item);
     }
 
-    protected async RunCommand(item: TreeItem, args: string[]): Promise<string[]> {
+    protected async runCommand(item: TreeItem, args: string[]): Promise<string[]> {
         if (!args || args.length <= 0) return;
 
         let fileCreator = <IFileCreator> (<any>item);

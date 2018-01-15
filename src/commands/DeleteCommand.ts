@@ -10,7 +10,7 @@ export class DeleteCommand extends CommandBase {
         super();
     }
 
-    protected ShouldRun(item: TreeItem): boolean {
+    protected shouldRun(item: TreeItem): boolean {
         if (!isDeletable(item)) return false;
 
         this.parameters = [
@@ -20,7 +20,7 @@ export class DeleteCommand extends CommandBase {
         return true;
     }
 
-    protected async RunCommand(item: TreeItem, args: string[]): Promise<string[]> {
+    protected async runCommand(item: TreeItem, args: string[]): Promise<string[]> {
         let renameable = <IDeletable> (<any>item);
         try {
             await renameable.delete();

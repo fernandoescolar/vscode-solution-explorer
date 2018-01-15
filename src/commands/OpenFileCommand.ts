@@ -9,12 +9,12 @@ export class OpenFileCommand extends CommandBase {
         super();
     }
 
-    protected ShouldRun(item: TreeItem): boolean {
+    protected shouldRun(item: TreeItem): boolean {
         if (item && item.path) return true; // return item && item.path; // raises an error
         return false;
     }
 
-    protected async RunCommand(item: TreeItem, args: string[]): Promise<string[]> {    
+    protected async runCommand(item: TreeItem, args: string[]): Promise<string[]> {    
         let filepath = item.path;
         let document = await vscode.workspace.openTextDocument(filepath);
         vscode.window.showTextDocument(document);    

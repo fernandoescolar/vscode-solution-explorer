@@ -8,7 +8,7 @@ export class SolutionFolderTreeItem extends TreeItem implements IRefreshable {
     private children: TreeItem[] = null;
     
     constructor(private project: ProjectInSolution, parent: TreeItem) {
-        super(project.ProjectName, TreeItemCollapsibleState.Expanded, ContextValues.SolutionFolder, parent);
+        super(project.projectName, TreeItemCollapsibleState.Expanded, ContextValues.SolutionFolder, parent);
     }
 
     public getChildren(): Thenable<TreeItem[]> {
@@ -25,9 +25,9 @@ export class SolutionFolderTreeItem extends TreeItem implements IRefreshable {
     
     private async createChildren(): Promise<TreeItem[]> {
         this.children = [];
-        for (let i = 0; i < this.project.Solution.Projects.length; i++){
-            let p = this.project.Solution.Projects[i];
-            if (p.ParentProjectGuid == this.project.ProjectGuid) {
+        for (let i = 0; i < this.project.solution.Projects.length; i++){
+            let p = this.project.solution.Projects[i];
+            if (p.parentProjectGuid == this.project.projectGuid) {
                 let item = await TreeItemFactory.CreateFromProject(this, p);
                 this.children.push(item);
             }

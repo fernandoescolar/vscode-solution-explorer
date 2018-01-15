@@ -1,4 +1,4 @@
 export class DirectorySearchResult {
-    constructor(public readonly Directories: string[], public readonly Files: string[]) {
+    constructor(public readonly directories: string[], public readonly files: string[]) {
     }
 }

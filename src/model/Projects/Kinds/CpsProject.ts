@@ -42,13 +42,13 @@ export class CpsProject extends FileSystemBasedProject {
 
         let ignore = SolutionExplorerConfiguration.getNetCoreIgnore();
         result.files.forEach(file => {
-            if (!this.FullPath.endsWith(file.FullPath) && ignore.indexOf(file.Name.toLocaleLowerCase()) < 0)
+            if (!this.fullPath.endsWith(file.fullPath) && ignore.indexOf(file.name.toLocaleLowerCase()) < 0)
                 files.push(file);
         });
 
         
         result.folders.forEach(folder => {
-            if (ignore.indexOf(folder.Name.toLocaleLowerCase()) < 0)
+            if (ignore.indexOf(folder.name.toLocaleLowerCase()) < 0)
                 folders.push(folder);
         });
         
@@ -58,7 +58,7 @@ export class CpsProject extends FileSystemBasedProject {
     private async checkProjectLoaded() {
         if (this.loaded) return;
 
-        await this.parseProject(this.FullPath);
+        await this.parseProject(this.fullPath);
         this.loaded = true;
     }
 

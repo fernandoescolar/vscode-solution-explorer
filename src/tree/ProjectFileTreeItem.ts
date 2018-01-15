@@ -9,7 +9,7 @@ export class ProjectFileTreeItem extends TreeItem implements IDeletable, IRename
     private children: TreeItem[];
 
     constructor(private readonly projectFile: ProjectFile, private readonly project: Project, parent: TreeItem) {
-        super(projectFile.Name, projectFile.HasDependents ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None, ContextValues.ProjectFile, parent, projectFile.FullPath);
+        super(projectFile.name, projectFile.hasDependents ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None, ContextValues.ProjectFile, parent, projectFile.fullPath);
     }
 
     command = {
@@ -19,9 +19,9 @@ export class ProjectFileTreeItem extends TreeItem implements IDeletable, IRename
 	};
 
     public getChildren(): Thenable<TreeItem[]> {
-        if (!this.children && this.projectFile.Dependents) {
+        if (!this.children && this.projectFile.dependents) {
             this.children = [];
-            this.projectFile.Dependents.forEach(d => {
+            this.projectFile.dependents.forEach(d => {
                 this.children.push(new ProjectFileTreeItem(d, this.project, this));
             });
         }

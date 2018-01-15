@@ -184,7 +184,7 @@ export class SolutionFile {
                     let propertyLineRegEx = /(.*)\s*=\s*(.*)/g;
                     let m = propertyLineRegEx.exec(line);
                     let parentGuid: string = m[1].trim();
-                    proj.AddDependency(parentGuid);
+                    proj.addDependency(parentGuid);
 
                     line = this.ReadLine();
                 }
@@ -202,7 +202,7 @@ export class SolutionFile {
                     let propertyName: string = m[1].trim();
                     let propertyValue: string = m[2].trim();
 
-                    proj.AddWebProperty(propertyName, propertyValue);
+                    proj.addWebProperty(propertyName, propertyValue);
 
                     line = this.ReadLine();
                 }
@@ -213,47 +213,47 @@ export class SolutionFile {
     private ParseFirstProjectLine(firstLine: string, proj: ProjectInSolution): void {
         let projectRegEx = /Project\("(.*)"\)\s*=\s*"(.*)"\s*,\s*"(.*)"\s*,\s*"(.*)"/g;
         let m = projectRegEx.exec(firstLine);
-        proj.ProjectTypeId = m[1].trim();
-        proj.ProjectName = m[2].trim();
-        proj.RelativePath = m[3].trim();
-        proj.FullPath = path.join(this.FolderPath, m[3].replace(/\\/g, path.sep)).trim();
-        proj.ProjectGuid = m[4].trim();
-        this.projects[proj.ProjectGuid] = proj;
+        proj.projectTypeId = m[1].trim();
+        proj.projectName = m[2].trim();
+        proj.relativePath = m[3].trim();
+        proj.fullPath = path.join(this.FolderPath, m[3].replace(/\\/g, path.sep)).trim();
+        proj.projectGuid = m[4].trim();
+        this.projects[proj.projectGuid] = proj;
 
-        if ((proj.ProjectTypeId == vbProjectGuid) ||
-            (proj.ProjectTypeId == csProjectGuid) ||
-            (proj.ProjectTypeId == cpsProjectGuid) ||
-            (proj.ProjectTypeId == cpsCsProjectGuid) ||
-            (proj.ProjectTypeId == cpsVbProjectGuid) ||
-            (proj.ProjectTypeId == fsProjectGuid) ||
-            (proj.ProjectTypeId == dbProjectGuid) ||
-            (proj.ProjectTypeId == vjProjectGuid))
+        if ((proj.projectTypeId == vbProjectGuid) ||
+            (proj.projectTypeId == csProjectGuid) ||
+            (proj.projectTypeId == cpsProjectGuid) ||
+            (proj.projectTypeId == cpsCsProjectGuid) ||
+            (proj.projectTypeId == cpsVbProjectGuid) ||
+            (proj.projectTypeId == fsProjectGuid) ||
+            (proj.projectTypeId == dbProjectGuid) ||
+            (proj.projectTypeId == vjProjectGuid))
         {
-            proj.ProjectType = SolutionProjectType.KnownToBeMSBuildFormat;
+            proj.projectType = SolutionProjectType.KnownToBeMSBuildFormat;
         }
-        else if (proj.ProjectTypeId == solutionFolderGuid)
+        else if (proj.projectTypeId == solutionFolderGuid)
         {
-            proj.ProjectType = SolutionProjectType.SolutionFolder;
+            proj.projectType = SolutionProjectType.SolutionFolder;
         }
         // MSBuild format VC projects have the same project type guid as old style VC projects.
         // If it's not an old-style VC project, we'll assume it's MSBuild format
-        else if (proj.ProjectTypeId == vcProjectGuid)
+        else if (proj.projectTypeId == vcProjectGuid)
         {
-            proj.ProjectType = SolutionProjectType.KnownToBeMSBuildFormat;
+            proj.projectType = SolutionProjectType.KnownToBeMSBuildFormat;
         }
-        else if (proj.ProjectTypeId == webProjectGuid)
+        else if (proj.projectTypeId == webProjectGuid)
         {
-            proj.ProjectType = SolutionProjectType.WebProject;
+            proj.projectType = SolutionProjectType.WebProject;
             this.solutionContainsWebProjects = true;
         }
-        else if (proj.ProjectTypeId == wdProjectGuid)
+        else if (proj.projectTypeId == wdProjectGuid)
         {
-            proj.ProjectType = SolutionProjectType.WebDeploymentProject;
+            proj.projectType = SolutionProjectType.WebDeploymentProject;
             this.solutionContainsWebDeploymentProjects = true;
         }
         else
         {
-            proj.ProjectType = SolutionProjectType.Unknown;
+            proj.projectType = SolutionProjectType.Unknown;
         }
        
     }
@@ -281,7 +281,7 @@ export class SolutionFile {
                 // error
             }
 
-            proj.ParentProjectGuid = parentProjectGuid;
+            proj.parentProjectGuid = parentProjectGuid;
         } while (true);
     }
 
@@ -357,19 +357,19 @@ export class SolutionFile {
         Object.keys(this.projects).forEach(key => {
             let project = this.projects[key];
             // Solution folders don't have configurations
-            if (project.ProjectType != SolutionProjectType.SolutionFolder)
+            if (project.projectType != SolutionProjectType.SolutionFolder)
             {
                 this.solutionConfigurations.forEach(solutionConfiguration => {
                     // The "ActiveCfg" entry defines the active project configuration in the given solution configuration
                     // This entry must be present for every possible solution configuration/project combination.
-                    let entryNameActiveConfig: string = project.ProjectGuid + "." + solutionConfiguration.FullName + ".ActiveCfg";
+                    let entryNameActiveConfig: string = project.projectGuid + "." + solutionConfiguration.fullName + ".ActiveCfg";
 
                     // The "Build.0" entry tells us whether to build the project configuration in the given solution configuration.
                     // Technically, it specifies a configuration name of its own which seems to be a remnant of an initial, 
                     // more flexible design of solution configurations (as well as the '.0' suffix - no higher values are ever used). 
                     // The configuration name is not used, and the whole entry means "build the project configuration" 
                     // if it's present in the solution file, and "don't build" if it's not.
-                    let entryNameBuild = project.ProjectGuid + "." + solutionConfiguration.FullName + ".Build.0";
+                    let entryNameBuild = project.projectGuid + "." + solutionConfiguration.fullName + ".Build.0";
 
                     if (rawProjectConfigurationsEntries[entryNameActiveConfig]) {
                         let configurationPlatformParts = rawProjectConfigurationsEntries[entryNameActiveConfig].split(configPlatformSeparators);
@@ -380,7 +380,7 @@ export class SolutionFile {
                             !!rawProjectConfigurationsEntries[entryNameBuild]
                         );
 
-                        project.SetProjectConfiguration(solutionConfiguration.FullName, projectConfiguration);
+                        project.setProjectConfiguration(solutionConfiguration.fullName, projectConfiguration);
                     }
                 });
             }

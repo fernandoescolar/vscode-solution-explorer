@@ -7,11 +7,11 @@ export abstract class CliCommandBase extends CommandBase {
         super();
     }
 
-    protected RunCommand(item: TreeItem, args: string[]): Promise<string[]> {
-        return this.RunCliCommand(this.app, args, item.path);
+    protected runCommand(item: TreeItem, args: string[]): Promise<string[]> {
+        return this.runCliCommand(this.app, args, item.path);
     }
 
-    private RunCliCommand(app: string, args: string[], path: string): Promise<string[]> {
+    private runCliCommand(app: string, args: string[], path: string): Promise<string[]> {
         return new Promise(resolve => {
             let process = spawn(app, args, { cwd: path });
             let out: string[] = [];

@@ -32,7 +32,7 @@ export class SolutionExplorerCommands {
 
     private registerCommand(name: string, command: ICommand) {
         vscode.commands.registerCommand(name, item => { 
-            command.Run(item)
+            command.run(item)
         });
     }
 }

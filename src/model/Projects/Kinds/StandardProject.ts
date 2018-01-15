@@ -64,10 +64,10 @@ export class StandardProject extends FileSystemBasedProject {
             } else {
                 let projectFile = new ProjectFile(item.fullpath);
                 if (this.dependents[item.virtualpath]) {
-                    projectFile.HasDependents = true;
+                    projectFile.hasDependents = true;
                     this.dependents[item.virtualpath].forEach(d => {
-                        var dependentFullPath = path.join(path.dirname(this.FullPath), d);
-                        projectFile.Dependents.push(new ProjectFile(dependentFullPath));
+                        var dependentFullPath = path.join(path.dirname(this.fullPath), d);
+                        projectFile.dependents.push(new ProjectFile(dependentFullPath));
                     });
                 }
                 files.push(projectFile);
@@ -75,14 +75,14 @@ export class StandardProject extends FileSystemBasedProject {
         }
 
         folders.sort((a, b) => {
-            var x = a.Name.toLowerCase();
-            var y = b.Name.toLowerCase();
+            var x = a.name.toLowerCase();
+            var y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
     
         files.sort((a, b) => {
-            var x = a.Name.toLowerCase();
-            var y = b.Name.toLowerCase();
+            var x = a.name.toLowerCase();
+            var y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
 
@@ -171,7 +171,7 @@ export class StandardProject extends FileSystemBasedProject {
 
     private async checkProjectLoaded(): Promise<void> {
         if (!this.loaded) {
-            let content = await fs.readFile(this.FullPath, 'utf8');
+            let content = await fs.readFile(this.fullPath, 'utf8');
             await this.parseProject(content);
             this.loaded = true;
         }
@@ -183,7 +183,7 @@ export class StandardProject extends FileSystemBasedProject {
 
     private async saveProject(): Promise<void> {
         let content = await xml.ParseToXml(this.document);
-        await fs.writeFile(this.FullPath, content);
+        await fs.writeFile(this.fullPath, content);
         await this.parseProject(content);
     }
 
@@ -246,7 +246,7 @@ export class StandardProject extends FileSystemBasedProject {
 
     private async parsePackages(): Promise<void> {
         this.packages = [];
-        let packagesPath = path.join(path.dirname(this.FullPath), 'packages.config');
+        let packagesPath = path.join(path.dirname(this.fullPath), 'packages.config');
         if (!(await fs.exists(packagesPath))) return;
         
         let content = await fs.readFile(packagesPath, 'utf8');
@@ -263,7 +263,7 @@ export class StandardProject extends FileSystemBasedProject {
             filepath = filepath.replace(/\\/g, path.sep);
             let pathParts = filepath.split(path.sep);
             let currentLevel = tree;
-            let currentFullPath = path.dirname(this.FullPath);
+            let currentFullPath = path.dirname(this.fullPath);
             pathParts.forEach(part => {
                 if (!part) return;
                 currentFullPath = path.join(currentFullPath, part);
@@ -393,7 +393,7 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     private getRelativePath(fullpath: string): string {
-        let relativePath = fullpath.replace(path.dirname(this.FullPath), '');
+        let relativePath = fullpath.replace(path.dirname(this.fullPath), '');
         if (relativePath.startsWith(path.sep))
             relativePath = relativePath.substring(1);
 

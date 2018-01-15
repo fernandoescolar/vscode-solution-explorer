@@ -4,32 +4,20 @@
  */
 
 export class ProjectConfigurationInSolution {
-    constructor(private readonly configurationName: string, private readonly platformName: string, private readonly includeInBuild: boolean) {
+    constructor(public readonly configurationName: string, public readonly platformName: string, public readonly includeInBuild: boolean) {
     }
 
-    public get ConfigurationName(): string {
-        return this.configurationName;
+    public get fullName(): string {
+        return this.computeFullName();
     }
 
-    public get PlatformName(): string {
-        return this.platformName;
-    }
-
-    public get IncludeInBuild(): boolean {
-        return this.includeInBuild;
-    }
-
-    public get FullName(): string {
-        return this.ComputeFullName();
-    }
-
-    private ComputeFullName(): string  {
+    private computeFullName(): string  {
         // Some configurations don't have the platform part
-        if (this.PlatformName && this.PlatformName.length > 0) {
-            return this.ConfigurationName + '|' + this.PlatformName;
+        if (this.platformName && this.platformName.length > 0) {
+            return this.configurationName + '|' + this.platformName;
         }
         else {
-            return this.ConfigurationName;
+            return this.configurationName;
         }
     }
 }

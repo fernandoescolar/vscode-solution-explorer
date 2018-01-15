@@ -10,7 +10,7 @@ export class RenameCommand extends CommandBase {
         super();
     }
 
-    protected ShouldRun(item: TreeItem): boolean {
+    protected shouldRun(item: TreeItem): boolean {
         if (!isRenameable(item)) return false;
 
         this.parameters = [
@@ -20,7 +20,7 @@ export class RenameCommand extends CommandBase {
         return true;
     }
 
-    protected async RunCommand(item: TreeItem, args: string[]): Promise<string[]> {
+    protected async runCommand(item: TreeItem, args: string[]): Promise<string[]> {
         if (!args || args.length <= 0) return;
 
         let renameable = <IRenameable> (<any>item);

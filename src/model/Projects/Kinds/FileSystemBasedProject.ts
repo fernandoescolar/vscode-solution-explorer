@@ -12,7 +12,7 @@ export abstract class FileSystemBasedProject extends Project {
     }
 
     public async getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[], folders: ProjectFolder[] }> {
-        let folderPath = path.dirname(this.projectInSolution.FullPath);
+        let folderPath = path.dirname(this.projectInSolution.fullPath);
         if (virtualPath)
             folderPath = path.join(folderPath, virtualPath);
         
@@ -20,8 +20,8 @@ export abstract class FileSystemBasedProject extends Project {
         let files: ProjectFile[] = [];
         let folders: ProjectFolder[] = [];
 
-        result.Files.forEach(filepath => files.push(new ProjectFile(filepath)));
-        result.Directories.forEach(folderpath => folders.push(new ProjectFolder(folderpath)));
+        result.files.forEach(filepath => files.push(new ProjectFile(filepath)));
+        result.directories.forEach(folderpath => folders.push(new ProjectFolder(folderpath)));
 
         return { files, folders };
     }

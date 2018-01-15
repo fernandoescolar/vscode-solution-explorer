@@ -27,7 +27,7 @@ export class SolutionTreeItem extends TreeItem implements IRefreshable {
         this.children = [];
         for (let i = 0; i < this.solution.Projects.length; i++){
             let p = this.solution.Projects[i];
-            if (!p.ParentProjectGuid) {
+            if (!p.parentProjectGuid) {
                 let item = await TreeItemFactory.CreateFromProject(this, p);
                 this.children.push(item);
             }

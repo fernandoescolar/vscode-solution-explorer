@@ -5,7 +5,7 @@ import { Project, ProjectReference } from "../model/Projects";
 
 export class ProjectReferencedProjectTreeItem extends TreeItem {
     constructor(projectReference: ProjectReference, parent: TreeItem) {
-        super(projectReference.Name, TreeItemCollapsibleState.None, ContextValues.ProjectReferencedProjects, parent);
+        super(projectReference.name, TreeItemCollapsibleState.None, ContextValues.ProjectReferencedProjects, parent);
     }
 
     public getChildren(): Thenable<TreeItem[]> {

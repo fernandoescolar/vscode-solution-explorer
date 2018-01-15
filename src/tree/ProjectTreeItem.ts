@@ -11,7 +11,7 @@ export class ProjectTreeItem extends TreeItem implements IFileCreator, IFolderCr
     private children: TreeItem[] = null;
 
     constructor(private readonly project: Project, private readonly projectInSolution: ProjectInSolution, parent: TreeItem) {
-        super(projectInSolution.ProjectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, parent, projectInSolution.FullPath);
+        super(projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, parent, projectInSolution.fullPath);
     }
 
     public getChildren(): Thenable<TreeItem[]> {
@@ -27,19 +27,19 @@ export class ProjectTreeItem extends TreeItem implements IFileCreator, IFolderCr
     }
     
     public createFile(name: string): Promise<string> {
-        let folderPath = path.dirname(this.project.FullPath);
+        let folderPath = path.dirname(this.project.fullPath);
         return this.project.createFile(folderPath, name);
     }
 
     public createFolder(name: string): Promise<void> {
-        let folderPath = path.join(path.dirname(this.project.FullPath), name);
+        let folderPath = path.join(path.dirname(this.project.fullPath), name);
         return this.project.createFolder(folderPath);
     }
 
     private async createChildren(): Promise<TreeItem[]> {
         this.children = [];
 
-        if (this.project.HasReferences) {
+        if (this.project.hasReferences) {
             this.children.push(new ProjectReferencesTreeItem(this.project, this));
         }
 

@@ -5,21 +5,21 @@ import { PackageReference } from "./PackageReference";
 import { ProjectReference } from "./ProjectReference";
 
 export abstract class Project {
-    private hasReferences: boolean = true;
+    private _hasReferences: boolean = true;
 
     constructor(protected readonly projectInSolution: ProjectInSolution) {
     }
 
-    public get FullPath(): string {
-        return this.projectInSolution.FullPath;
+    public get fullPath(): string {
+        return this.projectInSolution.fullPath;
     }
 
-    public get HasReferences(): boolean {
-        return this.hasReferences;
+    public get hasReferences(): boolean {
+        return this._hasReferences;
     }
 
     protected setHasReferences(value: boolean) {
-        this.hasReferences = value;
+        this._hasReferences = value;
     }
 
     public abstract getProjectReferences() : Promise<ProjectReference[]>;
