@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem, IFolderCreator, IRefreshable, isFolderCreator, isRefreshable } from "../tree";
+import { TreeItem, IFolderCreator, isFolderCreator } from "../tree";
 import { CommandBase } from "./base/CommandBase";
 import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
 
@@ -24,12 +24,6 @@ export class CreateFolderCommand extends CommandBase {
         let folderCreator = <IFolderCreator> (<any>item);
         try {
             await folderCreator.createFolder(args[0]);
-            if (isRefreshable(item)) {
-                let refreshable = <IRefreshable> (<any> item);
-                refreshable.refresh();
-            }
-            
-            this.provider.refresh(item);
         } catch(ex) {
             vscode.window.showInformationMessage('Can not create folder: ' + ex);
         }    

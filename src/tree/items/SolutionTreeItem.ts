@@ -1,38 +1,24 @@
 import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
-import * as TreeItemFactory from "../TreeItemFactory";
+import { TreeItemContext } from "../TreeItemContext";
 import { ContextValues } from "../ContextValues";
 import { SolutionFile } from "../../model/Solutions";
-import { IRefreshable } from "../index";
+import * as TreeItemFactory from "../TreeItemFactory";
 
-export class SolutionTreeItem extends TreeItem implements IRefreshable {
-    private children: TreeItem[] = null;
-    
-    constructor(private readonly solution: SolutionFile) {
-        super(solution.Name, TreeItemCollapsibleState.Expanded, ContextValues.Solution);
-    }
-
-    public getChildren(): Thenable<TreeItem[]> {
-        if (this.children != null) {
-            return Promise.resolve(this.children);
-        }
-        
-        return this.createChildren();
-    }
-
-    public refresh(): void {
-        this.children = null;
+export class SolutionTreeItem extends TreeItem {    
+    constructor(context: TreeItemContext, private readonly solution: SolutionFile) {
+        super(context, solution.Name, TreeItemCollapsibleState.Expanded, ContextValues.Solution);
     }
     
-    private async createChildren(): Promise<TreeItem[]> {
-        this.children = [];
+    protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
+        let result: TreeItem[] = [];
         for (let i = 0; i < this.solution.Projects.length; i++){
             let p = this.solution.Projects[i];
             if (!p.parentProjectGuid) {
-                let item = await TreeItemFactory.CreateFromProject(this, p);
-                this.children.push(item);
+                let item = await TreeItemFactory.CreateFromProject(childContext, p);
+                result.push(item);
             }
         }
 
-        return this.children;
+        return result;
     }
 }

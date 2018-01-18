@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem, IFileCreator, IRefreshable, isFileCreator, isRefreshable } from "../tree";
+import { TreeItem, IFileCreator, isFileCreator } from "../tree";
 import { CommandBase } from "./base/CommandBase";
 import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
 
@@ -24,13 +24,6 @@ export class CreateFileCommand extends CommandBase {
         let fileCreator = <IFileCreator> (<any>item);
         try {
             let filepath = await fileCreator.createFile(args[0]);
-            if (isRefreshable(item)) {
-                let refreshable = <IRefreshable> (<any> item);
-                refreshable.refresh();
-            }
-            
-            this.provider.refresh(item);
-
             let document = await vscode.workspace.openTextDocument(filepath);
             vscode.window.showTextDocument(document);  
         } catch(ex) {

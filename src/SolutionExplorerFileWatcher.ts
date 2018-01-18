@@ -1,8 +1,11 @@
 import * as vscode from "vscode";
-import { IFileEvent, FileEvent, FileEventType } from "./events";
+import { IFileEvent, FileEvent, FileEventType, IEventAggegator } from "./events";
 
-export class SolitionExplorerFileWatcher {
+export class SolutionExplorerFileWatcher {
     private fileWatcher: vscode.FileSystemWatcher;
+
+    constructor(public readonly eventAggregator: IEventAggegator){
+    }
 
     public register(): void {
         this.fileWatcher = vscode.workspace.createFileSystemWatcher("**/*");
@@ -32,6 +35,6 @@ export class SolitionExplorerFileWatcher {
     }
 
     private raiseEvent(event: IFileEvent): void {
-
+        this.eventAggregator.publish(event);
     }
 }

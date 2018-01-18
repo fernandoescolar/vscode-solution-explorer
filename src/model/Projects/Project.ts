@@ -28,15 +28,15 @@ export abstract class Project {
 
     public abstract getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[], folders: ProjectFolder[] }>;
 
-    public abstract renameFile(filepath: string, name: string): Promise<void>;
+    public abstract renameFile(filepath: string, name: string): Promise<string>;
 
     public abstract deleteFile(filepath: string): Promise<void>;
 
     public abstract createFile(folderpath: string, filename: string): Promise<string>;
 
-    public abstract renameFolder(folderpath: string, name: string): Promise<void>;
+    public abstract renameFolder(folderpath: string, name: string): Promise<string>;
 
     public abstract deleteFolder(folderpath: string): Promise<void>;
 
-    public abstract createFolder(folderpath: string): Promise<void>;
+    public abstract createFolder(folderpath: string): Promise<string>;
 }

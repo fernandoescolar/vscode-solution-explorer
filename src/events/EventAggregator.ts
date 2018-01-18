@@ -1,3 +1,4 @@
+import { IEventAggegator } from "./IEventAggregator";
 import { IEvent } from "./IEvent";
 import { ISubscription } from "./ISubscription";
 import { EventTypes } from "./EventTypes";
@@ -13,7 +14,7 @@ class Handler {
     }
 }
 
-export class EventAggregator {
+export class EventAggregator implements IEventAggegator {
     private eventHandlers: { [id: string]: Handler[] } = {};
 
     constructor() {

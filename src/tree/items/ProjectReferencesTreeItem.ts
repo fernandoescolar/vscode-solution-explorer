@@ -3,28 +3,18 @@ import { ContextValues } from "../ContextValues";
 import { Project } from "../../model/Projects";
 import { ProjectReferencedProjectsTreeItem } from "./ProjectReferencedProjectsTreeItem";
 import { ProjectReferencedPackagesTreeItem } from "./ProjectReferencedPackagesTreeItem";
-import { IRefreshable } from "../index";
+import { TreeItemContext } from "../TreeItemContext";
 
-export class ProjectReferencesTreeItem extends TreeItem implements IRefreshable {
-    private children: TreeItem[] = null;
-
-    constructor(private readonly project: Project, parent: TreeItem) {
-        super("references", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferences, parent);
+export class ProjectReferencesTreeItem extends TreeItem {
+    constructor(context: TreeItemContext, private readonly project: Project) {
+        super(context, "references", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferences);
     }
 
-    public getChildren(): Thenable<TreeItem[]> {
-        if (this.children) {
-            return Promise.resolve(this.children);
-        }
+    protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
+        let result: TreeItem[] = [];
+        result.push(new ProjectReferencedProjectsTreeItem(childContext, this.project));
+        result.push(new ProjectReferencedPackagesTreeItem(childContext, this.project));
 
-        this.children = [];
-        this.children.push(new ProjectReferencedProjectsTreeItem(this.project, this));
-        this.children.push(new ProjectReferencedPackagesTreeItem(this.project, this));
-
-        return Promise.resolve(this.children);
+        return Promise.resolve(result);
     }
-
-    public refresh(): void {
-        this.children = null;
-	}
 }

@@ -17,7 +17,6 @@ export class RefreshCommand extends CommandBase {
         if (item) {
             let refreshable = <IRefreshable> (<any>item);
             refreshable.refresh();
-            this.provider.refresh(item);
         } else {
             this.provider.refresh();
         }

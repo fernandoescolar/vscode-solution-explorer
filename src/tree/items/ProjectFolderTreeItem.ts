@@ -1,60 +1,49 @@
 import * as path from "path";
-import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { TreeItem, TreeItemCollapsibleState, IFileCreator, IFolderCreator, IDeletable, IRenameable } from "../";
+import { TreeItemContext } from "../TreeItemContext";
 import { ContextValues } from "../ContextValues";
 import { ProjectInSolution } from "../../model/Solutions";
 import { Project } from "../../model/Projects";
 import { ProjectReferencedProjectTreeItem } from "./ProjectReferencedProjectTreeItem";
-import * as TreeItemFactory from "../TreeItemFactory";
 import { ProjectFolder } from "../../model/Projects/ProjectFolder";
-import { IFileCreator, IFolderCreator, IDeletable, IRenameable, IRefreshable } from "../index";
+import * as TreeItemFactory from "../TreeItemFactory";
 
-export class ProjectFolderTreeItem extends TreeItem implements IFileCreator, IFolderCreator, IDeletable, IRenameable, IRefreshable {
-    private children: TreeItem[] = null;
-
-    constructor(private readonly projectFolder: ProjectFolder, private readonly project: Project, parent: TreeItem) {
-        super(projectFolder.name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, parent, projectFolder.fullPath);
-    }
-
-    public getChildren(): Thenable<TreeItem[]> {
-        if (this.children) {
-            return Promise.resolve(this.children);
-        }
-
-        return this.createChildren();
-    }
-
-
-    public refresh(): void {
-        this.children = null;
+export class ProjectFolderTreeItem extends TreeItem implements IFileCreator, IFolderCreator, IDeletable, IRenameable {
+    constructor(context: TreeItemContext, private readonly projectFolder: ProjectFolder, private readonly project: Project) {
+        super(context, projectFolder.name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, projectFolder.fullPath);
     }
     
-    public createFile(name: string): Promise<string> {
-        return this.project.createFile(this.path, name);
+    public async createFile(name: string): Promise<string> {
+        let result = await this.project.createFile(this.path, name);
+        this.refresh();
+        return result;
     }
 
-    public rename(name: string): Promise<void> {
-        return this.project.renameFolder(this.path, name);
+    public async rename(name: string): Promise<void> {
+        await this.project.renameFolder(this.path, name);
+        this.refresh();
     }
 
-    public delete(): Promise<void> {
-        return this.project.deleteFolder(this.path);
+    public async delete(): Promise<void> {
+        await this.project.deleteFolder(this.path);
+        this.parent.refresh();
     }
 
-    public createFolder(name: string): Promise<void> {
+    public async createFolder(name: string): Promise<void> {
         let folderpath = path.join(this.path, name);
-        return this.project.createFolder(folderpath);
+        await this.project.createFolder(folderpath);
+        this.refresh();
     }
 
-    private async createChildren(): Promise<TreeItem[]> {
-        this.children = [];
-
+    protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
         let virtualPath = this.projectFolder.fullPath.replace(path.dirname(this.project.fullPath), '');
         if (virtualPath.startsWith(path.sep))
             virtualPath = virtualPath.substring(1);
-            
-        let items = await TreeItemFactory.CreateItemsFromProject(this, this.project, virtualPath);
-        items.forEach(item => this.children.push(item));
         
-        return this.children;
+        let result: TreeItem[] = [];
+        let items = await TreeItemFactory.CreateItemsFromProject(childContext, this.project, virtualPath);
+        items.forEach(item => result.push(item));
+        
+        return result;
     }
 }

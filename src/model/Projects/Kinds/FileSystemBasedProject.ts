@@ -26,10 +26,11 @@ export abstract class FileSystemBasedProject extends Project {
         return { files, folders };
     }
 
-    public renameFile(filepath: string, name: string): Promise<void> {
+    public async renameFile(filepath: string, name: string): Promise<string> {
         let folder = path.dirname(filepath);
         let newFilepath = path.join(folder, name);
-        return fs.rename(filepath, newFilepath);
+        await fs.rename(filepath, newFilepath);
+        return newFilepath;
     }
 
     public async deleteFile(filepath: string): Promise<void> {
@@ -47,16 +48,18 @@ export abstract class FileSystemBasedProject extends Project {
         return filepath;
     }
 
-    public renameFolder(folderpath: string, name: string): Promise<void> {
+    public async renameFolder(folderpath: string, name: string): Promise<string> {
         let newfolderpath = path.join(path.dirname(folderpath), name);
-        return fs.rename(folderpath, newfolderpath);
+        await fs.rename(folderpath, newfolderpath);
+        return newfolderpath;
     }
 
     public deleteFolder(folderpath: string): Promise<void> {
         return fs.rmdir(folderpath);
     }
 
-    public async createFolder(folderpath: string): Promise<void> {
+    public async createFolder(folderpath: string): Promise<string> {
         await fs.mkdir(folderpath);
+        return folderpath;
     }
 }

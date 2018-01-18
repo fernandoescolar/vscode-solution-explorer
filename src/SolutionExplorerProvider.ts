@@ -5,7 +5,7 @@ import * as sln from "./tree";
 import * as SolutionExplorerConfiguration from "./SolutionExplorerConfiguration";
 import * as Utilities from "./model/Utilities";
 import { SolutionFile } from "./model/Solutions";
-import { TreeItem } from "./tree";
+import { IEventAggegator } from "./events";
 
 export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.TreeItem> {
 
@@ -13,8 +13,8 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	private _onDidChangeTreeData: vscode.EventEmitter<sln.TreeItem | undefined> = new vscode.EventEmitter<sln.TreeItem | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<sln.TreeItem | undefined> = this._onDidChangeTreeData.event;
 	//onDidChangeActiveTextEditor
-	
-	constructor(private workspaceRoot: string) {
+
+	constructor(private workspaceRoot: string, public readonly eventAggregator: IEventAggegator) {
 	}
 
 	public register() {
@@ -22,7 +22,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 			vscode.window.registerTreeDataProvider('solutionExplorer', this);
 	}
 
-	public refresh(item?: TreeItem): void {
+	public refresh(item?: sln.TreeItem): void {
 		if (item) {
 			this._onDidChangeTreeData.fire(item);
 		} else {
@@ -59,7 +59,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 		for(let i = 0; i < solutionPaths.length; i++) {
 			let s = solutionPaths[i];
 			let solution = await SolutionFile.Parse(s);
-			let item = await sln.CreateFromSolution(solution);
+			let item = await sln.CreateFromSolution(this, solution);
 			this.children.push(item);
 		}
 

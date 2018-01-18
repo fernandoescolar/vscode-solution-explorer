@@ -1,13 +1,9 @@
 import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
+import { TreeItemContext } from "../TreeItemContext";
 import { ContextValues } from "../ContextValues";
 
 export class ErrorTreeItem extends TreeItem {
-
-    constructor(text: string, parent: TreeItem) {
-        super(text, TreeItemCollapsibleState.None, ContextValues.Error, parent);
-    }
-
-    getChildren(): Thenable<TreeItem[]> {
-        return Promise.resolve(null);
+    constructor(context: TreeItemContext, text: string) {
+        super(context, text, TreeItemCollapsibleState.None, ContextValues.Error);
     }
 }

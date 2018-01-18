@@ -89,13 +89,14 @@ export class StandardProject extends FileSystemBasedProject {
         return { files, folders };
     }
 
-    public async renameFile(filepath: string, name: string): Promise<void> {
+    public async renameFile(filepath: string, name: string): Promise<string> {
         await this.checkProjectLoaded();
         let relativePath = this.getRelativePath(filepath);
         let newRelativePath = path.join(path.dirname(relativePath), name);
         this.renameInNodes(relativePath, newRelativePath);
-        await super.renameFile(filepath, name);
+        let newFilepath = await super.renameFile(filepath, name);
         await this.saveProject();
+        return newFilepath;
     }
 
     public async deleteFile(filepath: string): Promise<void> {
@@ -135,13 +136,14 @@ export class StandardProject extends FileSystemBasedProject {
         return await super.createFile(folderpath, filename);
     }
 
-    public async renameFolder(folderpath: string, name: string): Promise<void> {
+    public async renameFolder(folderpath: string, name: string): Promise<string> {
         await this.checkProjectLoaded();
         let relativePath = this.getRelativePath(folderpath);
         let newRelativePath = path.join(path.dirname(relativePath), name);
         this.renameInNodes(relativePath, newRelativePath, true);
-        super.renameFolder(folderpath, name);
+        let newFolderpath = await super.renameFolder(folderpath, name);
         await this.saveProject();
+        return newFolderpath;
     }
 
     public async deleteFolder(folderpath: string): Promise<void> {
@@ -156,7 +158,7 @@ export class StandardProject extends FileSystemBasedProject {
         await this.saveProject();
     }
 
-    public async createFolder(folderpath: string): Promise<void> {
+    public async createFolder(folderpath: string): Promise<string> {
         await this.checkProjectLoaded();
         let folderRelativePath = this.getRelativePath(folderpath);
         let parentRelativePath = path.dirname(folderRelativePath);
@@ -165,8 +167,9 @@ export class StandardProject extends FileSystemBasedProject {
             this.removeInNodes(parentRelativePath, true, ['Folder']);
         }
         this.currentItemGroupAdd('Folder', folderRelativePath, true);
-        await super.createFolder(folderpath);
+        let newFolderpath = await super.createFolder(folderpath);
         await this.saveProject();
+        return newFolderpath;
     }
 
     private async checkProjectLoaded(): Promise<void> {
