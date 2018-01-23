@@ -3,13 +3,16 @@ import { ProjectInSolution, SolutionProjectType, SolutionFile, ProjectTypeIds } 
 import { Project, ProjectFactory } from "../model/Projects";
 import { TreeItem } from "./TreeItem";
 import { TreeItemContext } from "./TreeItemContext";
+import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
 import { SolutionFolderTreeItem } from "./items/SolutionFolderTreeItem";
 import { UnknownProjectTreeItem } from "./items/UnknownProjectTreeItem";
 import { ProjectTreeItem } from "./items/ProjectTreeItem";
 import { SolutionTreeItem } from "./items/SolutionTreeItem";
 import { ProjectFolderTreeItem } from "./items/ProjectFolderTreeItem";
 import { ProjectFileTreeItem } from "./items/ProjectFileTreeItem";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
+import { CspProjectTreeItem } from "./items/csp/CspProjectTreeItem";
+import { StandardProjectTreeItem } from "./items/standard/StandardProjectTreeItem";
+import { WebSiteProjectTreeItem } from "./items/website/WebSiteProjectTreeItem";
 
 export function CreateFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile): Promise<TreeItem> {
     let context = new TreeItemContext(provider);
@@ -23,6 +26,9 @@ export async function CreateFromProject(context: TreeItemContext, project: Proje
 
     let p = await ProjectFactory.parse(project);
     if (p) {
+        if (p.type == 'csp') return new CspProjectTreeItem(context, p, project);
+        if (p.type == 'standard') return new StandardProjectTreeItem(context, p, project);
+        if (p.type == 'website') return new WebSiteProjectTreeItem(context, p, project);
         return new ProjectTreeItem(context, p, project);
     }
 

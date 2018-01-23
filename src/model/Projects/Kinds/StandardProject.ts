@@ -20,9 +20,10 @@ export class StandardProject extends FileSystemBasedProject {
     private filesTree: any = null;
     private dependents: { [id: string]: string[] };
     private currentItemGroup: any = null;
+    private shouldReload: boolean = true;
 
     constructor(projectInSolution: ProjectInSolution, document?: any) {
-        super(projectInSolution);
+        super(projectInSolution, 'standard');
 
         if (document) {
             this.parseDocument(document);
@@ -110,6 +111,7 @@ export class StandardProject extends FileSystemBasedProject {
         await super.deleteFile(filepath);
         await this.saveProject();
     }
+
     public async createFile(folderpath: string, filename: string): Promise<string> {
         await this.checkProjectLoaded();
         
@@ -172,6 +174,16 @@ export class StandardProject extends FileSystemBasedProject {
         return newFolderpath;
     }
 
+    public async refresh(): Promise<void> {
+        if (!this.shouldReload) {
+            this.shouldReload = true;
+            return;
+        }
+
+        this.loaded = false;
+        await this.checkProjectLoaded();
+    }
+
     private async checkProjectLoaded(): Promise<void> {
         if (!this.loaded) {
             let content = await fs.readFile(this.fullPath, 'utf8');
@@ -185,6 +197,7 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     private async saveProject(): Promise<void> {
+        this.shouldReload = false;
         let content = await xml.ParseToXml(this.document);
         await fs.writeFile(this.fullPath, content);
         await this.parseProject(content);
@@ -195,7 +208,7 @@ export class StandardProject extends FileSystemBasedProject {
         this.parseDocument(document);
     }
     
-    public parseDocument(document: any): void {
+    private parseDocument(document: any): void {
         this.loaded = true;
         this.document = document;
         let files: string[] = [];

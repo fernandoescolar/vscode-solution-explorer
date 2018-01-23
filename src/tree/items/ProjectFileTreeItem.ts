@@ -18,13 +18,10 @@ export class ProjectFileTreeItem extends TreeItem implements IDeletable, IRename
 
     public async rename(name: string): Promise<void> {
         await this.project.renameFile(this.path, name);
-        this.parent.refresh();
-        return Promise.resolve();
     }
     
-    public async delete(): Promise<void> {
-        await this.project.deleteFile(this.path);
-        this.parent.refresh();
+    public delete(): Promise<void> {
+        return this.project.deleteFile(this.path);
     }
 
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {

@@ -8,21 +8,18 @@ import * as TreeItemFactory from "../TreeItemFactory";
 import * as path from 'path';
 
 export class ProjectTreeItem extends TreeItem implements IFileCreator, IFolderCreator {
-    constructor(context: TreeItemContext, private readonly project: Project, private readonly projectInSolution: ProjectInSolution) {
+    constructor(context: TreeItemContext, protected readonly project: Project, protected readonly projectInSolution: ProjectInSolution) {
         super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, projectInSolution.fullPath);
     }
     
     public async createFile(name: string): Promise<string> {
         let filepath = path.dirname(this.project.fullPath);
-        let result = await this.project.createFile(filepath, name);
-        this.refresh();
-        return result;
+        return await this.project.createFile(filepath, name);
     }
 
     public async createFolder(name: string): Promise<void> {
         let folderPath = path.join(path.dirname(this.project.fullPath), name);
         await this.project.createFolder(folderPath);
-        this.refresh();
     }
 
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  

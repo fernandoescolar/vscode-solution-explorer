@@ -17,12 +17,17 @@ export class CpsProject extends FileSystemBasedProject {
     private loaded: boolean = false;
 
     constructor(projectInSolution: ProjectInSolution, document?: any) {
-        super(projectInSolution);
+        super(projectInSolution, 'csp');
 
         if (document) {
             this.parseDocument(document);
             this.loaded = true;
         }
+    }
+
+    public async refresh(): Promise<void> {
+        this.loaded = false;
+        await this.checkProjectLoaded();
     }
 
     public async getProjectReferences(): Promise<ProjectReference[]> {

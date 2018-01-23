@@ -13,26 +13,21 @@ export class ProjectFolderTreeItem extends TreeItem implements IFileCreator, IFo
         super(context, projectFolder.name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, projectFolder.fullPath);
     }
     
-    public async createFile(name: string): Promise<string> {
-        let result = await this.project.createFile(this.path, name);
-        this.refresh();
-        return result;
+    public createFile(name: string): Promise<string> {
+        return this.project.createFile(this.path, name);
     }
 
     public async rename(name: string): Promise<void> {
         await this.project.renameFolder(this.path, name);
-        this.refresh();
     }
 
     public async delete(): Promise<void> {
         await this.project.deleteFolder(this.path);
-        this.parent.refresh();
     }
 
     public async createFolder(name: string): Promise<void> {
         let folderpath = path.join(this.path, name);
         await this.project.createFolder(folderpath);
-        this.refresh();
     }
 
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {

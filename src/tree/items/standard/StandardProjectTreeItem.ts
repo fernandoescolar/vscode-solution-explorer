@@ -5,7 +5,7 @@ import { Project } from "../../../model/Projects";
 import { ProjectInSolution } from "../../../model/Solutions";
 import { EventTypes, IEvent, ISubscription, IFileEvent } from "../../../events/index";
 
-export class CspProjectTreeItem extends ProjectTreeItem {
+export class StandardProjectTreeItem extends ProjectTreeItem {
     private subscription: ISubscription = null;
 
     constructor(context: TreeItemContext, project: Project, projectInSolution: ProjectInSolution) {
@@ -21,16 +21,10 @@ export class CspProjectTreeItem extends ProjectTreeItem {
 
     private onFileEvent(event: IEvent): void {
         let fileEvent = <IFileEvent> event;
-        let workingdir = path.dirname(this.path);
-        let dirname = path.dirname(fileEvent.path);
-
         if (fileEvent.path == this.path) {
             this.project.refresh().then(res => {
                 this.refresh();
             });
-        }
-        else if (dirname.startsWith(workingdir)) {
-            this.refresh();
         }
     }
 }

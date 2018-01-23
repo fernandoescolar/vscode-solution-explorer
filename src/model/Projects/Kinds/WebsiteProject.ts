@@ -5,8 +5,12 @@ import { FileSystemBasedProject } from "./FileSystemBasedProject";
 
 export class WebsiteProject extends FileSystemBasedProject {
     constructor(projectInSolution: ProjectInSolution) {
-        super(projectInSolution);
+        super(projectInSolution, 'website');
         this.setHasReferences(false);
+    }
+
+    public refresh(): Promise<void> {
+        return Promise.resolve();
     }
 
     public getProjectReferences(): Promise<ProjectReference[]> {

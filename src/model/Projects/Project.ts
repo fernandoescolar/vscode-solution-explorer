@@ -7,7 +7,7 @@ import { ProjectReference } from "./ProjectReference";
 export abstract class Project {
     private _hasReferences: boolean = true;
 
-    constructor(protected readonly projectInSolution: ProjectInSolution) {
+    constructor(protected readonly projectInSolution: ProjectInSolution, public readonly type: string) {
     }
 
     public get fullPath(): string {
@@ -39,4 +39,6 @@ export abstract class Project {
     public abstract deleteFolder(folderpath: string): Promise<void>;
 
     public abstract createFolder(folderpath: string): Promise<string>;
+
+    public abstract refresh(): Promise<void>;
 }

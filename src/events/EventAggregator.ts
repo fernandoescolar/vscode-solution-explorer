@@ -25,13 +25,15 @@ export class EventAggregator implements IEventAggegator {
             throw new Error('Event type is invalid.');
         }
      
-        let handlers = this.eventHandlers[event.eventType];
-        if (handlers) {
-            handlers = handlers.slice();
-            handlers.forEach(handler => {
-                handler.handle(event);
-            });
-        }
+        setTimeout(() => { // i want to create files before call the event
+            let handlers = this.eventHandlers[event.eventType];
+            if (handlers) {
+                handlers = handlers.slice();
+                handlers.forEach(handler => {
+                    handler.handle(event);
+                });
+            }
+        }, 1);
     }
   
     public subscribe(eventType: string | EventTypes, callback: Function): ISubscription {

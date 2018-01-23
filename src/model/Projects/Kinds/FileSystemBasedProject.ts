@@ -7,8 +7,8 @@ import { ProjectFile } from "../ProjectFile";
 import { ProjectFolder } from "../ProjectFolder";
 
 export abstract class FileSystemBasedProject extends Project {
-    constructor(projectInSolution: ProjectInSolution) {
-        super(projectInSolution);
+    constructor(projectInSolution: ProjectInSolution, type: string) {
+        super(projectInSolution, type);
     }
 
     public async getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[], folders: ProjectFolder[] }> {
