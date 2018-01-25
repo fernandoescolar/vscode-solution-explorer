@@ -1,14 +1,14 @@
-import * as vscode from "vscode";
+import { workspace, FileSystemWatcher, Uri } from "vscode";
 import { IFileEvent, FileEvent, FileEventType, IEventAggegator } from "./events";
 
 export class SolutionExplorerFileWatcher {
-    private fileWatcher: vscode.FileSystemWatcher;
+    private fileWatcher: FileSystemWatcher;
 
     constructor(public readonly eventAggregator: IEventAggegator){
     }
 
     public register(): void {
-        this.fileWatcher = vscode.workspace.createFileSystemWatcher("**/*");
+        this.fileWatcher = workspace.createFileSystemWatcher("**/*");
 	    this.fileWatcher.onDidChange(uri => this.onChange(uri));
 	    this.fileWatcher.onDidCreate(uri => this.onCreate(uri));
         this.fileWatcher.onDidDelete(uri => this.onDelete(uri));
@@ -19,17 +19,17 @@ export class SolutionExplorerFileWatcher {
         this.fileWatcher = null;
     }
 
-    private onChange(uri: vscode.Uri): void {
+    private onChange(uri: Uri): void {
         let event: IFileEvent = new FileEvent(FileEventType.Modify, this.parseUri(uri));
         this.raiseEvent(event);
     }
 
-    private onCreate(uri: vscode.Uri): void {
+    private onCreate(uri: Uri): void {
         let event: IFileEvent = new FileEvent(FileEventType.Create, this.parseUri(uri));
         this.raiseEvent(event);
     }
 
-    private onDelete(uri: vscode.Uri): void {
+    private onDelete(uri: Uri): void {
         let event: IFileEvent = new FileEvent(FileEventType.Delete, this.parseUri(uri));
         this.raiseEvent(event);
     }
@@ -39,7 +39,7 @@ export class SolutionExplorerFileWatcher {
         this.eventAggregator.publish(event);
     }
 
-    private parseUri(uri: vscode.Uri): string {
+    private parseUri(uri: Uri): string {
         return uri.toString().replace("file://", "");
     }
 }

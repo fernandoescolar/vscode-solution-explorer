@@ -71,6 +71,10 @@ There is a lot of work to do.
 
 Refactor commands using command pattern.
 
+Added File Watcher to detect project and solution changes.
+
+Added Output Channel to log commands.
+
 ### 0.0.9
 
 Added configuration settings.
