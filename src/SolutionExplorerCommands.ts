@@ -11,7 +11,7 @@ export class SolutionExplorerCommands {
     private createFileCommand: ICommand;
     private moveCommand: ICommand;
 
-    constructor(private readonly provider: SolutionExplorerProvider) {
+    constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider) {
         this.refreshCommand = new RefreshCommand(provider);
         this.openFileCommand = new OpenFileCommand();
         this.renameCommand = new RenameCommand(provider);
@@ -35,8 +35,10 @@ export class SolutionExplorerCommands {
     }
 
     private registerCommand(name: string, command: ICommand) {
-        vscode.commands.registerCommand(name, item => { 
-            command.run(item)
-        });
+        this.context.subscriptions.push(
+            vscode.commands.registerCommand(name, item => { 
+                command.run(item)
+            })
+        );
     }
 }

@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
     const rootPath = vscode.workspace.rootPath;
     eventAggregator = new EventAggregator();
     solutionExplorerProvider = new SolutionExplorerProvider(rootPath, eventAggregator);
-    solutionExplorerCommands = new SolutionExplorerCommands(solutionExplorerProvider);
+    solutionExplorerCommands = new SolutionExplorerCommands(context, solutionExplorerProvider);
     solutionExplorerFileWatcher = new SolutionExplorerFileWatcher(eventAggregator);
     solutionExplorerOutputChannel = new SolutionExplorerOutputChannel(eventAggregator);
 
