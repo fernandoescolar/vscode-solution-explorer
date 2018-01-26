@@ -7,11 +7,11 @@ export abstract class CliCommandBase extends CommandBase {
         super();
     }
 
-    protected runCommand(item: TreeItem, args: string[]): Promise<string[]> {
+    protected runCommand(item: TreeItem, args: string[]): Promise<void> {
         return this.runCliCommand(this.app, args, item.path);
     }
 
-    private runCliCommand(app: string, args: string[], path: string): Promise<string[]> {
+    private runCliCommand(app: string, args: string[], path: string): Promise<void> {
         return new Promise(resolve => {
             let process = spawn(app, args, { cwd: path });
             let out: string[] = [];
@@ -24,7 +24,7 @@ export abstract class CliCommandBase extends CommandBase {
             });
             
             process.on('exit', (code) => {
-                resolve(out);
+                resolve();
             });
         });
     }

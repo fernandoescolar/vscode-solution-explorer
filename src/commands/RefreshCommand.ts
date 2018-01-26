@@ -13,14 +13,16 @@ export class RefreshCommand extends CommandBase {
         return !item || isRefreshable(item);
     }
 
-    protected runCommand(item: TreeItem, args: string[]): Promise<string[]> {       
+    protected runCommand(item: TreeItem, args: string[]): Promise<void> {       
         if (item) {
             let refreshable = <IRefreshable> (<any>item);
             refreshable.refresh();
+            this.provider.logger.log("Refreshed " + item.path);
         } else {
             this.provider.refresh();
+            this.provider.logger.log("Refreshed");
         }
 
-        return Promise.resolve([]);
+        return Promise.resolve();
     }
 }

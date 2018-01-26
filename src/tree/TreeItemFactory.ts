@@ -10,7 +10,7 @@ import { ProjectTreeItem } from "./items/ProjectTreeItem";
 import { SolutionTreeItem } from "./items/SolutionTreeItem";
 import { ProjectFolderTreeItem } from "./items/ProjectFolderTreeItem";
 import { ProjectFileTreeItem } from "./items/ProjectFileTreeItem";
-import { CspProjectTreeItem } from "./items/csp/CspProjectTreeItem";
+import { CpsProjectTreeItem } from "./items/cps/CpsProjectTreeItem";
 import { StandardProjectTreeItem } from "./items/standard/StandardProjectTreeItem";
 import { WebSiteProjectTreeItem } from "./items/website/WebSiteProjectTreeItem";
 
@@ -26,7 +26,7 @@ export async function CreateFromProject(context: TreeItemContext, project: Proje
 
     let p = await ProjectFactory.parse(project);
     if (p) {
-        if (p.type == 'csp') return new CspProjectTreeItem(context, p, project);
+        if (p.type == 'cps') return new CpsProjectTreeItem(context, p, project);
         if (p.type == 'standard') return new StandardProjectTreeItem(context, p, project);
         if (p.type == 'website') return new WebSiteProjectTreeItem(context, p, project);
         return new ProjectTreeItem(context, p, project);

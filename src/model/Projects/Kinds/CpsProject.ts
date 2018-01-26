@@ -17,7 +17,7 @@ export class CpsProject extends FileSystemBasedProject {
     private loaded: boolean = false;
 
     constructor(projectInSolution: ProjectInSolution, document?: any) {
-        super(projectInSolution, 'csp');
+        super(projectInSolution, 'cps');
 
         if (document) {
             this.parseDocument(document);

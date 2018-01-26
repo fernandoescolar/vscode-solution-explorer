@@ -5,7 +5,7 @@ import { Project } from "../../../model/Projects";
 import { ProjectInSolution } from "../../../model/Solutions";
 import { EventTypes, IEvent, ISubscription, IFileEvent } from "../../../events/index";
 
-export class CspProjectTreeItem extends ProjectTreeItem {
+export class CpsProjectTreeItem extends ProjectTreeItem {
     private subscription: ISubscription = null;
 
     constructor(context: TreeItemContext, project: Project, projectInSolution: ProjectInSolution) {

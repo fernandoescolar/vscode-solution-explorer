@@ -30,6 +30,14 @@ export class ProjectFolderTreeItem extends TreeItem implements IFileCreator, IFo
         await this.project.createFolder(folderpath);
     }
 
+    public getFolders(): Promise<string[]> {
+        return this.project.getFolderList();
+    }
+
+    public move(folderpath: string): Promise<string> {
+        return this.project.moveFile(this.path, folderpath);
+    }
+
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
         let virtualPath = this.projectFolder.fullPath.replace(path.dirname(this.project.fullPath), '');
         if (virtualPath.startsWith(path.sep))

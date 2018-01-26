@@ -78,6 +78,14 @@
             {
                 "command": "solutionExplorer.createFolder",
                 "title": "Create folder"
+            },
+            {
+                "command": "solutionExplorer.moveFile",
+                "title": "Move to folder"
+            },
+            {
+                "command": "solutionExplorer.moveFolder",
+                "title": "Move to folder"
             }
         ],
         "menus": {
@@ -128,6 +136,14 @@
                 {
                     "command": "solutionExplorer.createFolder",
                     "when": "view == solutionExplorer && viewItem == project-folder"
+                },
+                {
+                    "command": "solutionExplorer.moveFile",
+                    "when": "view == solutionExplorer && viewItem == project-file"
+                },
+                {
+                    "command": "solutionExplorer.moveFolder",
+                    "when": "view == solutionExplorer && viewItem == project-folder"
                 }
             ]
         },
@@ -139,6 +155,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Show the solution explorer in the explorer pane."
+                },
+                "vssolution.showOutputChannel": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show the solution explorer output channel."
                 },
                 "vssolution.netcoreIgnore": {
                     "type": "array",

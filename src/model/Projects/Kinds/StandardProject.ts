@@ -67,7 +67,7 @@ export class StandardProject extends FileSystemBasedProject {
                 if (this.dependents[item.virtualpath]) {
                     projectFile.hasDependents = true;
                     this.dependents[item.virtualpath].forEach(d => {
-                        var dependentFullPath = path.join(path.dirname(this.fullPath), d);
+                        let dependentFullPath = path.join(path.dirname(this.fullPath), d);
                         projectFile.dependents.push(new ProjectFile(dependentFullPath));
                     });
                 }
@@ -76,14 +76,14 @@ export class StandardProject extends FileSystemBasedProject {
         }
 
         folders.sort((a, b) => {
-            var x = a.name.toLowerCase();
-            var y = b.name.toLowerCase();
+            let x = a.name.toLowerCase();
+            let y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
     
         files.sort((a, b) => {
-            var x = a.name.toLowerCase();
-            var y = b.name.toLowerCase();
+            let x = a.name.toLowerCase();
+            let y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
 
@@ -152,7 +152,7 @@ export class StandardProject extends FileSystemBasedProject {
         await this.checkProjectLoaded();
         let folderRelativePath = this.getRelativePath(folderpath);
         if (this.countInNodes(folderRelativePath, true) > 1) {
-            throw new Error("Method not implemented for this kind of project yet.");    
+            throw new Error("Can not delete a not empty folder");    
         }
 
         this.removeInNodes(folderRelativePath, true, ['Folder']);
@@ -172,6 +172,43 @@ export class StandardProject extends FileSystemBasedProject {
         let newFolderpath = await super.createFolder(folderpath);
         await this.saveProject();
         return newFolderpath;
+    }
+
+    public async getFolderList(): Promise<string[]> {
+        let folderPath = path.dirname(this.projectInSolution.fullPath);
+        let directories = await this.getFoldersFromTree(this.filesTree);
+
+        directories.sort((a, b) => {
+            let x = a.toLowerCase();
+            let y = b.toLowerCase();
+            return x < y ? -1 : x > y ? 1 : 0;
+        });
+
+        let result: string[] = [ '.' + path.sep ];
+        directories.forEach(dirPath => result.push('.' + dirPath.replace(folderPath, '')));
+        return result;
+    }
+
+    public async moveFile(filepath: string, newfolderPath: string): Promise<string> {
+        await this.checkProjectLoaded();
+
+        let newFilepath = await super.moveFile(filepath, newfolderPath);
+        let relativePath = this.getRelativePath(filepath);
+        let newRelativePath = this.getRelativePath(newFilepath);
+        this.renameInNodes(relativePath, newRelativePath);
+        await this.saveProject();
+        return newFilepath;
+    }
+
+    public async moveFolder(folderpath: string, newfolderPath: string): Promise<string> {
+        await this.checkProjectLoaded();
+
+        let newFolderPath = await super.moveFile(folderpath, newfolderPath);
+        let relativePath = this.getRelativePath(folderpath);
+        let newRelativePath = this.getRelativePath(newFolderPath);
+        this.renameInNodes(relativePath, newRelativePath, true);
+        await this.saveProject();
+        return newFolderPath;
     }
 
     public async refresh(): Promise<void> {
@@ -414,5 +451,21 @@ export class StandardProject extends FileSystemBasedProject {
             relativePath = relativePath.substring(1);
 
         return relativePath;
+    }
+
+    private async getFoldersFromTree(items: any): Promise<string[]> {
+        if (!Array.isArray(items)) return [];
+        let result: string[] = [];
+        for (let i = 0; i < items.length; i++) {
+            let item = items[i];
+            let stat = await fs.lstat(item.fullpath);
+            if (stat.isDirectory()) {
+                result.push(item.fullpath);
+                let subItems = await this.getFoldersFromTree(item.children);
+                subItems.forEach(si => result.push(si));
+            }
+        }
+        
+        return result;
     }
 }

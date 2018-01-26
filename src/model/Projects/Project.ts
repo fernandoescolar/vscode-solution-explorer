@@ -40,5 +40,11 @@ export abstract class Project {
 
     public abstract createFolder(folderpath: string): Promise<string>;
 
+    public abstract getFolderList(): Promise<string[]>;
+
+    public abstract moveFile(filepath: string, newfolderPath: string): Promise<string>;
+
+    public abstract moveFolder(folderpath: string, newfolderPath: string): Promise<string>;
+
     public abstract refresh(): Promise<void>;
 }

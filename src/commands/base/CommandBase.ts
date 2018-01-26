@@ -4,13 +4,13 @@ import { ICommandParameter } from './ICommandParameter';
 export abstract class CommandBase {
     protected parameters: ICommandParameter[];
 
-    public async run(item: TreeItem): Promise<string[]> {
+    public async run(item: TreeItem): Promise<void> {
         if (!this.shouldRun(item)) return;
 
         let args = await this.getArguments();
-        if (!args)return [];
+        if (!args) return;
         
-        return await this.runCommand(item, args);
+        await this.runCommand(item, args);
     }
 
     protected async getArguments() : Promise<string[]> {
@@ -32,5 +32,5 @@ export abstract class CommandBase {
         return true;
     }
 
-    protected abstract runCommand(item: TreeItem, args: string[]): Promise<string[]>;
+    protected abstract runCommand(item: TreeItem, args: string[]): Promise<void>;
 }

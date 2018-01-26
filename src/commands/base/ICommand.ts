@@ -1,5 +1,5 @@
 import { TreeItem } from '../../tree';
 
 export interface ICommand {
-    run(item: TreeItem): Promise<string[]>;
+    run(item: TreeItem): Promise<void>;
 }

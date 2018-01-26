@@ -18,14 +18,15 @@ export class CreateFolderCommand extends CommandBase {
         return isFolderCreator(item);
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<string[]> {
+    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
         if (!args || args.length <= 0) return;
 
         let folderCreator = <IFolderCreator> (<any>item);
         try {
             await folderCreator.createFolder(args[0]);
+            this.provider.logger.log("Folder created: " + args[0]);
         } catch(ex) {
-            vscode.window.showInformationMessage('Can not create folder: ' + ex);
+            this.provider.logger.error('Can not create folder: ' + ex);
         }    
     }
 }

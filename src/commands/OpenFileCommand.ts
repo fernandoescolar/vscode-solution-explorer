@@ -14,10 +14,9 @@ export class OpenFileCommand extends CommandBase {
         return false;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<string[]> {    
+    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {    
         let filepath = item.path;
         let document = await vscode.workspace.openTextDocument(filepath);
         vscode.window.showTextDocument(document);    
-        return [];
     }
 }

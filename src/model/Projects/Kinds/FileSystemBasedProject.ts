@@ -26,11 +26,8 @@ export abstract class FileSystemBasedProject extends Project {
         return { files, folders };
     }
 
-    public async renameFile(filepath: string, name: string): Promise<string> {
-        let folder = path.dirname(filepath);
-        let newFilepath = path.join(folder, name);
-        await fs.rename(filepath, newFilepath);
-        return newFilepath;
+    public renameFile(filepath: string, name: string): Promise<string> {
+        return this.renameItem(filepath, name);
     }
 
     public async deleteFile(filepath: string): Promise<void> {
@@ -48,10 +45,8 @@ export abstract class FileSystemBasedProject extends Project {
         return filepath;
     }
 
-    public async renameFolder(folderpath: string, name: string): Promise<string> {
-        let newfolderpath = path.join(path.dirname(folderpath), name);
-        await fs.rename(folderpath, newfolderpath);
-        return newfolderpath;
+    public renameFolder(folderpath: string, name: string): Promise<string> {
+        return this.renameItem(folderpath, name);
     }
 
     public deleteFolder(folderpath: string): Promise<void> {
@@ -61,5 +56,37 @@ export abstract class FileSystemBasedProject extends Project {
     public async createFolder(folderpath: string): Promise<string> {
         await fs.mkdir(folderpath);
         return folderpath;
+    }
+
+    public async getFolderList(): Promise<string[]> {
+        let folderPath = path.dirname(this.projectInSolution.fullPath);
+        let directories = await Utilities.getAllDirectoriesRecursive(folderPath);
+        let result: string[] = [ '.' + path.sep ];
+        directories.forEach(dirPath => result.push('.' + dirPath.replace(folderPath, '')));
+        return result;
+    }
+
+    public moveFile(filepath: string, newfolderPath: string): Promise<string> {
+        return this.moveItem(filepath, newfolderPath);
+    }
+
+    public moveFolder(folderpath: string, newfolderPath: string): Promise<string> {
+        return this.moveItem(folderpath, newfolderPath);
+    }
+
+    private async moveItem(itemPath: string, newfolderPath: string): Promise<string> {
+        let folderPath = path.dirname(this.projectInSolution.fullPath);
+        let fullFolderPath = path.join(folderPath, newfolderPath);
+        let itemName = itemPath.split(path.sep).pop();
+        let newItemPath = path.join(fullFolderPath, itemName);
+        await fs.rename(itemPath, newItemPath);
+        return newItemPath;
+    }
+
+    private async renameItem(itemPath: string, name: string): Promise<string> {
+        let folder = path.dirname(itemPath);
+        let newItempath = path.join(folder, name);
+        await fs.rename(itemPath, newItempath);
+        return newItempath;
     }
 }

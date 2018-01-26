@@ -5,3 +5,4 @@ export * from "./RenameCommand";
 export * from "./DeleteCommand";
 export * from "./CreateFolderCommand";
 export * from "./CreateFileCommand";
+export * from "./MoveCommand";

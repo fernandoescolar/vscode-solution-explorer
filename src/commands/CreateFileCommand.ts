@@ -18,7 +18,7 @@ export class CreateFileCommand extends CommandBase {
         return isFileCreator(item);
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<string[]> {
+    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
         if (!args || args.length <= 0) return;
 
         let fileCreator = <IFileCreator> (<any>item);
@@ -26,8 +26,9 @@ export class CreateFileCommand extends CommandBase {
             let filepath = await fileCreator.createFile(args[0]);
             let document = await vscode.workspace.openTextDocument(filepath);
             vscode.window.showTextDocument(document);  
+            this.provider.logger.log("File created: " + filepath);
         } catch(ex) {
-            vscode.window.showInformationMessage('Can not create file: ' + ex);
+            this.provider.logger.error('Can not create file: ' + ex);
         }    
     }
 }

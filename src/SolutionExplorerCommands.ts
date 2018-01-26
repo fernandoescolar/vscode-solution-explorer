@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { SolutionExplorerProvider } from "./SolutionExplorerProvider";
-import { ICommand, RenameCommand, RefreshCommand, OpenFileCommand, DeleteCommand, CreateFolderCommand, CreateFileCommand } from "./commands";
+import { ICommand, RenameCommand, RefreshCommand, OpenFileCommand, DeleteCommand, CreateFolderCommand, CreateFileCommand, MoveCommand } from "./commands";
 
 export class SolutionExplorerCommands {
     private refreshCommand: ICommand;
@@ -9,6 +9,7 @@ export class SolutionExplorerCommands {
     private deleteCommand: ICommand;
     private createFolderCommand: ICommand;
     private createFileCommand: ICommand;
+    private moveCommand: ICommand;
 
     constructor(private readonly provider: SolutionExplorerProvider) {
         this.refreshCommand = new RefreshCommand(provider);
@@ -17,6 +18,7 @@ export class SolutionExplorerCommands {
         this.deleteCommand = new DeleteCommand(provider);
         this.createFolderCommand = new CreateFolderCommand(provider);
         this.createFileCommand = new CreateFileCommand(provider);
+        this.moveCommand = new MoveCommand(provider);
     }
 
     public register() {
@@ -28,6 +30,8 @@ export class SolutionExplorerCommands {
         this.registerCommand('solutionExplorer.deleteFolder', this.deleteCommand);
         this.registerCommand('solutionExplorer.createFolder', this.createFolderCommand);
         this.registerCommand('solutionExplorer.createFile', this.createFileCommand);
+        this.registerCommand('solutionExplorer.moveFile', this.moveCommand);
+        this.registerCommand('solutionExplorer.moveFolder', this.moveCommand);
     }
 
     private registerCommand(name: string, command: ICommand) {

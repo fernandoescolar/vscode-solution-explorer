@@ -32,6 +32,8 @@ Branded icons are licensed under their copyright license.
 
 - `vssolution.showInExplorer` Show the solution explorer in the explorer pane.
 
+- `vssolution.showOutputChannel` Show the solution explorer output channel.
+
 - `vssolution.netcoreIgnore` Folder and file names to ignore when get a dotnet core project content
 
 - `vssolution.xxprojItemTypes` Type of XML element to put in the xxproj files.
@@ -40,14 +42,16 @@ Branded icons are licensed under their copyright license.
 
 ```javascript
 {
+    "vssolution.showInExplorer": true,
+
+    "vssolution.showOutputChannel" : true,
+
     "vssolution.netcoreIgnore": [
         "bin",
         "node_modules",
         "obj",
         ".ds_store"
     ],
-
-    "vssolution.showInExplorer": true,
 
     "vssolution.xxprojItemTypes": {
         "*": "Content",
@@ -74,6 +78,8 @@ Refactor commands using command pattern.
 Added File Watcher to detect project and solution changes.
 
 Added Output Channel to log commands.
+
+Added move folder and files to folder in project.
 
 ### 0.0.9
 

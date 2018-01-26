@@ -6,3 +6,4 @@ export * from "./interfaces/IDeletable";
 export * from "./interfaces/IFileCreator";
 export * from "./interfaces/IFolderCreator";
 export * from "./interfaces/IRefreshable";
+export * from "./interfaces/IMovable";

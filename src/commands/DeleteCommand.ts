@@ -20,14 +20,13 @@ export class DeleteCommand extends CommandBase {
         return true;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<string[]> {
+    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
         let renameable = <IDeletable> (<any>item);
         try {
             await renameable.delete();
+            this.provider.logger.log("Deleted: " + item.path);
         } catch(ex) {
-            vscode.window.showInformationMessage('Can not delete item: ' + ex);
+            this.provider.logger.error('Can not delete item: ' + ex);
         }    
-
-        return [];
     }
 }
