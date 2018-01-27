@@ -6,14 +6,14 @@ import { ProjectReferencedPackagesTreeItem } from "./ProjectReferencedPackagesTr
 import { TreeItemContext } from "../TreeItemContext";
 
 export class ProjectReferencesTreeItem extends TreeItem {
-    constructor(context: TreeItemContext, protected readonly project: Project) {
+    constructor(context: TreeItemContext) {
         super(context, "references", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferences);
     }
 
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
         let result: TreeItem[] = [];
-        result.push(new ProjectReferencedProjectsTreeItem(childContext, this.project));
-        result.push(new ProjectReferencedPackagesTreeItem(childContext, this.project));
+        result.push(new ProjectReferencedProjectsTreeItem(childContext));
+        result.push(new ProjectReferencedPackagesTreeItem(childContext));
 
         return Promise.resolve(result);
     }

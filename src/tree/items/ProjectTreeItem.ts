@@ -1,4 +1,4 @@
-import { TreeItem, TreeItemCollapsibleState, IFileCreator, IFolderCreator } from "../";
+import { TreeItem, TreeItemCollapsibleState } from "../";
 import { TreeItemContext } from "../TreeItemContext";
 import { ContextValues } from "../ContextValues";
 import { ProjectInSolution } from "../../model/Solutions";
@@ -8,19 +8,10 @@ import * as TreeItemFactory from "../TreeItemFactory";
 import * as path from 'path';
 import { resolve } from "url";
 
-export class ProjectTreeItem extends TreeItem implements IFileCreator, IFolderCreator {
-    constructor(context: TreeItemContext, protected readonly project: Project, protected readonly projectInSolution: ProjectInSolution) {
+export class ProjectTreeItem extends TreeItem {
+    constructor(context: TreeItemContext, protected readonly projectInSolution: ProjectInSolution) {
         super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, projectInSolution.fullPath);
-    }
-    
-    public async createFile(name: string): Promise<string> {
-        let filepath = path.dirname(this.project.fullPath);
-        return await this.project.createFile(filepath, name);
-    }
-
-    public async createFolder(name: string): Promise<void> {
-        let folderPath = path.join(path.dirname(this.project.fullPath), name);
-        await this.project.createFolder(folderPath);
+        this.addContextValueSuffix();
     }
 
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
@@ -37,6 +28,6 @@ export class ProjectTreeItem extends TreeItem implements IFileCreator, IFolderCr
     }
 
     protected createReferenceItems(childContext: TreeItemContext): Promise<TreeItem[]> {
-        return Promise.resolve([ new ProjectReferencesTreeItem(childContext, this.project) ]);
+        return Promise.resolve([ new ProjectReferencesTreeItem(childContext) ]);
     }
 }

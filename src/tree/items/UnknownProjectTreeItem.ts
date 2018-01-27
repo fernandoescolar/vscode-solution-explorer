@@ -6,8 +6,8 @@ import { ErrorTreeItem } from "./ErrorTreeItem";
 
 export class UnknownProjectTreeItem extends TreeItem {
 
-    constructor(context: TreeItemContext, private readonly project: ProjectInSolution) {
-        super(context, project.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, project.fullPath);
+    constructor(context: TreeItemContext, private readonly projectInSolution: ProjectInSolution) {
+        super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, projectInSolution.fullPath);
     }
 
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  

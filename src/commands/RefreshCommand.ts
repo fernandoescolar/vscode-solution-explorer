@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem, IRefreshable, isRefreshable } from "../tree";
+import { TreeItem } from "../tree";
 import { CommandBase } from "./base/CommandBase";
 
 export class RefreshCommand extends CommandBase {
@@ -10,13 +10,12 @@ export class RefreshCommand extends CommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        return !item || isRefreshable(item);
+        return true;
     }
 
     protected runCommand(item: TreeItem, args: string[]): Promise<void> {       
         if (item) {
-            let refreshable = <IRefreshable> (<any>item);
-            refreshable.refresh();
+            item.refresh();
             this.provider.logger.log("Refreshed " + item.path);
         } else {
             this.provider.refresh();

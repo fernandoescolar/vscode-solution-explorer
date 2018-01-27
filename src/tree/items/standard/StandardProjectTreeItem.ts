@@ -8,8 +8,8 @@ import { EventTypes, IEvent, ISubscription, IFileEvent } from "../../../events/i
 export class StandardProjectTreeItem extends ProjectTreeItem {
     private subscription: ISubscription = null;
 
-    constructor(context: TreeItemContext, project: Project, projectInSolution: ProjectInSolution) {
-        super(context, project, projectInSolution);
+    constructor(context: TreeItemContext, projectInSolution: ProjectInSolution) {
+        super(context, projectInSolution);
         this.subscription = context.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
     }
 

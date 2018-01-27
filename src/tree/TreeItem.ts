@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 import * as TreeItemIconProvider from "./TreeItemIconProvider";
-import { IRefreshable, IDisposable } from "./";
 import { TreeItemContext } from "./TreeItemContext";
 import { SolutionFile } from "../model/Solutions";
+import { Project } from "../model/Projects";
 
 export { TreeItemCollapsibleState, Command } from "vscode";
 
-export abstract class TreeItem extends vscode.TreeItem implements IRefreshable, IDisposable {
+export abstract class TreeItem extends vscode.TreeItem {
 	protected children: TreeItem[] = null;
 
 	constructor(
@@ -29,10 +29,13 @@ export abstract class TreeItem extends vscode.TreeItem implements IRefreshable, 
 		return this.context.solution;
 	}
 
+	public get project(): Project {
+		return this.context.project;
+	}
 
 	public async getChildren(): Promise<TreeItem[]> {
         if (!this.children) {
-			let childContext = this.context.copy(this);
+			let childContext = this.context.copy(null, this);
 			this.children = await this.createChildren(childContext);
         }
 		
@@ -52,5 +55,9 @@ export abstract class TreeItem extends vscode.TreeItem implements IRefreshable, 
 
 	protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
 		return Promise.resolve([]);
+	}
+
+	protected addContextValueSuffix(): void {
+		this.contextValue += this.project && this.project.type ? '-' + this.project.type : '';
 	}
 }

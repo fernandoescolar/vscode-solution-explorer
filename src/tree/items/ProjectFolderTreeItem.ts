@@ -1,5 +1,5 @@
 import * as path from "path";
-import { TreeItem, TreeItemCollapsibleState, IFileCreator, IFolderCreator, IDeletable, IRenameable } from "../";
+import { TreeItem, TreeItemCollapsibleState } from "../";
 import { TreeItemContext } from "../TreeItemContext";
 import { ContextValues } from "../ContextValues";
 import { ProjectInSolution } from "../../model/Solutions";
@@ -8,34 +8,9 @@ import { ProjectReferencedProjectTreeItem } from "./ProjectReferencedProjectTree
 import { ProjectFolder } from "../../model/Projects/ProjectFolder";
 import * as TreeItemFactory from "../TreeItemFactory";
 
-export class ProjectFolderTreeItem extends TreeItem implements IFileCreator, IFolderCreator, IDeletable, IRenameable {
-    constructor(context: TreeItemContext, private readonly projectFolder: ProjectFolder, private readonly project: Project) {
+export class ProjectFolderTreeItem extends TreeItem {
+    constructor(context: TreeItemContext, private readonly projectFolder: ProjectFolder) {
         super(context, projectFolder.name, TreeItemCollapsibleState.Collapsed, ContextValues.ProjectFolder, projectFolder.fullPath);
-    }
-    
-    public createFile(name: string): Promise<string> {
-        return this.project.createFile(this.path, name);
-    }
-
-    public async rename(name: string): Promise<void> {
-        await this.project.renameFolder(this.path, name);
-    }
-
-    public async delete(): Promise<void> {
-        await this.project.deleteFolder(this.path);
-    }
-
-    public async createFolder(name: string): Promise<void> {
-        let folderpath = path.join(this.path, name);
-        await this.project.createFolder(folderpath);
-    }
-
-    public getFolders(): Promise<string[]> {
-        return this.project.getFolderList();
-    }
-
-    public move(folderpath: string): Promise<string> {
-        return this.project.moveFile(this.path, folderpath);
     }
 
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {

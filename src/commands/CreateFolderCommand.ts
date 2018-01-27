@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
+import * as path from "path";
 import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem, IFolderCreator, isFolderCreator } from "../tree";
+import { TreeItem, ContextValues } from "../tree";
 import { CommandBase } from "./base/CommandBase";
 import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
 
@@ -15,15 +16,19 @@ export class CreateFolderCommand extends CommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        return isFolderCreator(item);
+        return !!item.project;
     }
 
     protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
         if (!args || args.length <= 0) return;
 
-        let folderCreator = <IFolderCreator> (<any>item);
         try {
-            await folderCreator.createFolder(args[0]);
+            let targetpath: string = item.path;
+            if (item.contextValue.startsWith(ContextValues.Project))
+                targetpath = path.dirname(targetpath);
+                
+            let folderpath = path.join(targetpath, args[0]);
+            await item.project.createFolder(folderpath);
             this.provider.logger.log("Folder created: " + args[0]);
         } catch(ex) {
             this.provider.logger.error('Can not create folder: ' + ex);

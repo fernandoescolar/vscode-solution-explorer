@@ -31,19 +31,10 @@ export function findIconPath(name: string, path: string, contextValue: string): 
     if (contextValue == ContextValues.Solution) {
         return getIconPath('sln.svg');
     } else
-    if (contextValue == ContextValues.SolutionFolder || contextValue == ContextValues.ProjectFolder) {
-        if (path && path.endsWith("wwwroot"))
-            return getIconPath('wwwroot.svg');
-
-        return getIconPath('folder.svg');
-    } else 
-    if (contextValue == ContextValues.Project) {
-        return getIconPathFromExtension(path, 'csproj.svg');
-    } else
-    if (contextValue == ContextValues.ProjectFile) {
+    if (contextValue.startsWith(ContextValues.ProjectFile)) {
         return getIconPathFromExtension(path, 'file.svg');
     } else 
-    if (contextValue == ContextValues.ProjectReferences) {
+    if (contextValue.startsWith(ContextValues.ProjectReferences)) {
         return getIconPath('references.svg');
     } else 
     if (contextValue.startsWith(ContextValues.ProjectReferencedProject)) {
@@ -51,7 +42,16 @@ export function findIconPath(name: string, path: string, contextValue: string): 
     } else 
     if (contextValue.startsWith(ContextValues.ProjectReferencedPackage)) {
         return getIconPath('packages.svg');
-    }
+    } else
+    if (contextValue == ContextValues.SolutionFolder || contextValue.startsWith(ContextValues.ProjectFolder)) {
+        if (path && path.endsWith("wwwroot"))
+            return getIconPath('wwwroot.svg');
+
+        return getIconPath('folder.svg');
+    } else 
+    if (contextValue.startsWith(ContextValues.Project)) {
+        return getIconPathFromExtension(path, 'csproj.svg');
+    } 
 
     return getIconPath('file.svg');
 }

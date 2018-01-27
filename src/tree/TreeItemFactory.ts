@@ -25,14 +25,15 @@ export async function CreateFromProject(context: TreeItemContext, project: Proje
     } 
 
     let p = await ProjectFactory.parse(project);
+    let projectContext = context.copy(p);
     if (p) {
-        if (p.type == 'cps') return new CpsProjectTreeItem(context, p, project);
-        if (p.type == 'standard') return new StandardProjectTreeItem(context, p, project);
-        if (p.type == 'website') return new WebSiteProjectTreeItem(context, p, project);
-        return new ProjectTreeItem(context, p, project);
+        if (p.type == 'cps') return new CpsProjectTreeItem(projectContext, project);
+        if (p.type == 'standard') return new StandardProjectTreeItem(projectContext, project);
+        if (p.type == 'website') return new WebSiteProjectTreeItem(projectContext, project);
+        return new ProjectTreeItem(projectContext, project);
     }
 
-    return new UnknownProjectTreeItem(context, project);
+    return new UnknownProjectTreeItem(projectContext, project);
 }
 
 export async function CreateItemsFromProject(context: TreeItemContext, project: Project, virtualPath?: string): Promise<TreeItem[]> {
@@ -40,10 +41,10 @@ export async function CreateItemsFromProject(context: TreeItemContext, project: 
     let result: TreeItem[] = [];
     
     items.folders.forEach(folder => {
-        result.push(new ProjectFolderTreeItem(context, folder, project));
+        result.push(new ProjectFolderTreeItem(context, folder));
     });
     items.files.forEach(file => {
-        result.push(new ProjectFileTreeItem(context, file, project));
+        result.push(new ProjectFileTreeItem(context, file));
     });
 
     return result;

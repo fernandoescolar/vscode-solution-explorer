@@ -6,8 +6,9 @@ import { Project, ProjectReference } from "../../model/Projects";
 import { ProjectReferencedProjectTreeItem } from "./ProjectReferencedProjectTreeItem";
 
 export class ProjectReferencedProjectsTreeItem extends TreeItem {
-    constructor(context: TreeItemContext, private readonly project: Project, contextValue?: string) {
-        super(context, "projects", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferencedProjects + (contextValue ? '-' + contextValue : ''), project.fullPath);
+    constructor(context: TreeItemContext) {
+        super(context, "projects", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferencedProjects);
+        this.addContextValueSuffix();
     }
 
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
