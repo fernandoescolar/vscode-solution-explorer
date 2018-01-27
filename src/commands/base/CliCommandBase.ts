@@ -25,7 +25,7 @@ export abstract class CliCommandBase extends CommandBase {
             });
             
             process.stderr.on('data', (data: string) => {
-                this.provider.logger.log(data);
+                this.provider.logger.error(data);
             });
             
             process.on('exit', (code) => {

@@ -94,6 +94,14 @@
             {
                 "command": "solutionExplorer.removePackage",
                 "title": "Remove package"
+            },
+            {
+                "command": "solutionExplorer.addProjectReference",
+                "title": "Add reference"
+            },
+            {
+                "command": "solutionExplorer.removeProjectReference",
+                "title": "Remove reference"
             }
         ],
         "menus": {
@@ -164,6 +172,18 @@
                 {
                     "command": "solutionExplorer.removePackage",
                     "when": "view == solutionExplorer && viewItem == project-referenced-package-cps"
+                },
+                {
+                    "command": "solutionExplorer.addProjectReference",
+                    "when": "view == solutionExplorer && viewItem == project-referenced-projects-cps"
+                },
+                {
+                    "command": "solutionExplorer.addProjectReference",
+                    "when": "view == solutionExplorer && viewItem == project-referenced-project-cps"
+                },
+                {
+                    "command": "solutionExplorer.removeProjectReference",
+                    "when": "view == solutionExplorer && viewItem == project-referenced-project-cps"
                 }
             ]
         },

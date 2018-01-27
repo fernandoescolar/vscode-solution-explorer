@@ -4,6 +4,7 @@ export class ContextValues {
     public static readonly Project: string = 'project';
     public static readonly ProjectReferences: string = 'project-references';
     public static readonly ProjectReferencedProjects: string = 'project-referenced-projects';
+    public static readonly ProjectReferencedProject: string = 'project-referenced-project';
     public static readonly ProjectReferencedPackages: string = 'project-referenced-packages';
     public static readonly ProjectReferencedPackage: string = 'project-referenced-package';
     public static readonly ProjectFolder: string = 'project-folder';

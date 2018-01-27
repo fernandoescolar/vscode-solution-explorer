@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as TreeItemIconProvider from "./TreeItemIconProvider";
 import { IRefreshable, IDisposable } from "./";
 import { TreeItemContext } from "./TreeItemContext";
+import { SolutionFile } from "../model/Solutions";
 
 export { TreeItemCollapsibleState, Command } from "vscode";
 
@@ -9,12 +10,12 @@ export abstract class TreeItem extends vscode.TreeItem implements IRefreshable, 
 	protected children: TreeItem[] = null;
 
 	constructor(
-		protected readonly context: TreeItemContext,
+		protected context: TreeItemContext,
 		public label: string,
         public collapsibleState: vscode.TreeItemCollapsibleState,
-		public readonly contextValue: string,
-		public readonly path?: string,
-		public readonly command?: vscode.Command
+		public contextValue: string,
+		public path?: string,
+		public command?: vscode.Command
 	) {
 		super(label, collapsibleState);
 		this.iconPath = TreeItemIconProvider.findIconPath(label, path, contextValue);
@@ -23,6 +24,11 @@ export abstract class TreeItem extends vscode.TreeItem implements IRefreshable, 
 	public get parent(): TreeItem {
 		return this.context.parent;
 	}
+
+	public get solution(): SolutionFile {
+		return this.context.solution;
+	}
+
 
 	public async getChildren(): Promise<TreeItem[]> {
         if (!this.children) {

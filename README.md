@@ -81,7 +81,9 @@ Added Output Channel to log commands.
 
 Added move folder and files to folder in project.
 
-Added add and remove packages in CPS projects.
+Added add and remove packages commands in CPS projects.
+
+Added add and remove project reference commands in CPS projects.
 
 ### 0.0.9
 

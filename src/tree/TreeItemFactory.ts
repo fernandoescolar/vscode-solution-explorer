@@ -15,8 +15,8 @@ import { StandardProjectTreeItem } from "./items/standard/StandardProjectTreeIte
 import { WebSiteProjectTreeItem } from "./items/website/WebSiteProjectTreeItem";
 
 export function CreateFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile): Promise<TreeItem> {
-    let context = new TreeItemContext(provider);
-    return Promise.resolve(new SolutionTreeItem(context, solution));
+    let context = new TreeItemContext(provider, solution);
+    return Promise.resolve(new SolutionTreeItem(context));
 }
 
 export async function CreateFromProject(context: TreeItemContext, project: ProjectInSolution): Promise<TreeItem> {

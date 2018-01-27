@@ -46,7 +46,7 @@ export function findIconPath(name: string, path: string, contextValue: string): 
     if (contextValue == ContextValues.ProjectReferences) {
         return getIconPath('references.svg');
     } else 
-    if (contextValue == ContextValues.ProjectReferencedProjects) {
+    if (contextValue.startsWith(ContextValues.ProjectReferencedProject)) {
         return getIconPath('referenced-project.svg');
     } else 
     if (contextValue.startsWith(ContextValues.ProjectReferencedPackage)) {

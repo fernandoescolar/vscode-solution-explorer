@@ -12,6 +12,8 @@ export class SolutionExplorerCommands {
     private moveCommand: cmds.ICommand;
     private addPackage: cmds.ICommand;
     private removePackage: cmds.ICommand;
+    private addProjectReference: cmds.ICommand;
+    private removeProjectReference: cmds.ICommand;
 
     constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider) {
         this.refreshCommand = new cmds.RefreshCommand(provider);
@@ -23,6 +25,8 @@ export class SolutionExplorerCommands {
         this.moveCommand = new cmds.MoveCommand(provider);
         this.addPackage = new cmds.AddPackageCommand(provider);
         this.removePackage = new cmds.RemovePackageCommand(provider);
+        this.addProjectReference = new cmds.AddProjectReferenceCommand(provider);
+        this.removeProjectReference = new cmds.RemoveProjectReferenceCommand(provider);
     }
 
     public register() {
@@ -38,6 +42,8 @@ export class SolutionExplorerCommands {
         this.registerCommand('solutionExplorer.moveFolder', this.moveCommand);
         this.registerCommand('solutionExplorer.addPackage', this.addPackage);
         this.registerCommand('solutionExplorer.removePackage', this.removePackage);
+        this.registerCommand('solutionExplorer.addProjectReference', this.addProjectReference);
+        this.registerCommand('solutionExplorer.removeProjectReference', this.removeProjectReference);
     }
 
     private registerCommand(name: string, command: cmds.ICommand) {

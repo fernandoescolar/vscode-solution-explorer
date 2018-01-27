@@ -8,3 +8,5 @@ export * from "./CreateFileCommand";
 export * from "./MoveCommand";
 export * from "./AddPackageCommand";
 export * from "./RemovePackageCommand";
+export * from "./AddProjectReferenceCommand";
+export * from "./RemoveProjectReferenceCommand";

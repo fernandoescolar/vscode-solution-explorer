@@ -92,7 +92,7 @@ export class CpsProject extends FileSystemBasedProject {
                     ref = ref.split(path.sep).pop();
                     let extension = ref.split('.').pop();
                     ref = ref.substring(0, ref.length - extension.length - 1);
-                    this.references.push(new ProjectReference(ref));
+                    this.references.push(new ProjectReference(ref, reference.$.Include));
                 });
             }
         });

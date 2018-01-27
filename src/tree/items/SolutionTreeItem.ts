@@ -9,8 +9,8 @@ import { ISubscription, EventTypes, IEvent, IFileEvent } from "../../events";
 export class SolutionTreeItem extends TreeItem {
     private subscription: ISubscription = null;
      
-    constructor(context: TreeItemContext, private solution: SolutionFile) {
-        super(context, solution.Name, TreeItemCollapsibleState.Expanded, ContextValues.Solution);
+    constructor(context: TreeItemContext) {
+        super(context, context.solution.Name, TreeItemCollapsibleState.Expanded, ContextValues.Solution);
         this.subscription = context.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
     }
     
@@ -37,7 +37,7 @@ export class SolutionTreeItem extends TreeItem {
         let fileEvent = <IFileEvent> event;
         if (fileEvent.path == this.solution.FullPath) {
             SolutionFile.Parse(this.solution.FullPath).then(res => {
-                this.solution = res;
+                this.context = new TreeItemContext(this.context.provider, res);
                 this.refresh();
             });
         }

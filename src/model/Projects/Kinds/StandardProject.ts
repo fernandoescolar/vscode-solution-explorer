@@ -218,6 +218,8 @@ export class StandardProject extends FileSystemBasedProject {
         }
 
         this.loaded = false;
+        this.loadedPackages = false;
+        this.references = [];
         await this.checkProjectLoaded();
     }
 
@@ -264,7 +266,7 @@ export class StandardProject extends FileSystemBasedProject {
             this.document.Project.ItemGroup.forEach(element => {
                 if (element.Reference) {
                     element.Reference.forEach(ref => {
-                        this.references.push(new ProjectReference(ref.$.Include));
+                        this.references.push(new ProjectReference(ref.$.Include, ref.$.Include));
                     });
                 }
                 if (element.Compile) {
