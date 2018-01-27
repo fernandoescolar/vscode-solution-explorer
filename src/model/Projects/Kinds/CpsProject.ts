@@ -27,6 +27,8 @@ export class CpsProject extends FileSystemBasedProject {
 
     public async refresh(): Promise<void> {
         this.loaded = false;
+        this.references = [];
+        this.packages = [];
         await this.checkProjectLoaded();
     }
 

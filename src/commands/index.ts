@@ -6,3 +6,5 @@ export * from "./DeleteCommand";
 export * from "./CreateFolderCommand";
 export * from "./CreateFileCommand";
 export * from "./MoveCommand";
+export * from "./AddPackageCommand";
+export * from "./RemovePackageCommand";

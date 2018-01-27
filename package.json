@@ -86,6 +86,14 @@
             {
                 "command": "solutionExplorer.moveFolder",
                 "title": "Move to folder"
+            },
+            {
+                "command": "solutionExplorer.addPackage",
+                "title": "Add package"
+            },
+            {
+                "command": "solutionExplorer.removePackage",
+                "title": "Remove package"
             }
         ],
         "menus": {
@@ -144,6 +152,18 @@
                 {
                     "command": "solutionExplorer.moveFolder",
                     "when": "view == solutionExplorer && viewItem == project-folder"
+                },
+                {
+                    "command": "solutionExplorer.addPackage",
+                    "when": "view == solutionExplorer && viewItem == project-referenced-packages-cps"
+                },
+                {
+                    "command": "solutionExplorer.addPackage",
+                    "when": "view == solutionExplorer && viewItem == project-referenced-package-cps"
+                },
+                {
+                    "command": "solutionExplorer.removePackage",
+                    "when": "view == solutionExplorer && viewItem == project-referenced-package-cps"
                 }
             ]
         },

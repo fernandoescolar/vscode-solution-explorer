@@ -6,7 +6,7 @@ import { ProjectReferencedPackagesTreeItem } from "./ProjectReferencedPackagesTr
 import { TreeItemContext } from "../TreeItemContext";
 
 export class ProjectReferencesTreeItem extends TreeItem {
-    constructor(context: TreeItemContext, private readonly project: Project) {
+    constructor(context: TreeItemContext, protected readonly project: Project) {
         super(context, "references", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferences);
     }
 
