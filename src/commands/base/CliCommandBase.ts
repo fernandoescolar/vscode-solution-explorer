@@ -14,7 +14,7 @@ export abstract class CliCommandBase extends CommandBase {
         return this.runCliCommand(this.app, args, workingFolder);
     }
 
-    private runCliCommand(app: string, args: string[], path: string): Promise<void> {
+    protected runCliCommand(app: string, args: string[], path: string): Promise<void> {
         this.provider.logger.log('Cli: ' + [ app, ...args ].join(' '));
 
         return new Promise(resolve => {

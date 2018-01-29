@@ -3,50 +3,31 @@ import { SolutionExplorerProvider } from "./SolutionExplorerProvider";
 import * as cmds from "./commands";
 
 export class SolutionExplorerCommands {
-    private refreshCommand: cmds.ICommand;
-    private openFileCommand: cmds.ICommand;
-    private renameCommand: cmds.ICommand;
-    private deleteCommand: cmds.ICommand;
-    private createFolderCommand: cmds.ICommand;
-    private createFileCommand: cmds.ICommand;
-    private moveCommand: cmds.ICommand;
-    private addPackage: cmds.ICommand;
-    private removePackage: cmds.ICommand;
-    private addProjectReference: cmds.ICommand;
-    private removeProjectReference: cmds.ICommand;
-    private createNewSolution: cmds.ICommand;
+    private commands: { [id:string]: cmds.ICommand } = {};
 
     constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider) {
-        this.refreshCommand = new cmds.RefreshCommand(provider);
-        this.openFileCommand = new cmds.OpenFileCommand();
-        this.renameCommand = new cmds.RenameCommand(provider);
-        this.deleteCommand = new cmds.DeleteCommand(provider);
-        this.createFolderCommand = new cmds.CreateFolderCommand(provider);
-        this.createFileCommand = new cmds.CreateFileCommand(provider);
-        this.moveCommand = new cmds.MoveCommand(provider);
-        this.addPackage = new cmds.AddPackageCommand(provider);
-        this.removePackage = new cmds.RemovePackageCommand(provider);
-        this.addProjectReference = new cmds.AddProjectReferenceCommand(provider);
-        this.removeProjectReference = new cmds.RemoveProjectReferenceCommand(provider);
-        this.createNewSolution = new cmds.CreateNewSolutionCommand(provider);
+        this.commands['refresh'] = new cmds.RefreshCommand(provider);
+        this.commands['openFile'] = new cmds.OpenFileCommand();
+        this.commands['renameFile'] = new cmds.RenameCommand(provider);
+        this.commands['renameFolder'] = new cmds.RenameCommand(provider);
+        this.commands['deleteFile'] = new cmds.DeleteCommand(provider);
+        this.commands['deleteFolder'] = new cmds.DeleteCommand(provider);
+        this.commands['createFile'] = new cmds.CreateFileCommand(provider);
+        this.commands['createFolder'] = new cmds.CreateFolderCommand(provider);
+        this.commands['moveFile'] = new cmds.MoveCommand(provider);
+        this.commands['moveFolder'] = new cmds.MoveCommand(provider);
+        this.commands['addPackage'] = new cmds.AddPackageCommand(provider);
+        this.commands['removePackage'] = new cmds.RemovePackageCommand(provider);
+        this.commands['addProjectReference'] = new cmds.AddProjectReferenceCommand(provider);
+        this.commands['removeProjectReference'] = new cmds.RemoveProjectReferenceCommand(provider);
+        this.commands['createNewSolution'] = new cmds.CreateNewSolutionCommand(provider);
+        this.commands['addNewProject'] = new cmds.AddNewProjectCommand(provider);
     }
 
     public register() {
-        this.registerCommand('solutionExplorer.refresh', this.refreshCommand);
-        this.registerCommand('solutionExplorer.openFile', this.openFileCommand);
-        this.registerCommand('solutionExplorer.renameFile', this.renameCommand);
-        this.registerCommand('solutionExplorer.renameFolder', this.renameCommand);
-        this.registerCommand('solutionExplorer.deleteFile', this.deleteCommand);
-        this.registerCommand('solutionExplorer.deleteFolder', this.deleteCommand);
-        this.registerCommand('solutionExplorer.createFolder', this.createFolderCommand);
-        this.registerCommand('solutionExplorer.createFile', this.createFileCommand);
-        this.registerCommand('solutionExplorer.moveFile', this.moveCommand);
-        this.registerCommand('solutionExplorer.moveFolder', this.moveCommand);
-        this.registerCommand('solutionExplorer.addPackage', this.addPackage);
-        this.registerCommand('solutionExplorer.removePackage', this.removePackage);
-        this.registerCommand('solutionExplorer.addProjectReference', this.addProjectReference);
-        this.registerCommand('solutionExplorer.removeProjectReference', this.removeProjectReference);
-        this.registerCommand('solutionExplorer.createNewSolution', this.createNewSolution);
+        Object.keys(this.commands).forEach(key => {
+            this.registerCommand('solutionExplorer.' + key, this.commands[key]);
+        });
     }
 
     private registerCommand(name: string, command: cmds.ICommand) {

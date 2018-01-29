@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.0.10",
+    "version": "0.2.0",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -106,6 +106,10 @@
             {
                 "command": "solutionExplorer.createNewSolution",
                 "title": "Create new empty solution"
+            },
+            {
+                "command": "solutionExplorer.addNewProject",
+                "title": "Add new project"
             }
         ],
         "menus": {
@@ -232,6 +236,10 @@
                 {
                     "command": "solutionExplorer.createNewSolution",
                     "when": "view == solutionExplorer && viewItem == no-solution"
+                },
+                {
+                    "command": "solutionExplorer.addNewProject",
+                    "when": "view == solutionExplorer && viewItem == solution"
                 }
             ]
         },

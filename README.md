@@ -71,7 +71,7 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
-### 0.0.10
+### 0.2.0
 
 Refactor commands using command pattern.
 
@@ -84,6 +84,8 @@ Added move folder and file to folder in project.
 Added add and remove packages commands in CPS projects.
 
 Added add and remove project reference commands in CPS projects.
+
+Added create project and solution commands.
 
 ### 0.0.9
 

@@ -2,9 +2,21 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
-## 0.0.10
+### 0.2.0
 
-Refactoring commands using command pattern.
+Refactor commands using command pattern.
+
+Added File Watcher to detect project and solution changes.
+
+Added Output Channel to log commands.
+
+Added move folder and file to folder in project.
+
+Added add and remove packages commands in CPS projects.
+
+Added add and remove project reference commands in CPS projects.
+
+Added create project and solution commands.
 
 ## 0.0.9
 
