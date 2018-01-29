@@ -102,6 +102,10 @@
             {
                 "command": "solutionExplorer.removeProjectReference",
                 "title": "Remove reference"
+            },
+            {
+                "command": "solutionExplorer.createNewSolution",
+                "title": "Create new empty solution"
             }
         ],
         "menus": {
@@ -224,6 +228,10 @@
                 {
                     "command": "solutionExplorer.openFile",
                     "when": "view == solutionExplorer && viewItem == project-website"
+                },
+                {
+                    "command": "solutionExplorer.createNewSolution",
+                    "when": "view == solutionExplorer && viewItem == no-solution"
                 }
             ]
         },

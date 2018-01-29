@@ -1,6 +1,6 @@
-# vscode-solution-explorer 
+# vscode-solution-explorer
 
-This extension adds a Visual Studio Solution File explorer panel in Visual Studio Code. Now you can navigate into your solution following the original Visual Studio structure. 
+This extension adds a Visual Studio Solution File explorer panel in Visual Studio Code. Now you can navigate into your solution following the original Visual Studio structure.
 
 ## Features
 
@@ -14,7 +14,7 @@ Adds a Solution Explorer panel where you can find a Visual Studio Solution File 
 
 - Supports dotnet core projects
 
-- You can create, delete or rename project folders and files. 
+- You can create, delete or rename project folders and files.
 
 ## Requirements
 
@@ -79,7 +79,7 @@ Added File Watcher to detect project and solution changes.
 
 Added Output Channel to log commands.
 
-Added move folder and files to folder in project.
+Added move folder and file to folder in project.
 
 Added add and remove packages commands in CPS projects.
 

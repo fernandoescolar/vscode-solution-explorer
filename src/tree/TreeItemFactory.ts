@@ -13,6 +13,12 @@ import { ProjectFileTreeItem } from "./items/ProjectFileTreeItem";
 import { CpsProjectTreeItem } from "./items/cps/CpsProjectTreeItem";
 import { StandardProjectTreeItem } from "./items/standard/StandardProjectTreeItem";
 import { WebSiteProjectTreeItem } from "./items/website/WebSiteProjectTreeItem";
+import { NoSolutionTreeItem } from "./items/NoSolutionTreeItem";
+
+export function CreateNoSolution(provider: SolutionExplorerProvider, rootPath: string): Promise<TreeItem> {
+    let context = new TreeItemContext(provider, null);
+    return Promise.resolve(new NoSolutionTreeItem(context, rootPath));
+}
 
 export function CreateFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile): Promise<TreeItem> {
     let context = new TreeItemContext(provider, solution);

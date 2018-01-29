@@ -14,6 +14,7 @@ export class SolutionExplorerCommands {
     private removePackage: cmds.ICommand;
     private addProjectReference: cmds.ICommand;
     private removeProjectReference: cmds.ICommand;
+    private createNewSolution: cmds.ICommand;
 
     constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider) {
         this.refreshCommand = new cmds.RefreshCommand(provider);
@@ -27,6 +28,7 @@ export class SolutionExplorerCommands {
         this.removePackage = new cmds.RemovePackageCommand(provider);
         this.addProjectReference = new cmds.AddProjectReferenceCommand(provider);
         this.removeProjectReference = new cmds.RemoveProjectReferenceCommand(provider);
+        this.createNewSolution = new cmds.CreateNewSolutionCommand(provider);
     }
 
     public register() {
@@ -44,6 +46,7 @@ export class SolutionExplorerCommands {
         this.registerCommand('solutionExplorer.removePackage', this.removePackage);
         this.registerCommand('solutionExplorer.addProjectReference', this.addProjectReference);
         this.registerCommand('solutionExplorer.removeProjectReference', this.removeProjectReference);
+        this.registerCommand('solutionExplorer.createNewSolution', this.createNewSolution);
     }
 
     private registerCommand(name: string, command: cmds.ICommand) {

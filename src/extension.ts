@@ -26,6 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {
+    solutionExplorerProvider.unregister();
     solutionExplorerFileWatcher.unregister();
     solutionExplorerOutputChannel.unregister();
 }
