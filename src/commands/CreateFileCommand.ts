@@ -24,7 +24,7 @@ export class CreateFileCommand extends CommandBase {
 
         try {
             let targetpath: string = item.path;
-            if (item.contextValue.startsWith(ContextValues.Project))
+            if (!item.contextValue.startsWith(ContextValues.ProjectFolder))
                 targetpath = path.dirname(targetpath);
 
             let filepath = await item.project.createFile(targetpath, args[0]);

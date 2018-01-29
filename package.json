@@ -123,7 +123,15 @@
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project"
+                    "when": "view == solutionExplorer && viewItem == project-cps"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == solutionExplorer && viewItem == project-standard"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == solutionExplorer && viewItem == project-website"
                 },
                 {
                     "command": "solutionExplorer.createFile",
@@ -143,7 +151,15 @@
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project"
+                    "when": "view == solutionExplorer && viewItem == project-cps"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == solutionExplorer && viewItem == project-standard"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == solutionExplorer && viewItem == project-website"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
@@ -163,6 +179,10 @@
                 },
                 {
                     "command": "solutionExplorer.addPackage",
+                    "when": "view == solutionExplorer && viewItem == project-cps"
+                },
+                {
+                    "command": "solutionExplorer.addPackage",
                     "when": "view == solutionExplorer && viewItem == project-referenced-packages-cps"
                 },
                 {
@@ -175,6 +195,10 @@
                 },
                 {
                     "command": "solutionExplorer.addProjectReference",
+                    "when": "view == solutionExplorer && viewItem == project-cps"
+                },
+                {
+                    "command": "solutionExplorer.addProjectReference",
                     "when": "view == solutionExplorer && viewItem == project-referenced-projects-cps"
                 },
                 {
@@ -184,6 +208,22 @@
                 {
                     "command": "solutionExplorer.removeProjectReference",
                     "when": "view == solutionExplorer && viewItem == project-referenced-project-cps"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
+                    "when": "view == solutionExplorer && viewItem == solution"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
+                    "when": "view == solutionExplorer && viewItem == project-cps"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
+                    "when": "view == solutionExplorer && viewItem == project-standard"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
+                    "when": "view == solutionExplorer && viewItem == project-website"
                 }
             ]
         },

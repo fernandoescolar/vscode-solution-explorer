@@ -10,7 +10,7 @@ export class SolutionTreeItem extends TreeItem {
     private subscription: ISubscription = null;
      
     constructor(context: TreeItemContext) {
-        super(context, context.solution.Name, TreeItemCollapsibleState.Expanded, ContextValues.Solution);
+        super(context, context.solution.Name, TreeItemCollapsibleState.Expanded, ContextValues.Solution, context.solution.FullPath);
         this.subscription = context.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
     }
     
