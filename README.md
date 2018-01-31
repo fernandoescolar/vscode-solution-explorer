@@ -89,6 +89,8 @@ Added create project and solution commands.
 
 Added create and remove solution folder commands.
 
+Added move solution folder and project to solution folder commands.
+
 ### 0.0.9
 
 Added configuration settings.

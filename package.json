@@ -120,6 +120,10 @@
                 "title": "Create folder"
             },
             {
+                "command": "solutionExplorer.moveToSolutionFolder",
+                "title": "Move"
+            },
+            {
                 "command": "solutionExplorer.removeSolutionFolder",
                 "title": "Remove"
             }
@@ -276,6 +280,22 @@
                 {
                     "command": "solutionExplorer.removeSolutionFolder",
                     "when": "view == solutionExplorer && viewItem == solution-folder"
+                },
+                {
+                    "command": "solutionExplorer.moveToSolutionFolder",
+                    "when": "view == solutionExplorer && viewItem == solution-folder"
+                },
+                {
+                    "command": "solutionExplorer.moveToSolutionFolder",
+                    "when": "view == solutionExplorer && viewItem == project-cps"
+                },
+                {
+                    "command": "solutionExplorer.moveToSolutionFolder",
+                    "when": "view == solutionExplorer && viewItem == project-standard"
+                },
+                {
+                    "command": "solutionExplorer.moveToSolutionFolder",
+                    "when": "view == solutionExplorer && viewItem == project-website"
                 }
             ]
         },

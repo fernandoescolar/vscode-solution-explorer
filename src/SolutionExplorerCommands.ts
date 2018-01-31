@@ -25,6 +25,7 @@ export class SolutionExplorerCommands {
         this.commands['removeProject'] = new cmds.RemoveProjectCommand(provider);
         this.commands['createSolutionFolder'] = new cmds.CreateSolutionFolderCommand(provider);
         this.commands['removeSolutionFolder'] = new cmds.RemoveSolutionFolderCommand(provider);
+        this.commands['moveToSolutionFolder'] = new cmds.MoveToSolutionFolderCommand(provider);
     }
 
     public register() {

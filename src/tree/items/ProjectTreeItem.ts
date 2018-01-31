@@ -9,7 +9,7 @@ import * as path from 'path';
 import { resolve } from "url";
 
 export class ProjectTreeItem extends TreeItem {
-    constructor(context: TreeItemContext, protected readonly projectInSolution: ProjectInSolution) {
+    constructor(context: TreeItemContext, public readonly projectInSolution: ProjectInSolution) {
         super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, projectInSolution.fullPath);
         this.addContextValueSuffix();
     }

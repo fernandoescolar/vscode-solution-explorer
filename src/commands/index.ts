@@ -15,3 +15,4 @@ export * from "./AddNewProjectCommand";
 export * from "./RemoveProjectCommand";
 export * from "./CreateSolutionFolderCommand";
 export * from "./RemoveSolutionFolderCommand" ;
+export * from "./MoveToSolutionFolderCommand";
