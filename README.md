@@ -14,7 +14,11 @@ Adds a Solution Explorer panel where you can find a Visual Studio Solution File 
 
 - Supports dotnet core projects
 
-- You can create, delete or rename project folders and files.
+- You can create, delete, rename or move project folders and files.
+
+- You can create, delete, rename or move solution, solution folders and projects.
+
+- You can add or remove packages and references when the project is of kind CPS (dotnet core).
 
 ## Requirements
 
