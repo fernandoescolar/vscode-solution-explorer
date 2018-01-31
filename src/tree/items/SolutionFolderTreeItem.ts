@@ -5,7 +5,7 @@ import { ContextValues } from "../ContextValues";
 import { ProjectInSolution } from "../../model/Solutions";
 
 export class SolutionFolderTreeItem extends TreeItem {   
-    constructor(context: TreeItemContext, private projectInSolution: ProjectInSolution) {
+    constructor(context: TreeItemContext, public readonly projectInSolution: ProjectInSolution) {
         super(context, projectInSolution.projectName, TreeItemCollapsibleState.Expanded, ContextValues.SolutionFolder);
     }
 

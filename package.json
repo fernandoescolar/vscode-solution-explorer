@@ -110,6 +110,18 @@
             {
                 "command": "solutionExplorer.addNewProject",
                 "title": "Add new project"
+            },
+            {
+                "command": "solutionExplorer.removeProject",
+                "title": "Remove project from solution"
+            },
+            {
+                "command": "solutionExplorer.createSolutionFolder",
+                "title": "Create folder"
+            },
+            {
+                "command": "solutionExplorer.removeSolutionFolder",
+                "title": "Remove"
             }
         ],
         "menus": {
@@ -240,6 +252,30 @@
                 {
                     "command": "solutionExplorer.addNewProject",
                     "when": "view == solutionExplorer && viewItem == solution"
+                },
+                {
+                    "command": "solutionExplorer.removeProject",
+                    "when": "view == solutionExplorer && viewItem == project-cps"
+                },
+                {
+                    "command": "solutionExplorer.removeProject",
+                    "when": "view == solutionExplorer && viewItem == project-standard"
+                },
+                {
+                    "command": "solutionExplorer.removeProject",
+                    "when": "view == solutionExplorer && viewItem == project-website"
+                },
+                {
+                    "command": "solutionExplorer.createSolutionFolder",
+                    "when": "view == solutionExplorer && viewItem == solution"
+                },
+                {
+                    "command": "solutionExplorer.createSolutionFolder",
+                    "when": "view == solutionExplorer && viewItem == solution-folder"
+                },
+                {
+                    "command": "solutionExplorer.removeSolutionFolder",
+                    "when": "view == solutionExplorer && viewItem == solution-folder"
                 }
             ]
         },
@@ -259,10 +295,15 @@
                 },
                 "vssolution.netcoreIgnore": {
                     "type": "array",
-                    "items": { 
-                        "type": "string" 
+                    "items": {
+                        "type": "string"
                     },
-                    "default": [ "bin", "node_modules", "obj", ".ds_store" ],
+                    "default": [
+                        "bin",
+                        "node_modules",
+                        "obj",
+                        ".ds_store"
+                    ],
                     "description": "Folder and filenames to ignore when get a dotnet core project content"
                 },
                 "vssolution.xxprojItemTypes": {
@@ -297,6 +338,7 @@
         "vscode": "^1.1.6"
     },
     "dependencies": {
+        "node-uuid": "^1.4.8",
         "xml2js": "^0.4.19"
     }
 }

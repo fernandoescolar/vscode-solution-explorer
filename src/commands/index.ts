@@ -12,3 +12,6 @@ export * from "./AddProjectReferenceCommand";
 export * from "./RemoveProjectReferenceCommand";
 export * from "./CreateNewSolutionCommand";
 export * from "./AddNewProjectCommand";
+export * from "./RemoveProjectCommand";
+export * from "./CreateSolutionFolderCommand";
+export * from "./RemoveSolutionFolderCommand" ;

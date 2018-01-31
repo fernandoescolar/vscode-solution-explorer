@@ -87,6 +87,8 @@ Added add and remove project reference commands in CPS projects.
 
 Added create project and solution commands.
 
+Added create and remove solution folder commands.
+
 ### 0.0.9
 
 Added configuration settings.
