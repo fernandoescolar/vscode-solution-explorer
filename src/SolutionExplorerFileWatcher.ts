@@ -40,6 +40,6 @@ export class SolutionExplorerFileWatcher {
     }
 
     private parseUri(uri: Uri): string {
-        return uri.toString().replace("file://", "");
+        return uri.fsPath;
     }
 }
