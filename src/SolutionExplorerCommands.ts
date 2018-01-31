@@ -26,6 +26,7 @@ export class SolutionExplorerCommands {
         this.commands['createSolutionFolder'] = new cmds.CreateSolutionFolderCommand(provider);
         this.commands['removeSolutionFolder'] = new cmds.RemoveSolutionFolderCommand(provider);
         this.commands['moveToSolutionFolder'] = new cmds.MoveToSolutionFolderCommand(provider);
+        this.commands['renameSolutionItem'] = new cmds.RenameSolutionItemCommand(provider);
     }
 
     public register() {

@@ -4,7 +4,7 @@ import { TreeItemContext } from "../TreeItemContext";
 import { ContextValues } from "../ContextValues";
 import { SolutionFile } from "../../model/Solutions";
 import * as TreeItemFactory from "../TreeItemFactory";
-import { ISubscription, EventTypes, IEvent, IFileEvent } from "../../events";
+import { ISubscription, EventTypes, IEvent, IFileEvent, FileEventType } from "../../events";
 
 export class SolutionTreeItem extends TreeItem {
     private subscription: ISubscription = null;
@@ -35,7 +35,7 @@ export class SolutionTreeItem extends TreeItem {
 
     private onFileEvent(event: IEvent): void {
         let fileEvent = <IFileEvent> event;
-        if (fileEvent.path == this.solution.FullPath) {
+        if (fileEvent.path == this.solution.FullPath && fileEvent.fileEventType != FileEventType.Delete) {
             SolutionFile.Parse(this.solution.FullPath).then(res => {
                 this.context = new TreeItemContext(this.context.provider, res);
                 this.refresh();

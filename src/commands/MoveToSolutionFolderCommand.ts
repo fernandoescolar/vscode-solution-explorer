@@ -5,7 +5,6 @@ import { TreeItem, ContextValues } from "../tree";
 import { CommandBase } from "./base/CommandBase";
 import { SolutionProjectType, ProjectInSolution, SolutionFile } from "../model/Solutions";
 import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandParameter";
-import { resolve } from "url";
 
 export class MoveToSolutionFolderCommand extends CommandBase {
 

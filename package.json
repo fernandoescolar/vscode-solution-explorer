@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -112,12 +112,12 @@
                 "title": "Add new project"
             },
             {
-                "command": "solutionExplorer.removeProject",
-                "title": "Remove project from solution"
-            },
-            {
                 "command": "solutionExplorer.createSolutionFolder",
                 "title": "Create folder"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "title": "Rename"
             },
             {
                 "command": "solutionExplorer.moveToSolutionFolder",
@@ -126,6 +126,10 @@
             {
                 "command": "solutionExplorer.removeSolutionFolder",
                 "title": "Remove"
+            },
+            {
+                "command": "solutionExplorer.removeProject",
+                "title": "Remove project from solution"
             }
         ],
         "menus": {
@@ -295,6 +299,26 @@
                 },
                 {
                     "command": "solutionExplorer.moveToSolutionFolder",
+                    "when": "view == solutionExplorer && viewItem == project-website"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == solutionExplorer && viewItem == solution"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == solutionExplorer && viewItem == solution-folder"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == solutionExplorer && viewItem == project-cps"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == solutionExplorer && viewItem == project-standard"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
                     "when": "view == solutionExplorer && viewItem == project-website"
                 }
             ]
