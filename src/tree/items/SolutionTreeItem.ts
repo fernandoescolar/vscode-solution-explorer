@@ -20,17 +20,8 @@ export class SolutionTreeItem extends TreeItem {
         super.dispose();
     }
 
-    protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
-        let result: TreeItem[] = [];
-        for (let i = 0; i < this.solution.Projects.length; i++){
-            let p = this.solution.Projects[i];
-            if (!p.parentProjectGuid) {
-                let item = await TreeItemFactory.CreateFromProject(childContext, p);
-                result.push(item);
-            }
-        }
-
-        return result;
+    protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
+        return TreeItemFactory.CreateItemsFromSolution(childContext, this.solution);
     }
 
     private onFileEvent(event: IEvent): void {

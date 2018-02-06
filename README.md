@@ -22,7 +22,9 @@ Adds a Solution Explorer panel where you can find a Visual Studio Solution File 
 
 ## Requirements
 
-You have to open a folder with at least solution file (".sln") in the root path.
+You have to open a folder with at least one solution file (".sln") in the root path.
+
+Or you can create a new one by clicking with the rigth mouse button.
 
 ## License
 
@@ -75,6 +77,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.2
+
+Sort solution and solution folder child items.
+
 ### 0.2.1
 
 Refactor commands using command pattern.
@@ -100,13 +106,5 @@ Added rename solution, solution folder and project commands.
 ### 0.0.9
 
 Added configuration settings.
-
-### 0.0.8
-
-Fixing a bug getting the content of a dotnet project sub-folder.
-
-### 0.0.7
-
-Fixing lost dependencies.
 
 **Enjoy!**

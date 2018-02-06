@@ -9,16 +9,7 @@ export class SolutionFolderTreeItem extends TreeItem {
         super(context, projectInSolution.projectName, TreeItemCollapsibleState.Expanded, ContextValues.SolutionFolder);
     }
 
-    protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
-        let result: TreeItem[] = [];
-        for (let i = 0; i < this.projectInSolution.solution.Projects.length; i++){
-            let p = this.projectInSolution.solution.Projects[i];
-            if (p.parentProjectGuid == this.projectInSolution.projectGuid) {
-                let item = await TreeItemFactory.CreateFromProject(childContext, p);
-                result.push(item);
-            }
-        }
-
-        return result;
+    protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
+        return TreeItemFactory.CreateItemsFromSolution(childContext, this.solution, this.projectInSolution.projectGuid);
     }
 }

@@ -25,7 +25,42 @@ export function CreateFromSolution(provider: SolutionExplorerProvider, solution:
     return Promise.resolve(new SolutionTreeItem(context));
 }
 
-export async function CreateFromProject(context: TreeItemContext, project: ProjectInSolution): Promise<TreeItem> {
+export async function CreateItemsFromSolution(context: TreeItemContext, solution: SolutionFile, parentGuid?: string): Promise<TreeItem[]> {
+    let result: TreeItem[] = [];
+    let folders: ProjectInSolution[] = [];
+    let projects: ProjectInSolution[] = [];
+    solution.Projects.forEach(project => {
+        if(project.parentProjectGuid != parentGuid) return false;
+        if (project.projectType == SolutionProjectType.SolutionFolder)
+            folders.push(project);
+        else 
+            projects.push(project);
+    });
+
+    folders.sort((a, b) => {
+        let x = a.projectName.toLowerCase();
+        let y = b.projectName.toLowerCase();
+        return x < y ? -1 : x > y ? 1 : 0;
+    });
+
+    projects.sort((a, b) => {
+        let x = a.projectName.toLowerCase();
+        let y = b.projectName.toLowerCase();
+        return x < y ? -1 : x > y ? 1 : 0;
+    });
+
+    for(let i = 0; i < folders.length; i++) {
+        result.push(await CreateFromProject(context, folders[i]));
+    }
+
+    for(let i = 0; i < projects.length; i++) {
+        result.push(await CreateFromProject(context, projects[i]));
+    }
+
+    return result;
+}
+
+async function CreateFromProject(context: TreeItemContext, project: ProjectInSolution): Promise<TreeItem> {
     if (project.projectType == SolutionProjectType.SolutionFolder) {
         return new SolutionFolderTreeItem(context, project);
     } 

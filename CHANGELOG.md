@@ -2,7 +2,11 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
-### 0.2.1
+## 0.2.2
+
+Sort solution and solution folder child items.
+
+## 0.2.1
 
 Refactor commands using command pattern.
 
