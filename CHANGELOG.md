@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.3
+
+CPS projects take care of ignore configuration parameter on "move to folder" command options.
+
 ## 0.2.2
 
 Sort solution and solution folder child items.

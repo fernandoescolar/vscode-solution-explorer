@@ -77,6 +77,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.3
+
+CPS projects take care of ignore configuration parameter on "move to folder" command options.
+
 ### 0.2.2
 
 Sort solution and solution folder child items.
@@ -102,9 +106,5 @@ Added create and remove solution folder commands.
 Added move solution folder and project to solution folder commands.
 
 Added rename solution, solution folder and project commands.
-
-### 0.0.9
-
-Added configuration settings.
 
 **Enjoy!**

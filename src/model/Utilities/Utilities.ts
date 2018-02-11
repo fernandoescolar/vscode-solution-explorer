@@ -53,7 +53,7 @@ export async function getDirectoryItems (dirPath: string): Promise<DirectorySear
     return new DirectorySearchResult(directories, files);
 }
 
-export async function getAllDirectoriesRecursive(dirPath: string): Promise<string[]> {
+export async function getAllDirectoriesRecursive(dirPath: string, ignore?:string[]): Promise<string[]> {
     if (!(await fs.exists(dirPath))) {
         throw "Directory doesn't exist";
     }
@@ -61,6 +61,7 @@ export async function getAllDirectoriesRecursive(dirPath: string): Promise<strin
     let result: string[] = [];
     let items = await fs.readdir(dirPath);
     for(let i = 0; i < items.length; i++){
+        if (ignore && ignore.indexOf(items[i].toLocaleLowerCase()) >= 0) continue;
         let filename = path.join(dirPath, items[i]);
         let stat = await fs.lstat(filename);
         if (stat.isDirectory()){

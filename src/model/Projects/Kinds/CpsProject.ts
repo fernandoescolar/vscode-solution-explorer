@@ -62,6 +62,15 @@ export class CpsProject extends FileSystemBasedProject {
         return { files, folders };
     }
 
+    public async getFolderList(): Promise<string[]> {
+        let ignore = SolutionExplorerConfiguration.getNetCoreIgnore();
+        let folderPath = path.dirname(this.projectInSolution.fullPath);
+        let directories = await Utilities.getAllDirectoriesRecursive(folderPath, ignore);
+        let result: string[] = [ '.' + path.sep ];
+        directories.forEach(dirPath => result.push('.' + dirPath.replace(folderPath, '')));
+        return result;
+    }
+
     private async checkProjectLoaded() {
         if (this.loaded) return;
 
