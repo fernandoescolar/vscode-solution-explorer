@@ -1,5 +1,6 @@
 export * from "./base/ICommand";
 export * from "./RefreshCommand";
+export * from "./CollapseAllCommand";
 export * from "./OpenFileCommand";
 export * from "./RenameCommand";
 export * from "./DeleteCommand";
