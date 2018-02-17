@@ -358,6 +358,11 @@
                     "default": true,
                     "description": "Show the solution explorer output channel."
                 },
+                "vssolution.useSolutionExplorerIcons": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "true -> Uses the vscode-solution-explorer custom icons\nfalse -> Uses the installed icon theme"
+                },
                 "vssolution.netcoreIgnore": {
                     "type": "array",
                     "items": {

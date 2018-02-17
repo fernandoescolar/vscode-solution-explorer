@@ -8,6 +8,7 @@ import { TreeItemContext } from "../TreeItemContext";
 export class ProjectReferencesTreeItem extends TreeItem {
     constructor(context: TreeItemContext) {
         super(context, "references", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferences);
+        this.allowIconTheme = false;
     }
 
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  

@@ -40,7 +40,9 @@ Branded icons are licensed under their copyright license.
 
 - `vssolution.showOutputChannel` Show the solution explorer output channel.
 
-- `vssolution.netcoreIgnore` Folder and file names to ignore when get a dotnet core project content
+- `vssolution.useSolutionExplorerIcons` If 'true' it uses the vscode-solution-explorer custom icons. If 'false' it uses the installed icon theme.
+
+- `vssolution.netcoreIgnore` Folder and file names to ignore when get a dotnet core project content.
 
 - `vssolution.xxprojItemTypes` Type of XML element to put in the xxproj files.
 
@@ -50,7 +52,9 @@ Branded icons are licensed under their copyright license.
 {
     "vssolution.showInExplorer": true,
 
-    "vssolution.showOutputChannel" : true,
+    "vssolution.showOutputChannel": true,
+
+    "vssolution.useSolutionExplorerIcons": true, 
 
     "vssolution.netcoreIgnore": [
         "bin",
@@ -76,6 +80,16 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 ## Release Notes
 
 There is a lot of work to do.
+
+### 0.2.4
+
+Added add existing project to solution command.
+
+On double click in a file, it is opened and pinned.
+
+(WIP) collapse all button doesn't work due to a issue with the vscode refreshing.
+
+Use installed theme icons: set 'vssolution.useSolutionExplorerIcons' configuration parameter to false.
 
 ### 0.2.3
 

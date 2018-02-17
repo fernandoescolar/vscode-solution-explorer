@@ -3,6 +3,7 @@ import * as vscode from "vscode";
 const ConfigurationName = 'vssolution';
 const ItemTypesName = 'xxprojItemTypes';
 const ShowInExplorerName = 'showInExplorer';
+const UseSolutionExplorerIconsName = 'useSolutionExplorerIcons';
 const ShowOutputChannelName = 'showOutputChannel';
 const NetcoreIgnoreName = 'netcoreIgnore';
 
@@ -24,6 +25,10 @@ export function getItemTypes(): { [id: string]: string } {
 
 export function getShowInExplorer(): boolean {
     return config.get<boolean>(ShowInExplorerName, true);
+}
+
+export function getUseSolutionExplorerIcons(): boolean {
+    return config.get<boolean>(UseSolutionExplorerIconsName, true);
 }
 
 export function getShowOutputChannel(): boolean {
