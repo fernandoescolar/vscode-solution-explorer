@@ -1,4 +1,4 @@
-import * as path from "path";
+import { OpenDialogOptions } from "vscode";
 import { CliCommandBase } from "./base/CliCommandBase";
 import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
 import { TreeItem } from "../tree/TreeItem";
@@ -11,11 +11,17 @@ export class AddExistingProjectCommand extends CliCommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
+        let options: OpenDialogOptions = {
+		    openLabel: 'Add',
+    		canSelectFolders: false,
+    		canSelectMany: false,
+		    filters: { 'Projects': [ 'csproj', 'vbproj', 'fsproj' ] }
+        };
         this.parameters = [
             new StaticCommandParameter('sln'),
             new StaticCommandParameter(item.path),
             new StaticCommandParameter('add'),
-            new OpenFileCommandParameter('Add')
+            new OpenFileCommandParameter(options)
         ];
 
         return true;
