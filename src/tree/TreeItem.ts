@@ -21,6 +21,7 @@ export abstract class TreeItem extends vscode.TreeItem {
 		public command?: vscode.Command,
 	) {
 		super(label, collapsibleState);
+		this.createId();
 		this.loadIcon();
 	}
 
@@ -44,6 +45,8 @@ export abstract class TreeItem extends vscode.TreeItem {
 		this._allowIconTheme = val;
 		this.loadIcon();
 	}
+
+	public id?: string;
 
 	public resourceUri?: vscode.Uri;
 
@@ -81,6 +84,16 @@ export abstract class TreeItem extends vscode.TreeItem {
 
 	protected addContextValueSuffix(): void {
 		this.contextValue += this.project && this.project.type ? '-' + this.project.type : '';
+	}
+
+	protected createId(): void {
+		let id: string;
+		if (this.parent)
+			id = this.parent.id + '-' + this.label + '[' + this.contextValue + ']';
+		else 
+			id = this.solution.FullPath + '[' + this.contextValue + ']';
+		
+		this.id = id;
 	}
 
 	protected loadIcon(): void {
