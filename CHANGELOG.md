@@ -2,6 +2,16 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.4
+
+Added add existing project to solution command.
+
+On double click in a file, it is opened and pinned.
+
+(WIP) collapse all button doesn't work due to a issue with the vscode refreshing.
+
+Use installed theme icons: set 'vssolution.useSolutionExplorerIcons' configuration parameter to false.
+
 ## 0.2.3
 
 CPS projects take care of ignore configuration parameter on "move to folder" command options.
