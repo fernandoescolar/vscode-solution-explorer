@@ -42,6 +42,14 @@ export abstract class TreeItem extends vscode.TreeItem {
 		return this.children;
     }
 
+	public collapse(): void {
+		if (this.collapsibleState == vscode.TreeItemCollapsibleState.None) return;
+		if (this.children) this.children.forEach(c => c.collapse());
+		
+		this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+		this.context.provider.refresh(this);
+	}
+
 	public refresh(): void {
 		if (this.children) this.children.forEach(c => c.dispose());
         this.children = null;

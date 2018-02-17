@@ -7,6 +7,7 @@ export class SolutionExplorerCommands {
 
     constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider) {
         this.commands['refresh'] = new cmds.RefreshCommand(provider);
+        this.commands['collapseAll'] = new cmds.CollapseAllCommand(provider);
         this.commands['openFile'] = new cmds.OpenFileCommand();
         this.commands['renameFile'] = new cmds.RenameCommand(provider);
         this.commands['renameFolder'] = new cmds.RenameCommand(provider);

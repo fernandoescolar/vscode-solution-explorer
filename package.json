@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -45,6 +45,14 @@
                 "icon": {
                     "light": "icons/refresh-light.svg",
                     "dark": "icons/refresh-dark.svg"
+                }
+            },
+            {
+                "command": "solutionExplorer.collapseAll",
+                "title": "Collapse All",
+                "icon": {
+                    "light": "icons/collapse-all_light.svg",
+                    "dark": "icons/collapse-all_dark.svg"
                 }
             },
             {
@@ -136,6 +144,11 @@
             "view/title": [
                 {
                     "command": "solutionExplorer.refresh",
+                    "when": "view == solutionExplorer",
+                    "group": "navigation"
+                },
+                {
+                    "command": "solutionExplorer.collapseAll",
                     "when": "view == solutionExplorer",
                     "group": "navigation"
                 }
@@ -375,13 +388,15 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^7.0.43",
+        "@types/handlebars": "^4.0.36",
+        "@types/mocha": "^2.2.48",
+        "@types/node": "^7.0.55",
         "@types/xml2js": "^0.4.2",
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6"
+        "typescript": "^2.7.2",
+        "vscode": "^1.1.10"
     },
     "dependencies": {
+        "handlebars": "^4.0.11",
         "node-uuid": "^1.4.8",
         "xml2js": "^0.4.19"
     }
