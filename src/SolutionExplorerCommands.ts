@@ -23,6 +23,7 @@ export class SolutionExplorerCommands {
         this.commands['removeProjectReference'] = new cmds.RemoveProjectReferenceCommand(provider);
         this.commands['createNewSolution'] = new cmds.CreateNewSolutionCommand(provider);
         this.commands['addNewProject'] = new cmds.AddNewProjectCommand(provider);
+        this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand(provider);
         this.commands['removeProject'] = new cmds.RemoveProjectCommand(provider);
         this.commands['createSolutionFolder'] = new cmds.CreateSolutionFolderCommand(provider);
         this.commands['removeSolutionFolder'] = new cmds.RemoveSolutionFolderCommand(provider);

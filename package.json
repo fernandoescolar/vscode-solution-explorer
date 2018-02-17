@@ -120,6 +120,10 @@
                 "title": "Add new project"
             },
             {
+                "command": "solutionExplorer.addExistingProject",
+                "title": "Add existing project"
+            },
+            {
                 "command": "solutionExplorer.createSolutionFolder",
                 "title": "Create folder"
             },
@@ -272,6 +276,10 @@
                 },
                 {
                     "command": "solutionExplorer.addNewProject",
+                    "when": "view == solutionExplorer && viewItem == solution"
+                },
+                {
+                    "command": "solutionExplorer.addExistingProject",
                     "when": "view == solutionExplorer && viewItem == solution"
                 },
                 {
