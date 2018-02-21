@@ -11,6 +11,7 @@ import { resolve } from "url";
 export class ProjectTreeItem extends TreeItem {
     constructor(context: TreeItemContext, public readonly projectInSolution: ProjectInSolution) {
         super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.Project, projectInSolution.fullPath);
+        this.allowIconTheme = false;
         this.addContextValueSuffix();
     }
 

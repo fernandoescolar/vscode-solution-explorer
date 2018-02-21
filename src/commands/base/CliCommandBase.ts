@@ -10,7 +10,7 @@ export abstract class CliCommandBase extends CommandBase {
     }
 
     protected runCommand(item: TreeItem, args: string[]): Promise<void> {
-        let workingFolder = path.dirname(item.path);
+        let workingFolder = this.getWorkingFolder(item);
         return this.runCliCommand(this.app, args, workingFolder);
     }
 
@@ -33,5 +33,12 @@ export abstract class CliCommandBase extends CommandBase {
                 resolve();
             });
         });
+    }
+
+    private getWorkingFolder(item: TreeItem): string {
+        if (item.path) return path.dirname(item.path);
+        if (item.project) return path.dirname(item.project.fullPath);
+        if (item.solution) return item.solution.FolderPath;
+        return null;
     }
 }

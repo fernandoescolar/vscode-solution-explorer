@@ -11,6 +11,7 @@ export class SolutionTreeItem extends TreeItem {
      
     constructor(context: TreeItemContext) {
         super(context, context.solution.Name, TreeItemCollapsibleState.Expanded, ContextValues.Solution, context.solution.FullPath);
+        this.allowIconTheme = false;
         this.subscription = context.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
     }
     

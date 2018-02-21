@@ -12,7 +12,7 @@ export class AddPackageCommand extends CliCommandBase {
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
             new StaticCommandParameter('add'),
-            new StaticCommandParameter(item.path),
+            new StaticCommandParameter(item.project.fullPath),
             new StaticCommandParameter('package'),
             new InputTextCommandParameter('Package Name...')
         ];
