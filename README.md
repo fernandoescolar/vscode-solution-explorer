@@ -81,6 +81,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.5
+
+Bugfix: Add reference and add package commands now works
+
+Bugfix: It doesn't show the "Cannot read property 'FullPath' of null" on startup (#4)
+
 ### 0.2.4
 
 Added add existing project to solution command.
@@ -94,31 +100,5 @@ Use installed theme icons: set 'vssolution.useSolutionExplorerIcons' configurati
 ### 0.2.3
 
 CPS projects take care of ignore configuration parameter on "move to folder" command options.
-
-### 0.2.2
-
-Sort solution and solution folder child items.
-
-### 0.2.1
-
-Refactor commands using command pattern.
-
-Added File Watcher to detect project and solution changes.
-
-Added Output Channel to log commands.
-
-Added move folder and file to folder in project.
-
-Added add and remove packages commands in CPS projects.
-
-Added add and remove project reference commands in CPS projects.
-
-Added create project and solution commands.
-
-Added create and remove solution folder commands.
-
-Added move solution folder and project to solution folder commands.
-
-Added rename solution, solution folder and project commands.
 
 **Enjoy!**

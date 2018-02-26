@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.5
+
+Bugfix: Add reference and add package commands now works
+
+Bugfix: It doesn't show the "Cannot read property 'FullPath' of null" on startup (#4)
+
 ## 0.2.4
 
 Added add existing project to solution command.
