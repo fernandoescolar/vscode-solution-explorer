@@ -19,3 +19,5 @@ export * from "./CreateSolutionFolderCommand";
 export * from "./RemoveSolutionFolderCommand" ;
 export * from "./MoveToSolutionFolderCommand";
 export * from "./RenameSolutionItemCommand";
+export * from "./CopyCommand";
+export * from "./PasteCommand";

@@ -2,6 +2,16 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.6
+
+Copy and Paste command in files, folders and projects.
+
+Commands now are grouped.
+
+Added refresh command as inline icon in folders and projects.
+
+Fixed delete folder command in order to delete all tree.
+
 ## 0.2.5
 
 Bugfix: Add reference and add package commands now works

@@ -112,7 +112,7 @@ export class StandardProject extends FileSystemBasedProject {
         await this.saveProject();
     }
 
-    public async createFile(folderpath: string, filename: string): Promise<string> {
+    public async createFile(folderpath: string, filename: string, content?: string): Promise<string> {
         await this.checkProjectLoaded();
         
         let folderRelativePath = this.getRelativePath(folderpath);
@@ -135,7 +135,7 @@ export class StandardProject extends FileSystemBasedProject {
         }
         this.currentItemGroupAdd(type, relativePath);
         await this.saveProject();
-        return await super.createFile(folderpath, filename);
+        return await super.createFile(folderpath, filename, content);
     }
 
     public async renameFolder(folderpath: string, name: string): Promise<string> {
@@ -151,10 +151,6 @@ export class StandardProject extends FileSystemBasedProject {
     public async deleteFolder(folderpath: string): Promise<void> {
         await this.checkProjectLoaded();
         let folderRelativePath = this.getRelativePath(folderpath);
-        if (this.countInNodes(folderRelativePath, true) > 1) {
-            throw new Error("Can not delete a not empty folder");    
-        }
-
         this.removeInNodes(folderRelativePath, true, ['Folder']);
         await super.deleteFolder(folderpath);
         await this.saveProject();

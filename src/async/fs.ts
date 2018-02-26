@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as spath from "path";
 import { Promisify } from "./Promisify";
 
 export type Encoding = 'ascii'|'base64'|'binary'|'hex'|'ucs2'|'utf16le'|'utf8';
@@ -37,3 +38,22 @@ export function writeFile(file: string|number, data: string|any,
     ) { return Promisify<any>(fs.writeFile, arguments); }
 
 export function unlink(path: string) { return Promisify<void>(fs.unlink, arguments); }
+
+export async function rmdir_recursive(dir: string): Promise<void> {
+	var list = await readdir(dir);
+	for(var i = 0; i < list.length; i++) {
+		var filename = spath.join(dir, list[i]);
+		var stat = await lstat(filename);
+		if(filename == "." || filename == "..") {
+			// pass these files
+		} else if(stat.isDirectory()) {
+			// rmdir recursively
+			await rmdir_recursive(filename);
+		} else {
+			// rm fiilename
+			await unlink(filename);
+		}
+	}
+    
+    await fs.rmdir(dir);
+};

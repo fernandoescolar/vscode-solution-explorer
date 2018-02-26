@@ -36,10 +36,10 @@ export abstract class FileSystemBasedProject extends Project {
         }
     }
 
-    public async createFile(folderpath: string, filename: string): Promise<string> {
+    public async createFile(folderpath: string, filename: string, content?: string): Promise<string> {
         let filepath = path.join(folderpath, filename);
         if (!(await fs.exists(filepath))) {
-            await fs.writeFile(filepath, "");
+            await fs.writeFile(filepath, content || "");
         }
 
         return filepath;
@@ -50,7 +50,7 @@ export abstract class FileSystemBasedProject extends Project {
     }
 
     public deleteFolder(folderpath: string): Promise<void> {
-        return fs.rmdir(folderpath);
+        return fs.rmdir_recursive(folderpath);
     }
 
     public async createFolder(folderpath: string): Promise<string> {
