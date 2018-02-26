@@ -1,6 +1,7 @@
 import * as fs from "../async/fs";
 import * as path from "path";
 import * as clipboardy from "clipboardy";
+import * as Utilities from "../model/Utilities";
 import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
 import { TreeItem, ContextValues } from "../tree";
 import { CommandBase } from "./base/CommandBase";
@@ -53,11 +54,8 @@ export class PasteCommand extends CommandBase {
         try {
             let filename = path.basename(sourcepath);            
             let filepath = path.join(targetpath, filename);
-            if (await fs.exists(filepath)) {
-                let ext = path.extname(filename);
-                let name = path.basename(filename, ext);
-                filename = name + '.1' + ext;
-            }
+            filepath = await Utilities.createCopyName(filepath);
+            filename = path.basename(filepath);
             
             let content = await fs.readFile(sourcepath, "utf8");
             filepath = await item.project.createFile(targetpath, filename, content);
@@ -70,10 +68,7 @@ export class PasteCommand extends CommandBase {
     private async getFilesToCopyFromDirectory(sourcepath: string, targetpath: string): Promise<{[id: string]: string}> {
         let result: {[id: string]: string} = {};
         targetpath = path.join(targetpath, path.basename(sourcepath));
-
-        if (await fs.exists(targetpath)) {
-            targetpath += '.1';
-        } 
+        targetpath = await Utilities.createCopyName(targetpath);
 
         result[sourcepath] = targetpath;
 

@@ -81,3 +81,16 @@ export async function getAllDirectoriesRecursive(dirPath: string, ignore?:string
 
     return result;
 }
+
+export async function createCopyName(filepath: string): Promise<string> {
+    let counter = 1;
+    let ext = path.extname(filepath);
+    let name = path.basename(filepath, ext);
+    let folder = path.dirname(filepath);
+    while (await fs.exists(filepath)) {   
+        filepath = path.join(folder, name + '.' + counter + ext);
+        counter++;
+    }
+
+    return filepath;
+}
