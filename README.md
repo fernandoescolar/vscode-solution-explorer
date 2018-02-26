@@ -81,6 +81,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.7
+
+Remove "Collapse All" button. It doesn't work and causes issues.
+
 ### 0.2.6
 
 Copy and Paste command in files, folders and projects.

@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.7
+
+Remove "Collapse All" button. It doesn't work and causes issues.
+
 ## 0.2.6
 
 Copy and Paste command in files, folders and projects.
