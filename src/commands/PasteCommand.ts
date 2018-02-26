@@ -56,7 +56,7 @@ export class PasteCommand extends CommandBase {
             if (await fs.exists(filepath)) {
                 let ext = path.extname(filename);
                 let name = path.basename(filename, ext);
-                filename = name + '1' + ext;
+                filename = name + '.1' + ext;
             }
             
             let content = await fs.readFile(sourcepath, "utf8");
@@ -72,7 +72,7 @@ export class PasteCommand extends CommandBase {
         targetpath = path.join(targetpath, path.basename(sourcepath));
 
         if (await fs.exists(targetpath)) {
-            targetpath += '1';
+            targetpath += '.1';
         } 
 
         result[sourcepath] = targetpath;

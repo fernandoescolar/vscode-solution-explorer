@@ -152,6 +152,10 @@
                 "title": "Copy"
             },
             {
+                "command": "solutionExplorer.duplicate",
+                "title": "Create a copy"
+            },
+            {
                 "command": "solutionExplorer.paste",
                 "title": "Paste"
             }
@@ -202,6 +206,11 @@
                 },
                 {
                     "command": "solutionExplorer.copy",
+                    "when": "view == solutionExplorer && viewItem == project-file",
+                    "group": "5_cutcopypaste"
+                },
+                {
+                    "command": "solutionExplorer.duplicate",
                     "when": "view == solutionExplorer && viewItem == project-file",
                     "group": "5_cutcopypaste"
                 },
@@ -478,8 +487,8 @@
 							"mix",
 							"solution-explorer"
 						],
-                    "default": true,
-                    "description": "true -> Uses the vscode-solution-explorer custom icons\nfalse -> Uses the installed icon theme"
+                    "default": "solution-explorer",
+                    "description": "solution-explorer -> Uses the vscode-solution-explorer custom icons\nmix -> use current theme icons for files and folders\ncurrent-theme -> Uses the installed icon theme"
                 },
                 "vssolution.netcoreIgnore": {
                     "type": "array",
