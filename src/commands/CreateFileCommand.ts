@@ -9,10 +9,12 @@ import { TemplateEngine } from "../templates/TemplateEngine";
 
 export class CreateFileCommand extends CommandBase {
 
-    private readonly templates: TemplateEngine = new TemplateEngine(path.join(__filename, "..", "..", "..", "file-templates"));
+    private readonly templates: TemplateEngine;
 
     constructor(private readonly provider: SolutionExplorerProvider) {
         super();
+
+        this.templates = new TemplateEngine(path.join(provider.workspaceRoot, ".vscode", "solution-explorer"));
 
         this.parameters = [
             new InputTextCommandParameter('New file name'),
@@ -51,24 +53,6 @@ export class CreateFileCommand extends CommandBase {
     private getContent(item: TreeItem): Promise<string> {
         if (!this.args[1]) return Promise.resolve("");
 
-        let extension = path.extname(this.args[0]).substring(1);
-        let parameters = {
-            namespace: this.getNamespace(item),
-            name: path.basename(this.args[0], "." + extension)
-        };
-
-        return this.templates.generate(extension, this.args[1], parameters);
-    }
-
-    private getNamespace(item: TreeItem): string {
-        let result = "Unknown";
-        if (item.project) {
-            result = path.basename(item.project.fullPath, path.extname(item.project.fullPath));
-            if (item.contextValue.startsWith(ContextValues.ProjectFolder)) {
-                result += "." + item.path.replace(path.dirname(item.project.fullPath), "").substring(1).replace(/[\\\/]/g, ".");
-            }
-        }       
-
-        return result;
+        return this.templates.generate(this.args[0], this.args[1], item);
     }
 }

@@ -16,7 +16,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	readonly onDidChangeTreeData: vscode.Event<sln.TreeItem | undefined> = this._onDidChangeTreeData.event;
 	//onDidChangeActiveTextEditor
 
-	constructor(private workspaceRoot: string, public readonly eventAggregator: IEventAggegator) {
+	constructor(public workspaceRoot: string, public readonly eventAggregator: IEventAggegator) {
 		this._logger = new Logger(this.eventAggregator);
 	}
 
@@ -56,12 +56,17 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 			this.logger.log('No .sln found in workspace');
 			return Promise.resolve([]);
 		}
+		
 		if (element)
 			return element.getChildren();
+		
 		if (!element && this.children) 
 			return Promise.resolve(this.children);
-		if (!element && !this.children) 
+	
+		if (!element && !this.children) {
+			this.checkTemplatesToInstall();
 			return this.createSolutionItems();
+		}
 
 		return null;
 	}
@@ -92,7 +97,34 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 			this.children = null;
 			this.refresh();
         }
-    }
+	}
+	
+	private async checkTemplatesToInstall(): Promise<void> {
+		let templatesFolder = path.join(this.workspaceRoot, ".vscode", "solution-explorer");
+		if (!(await fs.exists(templatesFolder))) {
+			let option = await vscode.window.showWarningMessage("Would you like to create the vscode-solution-explorer templates folder?", 'Yes');
+			if (option !== null && option !== undefined && option == 'Yes') {
+				await this.copyFolder(path.join(__filename, "..", "..", "files-vscode-folder"), templatesFolder);
+			}
+		}
+	}
+
+	private async copyFolder(src: string, dest: string): Promise<void> {
+		var exists = await fs.exists(src);
+		var stats = exists && await fs.lstat(src);
+		var isDirectory = exists && stats.isDirectory();
+		if (exists && isDirectory) {
+			await fs.mkdir(dest);
+			let items = await fs.readdir(src);
+			for(let i = 0; i < items.length; i++) {
+				let childItemName = items[i];
+				await this.copyFolder(path.join(src, childItemName), path.join(dest, childItemName));
+			}
+		} else {
+			let content = await fs.readFile(src, "binary");
+			await fs.writeFile(dest, content, "binary");
+		}
+	}
 }
 
 
