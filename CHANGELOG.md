@@ -14,6 +14,8 @@ Fixed delete folder command in order to delete all tree.
 
 Changed the icons mode to "solution-explorer", "mix" or "current-theme" in the configuration settings.
 
+Added template system to create new files.
+
 ## 0.2.5
 
 Bugfix: Add reference and add package commands now works
