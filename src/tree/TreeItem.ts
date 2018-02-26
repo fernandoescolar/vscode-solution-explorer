@@ -90,8 +90,10 @@ export abstract class TreeItem extends vscode.TreeItem {
 		let id: string;
 		if (this.parent)
 			id = this.parent.id + '-' + this.label + '[' + this.contextValue + ']';
-		else 
+		else if (this.solution)
 			id = this.solution.FullPath + '[' + this.contextValue + ']';
+		else
+			id = this.label + '[' + this.contextValue + ']';
 		
 		this.id = id;
 	}
