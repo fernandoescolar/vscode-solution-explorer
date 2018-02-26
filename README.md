@@ -107,8 +107,4 @@ On double click in a file, it is opened and pinned.
 
 Use installed theme icons: set 'vssolution.useSolutionExplorerIcons' configuration parameter to false.
 
-### 0.2.3
-
-CPS projects take care of ignore configuration parameter on "move to folder" command options.
-
 **Enjoy!**

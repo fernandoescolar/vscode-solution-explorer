@@ -71,8 +71,8 @@
                 "command": "solutionExplorer.createFile",
                 "title": "Create file",
                 "icon": {
-                    "light": "icons/file_add.png",
-                    "dark": "icons/file_add.png"
+                    "light": "icons/add-file_light.png",
+                    "dark": "icons/add-file_dark.png"
                 }
             },
             {
@@ -85,7 +85,11 @@
             },
             {
                 "command": "solutionExplorer.createFolder",
-                "title": "Create folder"
+                "title": "Create folder",
+                "icon": {
+                    "light": "icons/add-folder_light.png",
+                    "dark": "icons/add-folder_dark.png"
+                }
             },
             {
                 "command": "solutionExplorer.moveFile",
@@ -343,7 +347,8 @@
                 },
                 {
                     "command": "solutionExplorer.openFile",
-                    "when": "view == solutionExplorer && viewItem == solution"
+                    "when": "view == solutionExplorer && viewItem == solution",
+                    "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.openFile",
@@ -367,7 +372,8 @@
                 },
                 {
                     "command": "solutionExplorer.addNewProject",
-                    "when": "view == solutionExplorer && viewItem == solution"
+                    "when": "view == solutionExplorer && viewItem == solution",
+                    "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.addExistingProject",
