@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 const ConfigurationName = 'vssolution';
 const ItemTypesName = 'xxprojItemTypes';
 const ShowInExplorerName = 'showInExplorer';
-const UseSolutionExplorerIconsName = 'useSolutionExplorerIcons';
+const SolutionExplorerIconsName = 'solutionExplorerIcons';
 const ShowOutputChannelName = 'showOutputChannel';
 const NetcoreIgnoreName = 'netcoreIgnore';
 
@@ -27,8 +27,8 @@ export function getShowInExplorer(): boolean {
     return config.get<boolean>(ShowInExplorerName, true);
 }
 
-export function getUseSolutionExplorerIcons(): boolean {
-    return config.get<boolean>(UseSolutionExplorerIconsName, true);
+export function getSolutionExplorerIcons(): string {
+    return config.get<string>(SolutionExplorerIconsName, ICONS_CUSTOM);
 }
 
 export function getShowOutputChannel(): boolean {
@@ -38,3 +38,7 @@ export function getShowOutputChannel(): boolean {
 export function getNetCoreIgnore(): string[] {
     return config.get<string[]>(NetcoreIgnoreName, [ "bin", "node_modules", "obj", ".ds_store" ]);
 }
+
+export const ICONS_THEME = "current-theme";
+export const ICONS_MIXED = "mix";
+export const ICONS_CUSTOM = "solution-explorer";

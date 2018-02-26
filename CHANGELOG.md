@@ -12,6 +12,8 @@ Added refresh command as inline icon in folders and projects.
 
 Fixed delete folder command in order to delete all tree.
 
+Changed the icons mode to "solution-explorer", "mix" or "current-theme" in the configuration settings.
+
 ## 0.2.5
 
 Bugfix: Add reference and add package commands now works

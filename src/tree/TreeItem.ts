@@ -99,7 +99,10 @@ export abstract class TreeItem extends vscode.TreeItem {
 	}
 
 	protected loadIcon(): void {
-		if (SolutionExplorerConfiguration.getUseSolutionExplorerIcons() || !this._allowIconTheme) {
+		let iconType = SolutionExplorerConfiguration.getSolutionExplorerIcons();
+		
+		if (iconType == SolutionExplorerConfiguration.ICONS_CUSTOM 
+		   || (iconType == SolutionExplorerConfiguration.ICONS_MIXED && !this._allowIconTheme)) {
 			this.iconPath = TreeItemIconProvider.findIconPath(this.label, this.path, this.contextValue);
 		} else {
 			let fullpath = this.path;

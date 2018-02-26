@@ -40,7 +40,7 @@ Branded icons are licensed under their copyright license.
 
 - `vssolution.showOutputChannel` Show the solution explorer output channel.
 
-- `vssolution.useSolutionExplorerIcons` If 'true' it uses the vscode-solution-explorer custom icons. If 'false' it uses the installed icon theme.
+- `vssolution.solutionExplorerIcons` "solution-explorer": custom items from vscode-solution-explorer extension. "mix": file and folder icons from the installed icons theme. "current-theme": all the icons are from the installed icons theme.
 
 - `vssolution.netcoreIgnore` Folder and file names to ignore when get a dotnet core project content.
 
@@ -54,7 +54,7 @@ Branded icons are licensed under their copyright license.
 
     "vssolution.showOutputChannel": true,
 
-    "vssolution.useSolutionExplorerIcons": true, 
+    "vssolution.solutionExplorerIcons": "mixed", 
 
     "vssolution.netcoreIgnore": [
         "bin",
@@ -90,6 +90,8 @@ Commands now are grouped.
 Added refresh command as inline icon in folders and projects.
 
 Fixed delete folder command in order to delete all tree.
+
+Changed the icons mode to "solution-explorer", "mix" or "current-theme" in the configuration settings.
 
 ### 0.2.5
 
