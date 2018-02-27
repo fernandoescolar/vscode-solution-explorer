@@ -51,7 +51,8 @@ export class TemplateEngine {
         let template = this.templates[index];
         let content = await fs.readFile(path.join(this.workingFolder, template.file), "utf8");
         let handlebar = Handlebars.compile(content);
-        let result = handlebar(this.getParameters(template, filename, item));
+        let parameters = await this.getParameters(template, filename, item)
+        let result = handlebar(parameters);
         return result;
     }
 
@@ -66,10 +67,15 @@ export class TemplateEngine {
 		await this.copyFolder(SourceFolder, this.workingFolder);
     }
 
-    private getParameters(template: ITemplate, filename: string, item: TreeItem): {[id: string]: string} {
+    private async getParameters(template: ITemplate, filename: string, item: TreeItem): Promise<{[id: string]: string}> {
         let parametersGetter = require(path.join(this.workingFolder, template.parameters));
         if (parametersGetter) {
-            return parametersGetter(filename, item.project ? item.project.fullPath : null, item.contextValue.startsWith(ContextValues.ProjectFolder) ? item.path : null);
+            let result = parametersGetter(filename, item.project ? item.project.fullPath : null, item.contextValue.startsWith(ContextValues.ProjectFolder) ? item.path : null);
+            if (Promise.resolve(result) === result) {
+                result = await (<Promise<any>>result);
+            }
+
+            return result;
         }
 
         return null;
