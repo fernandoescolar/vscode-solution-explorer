@@ -6,6 +6,8 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Ask for install templates only when at least one solution is found.
 
+Added more inline actions for create files and folders.
+
 ## 0.2.7
 
 Removed "Collapse All" button. It doesn't work and causes issues.

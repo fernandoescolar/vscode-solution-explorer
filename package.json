@@ -71,8 +71,8 @@
                 "command": "solutionExplorer.createFile",
                 "title": "Create file",
                 "icon": {
-                    "light": "icons/add-file_light.png",
-                    "dark": "icons/add-file_dark.png"
+                    "light": "icons/add-file_light.svg",
+                    "dark": "icons/add-file_dark.svg"
                 }
             },
             {
@@ -87,8 +87,8 @@
                 "command": "solutionExplorer.createFolder",
                 "title": "Create folder",
                 "icon": {
-                    "light": "icons/add-folder_light.png",
-                    "dark": "icons/add-folder_dark.png"
+                    "light": "icons/add-folder_light.svg",
+                    "dark": "icons/add-folder_dark.svg"
                 }
             },
             {
@@ -265,6 +265,26 @@
                     "group": "2_workspace"
                 },
                 {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "group": "inline"
+                },
+                {
                     "command": "solutionExplorer.renameFolder",
                     "when": "view == solutionExplorer && viewItem == project-folder",
                     "group": "7_modification"
@@ -298,6 +318,26 @@
                     "command": "solutionExplorer.createFolder",
                     "when": "view == solutionExplorer && viewItem == project-folder",
                     "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.moveFile",
@@ -477,11 +517,11 @@
                 },
                 "vssolution.solutionExplorerIcons": {
                     "type": "string",
-						"enum": [
-							"current-theme",
-							"mix",
-							"solution-explorer"
-						],
+                    "enum": [
+                        "current-theme",
+                        "mix",
+                        "solution-explorer"
+                    ],
                     "default": "solution-explorer",
                     "description": "solution-explorer -> Uses the vscode-solution-explorer custom icons\nmix -> use current theme icons for files and folders\ncurrent-theme -> Uses the installed icon theme"
                 },
