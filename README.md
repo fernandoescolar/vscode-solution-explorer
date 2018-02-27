@@ -6,8 +6,6 @@ This extension adds a Visual Studio Solution File explorer panel in Visual Studi
 
 Adds a Solution Explorer panel where you can find a Visual Studio Solution File Explorer. 
 
-![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/master/images/vscode-solution-explorer.gif)
-
 - Can load any .sln version
 
 - Supports csproj, fsproj and vbproj (from vs2017 and before)
@@ -19,6 +17,12 @@ Adds a Solution Explorer panel where you can find a Visual Studio Solution File 
 - You can create, delete, rename or move solution, solution folders and projects.
 
 - You can add or remove packages and references when the project is of kind CPS (dotnet core).
+
+![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/master/images/vscode-solution-explorer-1.gif)
+
+![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/master/images/vscode-solution-explorer-2.gif)
+
+![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/master/images/vscode-solution-explorer-3.gif)
 
 ## Requirements
 
@@ -90,6 +94,8 @@ Added more inline actions for create files and folders.
 Refactoring template engine installation.
 
 Rename command now has the old name value to modify.
+
+Add project command is showed in the right group, and it has a default project folder destination based on name.
 
 ### 0.2.7
 
