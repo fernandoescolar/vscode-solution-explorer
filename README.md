@@ -81,9 +81,13 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.8
+
+Ask for install templates only when at least one solution is found.
+
 ### 0.2.7
 
-Remove "Collapse All" button. It doesn't work and causes issues.
+Removed "Collapse All" button. It doesn't work and causes issues.
 
 ### 0.2.6
 
@@ -98,21 +102,5 @@ Fixed delete folder command in order to delete all tree.
 Changed the icons mode to "solution-explorer", "mix" or "current-theme" in the configuration settings.
 
 Added template system to create new files.
-
-### 0.2.5
-
-Bugfix: Add reference and add package commands now works
-
-Bugfix: It doesn't show the "Cannot read property 'FullPath' of null" on startup (#4)
-
-### 0.2.4
-
-Added add existing project to solution command.
-
-On double click in a file, it is opened and pinned.
-
-(WIP) collapse all button doesn't work due to a issue with the vscode refreshing.
-
-Use installed theme icons: set 'vssolution.useSolutionExplorerIcons' configuration parameter to false.
 
 **Enjoy!**

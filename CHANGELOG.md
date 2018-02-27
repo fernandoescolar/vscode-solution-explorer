@@ -2,9 +2,13 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.8
+
+Ask for install templates only when at least one solution is found.
+
 ## 0.2.7
 
-Remove "Collapse All" button. It doesn't work and causes issues.
+Removed "Collapse All" button. It doesn't work and causes issues.
 
 ## 0.2.6
 

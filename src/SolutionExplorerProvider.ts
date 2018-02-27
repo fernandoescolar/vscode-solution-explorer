@@ -64,7 +64,6 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 			return Promise.resolve(this.children);
 	
 		if (!element && !this.children) {
-			this.checkTemplatesToInstall();
 			return this.createSolutionItems();
 		}
 
@@ -85,6 +84,8 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 			let item = await sln.CreateFromSolution(this, solution);
 			this.children.push(item);
 		}
+
+		if (this.children.length > 0) this.checkTemplatesToInstall();
 
 		return this.children;
 	}
