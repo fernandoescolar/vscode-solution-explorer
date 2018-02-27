@@ -417,7 +417,7 @@
                 {
                     "command": "solutionExplorer.addNewProject",
                     "when": "view == solutionExplorer && viewItem == solution",
-                    "group": "7_modification"
+                    "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addExistingProject",

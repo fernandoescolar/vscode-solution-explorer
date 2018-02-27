@@ -12,6 +12,8 @@ Refactoring template engine installation.
 
 Rename command now has the old name value to modify.
 
+Add project command is showed in the right group, and it has a default project folder destination based on name.
+
 ## 0.2.7
 
 Removed "Collapse All" button. It doesn't work and causes issues.

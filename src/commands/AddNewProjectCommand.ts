@@ -36,7 +36,7 @@ export class AddNewProjectCommand extends CliCommandBase {
             new InputOptionsCommandParameter('Select project type', this.getProjectTypes()),
             new InputOptionsCommandParameter('Select language', () => this.getLanguages(), '-lang'),
             new InputTextCommandParameter('Project name...', '-n'),
-            new InputTextCommandParameter('Folder name...', '-o'),
+            new InputTextCommandParameter('Folder name...', '-o', () => this.getDefaultFolder()),
         ];
 
         return true;
@@ -68,5 +68,9 @@ export class AddNewProjectCommand extends CliCommandBase {
         if (this.args[this.args.length - 5] == 'VB') projectPath += '.vbproj';
 
         return this.runCliCommand('dotnet', ['sln', item.path, 'add', projectPath], workingpath);
+    }
+
+    private getDefaultFolder(): Promise<string> {
+        return Promise.resolve(this.args[this.args.length - 1]);
     }
 }
