@@ -12,7 +12,7 @@ Refactoring template engine installation.
 
 Rename command now has the old name value to modify.
 
-Add project command is showed in the right group, and it has a default project folder destination based on name.
+Add project command is showed in the right group, and it has a default project destination folder based on name.
 
 ## 0.2.7
 
