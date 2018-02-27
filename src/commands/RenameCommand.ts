@@ -12,7 +12,7 @@ export class RenameCommand extends CommandBase {
 
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
-            new InputTextCommandParameter(item.label)
+            new InputTextCommandParameter(item.label, null, item.label)
         ];
 
         return !!item.project;

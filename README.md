@@ -89,6 +89,8 @@ Added more inline actions for create files and folders.
 
 Refactoring template engine installation.
 
+Rename command now has the old name value to modify.
+
 ### 0.2.7
 
 Removed "Collapse All" button. It doesn't work and causes issues.
