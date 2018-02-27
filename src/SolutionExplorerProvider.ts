@@ -7,9 +7,11 @@ import * as Utilities from "./model/Utilities";
 import { SolutionFile } from "./model/Solutions";
 import { IEventAggegator, EventTypes, IEvent, ISubscription, IFileEvent } from "./events";
 import { ILogger, Logger } from "./log";
+import { ITemplateEngine, TemplateEngine } from "./templates";
 
 export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.TreeItem> {
 	private _logger: ILogger;
+	private _templateEngine: ITemplateEngine;
 	private subscription: ISubscription = null;
 	private children: sln.TreeItem[] = null;
 	private _onDidChangeTreeData: vscode.EventEmitter<sln.TreeItem | undefined> = new vscode.EventEmitter<sln.TreeItem | undefined>();
@@ -18,10 +20,15 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 
 	constructor(public workspaceRoot: string, public readonly eventAggregator: IEventAggegator) {
 		this._logger = new Logger(this.eventAggregator);
+		this._templateEngine = new TemplateEngine(workspaceRoot);
 	}
 
 	public get logger(): ILogger {
 		return this._logger;
+	}
+
+	public get templateEngine(): ITemplateEngine {
+		return this._templateEngine;
 	}
 
 	public register() {
@@ -99,35 +106,13 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 			this.refresh();
         }
 	}
-	
+
 	private async checkTemplatesToInstall(): Promise<void> {
-		let vscodeFolder = path.join(this.workspaceRoot, ".vscode");
-		let templatesFolder = path.join(this.workspaceRoot, ".vscode", "solution-explorer");
-		if (!(await fs.exists(templatesFolder))) {
+		if (!(await this.templateEngine.existsTemplates())) {
 			let option = await vscode.window.showWarningMessage("Would you like to create the vscode-solution-explorer templates folder?", 'Yes');
 			if (option !== null && option !== undefined && option == 'Yes') {
-				if (!(await fs.exists(vscodeFolder)))
-					await fs.mkdir(vscodeFolder);
-
-				await this.copyFolder(path.join(__filename, "..", "..", "files-vscode-folder"), templatesFolder);
+				await this.templateEngine.creteTemplates();
 			}
-		}
-	}
-
-	private async copyFolder(src: string, dest: string): Promise<void> {
-		var exists = await fs.exists(src);
-		var stats = exists && await fs.lstat(src);
-		var isDirectory = exists && stats.isDirectory();
-		if (exists && isDirectory) {
-			await fs.mkdir(dest);
-			let items = await fs.readdir(src);
-			for(let i = 0; i < items.length; i++) {
-				let childItemName = items[i];
-				await this.copyFolder(path.join(src, childItemName), path.join(dest, childItemName));
-			}
-		} else {
-			let content = await fs.readFile(src, "binary");
-			await fs.writeFile(dest, content, "binary");
 		}
 	}
 }

@@ -5,16 +5,10 @@ import { TreeItem, ContextValues } from "../tree";
 import { CommandBase } from "./base/CommandBase";
 import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
 import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandParameter";
-import { TemplateEngine } from "../templates/TemplateEngine";
 
 export class CreateFileCommand extends CommandBase {
-
-    private readonly templates: TemplateEngine;
-
     constructor(private readonly provider: SolutionExplorerProvider) {
         super();
-
-        this.templates = new TemplateEngine(path.join(provider.workspaceRoot, ".vscode", "solution-explorer"));
 
         this.parameters = [
             new InputTextCommandParameter('New file name'),
@@ -46,13 +40,13 @@ export class CreateFileCommand extends CommandBase {
 
     private async getTemplatesTypes(): Promise<string[]> {
         let extension = path.extname(this.args[0]).substring(1);
-        let result: string[] =  await this.templates.getTemplates(extension);
+        let result: string[] =  await this.provider.templateEngine.getTemplates(extension);
         return result;
     }
 
     private getContent(item: TreeItem): Promise<string> {
         if (!this.args[1]) return Promise.resolve("");
 
-        return this.templates.generate(this.args[0], this.args[1], item);
+        return this.provider.templateEngine.generate(this.args[0], this.args[1], item);
     }
 }

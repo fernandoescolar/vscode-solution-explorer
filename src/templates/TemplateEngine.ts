@@ -4,21 +4,32 @@ import * as fs from "../async/fs";
 import { ITemplate } from "./ITemplate";
 import { TreeItem, ContextValues } from "../tree";
 
+const TemplateFoldername: string = "solution-explorer";
+const VsCodeFoldername: string = ".vscode";
 const TemplateFilename: string = "template-list.json";
+const SourceFolder: string = path.join(__filename, "..", "..", "files-vscode-folder");
 
 export class TemplateEngine {
+    private readonly workspaceRoot: string;
+    private readonly vscodeFolder: string;
+    private readonly workingFolder: string;
+    private readonly templateFile: string;
     
     private templates: ITemplate[];
+    
 
-    constructor(private readonly workingFolder: string) {
+    constructor(workspaceRoot: string) {
+        this.workspaceRoot = workspaceRoot;
+        this.vscodeFolder = path.join(workspaceRoot, VsCodeFoldername);
+        this.workingFolder = path.join(workspaceRoot, VsCodeFoldername, TemplateFoldername);
+        this.templateFile = path.join(workspaceRoot, VsCodeFoldername, TemplateFoldername, TemplateFilename);
     }
 
     public async getTemplates(extension: string): Promise<string[]> {
         if (!this.templates) {
-            let filepath = path.join(this.workingFolder, TemplateFilename);
-            if (!(await fs.exists(filepath))) return [];
+            if (!(await fs.exists(this.templateFile))) return [];
             
-            let content = await fs.readFile(filepath, "utf8");
+            let content = await fs.readFile(this.templateFile, "utf8");
             this.templates = JSON.parse(content).templates;
         }
 
@@ -32,15 +43,6 @@ export class TemplateEngine {
         return result;
     }
 
-    public getParameters(template: ITemplate, filename: string, item: TreeItem): {[id: string]: string} {
-        let parametersGetter = require(path.join(this.workingFolder, template.parameters));
-        if (parametersGetter) {
-            return parametersGetter(filename, item.project ? item.project.fullPath : null, item.contextValue.startsWith(ContextValues.ProjectFolder) ? item.path : null);
-        }
-
-        return null;
-    }
-
     public async generate(filename: string, templateName: string, item: TreeItem): Promise<string> {
         let extension = path.extname(filename).substring(1);
         let index = this.templates.findIndex(t => t.extension.toLocaleLowerCase() == extension.toLocaleLowerCase() && t.name == templateName);
@@ -52,4 +54,43 @@ export class TemplateEngine {
         let result = handlebar(this.getParameters(template, filename, item));
         return result;
     }
+
+    public async existsTemplates(): Promise<boolean> {
+		return await fs.exists(this.templateFile);
+    }
+    
+    public async creteTemplates(): Promise<void> {
+        if (!(await fs.exists(this.vscodeFolder)))
+			await fs.mkdir(this.vscodeFolder);
+
+		await this.copyFolder(SourceFolder, this.workingFolder);
+    }
+
+    private getParameters(template: ITemplate, filename: string, item: TreeItem): {[id: string]: string} {
+        let parametersGetter = require(path.join(this.workingFolder, template.parameters));
+        if (parametersGetter) {
+            return parametersGetter(filename, item.project ? item.project.fullPath : null, item.contextValue.startsWith(ContextValues.ProjectFolder) ? item.path : null);
+        }
+
+        return null;
+    }
+
+	private async copyFolder(src: string, dest: string): Promise<void> {
+		var exists = await fs.exists(src);
+		var stats = exists && await fs.lstat(src);
+		var isDirectory = exists && stats.isDirectory();
+		if (exists && isDirectory) {
+            if (!(await fs.exists(dest)))
+                await fs.mkdir(dest);
+                
+			let items = await fs.readdir(src);
+			for(let i = 0; i < items.length; i++) {
+				let childItemName = items[i];
+				await this.copyFolder(path.join(src, childItemName), path.join(dest, childItemName));
+			}
+		} else {
+			let content = await fs.readFile(src, "binary");
+			await fs.writeFile(dest, content, "binary");
+		}
+	}
 }
