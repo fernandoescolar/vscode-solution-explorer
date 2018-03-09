@@ -2,6 +2,11 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.9
+
+Bugfixed: #6 Wrong warning about incorrect type for xxprojItemTypes
+
+
 ## 0.2.8
 
 Ask for install templates only when at least one solution is found.

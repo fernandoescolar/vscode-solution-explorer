@@ -58,7 +58,7 @@ Branded icons are licensed under their copyright license.
 
     "vssolution.showOutputChannel": true,
 
-    "vssolution.solutionExplorerIcons": "mixed", 
+    "vssolution.solutionExplorerIcons": "current-theme", 
 
     "vssolution.netcoreIgnore": [
         "bin",
@@ -85,6 +85,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+## 0.2.9
+
+Bugfixed: #6 Wrong warning about incorrect type for xxprojItemTypes
+
 ### 0.2.8
 
 Ask for install templates only when at least one solution is found.
@@ -100,19 +104,5 @@ Add project command is showed in the right group, and it has a default project d
 ### 0.2.7
 
 Removed "Collapse All" button. It doesn't work and causes issues.
-
-### 0.2.6
-
-Copy and Paste command in files, folders and projects.
-
-Commands now are grouped.
-
-Added refresh command as inline icon in folders and projects.
-
-Fixed delete folder command in order to delete all tree.
-
-Changed the icons mode to "solution-explorer", "mix" or "current-theme" in the configuration settings.
-
-Added template system to create new files.
 
 **Enjoy!**
