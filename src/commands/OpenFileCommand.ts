@@ -18,7 +18,8 @@ export class OpenFileCommand extends CommandBase {
 
     protected async runCommand(item: TreeItem, args: string[]): Promise<void> {    
         let options: vscode.TextDocumentShowOptions = {
-            preview: !this.checkDoubleClick(item)
+            preview: !this.checkDoubleClick(item),
+            preserveFocus: true
         };
         let filepath = item.path;
         let document = await vscode.workspace.openTextDocument(filepath);

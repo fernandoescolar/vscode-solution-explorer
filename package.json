@@ -501,6 +501,206 @@
                 }
             ]
         },
+        "keybindings": [
+            {
+                "command": "solutionExplorer.copy",
+                "when": "view == solutionExplorer && viewItem == project-folder",
+                "key": "ctrl+c",
+                "mac": "cmd+c"
+            },
+            {
+                "command": "solutionExplorer.copy",
+                "when": "view == solutionExplorer && viewItem == project-file",
+                "key": "ctrl+c",
+                "mac": "cmd+c"
+            },
+            {
+                "command": "solutionExplorer.paste",
+                "when": "view == solutionExplorer && viewItem == project-folder",
+                "key": "ctrl+v",
+                "mac": "cmd+v"
+            },
+            {
+                "command": "solutionExplorer.paste",
+                "when": "view == solutionExplorer && viewItem == project-cps",
+                "key": "ctrl+v",
+                "mac": "cmd+v"
+            },
+            {
+                "command": "solutionExplorer.paste",
+                "when": "view == solutionExplorer && viewItem == project-standard",
+                "key": "ctrl+v",
+                "mac": "cmd+v"
+            },
+            {
+                "command": "solutionExplorer.paste",
+                "when": "view == solutionExplorer && viewItem == project-website",
+                "key": "ctrl+v",
+                "mac": "cmd+v"
+            },
+            {
+                "command": "solutionExplorer.renameFile",
+                "when": "view == solutionExplorer && viewItem == project-file",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.deleteFile",
+                "when": "view == solutionExplorer && viewItem == project-file",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.renameFolder",
+                "when": "view == solutionExplorer && viewItem == project-folder",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.deleteFolder",
+                "when": "view == solutionExplorer && viewItem == project-folder",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == solutionExplorer && viewItem == project-cps",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == solutionExplorer && viewItem == project-standard",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == solutionExplorer && viewItem == project-website",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == solutionExplorer && viewItem == project-file",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == solutionExplorer && viewItem == project-folder",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == solutionExplorer && viewItem == project-cps",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == solutionExplorer && viewItem == project-standard",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == solutionExplorer && viewItem == project-website",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == solutionExplorer && viewItem == project-file",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == solutionExplorer && viewItem == project-folder",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.removePackage",
+                "when": "view == solutionExplorer && viewItem == project-referenced-package-cps",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.removeProjectReference",
+                "when": "view == solutionExplorer && viewItem == project-referenced-project-cps",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.createSolutionFolder",
+                "when": "view == solutionExplorer && viewItem == solution",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createSolutionFolder",
+                "when": "view == solutionExplorer && viewItem == solution-folder",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.removeSolutionFolder",
+                "when": "view == solutionExplorer && viewItem == solution-folder",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.removeProject",
+                "when": "view == solutionExplorer && viewItem == project-cps",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.removeProject",
+                "when": "view == solutionExplorer && viewItem == project-standard",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.removeProject",
+                "when": "view == solutionExplorer && viewItem == project-website",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == solutionExplorer && viewItem == solution",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == solutionExplorer && viewItem == solution-folder",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == solutionExplorer && viewItem == project-cps",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == solutionExplorer && viewItem == project-standard",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == solutionExplorer && viewItem == project-website",
+                "key": "f2",
+                "mac": "f2"
+            }
+        ],
         "configuration": {
             "type": "object",
             "title": "vscode-solution-explorer configuration",

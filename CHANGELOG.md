@@ -8,6 +8,8 @@ Bug fixed: #6 Wrong warning about incorrect type for xxprojItemTypes.
 
 Updated icons from current theme with the vscode 1.21.0 new features.
 
+Added commands shorcuts (but you have to open the context menu to make it work :( ).
+
 ## 0.2.8
 
 Ask for install templates only when at least one solution is found.
