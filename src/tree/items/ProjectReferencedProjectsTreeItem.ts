@@ -37,4 +37,8 @@ export class ProjectReferencedProjectsTreeItem extends TreeItem {
     protected createProjectReferenceItem(childContext: TreeItemContext, ref: ProjectReference) {
         return new ProjectReferencedProjectTreeItem(childContext, ref);
     }
+
+    protected loadThemeIcon(fullpath: string): void {
+		super.loadThemeIcon(fullpath + ".vsix");
+	}
 }

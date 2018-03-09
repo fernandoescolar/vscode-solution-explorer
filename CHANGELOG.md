@@ -4,8 +4,9 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 ## 0.2.9
 
-Bugfixed: #6 Wrong warning about incorrect type for xxprojItemTypes
+Bug fixed: #6 Wrong warning about incorrect type for xxprojItemTypes.
 
+Updated icons from current theme with the vscode 1.21.0 new features.
 
 ## 0.2.8
 

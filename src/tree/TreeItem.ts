@@ -107,9 +107,12 @@ export abstract class TreeItem extends vscode.TreeItem {
 		} else {
 			let fullpath = this.path;
 			if (!fullpath) fullpath = path.dirname(this.solution.FullPath);
-
-			this.iconPath = null;
-			this.resourceUri = vscode.Uri.parse(fullpath);
+			this.loadThemeIcon(fullpath);
 		}
+	}
+
+	protected loadThemeIcon(fullpath: string): void {
+		this.iconPath = this.contextValue.indexOf('folder') >= 0 ? vscode.ThemeIcon.Folder : vscode.ThemeIcon.File;
+		this.resourceUri = vscode.Uri.parse(fullpath);
 	}
 }

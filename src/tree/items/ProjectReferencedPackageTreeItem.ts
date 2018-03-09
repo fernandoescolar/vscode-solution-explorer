@@ -10,4 +10,8 @@ export class ProjectReferencedPackageTreeItem extends TreeItem {
         this.allowIconTheme = false;
         this.addContextValueSuffix();
     }
+
+    protected loadThemeIcon(fullpath: string): void {
+		super.loadThemeIcon(fullpath + ".nupkg");
+	}
 }

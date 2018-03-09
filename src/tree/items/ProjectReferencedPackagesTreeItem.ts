@@ -35,4 +35,8 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem {
     protected createReferencePackageItem(childContext: TreeItemContext, ref: PackageReference) {
         return new ProjectReferencedPackageTreeItem(childContext, ref);
     }
+
+    protected loadThemeIcon(fullpath: string): void {
+		super.loadThemeIcon(fullpath + ".pkg");
+	}
 }

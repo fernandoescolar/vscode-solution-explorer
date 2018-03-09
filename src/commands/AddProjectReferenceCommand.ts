@@ -37,6 +37,7 @@ export class AddProjectReferenceCommand extends CliCommandBase {
         if (!project.parentProjectGuid) return project.projectName;
        
         let index = projects.findIndex(p => p.projectGuid == project.parentProjectGuid);
+        if (index <= 0) return project.projectName;
         return this.getProjectName(projects[index], projects) + path.sep + project.projectName;
     }
 }

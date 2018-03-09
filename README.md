@@ -4,7 +4,7 @@ This extension adds a Visual Studio Solution File explorer panel in Visual Studi
 
 ## Features
 
-Adds a Solution Explorer panel where you can find a Visual Studio Solution File Explorer. 
+Adds a Solution Explorer panel where you can find a Visual Studio Solution File Explorer.
 
 - Can load any .sln version
 
@@ -85,9 +85,11 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
-## 0.2.9
+### 0.2.9
 
-Bugfixed: #6 Wrong warning about incorrect type for xxprojItemTypes
+Bug fixed: #6 Wrong warning about incorrect type for xxprojItemTypes.
+
+Updated icons from current theme with the vscode 1.21.0 new features.
 
 ### 0.2.8
 

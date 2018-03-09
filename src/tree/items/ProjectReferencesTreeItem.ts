@@ -18,4 +18,8 @@ export class ProjectReferencesTreeItem extends TreeItem {
 
         return Promise.resolve(result);
     }
+
+    protected loadThemeIcon(fullpath: string): void {
+		super.loadThemeIcon(fullpath + ".reg");
+	}
 }
