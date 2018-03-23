@@ -5,6 +5,7 @@ import { CpsProject } from "./Kinds/CpsProject";
 import { StandardProject } from "./Kinds/StandardProject";
 import { WebsiteProject } from "./Kinds/WebsiteProject";
 import { Project } from "./Project";
+import { SharedProject } from "./Kinds/SharedProject";
 
 const cpsProjectTypes = [ ProjectTypeIds.cpsCsProjectGuid, ProjectTypeIds.cpsVbProjectGuid, ProjectTypeIds.cpsProjectGuid ];
 const standardProjectTypes = [ ProjectTypeIds.csProjectGuid, ProjectTypeIds.fsProjectGuid, ProjectTypeIds.vbProjectGuid ];
@@ -13,7 +14,7 @@ export class ProjectFactory {
     public static parse(project: ProjectInSolution): Promise<Project> {
         if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat 
             && cpsProjectTypes.indexOf(project.projectTypeId) >= 0) {
-            return ProjectFactory.loadCspProject(project);
+            return ProjectFactory.loadCpsProject(project);
         } 
 
         if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat 
@@ -23,6 +24,10 @@ export class ProjectFactory {
 
         if (project.projectType == SolutionProjectType.WebProject) {
             return ProjectFactory.loadWebsiteProject(project);
+        }
+
+        if (project.projectTypeId == ProjectTypeIds.shProjectGuid) {
+            return ProjectFactory.loadSharedProject(project);
         }
 
         return Promise.resolve(null);
@@ -43,7 +48,7 @@ export class ProjectFactory {
         return  await xml.ParseToJson(content);
     }
 
-    private static async loadCspProject(project: ProjectInSolution): Promise<any> {
+    private static async loadCpsProject(project: ProjectInSolution): Promise<any> {
         let document =  await ProjectFactory.loadProjectDocument(project.fullPath);
         return new CpsProject(project, document);
     }
@@ -51,5 +56,9 @@ export class ProjectFactory {
     private static loadWebsiteProject(project: ProjectInSolution): Promise<any> {
         project.fullPath = project.fullPath + '.web-project';
         return Promise.resolve(new WebsiteProject(project));
+    }
+
+    private static loadSharedProject(project: ProjectInSolution): Promise<any> {
+        return Promise.resolve(new SharedProject(project));
     }
 }

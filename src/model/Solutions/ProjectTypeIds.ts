@@ -11,4 +11,5 @@ export class ProjectTypeIds {
     public static wdProjectGuid = "{2CFEAB61-6A3B-4EB8-B523-560B4BEEF521}";
     public static webProjectGuid = "{E24C65DC-7377-472B-9ABA-BC803B73C61A}";
     public static solutionFolderGuid = "{2150E333-8FDC-42A3-9474-1A3956D46DE8}";
+    public static shProjectGuid = "{D954291E-2A0B-460D-934E-DC6B0785DB48}";
 }

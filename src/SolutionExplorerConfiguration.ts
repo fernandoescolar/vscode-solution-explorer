@@ -19,7 +19,8 @@ export function getItemTypes(): { [id: string]: string } {
         "cs": "Compile",
         "vb": "Compile",
         "fs": "Compile",
-        "ts": "TypeScriptCompile"
+        "ts": "TypeScriptCompile",
+        "xaml": "EmbeddedResource"
     });
 }
 

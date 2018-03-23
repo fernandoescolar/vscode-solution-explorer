@@ -8,7 +8,7 @@ export class ConfirmCommandParameter implements ICommandParameter {
     }
 
     public async setArguments(): Promise<boolean> {
-        let option = await vscode.window.showWarningMessage(this.message, 'Yes');
+        let option = await vscode.window.showWarningMessage(this.message, 'Yes', 'No');
         if (option !== null && option !== undefined && option == 'Yes') {
             return true;
         }

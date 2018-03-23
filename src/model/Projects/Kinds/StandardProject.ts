@@ -18,12 +18,13 @@ export class StandardProject extends FileSystemBasedProject {
     private document: any = null;
     private folders: string[] = [];
     private filesTree: any = null;
-    private dependents: { [id: string]: string[] };
     private currentItemGroup: any = null;
     private shouldReload: boolean = true;
+    protected dependents: { [id: string]: string[] };
+    protected includePrefix: string = null;
 
-    constructor(projectInSolution: ProjectInSolution, document?: any) {
-        super(projectInSolution, 'standard');
+    constructor(projectInSolution: ProjectInSolution, document?: any, type?: string) {
+        super(projectInSolution, type ? type : 'standard');
 
         if (document) {
             this.parseDocument(document);
@@ -64,13 +65,7 @@ export class StandardProject extends FileSystemBasedProject {
                 folders.push(new ProjectFolder(item.fullpath));
             } else {
                 let projectFile = new ProjectFile(item.fullpath);
-                if (this.dependents[item.virtualpath]) {
-                    projectFile.hasDependents = true;
-                    this.dependents[item.virtualpath].forEach(d => {
-                        let dependentFullPath = path.join(path.dirname(this.fullPath), d);
-                        projectFile.dependents.push(new ProjectFile(dependentFullPath));
-                    });
-                }
+                this.addFileDependents(item, projectFile);
                 files.push(projectFile);
             }    
         }
@@ -219,13 +214,23 @@ export class StandardProject extends FileSystemBasedProject {
         await this.checkProjectLoaded();
     }
 
+    protected addFileDependents(item: any, projectFile: ProjectFile) {
+        if (this.dependents[item.virtualpath]) {
+            projectFile.hasDependents = true;
+            this.dependents[item.virtualpath].forEach(d => {
+                let dependentFullPath = path.join(path.dirname(this.fullPath), d);
+                projectFile.dependents.push(new ProjectFile(dependentFullPath));
+            });
+        }
+    }
+
     private async checkProjectLoaded(): Promise<void> {
         if (!this.loaded) {
             let content = await fs.readFile(this.fullPath, 'utf8');
             await this.parseProject(content);
             this.loaded = true;
         }
-        if (!this.loadedPackages) {
+        if (!this.loadedPackages && this.hasReferences) {
             await this.parsePackages();
             this.loadedPackages = true;
         }
@@ -253,16 +258,17 @@ export class StandardProject extends FileSystemBasedProject {
             if (ref.DependentUpon) {
                 let parent = ref.DependentUpon[0];
                 if (!dependents[parent]) dependents[parent] = [];
-                dependents[parent].push(ref.$.Include);
+                dependents[parent].push(this.cleanIncludePath(ref.$.Include).replace(/\\/g, path.sep));
             } else {
-                files.push(ref.$.Include);
+                files.push(this.cleanIncludePath(ref.$.Include).replace(/\\/g, path.sep));
             }
         };
         if (this.document.Project && this.document.Project.ItemGroup) {
             this.document.Project.ItemGroup.forEach(element => {
                 if (element.Reference) {
                     element.Reference.forEach(ref => {
-                        this.references.push(new ProjectReference(ref.$.Include, ref.$.Include));
+                        let include = this.cleanIncludePath(ref.$.Include);
+                        this.references.push(new ProjectReference(include, include));
                     });
                 }
                 if (element.Compile) {
@@ -274,6 +280,9 @@ export class StandardProject extends FileSystemBasedProject {
                 if (element.TypeScriptCompile) {
                     element.TypeScriptCompile.forEach(addFile);
                 }
+                if (element.EmbeddedResource) {
+                    element.EmbeddedResource.forEach(addFile);
+                }
                 if (element.None) {
                     element.None.forEach(addFile);
                 }
@@ -281,7 +290,7 @@ export class StandardProject extends FileSystemBasedProject {
                     element.Folder.forEach(ref => {
                         addFile(ref);
 
-                        let folder = ref.$.Include.replace(/\\/g, path.sep);
+                        let folder = this.cleanIncludePath(ref.$.Include).replace(/\\/g, path.sep);
                         if (folder.endsWith(path.sep))
                             folder = folder.substring(0, folder.length - 1);
                         folders.push(folder);
@@ -340,28 +349,21 @@ export class StandardProject extends FileSystemBasedProject {
 
     private countInNodes(pattern: string, isFolder: boolean = false): number {
         pattern = pattern.replace(/\//g, '\\') + (isFolder ? '\\' : '');
+        if (this.includePrefix) pattern = this.includePrefix + pattern;
+
         let counter = 0;
         let findPattern = ref => {
             if (ref.$.Include.startsWith(pattern)) {
                 counter++;
             }
         };
+
+        let nodeNames = this.getXmlNodeNames();
         this.document.Project.ItemGroup.forEach(element => {
-            if (element.Compile) {
-                element.Compile.forEach(findPattern);
-            }
-            if (element.Content) {
-                element.Content.forEach(findPattern);
-            }
-            if (element.TypeScriptCompile) {
-                element.TypeScriptCompile.forEach(findPattern);
-            }
-            if (element.None) {
-                element.None.forEach(findPattern);
-            }
-            if (element.Folder) {
-                element.Folder.forEach(findPattern);
-            }
+            nodeNames.forEach(nodeName => {
+                if (element[nodeName])
+                    element[nodeName].forEach(findPattern);
+            });
         });
 
         return counter;
@@ -370,42 +372,47 @@ export class StandardProject extends FileSystemBasedProject {
     private renameInNodes(pattern: string, newPattern: string, isFolder: boolean = false): void {
         pattern = pattern.replace(/\//g, '\\') + (isFolder ? '\\' : '');
         newPattern = newPattern.replace(/\//g, '\\') + (isFolder ? '\\' : '');
+
+        if (this.includePrefix) {
+            pattern = this.includePrefix + pattern;
+            newPattern = this.includePrefix + newPattern;
+        }
+
         let findPattern = ref => {
-            if (ref.DependentUpon && ref.DependentUpon[0].startsWith(pattern)) {
-                ref.DependentUpon[0] = ref.DependentUpon[0].replace(pattern, newPattern);
-            } 
+            this.replaceDependsUponNode(ref, pattern, newPattern); 
+
             if (ref.$.Include.startsWith(pattern)) {
                 ref.$.Include = ref.$.Include.replace(pattern, newPattern);
             }
         };
+
+        let nodeNames = this.getXmlNodeNames();
         this.document.Project.ItemGroup.forEach(element => {
-            if (element.Compile) {
-                element.Compile.forEach(findPattern);
-            }
-            if (element.Content) {
-                element.Content.forEach(findPattern);
-            }
-            if (element.TypeScriptCompile) {
-                element.TypeScriptCompile.forEach(findPattern);
-            }
-            if (element.None) {
-                element.None.forEach(findPattern);
-            }
-            if (element.Folder) {
-                element.Folder.forEach(findPattern);
-            }
+            nodeNames.forEach(nodeName => {
+                if (element[nodeName]) {
+                    element[nodeName].forEach(findPattern);
+                }
+            });
         });
     }
 
-    private removeInNodes(pattern: string, isFolder: boolean = false, types: string[] = ['Compile', 'Content', 'TypeScriptCompile', 'None', 'Folder']): void {
+    protected replaceDependsUponNode(ref: any, pattern: string, newPattern: string) {
+        if (ref.DependentUpon && ref.DependentUpon[0].startsWith(pattern)) {
+            ref.DependentUpon[0] = ref.DependentUpon[0].replace(pattern, newPattern);
+        }
+    }
+
+    private removeInNodes(pattern: string, isFolder: boolean = false, types: string[] = null): void {
         pattern = pattern.replace(/\//g, '\\') + (isFolder ? '\\' : '');
+        if (this.includePrefix) pattern = this.includePrefix + pattern;
+        if (!types) types = this.getXmlNodeNames();
+
         this.document.Project.ItemGroup.forEach(element => {
             types.forEach(type => {
                 if (!element[type]) return;
                 element[type].forEach(node => {
-                    if (node.DependentUpon && node.DependentUpon[0].startsWith(pattern)) {
-                        delete node.DependentUpon;
-                    }
+                    this.deleteDependsUponNode(node, pattern);
+                    
                     if (node.$.Include.startsWith(pattern)) {
                         element[type].splice(element[type].indexOf(node), 1);
                     }
@@ -420,10 +427,18 @@ export class StandardProject extends FileSystemBasedProject {
         });
     }
 
+    protected deleteDependsUponNode(node: any, pattern: string) {
+        if (node.DependentUpon && node.DependentUpon[0].startsWith(pattern)) {
+            delete node.DependentUpon;
+        }
+    }
+
     private currentItemGroupAdd(type: string, include: string, isFolder: boolean = false) {
         this.checkCurrentItemGroup();
         
         include = include.replace(/\//g, '\\') + (isFolder ? '\\' : '');
+
+        if (this.includePrefix) include = this.includePrefix + include;
 
         if (!this.currentItemGroup[type]) this.currentItemGroup[type] = [];
         this.currentItemGroup[type].push({
@@ -464,6 +479,24 @@ export class StandardProject extends FileSystemBasedProject {
             }
         }
         
+        return result;
+    }
+
+    private cleanIncludePath(include: string): string {
+        if (this.includePrefix)
+            return include.replace(this.includePrefix, "");
+        
+        return include;
+    }
+
+    private getXmlNodeNames(): string[] {
+        let result: string[] = ["Compile", "Content", "TypeScriptCompile", "EmbeddedResource", "None", "Folder"];
+        let itemTypes = SolutionExplorerConfiguration.getItemTypes();
+        Object.keys(itemTypes).forEach(key => {
+            if (result.indexOf(itemTypes[key]) < 0) {
+                result.push(itemTypes[key]);
+            }
+        });
         return result;
     }
 }

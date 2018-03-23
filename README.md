@@ -85,6 +85,16 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.10
+
+Added basic support for .shproj files.
+
+Improved xml node name selection on edit old xxproj.
+
+Updated question popups to show 'No' option.
+
+Updated to vscode 1.21.1.
+
 ### 0.2.9
 
 Bug fixed: #6 Wrong warning about incorrect type for xxprojItemTypes.
@@ -104,9 +114,5 @@ Refactoring template engine installation.
 Rename command now has the old name value to modify.
 
 Add project command is showed in the right group, and it has a default project destination folder based on name.
-
-### 0.2.7
-
-Removed "Collapse All" button. It doesn't work and causes issues.
 
 **Enjoy!**

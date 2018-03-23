@@ -3,7 +3,7 @@ import { ProjectTreeItem } from "../ProjectTreeItem";
 import { TreeItemContext } from "../../TreeItemContext";
 import { Project } from "../../../model/Projects";
 import { ProjectInSolution } from "../../../model/Solutions";
-import { EventTypes, IEvent, ISubscription, IFileEvent } from "../../../events/index";
+import { EventTypes, IEvent, ISubscription, IFileEvent, FileEvent } from "../../../events/index";
 
 export class StandardProjectTreeItem extends ProjectTreeItem {
     private subscription: ISubscription = null;
@@ -19,9 +19,13 @@ export class StandardProjectTreeItem extends ProjectTreeItem {
         super.dispose();
     }
 
+    protected shouldHandleFileEvent(fileEvent: FileEvent): boolean {
+        return fileEvent.path == this.path;
+    }
+
     private onFileEvent(event: IEvent): void {
         let fileEvent = <IFileEvent> event;
-        if (fileEvent.path == this.path) {
+        if (this.shouldHandleFileEvent(fileEvent)) {
             this.project.refresh().then(res => {
                 this.refresh();
             });

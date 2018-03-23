@@ -14,6 +14,7 @@ import { CpsProjectTreeItem } from "./items/cps/CpsProjectTreeItem";
 import { StandardProjectTreeItem } from "./items/standard/StandardProjectTreeItem";
 import { WebSiteProjectTreeItem } from "./items/website/WebSiteProjectTreeItem";
 import { NoSolutionTreeItem } from "./items/NoSolutionTreeItem";
+import { SharedProjectTreeItem } from "./items/standard/SharedProjectTreeItem";
 
 export function CreateNoSolution(provider: SolutionExplorerProvider, rootPath: string): Promise<TreeItem> {
     let context = new TreeItemContext(provider, null);
@@ -70,6 +71,7 @@ async function CreateFromProject(context: TreeItemContext, project: ProjectInSol
     if (p) {
         if (p.type == 'cps') return new CpsProjectTreeItem(projectContext, project);
         if (p.type == 'standard') return new StandardProjectTreeItem(projectContext, project);
+        if (p.type == 'shared') return new SharedProjectTreeItem(projectContext, project);
         if (p.type == 'website') return new WebSiteProjectTreeItem(projectContext, project);
         return new ProjectTreeItem(projectContext, project);
     }
