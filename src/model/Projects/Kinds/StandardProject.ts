@@ -146,7 +146,7 @@ export class StandardProject extends FileSystemBasedProject {
     public async deleteFolder(folderpath: string): Promise<void> {
         await this.checkProjectLoaded();
         let folderRelativePath = this.getRelativePath(folderpath);
-        this.removeInNodes(folderRelativePath, true, ['Folder']);
+        this.removeInNodes(folderRelativePath, true);
         await super.deleteFolder(folderpath);
         await this.saveProject();
     }
