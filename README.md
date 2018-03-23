@@ -87,6 +87,8 @@ There is a lot of work to do.
 
 ### 0.2.10
 
+Bug fixed: error removing a folder with files in old xxproj files.
+
 Added basic support for .shproj files.
 
 Improved xml node name selection on edit old xxproj.

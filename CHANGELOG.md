@@ -2,6 +2,18 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.10
+
+Bug fixed: error removing a folder with files in old xxproj files.
+
+Added basic support for .shproj files.
+
+Improved xml node name selection on edit old xxproj.
+
+Updated question popups to show 'No' option.
+
+Updated to vscode 1.21.1.
+
 ## 0.2.9
 
 Bug fixed: #6 Wrong warning about incorrect type for xxprojItemTypes.
