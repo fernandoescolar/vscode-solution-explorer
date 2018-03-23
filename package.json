@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.10",
+    "version": "0.2.11",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -158,6 +158,34 @@
             {
                 "command": "solutionExplorer.paste",
                 "title": "Paste"
+            },
+            {
+                "command": "solutionExplorer.build",
+                "title": "Build"
+            },
+            {
+                "command": "solutionExplorer.clean",
+                "title": "Clean"
+            },
+            {
+                "command": "solutionExplorer.pack",
+                "title": "Pack"
+            },
+            {
+                "command": "solutionExplorer.publish",
+                "title": "Publish"
+            },
+            {
+                "command": "solutionExplorer.restore",
+                "title": "Restore"
+            },
+            {
+                "command": "solutionExplorer.run",
+                "title": "Run"
+            },
+            {
+                "command": "solutionExplorer.test",
+                "title": "Test"
             }
         ],
         "menus": {
@@ -498,6 +526,71 @@
                     "command": "solutionExplorer.renameSolutionItem",
                     "when": "view == solutionExplorer && viewItem == project-website",
                     "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.build",
+                    "when": "view == solutionExplorer && viewItem == solution",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.clean",
+                    "when": "view == solutionExplorer && viewItem == solution",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.pack",
+                    "when": "view == solutionExplorer && viewItem == solution",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.publish",
+                    "when": "view == solutionExplorer && viewItem == solution",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.restore",
+                    "when": "view == solutionExplorer && viewItem == solution",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.test",
+                    "when": "view == solutionExplorer && viewItem == solution",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.build",
+                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.clean",
+                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.pack",
+                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.publish",
+                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.restore",
+                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.run",
+                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.test",
+                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
                 }
             ]
         },

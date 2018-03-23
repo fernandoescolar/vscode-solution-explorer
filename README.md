@@ -85,6 +85,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.11
+
+Added dotnet commands: build, clean, pack, publish, restore, run and test.
+
 ### 0.2.10
 
 Bug fixed: error removing a folder with files in old xxproj files.

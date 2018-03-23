@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.11
+
+Added dotnet commands: build, clean, pack, publish, restore, run and test.
+
 ## 0.2.10
 
 Bug fixed: error removing a folder with files in old xxproj files.

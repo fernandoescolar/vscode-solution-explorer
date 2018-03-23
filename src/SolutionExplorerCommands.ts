@@ -32,6 +32,13 @@ export class SolutionExplorerCommands {
         this.commands['copy'] = new cmds.CopyCommand(provider);
         this.commands['duplicate'] = new cmds.DuplicateCommand(provider);
         this.commands['paste'] = new cmds.PasteCommand(provider);
+        this.commands['build'] = new cmds.BuildCommand(provider);
+        this.commands['clean'] = new cmds.CleanCommand(provider);
+        this.commands['pack'] = new cmds.PackCommand(provider);
+        this.commands['publish'] = new cmds.PublishCommand(provider);
+        this.commands['restore'] = new cmds.RestoreCommand(provider);
+        this.commands['run'] = new cmds.RunCommand(provider);
+        this.commands['test'] = new cmds.TestCommand(provider);
     }
 
     public register() {
