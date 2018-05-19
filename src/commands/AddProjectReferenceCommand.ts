@@ -25,6 +25,7 @@ export class AddProjectReferenceCommand extends CliCommandBase {
     private getCPSProjects(item: TreeItem): Promise<{[id: string]: string}> {
         let result: {[id: string]: string} = {};
         item.solution.Projects.forEach(p => {
+            if (item.project && item.project.fullPath === p.fullPath) return false;
             if (p.projectType != SolutionProjectType.SolutionFolder) {
                 result[this.getProjectName(p, item.solution.Projects)] = p.fullPath;
             }

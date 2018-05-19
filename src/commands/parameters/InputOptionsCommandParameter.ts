@@ -17,6 +17,7 @@ export class InputOptionsCommandParameter implements ICommandParameter {
     
     public async setArguments(): Promise<boolean> {
         let items = await this.getItems();
+
         if (items.length <= 0) {
             return true;
         }
@@ -25,6 +26,12 @@ export class InputOptionsCommandParameter implements ICommandParameter {
             this.value = this.getValue(items[0]);
             return true;
         } 
+
+        items.sort((a, b) => {
+            let x = a.toLowerCase();
+            let y = b.toLowerCase();
+            return x < y ? -1 : x > y ? 1 : 0;
+        });
 
         let value = await vscode.window.showQuickPick(items, { placeHolder: this.placeholder });
         if (value !== null && value !== undefined) {
