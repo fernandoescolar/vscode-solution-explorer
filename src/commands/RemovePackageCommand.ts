@@ -12,7 +12,7 @@ export class RemovePackageCommand extends CliCommandBase {
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
             new StaticCommandParameter('remove'),
-            new StaticCommandParameter(item.parent.path),
+            new StaticCommandParameter(item.project.fullPath),
             new StaticCommandParameter('package'),
             new StaticCommandParameter(item.path)
         ];

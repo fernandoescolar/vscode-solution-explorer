@@ -1,6 +1,6 @@
 import * as path from "path";
 import { spawn } from 'child_process';
-import { TreeItem } from '../../tree';
+import { TreeItem, ContextValues } from '../../tree';
 import { CommandBase } from './CommandBase';
 import { SolutionExplorerProvider } from '../../SolutionExplorerProvider';
 
@@ -36,7 +36,7 @@ export abstract class CliCommandBase extends CommandBase {
     }
 
     private getWorkingFolder(item: TreeItem): string {
-        if (item.path) return path.dirname(item.path);
+        if (item.path && item.contextValue !== ContextValues.ProjectReferencedPackage) return path.dirname(item.path);
         if (item.project) return path.dirname(item.project.fullPath);
         if (item.solution) return item.solution.FolderPath;
         return null;

@@ -12,7 +12,7 @@ export class RemoveProjectReferenceCommand extends CliCommandBase {
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
             new StaticCommandParameter('remove'),
-            new StaticCommandParameter(item.parent.path),
+            new StaticCommandParameter(item.project.fullPath),
             new StaticCommandParameter('reference'),
             new StaticCommandParameter(item.path)
         ];
