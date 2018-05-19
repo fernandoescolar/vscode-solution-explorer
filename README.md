@@ -85,6 +85,16 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.23
+
+Bug fixed: remove package and remove project reference command.
+
+Bug fixed: do not show the current project in the add referenced project suggesion.
+
+Now the solution explorer is showed in its custom panel in the activity bar.
+
+Updated to vscode 1.23.
+
 ### 0.2.11
 
 Added dotnet commands: build, clean, pack, publish, restore, run and test.
@@ -100,25 +110,5 @@ Improved xml node name selection on edit old xxproj.
 Updated question popups to show 'No' option.
 
 Updated to vscode 1.21.1.
-
-### 0.2.9
-
-Bug fixed: #6 Wrong warning about incorrect type for xxprojItemTypes.
-
-Updated icons from current theme with the vscode 1.21.0 new features.
-
-Added commands shorcuts (but you have to open the context menu to make it work :( ).
-
-### 0.2.8
-
-Ask for install templates only when at least one solution is found.
-
-Added more inline actions for create files and folders.
-
-Refactoring template engine installation.
-
-Rename command now has the old name value to modify.
-
-Add project command is showed in the right group, and it has a default project destination folder based on name.
 
 **Enjoy!**
