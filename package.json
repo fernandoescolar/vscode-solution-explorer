@@ -20,7 +20,7 @@
         "email": "f.escolar@hotmail.com"
     },
     "engines": {
-        "vscode": "^1.21.1"
+        "vscode": "^1.23.0"
     },
     "categories": [
         "Other"
@@ -30,11 +30,20 @@
     ],
     "main": "./out/extension",
     "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "solution-explorer",
+                    "title": "Solution",
+                    "icon": "images/activity-icon.png"
+                }
+            ]
+        },
         "views": {
-            "explorer": [
+            "solution-explorer": [
                 {
                     "id": "solutionExplorer",
-                    "name": "Solution Explorer"
+                    "name": "Explorer"
                 }
             ]
         },
@@ -853,12 +862,12 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/handlebars": "^4.0.36",
+        "@types/handlebars": "^4.0.37",
         "@types/mocha": "^2.2.48",
-        "@types/node": "^7.0.56",
+        "@types/node": "^7.0.65",
         "@types/xml2js": "^0.4.2",
-        "typescript": "^2.7.2",
-        "vscode": "^1.1.12"
+        "typescript": "^2.8.3",
+        "vscode": "^1.1.17"
     },
     "dependencies": {
         "clipboardy": "^1.2.3",
