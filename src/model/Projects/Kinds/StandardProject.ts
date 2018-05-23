@@ -100,7 +100,7 @@ export class StandardProject extends FileSystemBasedProject {
         let relativePath = this.getRelativePath(filepath);
         let folderRelativePath = path.dirname(relativePath);
         this.removeInNodes(relativePath);
-        if (this.countInNodes(folderRelativePath, true) == 0) {
+        if (folderRelativePath != '.' && this.countInNodes(folderRelativePath, true) == 0) {
             this.currentItemGroupAdd('Folder', folderRelativePath, true);
         }
         await super.deleteFile(filepath);
@@ -251,53 +251,55 @@ export class StandardProject extends FileSystemBasedProject {
     private parseDocument(document: any): void {
         this.loaded = true;
         this.document = document;
+        let project = this.document.elements[0];
+        let nodeNames = this.getXmlNodeNames();
         let files: string[] = [];
         let folders: string[] = [];
         let dependents: { [id: string]: string[] } = {};
         let addFile = ref => {
-            if (ref.DependentUpon) {
-                let parent = ref.DependentUpon[0];
-                if (!dependents[parent]) dependents[parent] = [];
-                dependents[parent].push(this.cleanIncludePath(ref.$.Include).replace(/\\/g, path.sep));
-            } else {
-                files.push(this.cleanIncludePath(ref.$.Include).replace(/\\/g, path.sep));
+            let isDependent = false;
+            if (ref.elements) {
+                ref.elements.forEach(e => {
+                    if (e.name === 'DependentUpon') {
+                        isDependent = true;
+                        let parent = e.elements[0].text;
+                        if (!dependents[parent]) dependents[parent] = [];
+                        dependents[parent].push(this.cleanIncludePath(ref.attributes.Include).replace(/\\/g, path.sep));
+                    }
+                });
+            }
+
+            if (!isDependent){
+                files.push(this.cleanIncludePath(ref.attributes.Include).replace(/\\/g, path.sep));
             }
         };
-        if (this.document.Project && this.document.Project.ItemGroup) {
-            this.document.Project.ItemGroup.forEach(element => {
-                if (element.Reference) {
-                    element.Reference.forEach(ref => {
-                        let include = this.cleanIncludePath(ref.$.Include);
-                        this.references.push(new ProjectReference(include, include));
-                    });
-                }
-                if (element.Compile) {
-                    element.Compile.forEach(addFile);
-                }
-                if (element.Content) {
-                    element.Content.forEach(addFile);
-                }
-                if (element.TypeScriptCompile) {
-                    element.TypeScriptCompile.forEach(addFile);
-                }
-                if (element.EmbeddedResource) {
-                    element.EmbeddedResource.forEach(addFile);
-                }
-                if (element.None) {
-                    element.None.forEach(addFile);
-                }
-                if (element.Folder) {
-                    element.Folder.forEach(ref => {
-                        addFile(ref);
 
-                        let folder = this.cleanIncludePath(ref.$.Include).replace(/\\/g, path.sep);
+        project.elements.forEach(element => {
+            if (element.name === 'ItemGroup') {
+                element.elements.forEach(e => {
+                    if (e.name === 'Reference') {
+                        let include = this.cleanIncludePath(e.attributes.Include);
+                        this.references.push(new ProjectReference(include, include));
+                        return false;
+                    }
+
+                    if (e.name === 'Folder') {
+                        addFile(e);
+                        let folder = this.cleanIncludePath(e.attributes.Include).replace(/\\/g, path.sep);
                         if (folder.endsWith(path.sep))
                             folder = folder.substring(0, folder.length - 1);
                         folders.push(folder);
+                        return false;
+                    }
+
+                    nodeNames.forEach(nodeName => {
+                        if (e.name === nodeName) {
+                            addFile(e);
+                        }
                     });
-                }
-            });
-        }
+                });
+            }
+        });
 
         this.filesTree = this.parseToTree(files);
         this.folders = folders;
@@ -353,17 +355,23 @@ export class StandardProject extends FileSystemBasedProject {
 
         let counter = 0;
         let findPattern = ref => {
-            if (ref.$.Include.startsWith(pattern)) {
+            if (ref.attributes.Include.startsWith(pattern)) {
                 counter++;
             }
         };
 
         let nodeNames = this.getXmlNodeNames();
-        this.document.Project.ItemGroup.forEach(element => {
-            nodeNames.forEach(nodeName => {
-                if (element[nodeName])
-                    element[nodeName].forEach(findPattern);
-            });
+        let project = this.document.elements[0];
+        project.elements.forEach(element => {
+            if (element.name === 'ItemGroup') {
+                element.elements.forEach(e => {
+                    nodeNames.forEach(nodeName => {
+                        if (e.name === nodeName) {
+                            findPattern(e);
+                        }
+                    });
+                });
+            }
         });
 
         return counter;
@@ -381,25 +389,34 @@ export class StandardProject extends FileSystemBasedProject {
         let findPattern = ref => {
             this.replaceDependsUponNode(ref, pattern, newPattern); 
 
-            if (ref.$.Include.startsWith(pattern)) {
-                ref.$.Include = ref.$.Include.replace(pattern, newPattern);
+            if (ref.attributes.Include.startsWith(pattern)) {
+                ref.attributes.Include = ref.attributes.Include.replace(pattern, newPattern);
             }
         };
 
         let nodeNames = this.getXmlNodeNames();
-        this.document.Project.ItemGroup.forEach(element => {
-            nodeNames.forEach(nodeName => {
-                if (element[nodeName]) {
-                    element[nodeName].forEach(findPattern);
-                }
-            });
+        let project = this.document.elements[0];
+        project.elements.forEach(element => {
+            if (element.name === 'ItemGroup') {
+                element.elements.forEach(e => {
+                    nodeNames.forEach(nodeName => {
+                        if (e.name === nodeName) {
+                            findPattern(e);
+                        }
+                    });
+                });
+            }
         });
     }
 
     protected replaceDependsUponNode(ref: any, pattern: string, newPattern: string) {
-        if (ref.DependentUpon && ref.DependentUpon[0].startsWith(pattern)) {
-            ref.DependentUpon[0] = ref.DependentUpon[0].replace(pattern, newPattern);
-        }
+        if (!ref.elements) return;
+
+        ref.elements.forEach(e => {
+            if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
+                e.elements[0].text = e.elements[0].text.replace(pattern, newPattern);
+            }
+        });
     }
 
     private removeInNodes(pattern: string, isFolder: boolean = false, types: string[] = null): void {
@@ -407,29 +424,44 @@ export class StandardProject extends FileSystemBasedProject {
         if (this.includePrefix) pattern = this.includePrefix + pattern;
         if (!types) types = this.getXmlNodeNames();
 
-        this.document.Project.ItemGroup.forEach(element => {
-            types.forEach(type => {
-                if (!element[type]) return;
-                element[type].forEach(node => {
-                    this.deleteDependsUponNode(node, pattern);
-                    
-                    if (node.$.Include.startsWith(pattern)) {
-                        element[type].splice(element[type].indexOf(node), 1);
-                    }
+        let project = this.document.elements[0];
+        project.elements.forEach((element, elementIndex) => {
+            if (element.name === 'ItemGroup') {
+                let toDelete: any[] = [];
+                element.elements.forEach(e => {
+                    types.forEach(nodeName => {
+                        if (e.name === nodeName) {
+                            this.deleteDependsUponNode(e, pattern);
+                            if (e.attributes.Include.startsWith(pattern)) {
+                                toDelete.push(e);
+                            }
+                        }
+                    });
                 });
 
-                if (element[type].length == 0) delete element[type];
-            });
+                toDelete.forEach(e => {
+                    element.elements.splice(element.elements.indexOf(e), 1);
+                });
+                
 
-            if (Object.keys(element).length == 0) {
-                this.document.Project.ItemGroup.splice(this.document.Project.ItemGroup.indexOf(element), 1);
+                if (element.elements.length === 0) {
+                    project.elements.splice(elementIndex, 1);
+                }
             }
         });
     }
 
     protected deleteDependsUponNode(node: any, pattern: string) {
-        if (node.DependentUpon && node.DependentUpon[0].startsWith(pattern)) {
-            delete node.DependentUpon;
+        if (!node.elements) return;
+
+        node.elements.forEach((e, eIndex) => {
+            if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
+                node.elements.splice(eIndex, 1);
+            }
+        });
+
+        if (node.elements.length === 0) {
+            delete node.elements;
         }
     }
 
@@ -440,22 +472,40 @@ export class StandardProject extends FileSystemBasedProject {
 
         if (this.includePrefix) include = this.includePrefix + include;
 
-        if (!this.currentItemGroup[type]) this.currentItemGroup[type] = [];
-        this.currentItemGroup[type].push({
-            $: {
+        this.currentItemGroup.elements.push({
+            type: 'element',
+            name: type,
+            attributes: {
                 Include: include
             }
         });
     }
 
     private checkCurrentItemGroup(): void {
-        if (this.currentItemGroup && this.document.Project.ItemGroup.indexOf(this.currentItemGroup) >= 0) return;
-        if (this.document.Project.ItemGroup.length > 0) {
-            this.currentItemGroup = this.document.Project.ItemGroup[this.document.Project.ItemGroup.length - 1];
-        } else {
-            this.currentItemGroup = {};
-            this.document.Project.ItemGroup.push(this.currentItemGroup);
+        let project = this.document.elements[0];
+        let current: any;
+        let lastElement: any;
+        project.elements.forEach(element => {
+            if (element.name === 'ItemGroup') {
+                lastElement = element;
+            }
+            if (this.currentItemGroup && element === this.currentItemGroup) {
+                current = element;
+            }
+        });
+
+        if (!current && !lastElement) {
+            current = {
+                type: 'element',
+                name: 'ItemGroup',
+                elements: []
+            }
+            project.elements.push(current);
+        } else if (!current) {
+            current = lastElement;
         }
+
+        this.currentItemGroup = current;
     }
 
     private getRelativePath(fullpath: string): string {

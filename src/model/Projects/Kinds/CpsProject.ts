@@ -86,22 +86,20 @@ export class CpsProject extends FileSystemBasedProject {
 
     private parseDocument(document: any): void {
         this.document = document;
-        if (!this.document.Project.ItemGroup) return;
-
-        this.document.Project.ItemGroup.forEach(items => {
-            if (items.PackageReference) {
-                items.PackageReference.forEach(pack => {
-                    this.packages.push(new PackageReference(pack.$.Include, pack.$.Version));
-                });
-            }
-
-            if (items.ProjectReference) {
-                items.ProjectReference.forEach(reference => {
-                    let ref = reference.$.Include.replace(/\\/g, path.sep).trim();
-                    ref = ref.split(path.sep).pop();
-                    let extension = ref.split('.').pop();
-                    ref = ref.substring(0, ref.length - extension.length - 1);
-                    this.references.push(new ProjectReference(ref, reference.$.Include));
+        let project = this.document.elements[0];
+        project.elements.forEach(element => {
+            if (element.name === 'ItemGroup') {
+                element.elements.forEach(e => {
+                    if (e.name === 'PackageReference') {
+                        this.packages.push(new PackageReference(e.attributes.Include, e.attributes.Include));
+                    }
+                    if (e.name === 'ProjectReference') {
+                        let ref = e.attributes.Include.replace(/\\/g, path.sep).trim();
+                        ref = ref.split(path.sep).pop();
+                        let extension = ref.split('.').pop();
+                        ref = ref.substring(0, ref.length - extension.length - 1);
+                        this.references.push(new ProjectReference(ref, e.attributes.Include));
+                    }
                 });
             }
         });
