@@ -40,11 +40,13 @@ Branded icons are licensed under their copyright license.
 
 ## Extension Settings
 
-- `vssolution.showInExplorer` Show the solution explorer in the explorer pane.
+- `vssolution.showMode` Show the solution explorer in the "activityBar", in the "explorer" pane or "none" to hide it. This feature is only for testing pourposes.
+
+- `vssolution.solutionExplorerIcons` "solution-explorer": custom items from vscode-solution-explorer extension. "mix": file and folder icons from the installed icons theme. "current-theme": all the icons are from the installed icons theme.
 
 - `vssolution.showOutputChannel` Show the solution explorer output channel.
 
-- `vssolution.solutionExplorerIcons` "solution-explorer": custom items from vscode-solution-explorer extension. "mix": file and folder icons from the installed icons theme. "current-theme": all the icons are from the installed icons theme.
+- `vssolution.trackActiveItem` Select the active editor file in the solution explorer.
 
 - `vssolution.netcoreIgnore` Folder and file names to ignore when get a dotnet core project content.
 
@@ -54,11 +56,13 @@ Branded icons are licensed under their copyright license.
 
 ```javascript
 {
-    "vssolution.showInExplorer": true,
+    "vssolution.showMode": "explorer",
+
+    "vssolution.solutionExplorerIcons": "current-theme", 
 
     "vssolution.showOutputChannel": true,
 
-    "vssolution.solutionExplorerIcons": "current-theme", 
+    "vssolution.trackActiveItem": true,
 
     "vssolution.netcoreIgnore": [
         "bin",
@@ -84,6 +88,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 ## Release Notes
 
 There is a lot of work to do.
+
+### 0.2.24
+
+Delete activity bar item, it is not usable for now.
+
+Added track active item.
 
 ### 0.2.23
 

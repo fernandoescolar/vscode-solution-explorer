@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.23",
+    "version": "0.2.24",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -30,20 +30,12 @@
     ],
     "main": "./out/extension",
     "contributes": {
-        "viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "solution-explorer",
-                    "title": "Solution",
-                    "icon": "images/activity-icon.png"
-                }
-            ]
-        },
         "views": {
-            "solution-explorer": [
+            "explorer": [
                 {
                     "id": "solutionExplorer",
-                    "name": "Explorer"
+                    "name": "Solution Explorer",
+                    "when": "!solutionExplorer.viewInActivityBar && !solutionExplorer.viewInNone"
                 }
             ]
         },
@@ -807,15 +799,15 @@
             "type": "object",
             "title": "vscode-solution-explorer configuration",
             "properties": {
-                "vssolution.showInExplorer": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show the solution explorer in the explorer pane."
-                },
-                "vssolution.showOutputChannel": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show the solution explorer output channel."
+                "vssolution.showMode": {
+                    "type": "string",
+                    "enum": [
+                        "activityBar",
+                        "explorer",
+                        "none"
+                    ],
+                    "default": "explorer",
+                    "description": "Show the solution explorer in the activity bar, in the explorer pane or don't show it."
                 },
                 "vssolution.solutionExplorerIcons": {
                     "type": "string",
@@ -826,6 +818,16 @@
                     ],
                     "default": "solution-explorer",
                     "description": "solution-explorer -> Uses the vscode-solution-explorer custom icons\nmix -> use current theme icons for files and folders\ncurrent-theme -> Uses the installed icon theme"
+                },
+                "vssolution.showOutputChannel": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show the solution explorer output channel."
+                },
+                "vssolution.trackActiveItem": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Select the active editor file in the solution explorer."
                 },
                 "vssolution.netcoreIgnore": {
                     "type": "array",

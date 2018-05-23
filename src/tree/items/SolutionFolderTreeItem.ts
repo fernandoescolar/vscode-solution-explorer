@@ -12,4 +12,14 @@ export class SolutionFolderTreeItem extends TreeItem {
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
         return TreeItemFactory.CreateItemsFromSolution(childContext, this.solution, this.projectInSolution.projectGuid);
     }
+
+    public async search(filepath: string): Promise<TreeItem> {	
+        await this.getChildren();
+        for(let i = 0; i < this.children.length; i++) {
+            let result = await this.children[i].search(filepath);
+            if (result) return result;
+        }
+			
+		return null;
+	}
 }

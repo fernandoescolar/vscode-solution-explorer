@@ -2,6 +2,22 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.24
+
+Delete activity bar item, it is not usable for now.
+
+Added track active item.
+
+## 0.2.23
+
+Bug fixed: remove package and remove project reference command.
+
+Bug fixed: do not show the current project in the add referenced project suggesion.
+
+Now the solution explorer is showed in its custom panel in the activity bar.
+
+Updated to vscode 1.23.
+
 ## 0.2.11
 
 Added dotnet commands: build, clean, pack, publish, restore, run and test.

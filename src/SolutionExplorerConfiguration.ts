@@ -2,7 +2,8 @@ import * as vscode from "vscode";
 
 const ConfigurationName = 'vssolution';
 const ItemTypesName = 'xxprojItemTypes';
-const ShowInExplorerName = 'showInExplorer';
+const ShowModeName = 'showMode';
+const TrackActiveItemName = 'trackActiveItem';
 const SolutionExplorerIconsName = 'solutionExplorerIcons';
 const ShowOutputChannelName = 'showOutputChannel';
 const NetcoreIgnoreName = 'netcoreIgnore';
@@ -24,12 +25,16 @@ export function getItemTypes(): { [id: string]: string } {
     });
 }
 
-export function getShowInExplorer(): boolean {
-    return config.get<boolean>(ShowInExplorerName, true);
+export function getShowMode(): string {
+    return config.get<string>(ShowModeName, SHOW_MODE_EXPLORER);
 }
 
 export function getSolutionExplorerIcons(): string {
     return config.get<string>(SolutionExplorerIconsName, ICONS_CUSTOM);
+}
+
+export function getTrackActiveItem(): boolean {
+    return config.get<boolean>(TrackActiveItemName, true);
 }
 
 export function getShowOutputChannel(): boolean {
@@ -43,3 +48,7 @@ export function getNetCoreIgnore(): string[] {
 export const ICONS_THEME = "current-theme";
 export const ICONS_MIXED = "mix";
 export const ICONS_CUSTOM = "solution-explorer";
+
+export const SHOW_MODE_ACTIVITYBAR = "activityBar";
+export const SHOW_MODE_EXPLORER = "explorer";
+export const SHOW_MODE_NONE = "none";

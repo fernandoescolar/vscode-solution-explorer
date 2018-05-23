@@ -14,6 +14,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	private _templateEngine: ITemplateEngine;
 	private subscription: ISubscription = null;
 	private children: sln.TreeItem[] = null;
+	private treeView: vscode.TreeView<sln.TreeItem> = null;
 	private _onDidChangeTreeData: vscode.EventEmitter<sln.TreeItem | undefined> = new vscode.EventEmitter<sln.TreeItem | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<sln.TreeItem | undefined> = this._onDidChangeTreeData.event;
 	//onDidChangeActiveTextEditor
@@ -21,6 +22,8 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	constructor(public workspaceRoot: string, public readonly eventAggregator: IEventAggegator) {
 		this._logger = new Logger(this.eventAggregator);
 		this._templateEngine = new TemplateEngine(workspaceRoot);
+		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
+		vscode.window.onDidChangeVisibleTextEditors(data => this.onVisibleEditorsChanged(data));
 	}
 
 	public get logger(): ILogger {
@@ -32,16 +35,23 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	}
 
 	public register() {
-		if (SolutionExplorerConfiguration.getShowInExplorer()) {
+		let showMode = SolutionExplorerConfiguration.getShowMode();
+		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInActivityBar', showMode === SolutionExplorerConfiguration.SHOW_MODE_ACTIVITYBAR);
+		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInExplorer', showMode === SolutionExplorerConfiguration.SHOW_MODE_EXPLORER);
+		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === SolutionExplorerConfiguration.SHOW_MODE_NONE);
+		
+		if (showMode !== SolutionExplorerConfiguration.SHOW_MODE_NONE) {
 			this.subscription = this.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
-			vscode.window.registerTreeDataProvider('solutionExplorer', this);
+			this.treeView = vscode.window.createTreeView('solutionExplorer', { treeDataProvider: this });
 		}
 	}
 
 	public unregister() {
-		if (SolutionExplorerConfiguration.getShowInExplorer()) {
+		if (SolutionExplorerConfiguration.getShowMode() !== SolutionExplorerConfiguration.SHOW_MODE_NONE) {
 			this.subscription.dispose();
 			this.subscription = null;
+			this.treeView.dispose();
+			this.treeView = null;
 		}
 	}
 
@@ -75,6 +85,27 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 		}
 
 		return null;
+	}
+
+	public getParent(element: sln.TreeItem): sln.TreeItem {
+		return element.parent;
+	}
+
+	private async selectFile(filepath: string): Promise<void> {
+		if (!this.children) return;
+		for(let i = 0; i < this.children.length; i++) {
+			let result = await this.children[i].search(filepath);
+			if (result) {
+				this.selectTreeItem(result);
+				return;
+			}
+		}
+	}
+
+	private selectTreeItem(element: sln.TreeItem): void {
+		if (this.treeView) {
+			this.treeView.reveal(element);
+		}
 	}
 
 	private async createSolutionItems(): Promise<sln.TreeItem[]> {
@@ -114,6 +145,18 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 				await this.templateEngine.creteTemplates();
 			}
 		}
+	}
+
+	private onActiveEditorChanged(): void {
+		if (vscode.window.activeTextEditor) {
+			if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
+				this.selectFile(vscode.window.activeTextEditor.document.uri.fsPath);
+			}
+		} 
+	}
+
+	private onVisibleEditorsChanged(editors: vscode.TextEditor[]): void {
+		
 	}
 }
 

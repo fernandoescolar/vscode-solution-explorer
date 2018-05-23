@@ -73,6 +73,23 @@ export abstract class TreeItem extends vscode.TreeItem {
 		this.context.provider.refresh(this);
 	}
 
+	public async search(filepath: string): Promise<TreeItem> {
+		if (this.path) {
+			if (this.path === filepath) return this;
+
+			let dirname = path.dirname(this.path);
+			if (filepath.startsWith(dirname)) {
+				await this.getChildren();
+				for(let i = 0; i < this.children.length; i++) {
+					let result = await this.children[i].search(filepath);
+					if (result) return result;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	public dispose(): void {
 		if (this.children) this.children.forEach(c => c.dispose());
         this.children = null;
