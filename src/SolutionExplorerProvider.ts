@@ -112,8 +112,16 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 		this.children = [];
 		let solutionPaths = await Utilities.searchFilesInDir(this.workspaceRoot, '.sln');
 		if (solutionPaths.length <= 0) {
-			this.children .push(await sln.CreateNoSolution(this, this.workspaceRoot));
-			return this.children;
+			let altFolders = SolutionExplorerConfiguration.getAlternativeSolutionFolders();
+			for (let i = 0; i < altFolders.length; i++) {
+				let altSolutionPaths = await Utilities.searchFilesInDir(path.join(this.workspaceRoot, altFolders[i]), '.sln');
+				solutionPaths = [ ...solutionPaths, ...altSolutionPaths]
+			}
+			
+			if (solutionPaths.length <= 0) {
+				this.children .push(await sln.CreateNoSolution(this, this.workspaceRoot));
+				return this.children;
+			}
 		}
 		
 		for(let i = 0; i < solutionPaths.length; i++) {

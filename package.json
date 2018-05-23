@@ -852,6 +852,16 @@
                         "ts": "TypeScriptCompile"
                     },
                     "description": "Type of XML element to put in the xxproj files."
+                },
+                "vssolution.altSolutionFolders": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "src"
+                    ],
+                    "description": "If there is no solution in the workplace root folder, it will search for solutions in any of these folders."
                 }
             }
         }

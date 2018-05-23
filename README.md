@@ -52,6 +52,8 @@ Branded icons are licensed under their copyright license.
 
 - `vssolution.xxprojItemTypes` Type of XML element to put in the xxproj files.
 
+- `vssolution.altSolutionFolders` If there is no solution in the workplace root folder, it will search for solutions in any of these folders.
+
 ###### Example
 
 ```javascript
@@ -77,7 +79,11 @@ Branded icons are licensed under their copyright license.
         "vb": "Compile",
         "fs": "Compile",
         "ts": "TypeScriptCompile"
-    }
+    },
+
+    "vssolution.altSolutionFolders": [
+        "src"
+    ]
 }
 ```
 
@@ -92,6 +98,8 @@ There is a lot of work to do.
 ### 0.2.25
 
 Bug fixed #15: the npm package "xml2js" has been replaced by "xml-js". The idea behind this modification is to keep the structure of the document as similar to the original.
+
+Added `vssolution.altSolutionFolders` configuration parameter to allow specify other folder than the root with .sln files. It is related with the issue #8.
 
 ### 0.2.24
 

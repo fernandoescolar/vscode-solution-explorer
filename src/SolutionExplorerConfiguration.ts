@@ -7,6 +7,7 @@ const TrackActiveItemName = 'trackActiveItem';
 const SolutionExplorerIconsName = 'solutionExplorerIcons';
 const ShowOutputChannelName = 'showOutputChannel';
 const NetcoreIgnoreName = 'netcoreIgnore';
+const AlternativeSolutionFoldersName = 'altSolutionFolders';
 
 let config: vscode.WorkspaceConfiguration = null;
 
@@ -43,6 +44,10 @@ export function getShowOutputChannel(): boolean {
 
 export function getNetCoreIgnore(): string[] {
     return config.get<string[]>(NetcoreIgnoreName, [ "bin", "node_modules", "obj", ".ds_store" ]);
+}
+
+export function getAlternativeSolutionFolders(): string[] {
+    return config.get<string[]>(AlternativeSolutionFoldersName, [ "src" ]);
 }
 
 export const ICONS_THEME = "current-theme";

@@ -6,6 +6,8 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Bug fixed #15: the npm package "xml2js" has been replaced by "xml-js". The idea behind this modification is to keep the structure of the document as similar to the original.
 
+Added `vssolution.altSolutionFolders` configuration parameter to allow specify other folder than the root with .sln files. It is related with the issue #8.
+
 ## 0.2.24
 
 Delete activity bar item, it is not usable for now.
