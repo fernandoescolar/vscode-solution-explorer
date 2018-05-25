@@ -95,6 +95,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.26
+
+Bug fixed #16: using this workarround to try to solve the encoding bug in the output channel: https://github.com/Microsoft/vscode-arduino/commit/00d3fefcead1a95ec1b1ffbb32abc0f1b0a47a82
+
 ### 0.2.25
 
 Bug fixed #15: the npm package "xml2js" has been replaced by "xml-js". The idea behind this modification is to keep the structure of the document as similar to the original.
@@ -106,31 +110,5 @@ Added `vssolution.altSolutionFolders` configuration parameter to allow specify o
 Delete activity bar item, it is not usable for now.
 
 Added track active item.
-
-### 0.2.23
-
-Bug fixed: remove package and remove project reference command.
-
-Bug fixed: do not show the current project in the add referenced project suggesion.
-
-Now the solution explorer is showed in its custom panel in the activity bar.
-
-Updated to vscode 1.23.
-
-### 0.2.11
-
-Added dotnet commands: build, clean, pack, publish, restore, run and test.
-
-### 0.2.10
-
-Bug fixed: error removing a folder with files in old xxproj files.
-
-Added basic support for .shproj files.
-
-Improved xml node name selection on edit old xxproj.
-
-Updated question popups to show 'No' option.
-
-Updated to vscode 1.21.1.
 
 **Enjoy!**

@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.25",
+    "version": "0.2.26",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -884,6 +884,7 @@
     "dependencies": {
         "clipboardy": "^1.2.3",
         "handlebars": "^4.0.11",
+        "iconv-lite": "^0.4.23",
         "node-uuid": "^1.4.8",
         "xml-js": "^1.6.3"
     }
