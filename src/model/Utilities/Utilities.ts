@@ -4,7 +4,7 @@ import { DirectorySearchResult } from "./DirectorySearchResult";
 
 export async function searchFilesInDir(startPath:string, extension: string) : Promise<string[]> {
     if (!(await fs.exists(startPath))) {
-        throw "Directory doesn't exist";
+        return [];
     }
 
     let result: string[] = [];

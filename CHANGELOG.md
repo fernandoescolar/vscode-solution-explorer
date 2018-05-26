@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.27
+
+Litle bugfixed when trying to load solutions in other folder and those folders don't exist.
+
 ## 0.2.26
 
 Bug fixed #16: using this workarround to try to solve the encoding bug in the output channel: https://github.com/Microsoft/vscode-arduino/commit/00d3fefcead1a95ec1b1ffbb32abc0f1b0a47a82
