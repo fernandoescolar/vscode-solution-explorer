@@ -6,6 +6,8 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Bug fixed #21: allow invoke create new empty solution from command palette.
 
+Bug fixed #20: now the "vssolution.trackActiveItem" configuration setting works right.
+
 ## 0.2.27
 
 Litle bugfixed when trying to load solutions in other folder and those folders don't exist.

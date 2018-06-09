@@ -156,11 +156,12 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	}
 
 	private onActiveEditorChanged(): void {
-		if (vscode.window.activeTextEditor) {
-			if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
-				this.selectFile(vscode.window.activeTextEditor.document.uri.fsPath);
-			}
-		} 
+		let shouldExecute = SolutionExplorerConfiguration.getTrackActiveItem();
+		if (!shouldExecute) return;
+		if (!vscode.window.activeTextEditor) return;
+		if (vscode.window.activeTextEditor.document.uri.scheme !== 'file') return;
+		
+		this.selectFile(vscode.window.activeTextEditor.document.uri.fsPath); 
 	}
 
 	private onVisibleEditorsChanged(editors: vscode.TextEditor[]): void {
