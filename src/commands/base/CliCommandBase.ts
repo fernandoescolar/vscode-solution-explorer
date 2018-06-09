@@ -1,5 +1,6 @@
 import * as path from "path";
 import * as os from "os";
+import * as vscode from "vscode";
 import { spawn, execSync } from 'child_process';
 import { TreeItem, ContextValues } from '../../tree';
 import { CommandBase } from './CommandBase';
@@ -41,10 +42,10 @@ export abstract class CliCommandBase extends CommandBase {
     }
 
     private getWorkingFolder(item: TreeItem): string {
-        if (item.path && item.contextValue !== ContextValues.ProjectReferencedPackage) return path.dirname(item.path);
-        if (item.project) return path.dirname(item.project.fullPath);
-        if (item.solution) return item.solution.FolderPath;
-        return null;
+        if (item && item.path && item.contextValue !== ContextValues.ProjectReferencedPackage) return path.dirname(item.path);
+        if (item && item.project) return path.dirname(item.project.fullPath);
+        if (item && item.solution) return item.solution.FolderPath;
+        return vscode.workspace.rootPath;
     }
 
     private checkCurrentEncoding(): void {

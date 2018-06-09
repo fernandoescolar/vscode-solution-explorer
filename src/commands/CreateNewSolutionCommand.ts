@@ -13,9 +13,12 @@ export class CreateNewSolutionCommand extends CliCommandBase {
         this.parameters = [
             new StaticCommandParameter('new'),
             new StaticCommandParameter('sln'),
-            new InputTextCommandParameter('Solution name...', '-n'),
-            new StaticCommandParameter(item.path, '-o'),
+            new InputTextCommandParameter('Solution name...', '-n')
         ];
+
+        if (item && item.path) {
+            this.parameters.push(new StaticCommandParameter(item.path, '-o'));
+        }
 
         return true;
     }

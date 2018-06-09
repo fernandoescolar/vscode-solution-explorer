@@ -95,6 +95,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.28
+
+Bug fixed #21: allow invoke create new empty solution from command palette.
+
 ### 0.2.27
 
 Litle bugfixed when trying to load solutions in other folder and those folders don't exist.
@@ -104,11 +108,5 @@ Ignore empty string in logs.
 ### 0.2.26
 
 Bug fixed #16: using this workarround to try to solve the encoding bug in the output channel: https://github.com/Microsoft/vscode-arduino/commit/00d3fefcead1a95ec1b1ffbb32abc0f1b0a47a82
-
-### 0.2.25
-
-Bug fixed #15: the npm package "xml2js" has been replaced by "xml-js". The idea behind this modification is to keep the structure of the document as similar to the original.
-
-Added `vssolution.altSolutionFolders` configuration parameter to allow specify other folder than the root with .sln files. It is related with the issue #8.
 
 **Enjoy!**
