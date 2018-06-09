@@ -15,6 +15,7 @@ import { StandardProjectTreeItem } from "./items/standard/StandardProjectTreeIte
 import { WebSiteProjectTreeItem } from "./items/website/WebSiteProjectTreeItem";
 import { NoSolutionTreeItem } from "./items/NoSolutionTreeItem";
 import { SharedProjectTreeItem } from "./items/standard/SharedProjectTreeItem";
+import { DeployProjectTreeItem } from "./items/standard/DeployProjectTreeItem";
 
 export function CreateNoSolution(provider: SolutionExplorerProvider, rootPath: string): Promise<TreeItem> {
     let context = new TreeItemContext(provider, null);
@@ -73,6 +74,7 @@ async function CreateFromProject(context: TreeItemContext, project: ProjectInSol
         if (p.type == 'standard') return new StandardProjectTreeItem(projectContext, project);
         if (p.type == 'shared') return new SharedProjectTreeItem(projectContext, project);
         if (p.type == 'website') return new WebSiteProjectTreeItem(projectContext, project);
+        if (p.type == 'deploy') return new DeployProjectTreeItem(projectContext, project);
         return new ProjectTreeItem(projectContext, project);
     }
 

@@ -2,7 +2,6 @@ import * as path from "path";
 import * as fs from "../../../async/fs";
 import * as xml from "../../../async/xml";
 import * as SolutionExplorerConfiguration from "../../../SolutionExplorerConfiguration";
-import * as Utilities from "../../Utilities";
 import { ProjectInSolution } from "../../Solutions";
 import { ProjectFile } from "../ProjectFile";
 import { ProjectFolder } from "../ProjectFolder";

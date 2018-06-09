@@ -38,14 +38,24 @@ export class SharedProject extends StandardProject {
     }
 
     protected replaceDependsUponNode(ref: any, pattern: string, newPattern: string) {
-        if (ref.DependentUpon && ref.DependentUpon[0].startsWith(pattern)) {
-            ref.DependentUpon[0] = ref.DependentUpon[0].replace(pattern, newPattern);
-        }
+        ref.elements.forEach(e => {
+            if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
+                e.elements[0].text = e.elements[0].text.replace(pattern, newPattern);
+            }
+        });
     }
 
     protected deleteDependsUponNode(node: any, pattern: string) {
-        if (node.DependentUpon && node.DependentUpon[0].startsWith(pattern)) {
-            delete node.DependentUpon;
+        if (!node.elements) return;
+
+        node.elements.forEach((e, eIndex) => {
+            if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
+                node.elements.splice(eIndex, 1);
+            }
+        });
+
+        if (node.elements.length === 0) {
+            delete node.elements;
         }
     }
 }

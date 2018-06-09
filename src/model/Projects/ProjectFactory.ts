@@ -6,6 +6,7 @@ import { StandardProject } from "./Kinds/StandardProject";
 import { WebsiteProject } from "./Kinds/WebsiteProject";
 import { Project } from "./Project";
 import { SharedProject } from "./Kinds/SharedProject";
+import { DeployProject } from "./Kinds/DeployProject";
 
 const cpsProjectTypes = [ ProjectTypeIds.cpsCsProjectGuid, ProjectTypeIds.cpsVbProjectGuid, ProjectTypeIds.cpsProjectGuid ];
 const standardProjectTypes = [ ProjectTypeIds.csProjectGuid, ProjectTypeIds.fsProjectGuid, ProjectTypeIds.vbProjectGuid ];
@@ -28,6 +29,10 @@ export class ProjectFactory {
 
         if (project.projectTypeId == ProjectTypeIds.shProjectGuid) {
             return ProjectFactory.loadSharedProject(project);
+        }
+
+        if (project.projectTypeId == ProjectTypeIds.deployProjectGuid) {
+            return ProjectFactory.loadDeploydProject(project);
         }
 
         return Promise.resolve(null);
@@ -60,5 +65,9 @@ export class ProjectFactory {
 
     private static loadSharedProject(project: ProjectInSolution): Promise<any> {
         return Promise.resolve(new SharedProject(project));
+    }
+
+    private static loadDeploydProject(project: ProjectInSolution): Promise<any> {
+        return Promise.resolve(new DeployProject(project));
     }
 }

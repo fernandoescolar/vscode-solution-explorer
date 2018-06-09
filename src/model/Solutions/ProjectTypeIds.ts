@@ -12,4 +12,5 @@ export class ProjectTypeIds {
     public static webProjectGuid = "{E24C65DC-7377-472B-9ABA-BC803B73C61A}";
     public static solutionFolderGuid = "{2150E333-8FDC-42A3-9474-1A3956D46DE8}";
     public static shProjectGuid = "{D954291E-2A0B-460D-934E-DC6B0785DB48}";
+    public static deployProjectGuid = "{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}";
 }

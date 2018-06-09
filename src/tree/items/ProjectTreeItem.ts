@@ -2,11 +2,9 @@ import { TreeItem, TreeItemCollapsibleState } from "../";
 import { TreeItemContext } from "../TreeItemContext";
 import { ContextValues } from "../ContextValues";
 import { ProjectInSolution } from "../../model/Solutions";
-import { Project } from "../../model/Projects";
 import { ProjectReferencesTreeItem } from "./ProjectReferencesTreeItem";
 import * as TreeItemFactory from "../TreeItemFactory";
-import * as path from 'path';
-import { resolve } from "url";
+
 
 export class ProjectTreeItem extends TreeItem {
     constructor(context: TreeItemContext, public readonly projectInSolution: ProjectInSolution) {
