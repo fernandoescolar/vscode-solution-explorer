@@ -95,6 +95,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.29
+
+New feature #18: .deployproj files support added.
+
 ### 0.2.28
 
 Bug fixed #21: allow invoke create new empty solution from command palette.
@@ -106,9 +110,5 @@ Bug fixed #20: now the "vssolution.trackActiveItem" configuration setting works 
 Litle bugfixed when trying to load solutions in other folder and those folders don't exist.
 
 Ignore empty string in logs.
-
-### 0.2.26
-
-Bug fixed #16: using this workarround to try to solve the encoding bug in the output channel: https://github.com/Microsoft/vscode-arduino/commit/00d3fefcead1a95ec1b1ffbb32abc0f1b0a47a82
 
 **Enjoy!**

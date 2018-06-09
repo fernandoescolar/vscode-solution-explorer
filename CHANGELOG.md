@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.29
+
+New feature #18: .deployproj files support added.
+
 ## 0.2.28
 
 Bug fixed #21: allow invoke create new empty solution from command palette.
