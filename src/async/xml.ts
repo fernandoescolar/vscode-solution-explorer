@@ -3,12 +3,12 @@ import * as config from "../SolutionExplorerConfiguration";
 
 const readOptions: convert.Options.XML2JSON = {
     compact: false
-}
+};
 
 const writeOptions: convert.Options.JS2XML = {
     compact: false,
-    spaces: config.getXmlSpaces()
-}
+    spaces: 2
+};
 
 export function ParseToJson(content: string): Promise<any> {
     let result = <any>convert.xml2js(content, readOptions);
@@ -19,6 +19,7 @@ export function ParseToJson(content: string): Promise<any> {
 }
 
 export function ParseToXml(content: any): Promise<string> {
+    writeOptions.spaces = config.getXmlSpaces();
     let result = convert.js2xml(content, writeOptions);
     return Promise.resolve(result);
 }
