@@ -273,6 +273,9 @@ export class StandardProject extends FileSystemBasedProject {
             }
         };
 
+        if (!project) project = { elements: [] };
+        if (!project.elements || !Array.isArray(project.elements)) project.elements = [];
+
         project.elements.forEach(element => {
             if (element.name === 'ItemGroup') {
                 element.elements.forEach(e => {

@@ -103,6 +103,8 @@ There is a lot of work to do.
 
 New feature #26: Added a new parameter to set the xml spaces.
 
+Bug fixed #25: Check if the project XML format is not as expected.
+
 ### 0.2.29
 
 New feature #18: .deployproj files support added.
