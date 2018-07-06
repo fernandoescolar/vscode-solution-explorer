@@ -8,6 +8,7 @@ const SolutionExplorerIconsName = 'solutionExplorerIcons';
 const ShowOutputChannelName = 'showOutputChannel';
 const NetcoreIgnoreName = 'netcoreIgnore';
 const AlternativeSolutionFoldersName = 'altSolutionFolders';
+const XmlSpacesName = 'xmlspaces';
 
 let config: vscode.WorkspaceConfiguration = null;
 
@@ -48,6 +49,15 @@ export function getNetCoreIgnore(): string[] {
 
 export function getAlternativeSolutionFolders(): string[] {
     return config.get<string[]>(AlternativeSolutionFoldersName, [ "src" ]);
+}
+
+export function getXmlSpaces(): string | number {
+    let value = config.get<string>(XmlSpacesName, "2");
+    if (isNaN(parseInt(value))) {
+        return value;
+    } else {
+        return parseInt(value);
+    }
 }
 
 export const ICONS_THEME = "current-theme";

@@ -52,6 +52,8 @@ Branded icons are licensed under their copyright license.
 
 - `vssolution.xxprojItemTypes` Type of XML element to put in the xxproj files.
 
+- `vssolution.xmlspaces` Spaces to be used for indenting XML output. It could be a number or an string. ex. "2", " " or "t".
+
 - `vssolution.altSolutionFolders` If there is no solution in the workplace root folder, it will search for solutions in any of these folders.
 
 ###### Example
@@ -81,6 +83,8 @@ Branded icons are licensed under their copyright license.
         "ts": "TypeScriptCompile"
     },
 
+    "vssolution.xmlspaces": "2",
+
     "vssolution.altSolutionFolders": [
         "src"
     ]
@@ -95,6 +99,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.30
+
+New feature #26: Added a new parameter to set the xml spaces.
+
 ### 0.2.29
 
 New feature #18: .deployproj files support added.
@@ -104,11 +112,5 @@ New feature #18: .deployproj files support added.
 Bug fixed #21: allow invoke create new empty solution from command palette.
 
 Bug fixed #20: now the "vssolution.trackActiveItem" configuration setting works right.
-
-### 0.2.27
-
-Litle bugfixed when trying to load solutions in other folder and those folders don't exist.
-
-Ignore empty string in logs.
 
 **Enjoy!**

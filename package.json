@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.29",
+    "version": "0.2.30",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -852,6 +852,11 @@
                         "ts": "TypeScriptCompile"
                     },
                     "description": "Type of XML element to put in the xxproj files."
+                },
+                "vssolution.xmlspaces": {
+                    "type": "string",
+                    "default": "2",
+                    "description": "Spaces to be used for indenting XML output. It could be a number or an string. ex. \"2\", \" \" or \"\\t\"."
                 },
                 "vssolution.altSolutionFolders": {
                     "type": "array",

@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.30
+
+New feature #26: Added a new parameter to set the xml spaces.
+
 ## 0.2.29
 
 New feature #18: .deployproj files support added.

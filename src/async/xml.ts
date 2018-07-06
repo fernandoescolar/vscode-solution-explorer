@@ -1,13 +1,17 @@
-import * as fs from "fs";
 import * as convert from "xml-js";
+import * as config from "../SolutionExplorerConfiguration";
 
-const options: convert.Options.JS2XML = {
+const readOptions: convert.Options.XML2JSON = {
+    compact: false
+}
+
+const writeOptions: convert.Options.JS2XML = {
     compact: false,
-    spaces: 2
+    spaces: config.getXmlSpaces()
 }
 
 export function ParseToJson(content: string): Promise<any> {
-    let result = <any>convert.xml2js(content, options);
+    let result = <any>convert.xml2js(content, readOptions);
     if (result.declaration) {
         delete result.declaration
     }
@@ -15,6 +19,6 @@ export function ParseToJson(content: string): Promise<any> {
 }
 
 export function ParseToXml(content: any): Promise<string> {
-    let result = convert.js2xml(content, options);
+    let result = convert.js2xml(content, writeOptions);
     return Promise.resolve(result);
 }
