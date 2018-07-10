@@ -21,5 +21,9 @@ export function ParseToJson(content: string): Promise<any> {
 export function ParseToXml(content: any): Promise<string> {
     writeOptions.spaces = config.getXmlSpaces();
     let result = convert.js2xml(content, writeOptions);
+    if (config.getXmlClosingTagSpace()) {
+        let re = /([A-Za-z0-9_\"]+)\/\>/g;
+        result = result.replace(re,"$1 />");
+    }
     return Promise.resolve(result);
 }

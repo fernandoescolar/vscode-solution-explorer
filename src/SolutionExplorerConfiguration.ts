@@ -9,6 +9,7 @@ const ShowOutputChannelName = 'showOutputChannel';
 const NetcoreIgnoreName = 'netcoreIgnore';
 const AlternativeSolutionFoldersName = 'altSolutionFolders';
 const XmlSpacesName = 'xmlspaces';
+const XmlClosingTagSpace = 'xmlClosingTagSpace';
 
 let config: vscode.WorkspaceConfiguration = null;
 
@@ -58,6 +59,10 @@ export function getXmlSpaces(): string | number {
     } else {
         return parseInt(value);
     }
+}
+
+export function getXmlClosingTagSpace(): boolean {
+    return config.get<boolean>(XmlClosingTagSpace, false);
 }
 
 export const ICONS_THEME = "current-theme";
