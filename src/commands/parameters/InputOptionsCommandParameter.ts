@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import { ICommandParameter } from "../base/ICommandParameter";
-import { parseString } from "xml2js";
 
 export type ItemsResolver = () => Promise<string[]>;
 
