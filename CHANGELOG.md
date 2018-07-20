@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.32
+
+Activated again the activity bar show mode. It's not working right. But some people have ask for it.
+
 ## 0.2.31
 
 Bug Fixed #24: Now the solution context menu doesn't show the dotnet core commands if the solution doesn't have any CPS (dotnet core) project.

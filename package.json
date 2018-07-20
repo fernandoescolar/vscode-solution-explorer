@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.31",
+    "version": "0.2.32",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -30,12 +30,29 @@
     ],
     "main": "./out/extension",
     "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "solution-explorer",
+                    "title": "Solution",
+                    "icon": "images/activity-icon.png",
+                    "when": "!solutionExplorer.viewInExplorer && !solutionExplorer.viewInNone"
+                }
+            ]
+        },
         "views": {
             "explorer": [
                 {
                     "id": "solutionExplorer",
                     "name": "Solution Explorer",
                     "when": "!solutionExplorer.viewInActivityBar && !solutionExplorer.viewInNone"
+                }
+            ],
+            "solution-explorer": [
+                {
+                    "id": "solutionExplorer",
+                    "name": "Explorer",
+                    "when": "!solutionExplorer.viewInExplorer && !solutionExplorer.viewInNone"
                 }
             ]
         },
