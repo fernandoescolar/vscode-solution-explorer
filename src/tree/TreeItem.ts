@@ -132,4 +132,19 @@ export abstract class TreeItem extends vscode.TreeItem {
 		this.iconPath = this.contextValue.indexOf('folder') >= 0 ? vscode.ThemeIcon.Folder : vscode.ThemeIcon.File;
 		this.resourceUri = vscode.Uri.parse(fullpath);
 	}
+
+	protected containsContextValueChildren(contextValue: string, item?: TreeItem): boolean {
+		let result = false;
+		if (!item) item = this;
+		if (item.contextValue === contextValue) return true;
+        if (item.children) {
+            item.children.forEach(c => {
+				if (this.containsContextValueChildren(contextValue, c)) {
+					result = true;
+				}
+			});
+		}
+		
+		return result;
+    }
 }

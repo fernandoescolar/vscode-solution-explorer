@@ -1,4 +1,3 @@
-import * as path from "path";
 import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
 import { TreeItemContext } from "../TreeItemContext";
 import { ContextValues } from "../ContextValues";
@@ -15,6 +14,14 @@ export class SolutionTreeItem extends TreeItem {
         this.subscription = context.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
     }
     
+    public refreshContextValue(): void {
+        if (this.containsContextValueChildren(ContextValues.Project + '-cps')) {
+            this.contextValue = ContextValues.Solution + '-cps';
+        } else {
+            this.contextValue = ContextValues.Solution;
+        }
+    }
+
     public dispose(): void {
         this.subscription.dispose();
         this.subscription = null;

@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.30",
+    "version": "0.2.31",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -425,6 +425,11 @@
                 },
                 {
                     "command": "solutionExplorer.openFile",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
                     "when": "view == solutionExplorer && viewItem == project-cps",
                     "group": "7_modification"
                 },
@@ -454,6 +459,16 @@
                     "group": "2_workspace"
                 },
                 {
+                    "command": "solutionExplorer.addNewProject",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addExistingProject",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
                     "command": "solutionExplorer.removeProject",
                     "when": "view == solutionExplorer && viewItem == project-cps",
                     "group": "2_workspace"
@@ -471,6 +486,11 @@
                 {
                     "command": "solutionExplorer.createSolutionFolder",
                     "when": "view == solutionExplorer && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createSolutionFolder",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
                     "group": "2_workspace"
                 },
                 {
@@ -510,6 +530,11 @@
                 },
                 {
                     "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
                     "when": "view == solutionExplorer && viewItem == solution-folder",
                     "group": "7_modification"
                 },
@@ -530,32 +555,32 @@
                 },
                 {
                     "command": "solutionExplorer.build",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.clean",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.pack",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.publish",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.restore",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.test",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == solutionExplorer && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
@@ -736,6 +761,12 @@
             },
             {
                 "command": "solutionExplorer.createSolutionFolder",
+                "when": "view == solutionExplorer && viewItem == solution-cps",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createSolutionFolder",
                 "when": "view == solutionExplorer && viewItem == solution-folder",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
@@ -767,6 +798,12 @@
             {
                 "command": "solutionExplorer.renameSolutionItem",
                 "when": "view == solutionExplorer && viewItem == solution",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == solutionExplorer && viewItem == solution-cps",
                 "key": "f2",
                 "mac": "f2"
             },

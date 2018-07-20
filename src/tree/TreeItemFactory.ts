@@ -22,9 +22,12 @@ export function CreateNoSolution(provider: SolutionExplorerProvider, rootPath: s
     return Promise.resolve(new NoSolutionTreeItem(context, rootPath));
 }
 
-export function CreateFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile): Promise<TreeItem> {
+export async function CreateFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile): Promise<TreeItem> {
     let context = new TreeItemContext(provider, solution);
-    return Promise.resolve(new SolutionTreeItem(context));
+    let treeItem = new SolutionTreeItem(context);
+    await treeItem.getChildren();
+    await treeItem.refreshContextValue();
+    return treeItem;
 }
 
 export async function CreateItemsFromSolution(context: TreeItemContext, solution: SolutionFile, parentGuid?: string): Promise<TreeItem[]> {
@@ -64,7 +67,9 @@ export async function CreateItemsFromSolution(context: TreeItemContext, solution
 
 async function CreateFromProject(context: TreeItemContext, project: ProjectInSolution): Promise<TreeItem> {
     if (project.projectType == SolutionProjectType.SolutionFolder) {
-        return new SolutionFolderTreeItem(context, project);
+        let treeItem = new SolutionFolderTreeItem(context, project);
+        await treeItem.getChildren();
+        return treeItem;
     } 
 
     let p = await ProjectFactory.parse(project);

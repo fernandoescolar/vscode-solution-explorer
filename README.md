@@ -99,6 +99,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.31
+
+Bug Fixed #24: Now the solution context menu doesn't show the dotnet core commands if the solution doesn't have any CPS (dotnet core) project.
+
+New feature #26: Adds a new option: xmlClosingTagSpace. When xmlClosingTagSpace is enabled, closing tags are written as: " />" rather than "/>" - this is for Visual Studio compatibility. (PR #27 by [dfrencham](https://github.com/dfrencham))
+
 ### 0.2.30
 
 New feature #26: Added a new parameter to set the xml spaces.
@@ -109,10 +115,8 @@ Bug fixed #25: Check if the project XML format is not as expected.
 
 New feature #18: .deployproj files support added.
 
-### 0.2.28
+## Thanks to contributors
 
-Bug fixed #21: allow invoke create new empty solution from command palette.
-
-Bug fixed #20: now the "vssolution.trackActiveItem" configuration setting works right.
+[dfrencham] (https://github.com/dfrencham)
 
 **Enjoy!**
