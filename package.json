@@ -858,6 +858,11 @@
                     "default": "2",
                     "description": "Spaces to be used for indenting XML output. It could be a number or an string. ex. \"2\", \" \" or \"\\t\"."
                 },
+                "vssolution.xmlClosingTagSpace": {
+                    "type": "boolean",
+                    "default": "false",
+                    "description": "Add space at the end of XML closing tag, ex: \" />\""
+                },
                 "vssolution.altSolutionFolders": {
                     "type": "array",
                     "items": {
