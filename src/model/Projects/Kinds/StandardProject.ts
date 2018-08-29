@@ -250,7 +250,7 @@ export class StandardProject extends FileSystemBasedProject {
     private parseDocument(document: any): void {
         this.loaded = true;
         this.document = document;
-        let project = this.document.elements[0];
+        let project = StandardProject.getProjectElement(this.document);
         let nodeNames = this.getXmlNodeNames();
         let files: string[] = [];
         let folders: string[] = [];
@@ -365,7 +365,7 @@ export class StandardProject extends FileSystemBasedProject {
         };
 
         let nodeNames = this.getXmlNodeNames();
-        let project = this.document.elements[0];
+        let project = StandardProject.getProjectElement(this.document);
         project.elements.forEach(element => {
             if (element.name === 'ItemGroup') {
                 element.elements.forEach(e => {
@@ -399,7 +399,7 @@ export class StandardProject extends FileSystemBasedProject {
         };
 
         let nodeNames = this.getXmlNodeNames();
-        let project = this.document.elements[0];
+        let project = StandardProject.getProjectElement(this.document);
         project.elements.forEach(element => {
             if (element.name === 'ItemGroup') {
                 element.elements.forEach(e => {
@@ -428,7 +428,7 @@ export class StandardProject extends FileSystemBasedProject {
         if (this.includePrefix) pattern = this.includePrefix + pattern;
         if (!types) types = this.getXmlNodeNames();
 
-        let project = this.document.elements[0];
+        let project = StandardProject.getProjectElement(this.document);
         project.elements.forEach((element, elementIndex) => {
             if (element.name === 'ItemGroup') {
                 let toDelete: any[] = [];
@@ -486,7 +486,7 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     private checkCurrentItemGroup(): void {
-        let project = this.document.elements[0];
+        let project = StandardProject.getProjectElement(this.document);
         let current: any;
         let lastElement: any;
         project.elements.forEach(element => {

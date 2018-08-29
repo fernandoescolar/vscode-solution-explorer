@@ -40,9 +40,14 @@ export class ProjectFactory {
 
     private static async determineStandardProject(project: ProjectInSolution): Promise<Project> {
         let document =  await ProjectFactory.loadProjectDocument(project.fullPath);
+        let element: any = Project.getProjectElement(document);
+        
+        if (!element) {
+            return null;
+        }
 
-        if (document.elements[0].attributes.Sdk 
-            && document.elements[0].attributes.Sdk.startsWith("Microsoft.NET.Sdk"))
+        if (element.attributes.Sdk 
+            && element.attributes.Sdk.startsWith("Microsoft.NET.Sdk"))
             return new CpsProject(project, document);
 
         return new StandardProject(project, document);

@@ -6,6 +6,8 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Bug fixed #32: If you select "explorer" mode it doesn't show the "activityBar" icon.
 
+Bug fixed #35: commented "Project" tag lines in the ".xxproj" files are ignored.
+
 ## 0.2.32
 
 Activated again the activity bar show mode. It's not working right. But some people have ask for it.

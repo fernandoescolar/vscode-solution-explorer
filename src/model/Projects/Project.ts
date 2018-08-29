@@ -47,4 +47,18 @@ export abstract class Project {
     public abstract moveFolder(folderpath: string, newfolderPath: string): Promise<string>;
 
     public abstract refresh(): Promise<void>;
+
+    public static getProjectElement(document: any): any {
+        if (document.elements.length == 1) {
+            return document.elements[0];
+        } else {
+            for(let i = 0; i < document.elements.length; i++) {
+                if (document.elements[i].type !== 'comment') {
+                    return document.elements[i];
+                }
+            }
+        }
+
+        return null;
+    }
 }
