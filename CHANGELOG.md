@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.33
+
+Bug fixed #32: If you select "explorer" mode it doesn't show the "activityBar" icon.
+
 ## 0.2.32
 
 Activated again the activity bar show mode. It's not working right. But some people have ask for it.

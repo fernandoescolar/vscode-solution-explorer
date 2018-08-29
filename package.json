@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.32",
+    "version": "0.2.33",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -26,7 +26,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onView:solutionExplorer"
+        "*"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -36,7 +36,7 @@
                     "id": "solution-explorer",
                     "title": "Solution",
                     "icon": "images/activity-icon.png",
-                    "when": "!solutionExplorer.viewInExplorer && !solutionExplorer.viewInNone"
+                    "when": "!solutionExplorer.viewInExplorer && !solutionExplorer.viewInNone && solutionExplorer.loadedFlag"
                 }
             ]
         },
@@ -45,14 +45,14 @@
                 {
                     "id": "solutionExplorer",
                     "name": "Solution Explorer",
-                    "when": "!solutionExplorer.viewInActivityBar && !solutionExplorer.viewInNone"
+                    "when": "!solutionExplorer.viewInActivityBar && !solutionExplorer.viewInNone && solutionExplorer.loadedFlag"
                 }
             ],
             "solution-explorer": [
                 {
                     "id": "solutionExplorer",
                     "name": "Explorer",
-                    "when": "!solutionExplorer.viewInExplorer && !solutionExplorer.viewInNone"
+                    "when": "!solutionExplorer.viewInExplorer && !solutionExplorer.viewInNone && solutionExplorer.loadedFlag"
                 }
             ]
         },
@@ -938,18 +938,18 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/handlebars": "^4.0.37",
+        "@types/handlebars": "^4.0.39",
         "@types/mocha": "^2.2.48",
-        "@types/node": "^7.0.65",
+        "@types/node": "^7.0.69",
         "@types/xml-js": "^1.0.0",
-        "typescript": "^2.8.3",
-        "vscode": "^1.1.17"
+        "typescript": "^2.9.2",
+        "vscode": "^1.1.21"
     },
     "dependencies": {
         "clipboardy": "^1.2.3",
         "handlebars": "^4.0.11",
-        "iconv-lite": "^0.4.23",
+        "iconv-lite": "^0.4.24",
         "node-uuid": "^1.4.8",
-        "xml-js": "^1.6.3"
+        "xml-js": "^1.6.7"
     }
 }

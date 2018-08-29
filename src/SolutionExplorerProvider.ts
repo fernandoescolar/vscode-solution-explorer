@@ -36,6 +36,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 
 	public register() {
 		let showMode = SolutionExplorerConfiguration.getShowMode();
+		vscode.commands.executeCommand('setContext', 'solutionExplorer.loadedFlag', !false);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInActivityBar', showMode === SolutionExplorerConfiguration.SHOW_MODE_ACTIVITYBAR);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInExplorer', showMode === SolutionExplorerConfiguration.SHOW_MODE_EXPLORER);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === SolutionExplorerConfiguration.SHOW_MODE_NONE);
