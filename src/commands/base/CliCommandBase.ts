@@ -60,6 +60,8 @@ export abstract class CliCommandBase extends CommandBase {
                 return iconv.decode(data, "Shift_JIS");
             case "936":
                 return iconv.decode(data, "GBK");
+            case "950":
+                return iconv.decode(data, "big5");
             default:
                 return data.toString();
         }
