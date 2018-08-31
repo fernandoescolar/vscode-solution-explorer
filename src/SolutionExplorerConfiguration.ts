@@ -10,6 +10,7 @@ const NetcoreIgnoreName = 'netcoreIgnore';
 const AlternativeSolutionFoldersName = 'altSolutionFolders';
 const XmlSpacesName = 'xmlspaces';
 const XmlClosingTagSpace = 'xmlClosingTagSpace';
+const Win32EncodingName = 'win32Encoding';
 
 let config: vscode.WorkspaceConfiguration = null;
 
@@ -63,6 +64,14 @@ export function getXmlSpaces(): string | number {
 
 export function getXmlClosingTagSpace(): boolean {
     return config.get<boolean>(XmlClosingTagSpace, false);
+}
+
+export function getWin32EncodingTable(): { [id: string]: string } {
+    return config.get<{ [id: string]: string }>(Win32EncodingName, {
+        "932": "Shift_JIS",
+        "936": "GBK",
+        "950": "BIG5"
+    });
 }
 
 export const ICONS_THEME = "current-theme";

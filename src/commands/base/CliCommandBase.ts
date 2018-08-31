@@ -6,6 +6,7 @@ import { TreeItem, ContextValues } from '../../tree';
 import { CommandBase } from './CommandBase';
 import { SolutionExplorerProvider } from '../../SolutionExplorerProvider';
 import * as iconv from 'iconv-lite';
+import * as configuration from '../../SolutionExplorerConfiguration';
 
 export abstract class CliCommandBase extends CommandBase {
     private codepage: string = "65001";
@@ -55,15 +56,14 @@ export abstract class CliCommandBase extends CommandBase {
     }
 
     private decode(data: Buffer): string {
-        switch (this.codepage) {
-            case "932":
-                return iconv.decode(data, "Shift_JIS");
-            case "936":
-                return iconv.decode(data, "GBK");
-            case "950":
-                return iconv.decode(data, "big5");
-            default:
-                return data.toString();
+        var encodings = configuration.getWin32EncodingTable();
+        var keys = Object.keys(encodings);
+        for (let i = 0; i < keys.length; i++) {
+            if (keys[i] === this.codepage) {
+                return iconv.decode(data, encodings[keys[i]]);
+            }
         }
+       
+        return data.toString();
     }
 }
