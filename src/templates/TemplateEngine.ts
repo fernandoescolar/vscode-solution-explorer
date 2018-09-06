@@ -10,6 +10,7 @@ const TemplateFilename: string = "template-list.json";
 const SourceFolder: string = path.join(__filename, "..", "..", "..", "files-vscode-folder");
 
 export class TemplateEngine {
+    private readonly workspaceName: string;
     private readonly workspaceRoot: string;
     private readonly vscodeFolder: string;
     private readonly workingFolder: string;
@@ -18,7 +19,8 @@ export class TemplateEngine {
     private templates: ITemplate[];
     
 
-    constructor(workspaceRoot: string) {
+    constructor(workspaceName: string, workspaceRoot: string) {
+        this.workspaceName = workspaceName;
         this.workspaceRoot = workspaceRoot;
         this.vscodeFolder = path.join(workspaceRoot, VsCodeFoldername);
         this.workingFolder = path.join(workspaceRoot, VsCodeFoldername, TemplateFoldername);

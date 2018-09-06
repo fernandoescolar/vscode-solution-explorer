@@ -11,9 +11,8 @@ import { SolutionExplorerOutputChannel } from "./SolutionExplorerOutputChannel";
 var eventAggregator, solutionExplorerProvider, solutionExplorerCommands, solutionExplorerFileWatcher, solutionExplorerOutputChannel;
 
 export function activate(context: vscode.ExtensionContext) {
-    const rootPath = vscode.workspace.rootPath;
     eventAggregator = new EventAggregator();
-    solutionExplorerProvider = new SolutionExplorerProvider(rootPath, eventAggregator);
+    solutionExplorerProvider = new SolutionExplorerProvider(vscode.workspace.workspaceFolders, eventAggregator);
     solutionExplorerCommands = new SolutionExplorerCommands(context, solutionExplorerProvider);
     solutionExplorerFileWatcher = new SolutionExplorerFileWatcher(eventAggregator);
     solutionExplorerOutputChannel = new SolutionExplorerOutputChannel(eventAggregator);

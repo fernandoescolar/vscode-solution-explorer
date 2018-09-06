@@ -40,13 +40,13 @@ export class CreateFileCommand extends CommandBase {
 
     private async getTemplatesTypes(): Promise<string[]> {
         let extension = path.extname(this.args[0]).substring(1);
-        let result: string[] =  await this.provider.templateEngine.getTemplates(extension);
+        let result: string[] =  await this.provider.defaultTemplateEngine.getTemplates(extension);
         return result;
     }
 
     private getContent(item: TreeItem): Promise<string> {
         if (!this.args[1]) return Promise.resolve("");
 
-        return this.provider.templateEngine.generate(this.args[0], this.args[1], item);
+        return this.provider.defaultTemplateEngine.generate(this.args[0], this.args[1], item);
     }
 }

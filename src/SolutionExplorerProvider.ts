@@ -11,7 +11,8 @@ import { ITemplateEngine, TemplateEngine } from "./templates";
 
 export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.TreeItem> {
 	private _logger: ILogger;
-	private _templateEngine: ITemplateEngine;
+	private _workspaceFolders: vscode.WorkspaceFolder[];
+	private _templateEngines: Map<string, ITemplateEngine>;
 	private subscription: ISubscription = null;
 	private children: sln.TreeItem[] = null;
 	private treeView: vscode.TreeView<sln.TreeItem> = null;
@@ -19,9 +20,13 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	readonly onDidChangeTreeData: vscode.Event<sln.TreeItem | undefined> = this._onDidChangeTreeData.event;
 	//onDidChangeActiveTextEditor
 
-	constructor(public workspaceRoot: string, public readonly eventAggregator: IEventAggegator) {
+	constructor(public workspaceFolders: vscode.WorkspaceFolder[], public readonly eventAggregator: IEventAggegator) {
 		this._logger = new Logger(this.eventAggregator);
-		this._templateEngine = new TemplateEngine(workspaceRoot);
+		this._workspaceFolders = workspaceFolders;
+		this._templateEngines = this._workspaceFolders.reduce((map, folder) => {
+			map[folder.name] = new TemplateEngine(folder.name, folder.uri.path);
+			return map;
+		}, new Map<string, ITemplateEngine>());
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		vscode.window.onDidChangeVisibleTextEditors(data => this.onVisibleEditorsChanged(data));
 	}
@@ -30,8 +35,12 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 		return this._logger;
 	}
 
-	public get templateEngine(): ITemplateEngine {
-		return this._templateEngine;
+	public get defaultTemplateEngine(): ITemplateEngine {
+		return this._templateEngines[0];
+	}
+
+	public templateEngine(workspaceName: string): ITemplateEngine {
+		return this._templateEngines[workspaceName];
 	}
 
 	public register() {
@@ -70,7 +79,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	}
 
 	public getChildren(element?: sln.TreeItem): Thenable<sln.TreeItem[]> {
-		if (!this.workspaceRoot) {
+		if (!this._workspaceFolders || this._workspaceFolders.length == 0) {
 			this.logger.log('No .sln found in workspace');
 			return Promise.resolve([]);
 		}
@@ -111,16 +120,16 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 
 	private async createSolutionItems(): Promise<sln.TreeItem[]> {
 		this.children = [];
-		let solutionPaths = await Utilities.searchFilesInDir(this.workspaceRoot, '.sln');
+		let solutionPaths = await this._workspaceFolders.reduce(async (_paths, folder) => (await _paths).concat(await Utilities.searchFilesInDir(folder.uri.path, '.sln')), Promise.resolve(new Array<string>()));
 		if (solutionPaths.length <= 0) {
 			let altFolders = SolutionExplorerConfiguration.getAlternativeSolutionFolders();
 			for (let i = 0; i < altFolders.length; i++) {
-				let altSolutionPaths = await Utilities.searchFilesInDir(path.join(this.workspaceRoot, altFolders[i]), '.sln');
+				let altSolutionPaths = await this._workspaceFolders.reduce(async (_paths, folder) => (await _paths).concat(await Utilities.searchFilesInDir(path.join(folder.uri.path, altFolders[i]), '.sln')), Promise.resolve(new Array<string>()));
 				solutionPaths = [ ...solutionPaths, ...altSolutionPaths]
 			}
 			
 			if (solutionPaths.length <= 0) {
-				this.children .push(await sln.CreateNoSolution(this, this.workspaceRoot));
+				this.children.push(await sln.CreateNoSolution(this, this._workspaceFolders[0].uri.path));
 				return this.children;
 			}
 		}
@@ -140,7 +149,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	private onFileEvent(event: IEvent): void {
         let fileEvent = <IFileEvent> event;
 
-		if (path.dirname(fileEvent.path) == this.workspaceRoot 
+		if (this._workspaceFolders.find(f => f.uri.path != path.dirname(fileEvent.path)) == null 
 		    && fileEvent.path.endsWith('.sln')) {
 			this.children = null;
 			this.refresh();
@@ -148,10 +157,12 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	}
 
 	private async checkTemplatesToInstall(): Promise<void> {
-		if (!(await this.templateEngine.existsTemplates())) {
-			let option = await vscode.window.showWarningMessage("Would you like to create the vscode-solution-explorer templates folder?", 'Yes', 'No');
-			if (option !== null && option !== undefined && option == 'Yes') {
-				await this.templateEngine.creteTemplates();
+		for (const templateEngine of this._templateEngines.values()) {
+			if (!(await templateEngine.existsTemplates())) {
+				let option = await vscode.window.showWarningMessage("Would you like to create the vscode-solution-explorer templates folder?", 'Yes', 'No');
+				if (option !== null && option !== undefined && option == 'Yes') {
+					await templateEngine.createTemplates();
+				}
 			}
 		}
 	}
