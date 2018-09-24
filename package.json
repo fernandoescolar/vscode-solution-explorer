@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.33",
+    "version": "0.2.34",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -20,7 +20,7 @@
         "email": "f.escolar@hotmail.com"
     },
     "engines": {
-        "vscode": "^1.23.0"
+        "vscode": "^1.26.1"
     },
     "categories": [
         "Other"
@@ -926,6 +926,15 @@
                         "src"
                     ],
                     "description": "If there is no solution in the workplace root folder, it will search for solutions in any of these folders."
+                },
+                "vssolution.win32Encoding": {
+                    "type": "object",
+                    "default": {
+                        "932": "Shift_JIS",
+                        "936": "GBK",
+                        "950": "BIG5"
+                    },
+                    "description": "Win32 codepage -> iconv.js encoding equivalences."
                 }
             }
         }

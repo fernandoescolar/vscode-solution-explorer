@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.2.34
+
+Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.
+
+Bug fixed #36: chinese encoding problem. Thanks to [darkmfj](https://github.com/darkmfj).
+
+Feature #23: Added .njsproj project support.
+
 ## 0.2.33
 
 Bug fixed #32: If you select "explorer" mode it doesn't show the "activityBar" icon.

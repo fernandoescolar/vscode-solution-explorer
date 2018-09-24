@@ -105,7 +105,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 
 	private selectTreeItem(element: sln.TreeItem): void {
 		if (this.treeView) {
-			this.treeView.reveal(element);
+			this.treeView.reveal(element, { select: true, focus: true });
 		}
 	}
 

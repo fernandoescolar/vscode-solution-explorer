@@ -56,13 +56,15 @@ Branded icons are licensed under their copyright license.
 
 - `vssolution.altSolutionFolders` If there is no solution in the workplace root folder, it will search for solutions in any of these folders.
 
+- `vssolution.win32Encoding` Win32 "codepage" to "iconv.js" encoding equivalences.
+
 ###### Example
 
 ```javascript
 {
     "vssolution.showMode": "explorer",
 
-    "vssolution.solutionExplorerIcons": "current-theme", 
+    "vssolution.solutionExplorerIcons": "current-theme",
 
     "vssolution.showOutputChannel": true,
 
@@ -87,7 +89,13 @@ Branded icons are licensed under their copyright license.
 
     "vssolution.altSolutionFolders": [
         "src"
-    ]
+    ],
+
+    "vssolution.win32Encoding": {
+        "932": "Shift_JIS",
+        "936": "GBK",
+        "950": "BIG5"
+    }
 }
 ```
 
@@ -99,6 +107,14 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.2.34
+
+Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.
+
+Bug fixed #36: chinese encoding problem. Thanks to [darkmfj](https://github.com/darkmfj).
+
+Feature #23: Added .njsproj project support.
+
 ### 0.2.33
 
 Bug fixed #32: If you select "explorer" mode it doesn't show the "activityBar" icon.
@@ -109,20 +125,9 @@ Bug fixed #35: commented "Project" tag lines in the ".xxproj" files are ignored.
 
 Activated again the activity bar show mode. It's not working right. But some people have ask for it.
 
-### 0.2.31
-
-Bug Fixed #24: Now the solution context menu doesn't show the dotnet core commands if the solution doesn't have any CPS (dotnet core) project.
-
-New feature #26: Adds a new option: xmlClosingTagSpace. When xmlClosingTagSpace is enabled, closing tags are written as: " />" rather than "/>" - this is for Visual Studio compatibility. (PR #27 by [dfrencham](https://github.com/dfrencham))
-
-### 0.2.30
-
-New feature #26: Added a new parameter to set the xml spaces.
-
-Bug fixed #25: Check if the project XML format is not as expected.
-
 ## Thanks to contributors
 
-[dfrencham] (https://github.com/dfrencham)
+[dfrencham](https://github.com/dfrencham)
+[darkmfj](https://github.com/darkmfj)
 
 **Enjoy!**

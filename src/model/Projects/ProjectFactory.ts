@@ -7,12 +7,17 @@ import { WebsiteProject } from "./Kinds/WebsiteProject";
 import { Project } from "./Project";
 import { SharedProject } from "./Kinds/SharedProject";
 import { DeployProject } from "./Kinds/DeployProject";
+import { NoReferencesStandardProject } from "./Kinds/NoReferencesStandardProject";
 
 const cpsProjectTypes = [ ProjectTypeIds.cpsCsProjectGuid, ProjectTypeIds.cpsVbProjectGuid, ProjectTypeIds.cpsProjectGuid ];
 const standardProjectTypes = [ ProjectTypeIds.csProjectGuid, ProjectTypeIds.fsProjectGuid, ProjectTypeIds.vbProjectGuid ];
 
 export class ProjectFactory {
     public static parse(project: ProjectInSolution): Promise<Project> {
+        if (project.fullPath.toLocaleLowerCase().endsWith(".njsproj")) {
+            return ProjectFactory.loadNoReferencesStandardProject(project);
+             
+        }
         if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat 
             && cpsProjectTypes.indexOf(project.projectTypeId) >= 0) {
             return ProjectFactory.loadCpsProject(project);
@@ -61,6 +66,10 @@ export class ProjectFactory {
     private static async loadCpsProject(project: ProjectInSolution): Promise<any> {
         let document =  await ProjectFactory.loadProjectDocument(project.fullPath);
         return new CpsProject(project, document);
+    }
+
+    private static loadNoReferencesStandardProject(project: ProjectInSolution): Promise<any> {
+        return Promise.resolve(new NoReferencesStandardProject(project));
     }
 
     private static loadWebsiteProject(project: ProjectInSolution): Promise<any> {
