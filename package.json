@@ -935,6 +935,11 @@
                         "950": "BIG5"
                     },
                     "description": "Win32 codepage -> iconv.js encoding equivalences."
+                },
+                "vssolution.createTemplateFolderQuestion": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Ask to create the solution template folder when none exists."
                 }
             }
         }

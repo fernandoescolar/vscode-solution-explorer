@@ -11,6 +11,7 @@ const AlternativeSolutionFoldersName = 'altSolutionFolders';
 const XmlSpacesName = 'xmlspaces';
 const XmlClosingTagSpace = 'xmlClosingTagSpace';
 const Win32EncodingName = 'win32Encoding';
+const CreateTemplateFolderQuestion = 'createTemplateFolderQuestion';
 
 let config: vscode.WorkspaceConfiguration = null;
 
@@ -72,6 +73,10 @@ export function getWin32EncodingTable(): { [id: string]: string } {
         "936": "GBK",
         "950": "BIG5"
     });
+}
+
+export function getCreateTemplateFolderQuestion() : boolean {
+    return config.get<boolean>(CreateTemplateFolderQuestion, true);
 }
 
 export const ICONS_THEME = "current-theme";
