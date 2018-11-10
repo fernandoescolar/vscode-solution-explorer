@@ -22,6 +22,11 @@ export function getItemTypes(): { [id: string]: string } {
     return config.get<{ [id: string]: string }>(ItemTypesName, {
         "*": "Content",
         "cs": "Compile",
+        "cpp": "ClCompile",
+        "cc": "ClCompile",
+        "c": "ClCompile",
+        "h": "ClInclude",
+        "hpp": "ClInclude",
         "vb": "Compile",
         "fs": "Compile",
         "ts": "TypeScriptCompile",
