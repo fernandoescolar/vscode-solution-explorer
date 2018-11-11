@@ -179,7 +179,6 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     public async getFolderList(): Promise<string[]> {
-        let folderPath = path.dirname(this.projectInSolution.fullPath);
         let directories = await this.getFoldersFromTree(this.filesTree);
 
         directories.sort((a, b) => {
