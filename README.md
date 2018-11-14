@@ -32,7 +32,7 @@ Or you can create a new one by clicking with the rigth mouse button.
 
 ## License
 
-The source code is licensed under the [CC-BY-SA](License) license.
+The source code is licensed under the [CC-BY-SA](LICENSE.md) license.
 
 The icons from ([vscode-icons extension](https://github.com/vscode-icons/vscode-icons/)) are licensed under the [Creative Commons - ShareAlike (CC BY-SA)](https://creativecommons.org/licenses/by-sa/4.0/) license. 
 
