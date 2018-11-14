@@ -148,7 +148,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	}
 
 	private async checkTemplatesToInstall(): Promise<void> {
-		if (!(await this.templateEngine.existsTemplates())) {
+		if (SolutionExplorerConfiguration.getCreateTemplateFolderQuestion() && !(await this.templateEngine.existsTemplates())) {
 			let option = await vscode.window.showWarningMessage("Would you like to create the vscode-solution-explorer templates folder?", 'Yes', 'No');
 			if (option !== null && option !== undefined && option == 'Yes') {
 				await this.templateEngine.creteTemplates();
