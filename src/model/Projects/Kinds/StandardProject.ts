@@ -9,6 +9,20 @@ import { PackageReference } from "../PackageReference";
 import { ProjectReference } from "../ProjectReference";
 import { FileSystemBasedProject } from "./FileSystemBasedProject";
 
+function commonPrefix(x: string, y: string): string {
+    if (x > y) {
+        [x, y] = [y, x];
+    }
+
+    let i = 0;
+    for (; i < x.length; i++) {
+        if (x[i] != y[i]) {
+            break;
+        }
+    }
+    return x.substr(0, i);
+}
+
 export class StandardProject extends FileSystemBasedProject {
     private loaded: boolean = false;
     private loadedPackages: boolean = false;
@@ -165,7 +179,6 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     public async getFolderList(): Promise<string[]> {
-        let folderPath = path.dirname(this.projectInSolution.fullPath);
         let directories = await this.getFoldersFromTree(this.filesTree);
 
         directories.sort((a, b) => {
@@ -175,7 +188,7 @@ export class StandardProject extends FileSystemBasedProject {
         });
 
         let result: string[] = [ '.' + path.sep ];
-        directories.forEach(dirPath => result.push('.' + dirPath.replace(folderPath, '')));
+        directories.forEach(dirPath => result.push(this.getRelativePath(dirPath)));
         return result;
     }
 
@@ -326,10 +339,16 @@ export class StandardProject extends FileSystemBasedProject {
     private parseToTree(files: string[]): any {
         let tree = [];
         files.forEach(filepath => {
+            // Get absolute path of file
             filepath = filepath.replace(/\\/g, path.sep);
-            let pathParts = filepath.split(path.sep);
+            filepath = path.resolve(path.dirname(this.fullPath), filepath);
+
+            // Trim the leading path that the file and project file share
+            let currentFullPath = commonPrefix(path.dirname(this.fullPath), filepath);
+            let virtualPath = path.relative(currentFullPath, filepath);
+
+            let pathParts = virtualPath.split(path.sep);
             let currentLevel = tree;
-            let currentFullPath = path.dirname(this.fullPath);
             pathParts.forEach(part => {
                 if (!part) return;
                 currentFullPath = path.join(currentFullPath, part);
@@ -339,7 +358,7 @@ export class StandardProject extends FileSystemBasedProject {
                 } else {
                     let newPart = {
                         name: part,
-                        virtualpath: filepath,
+                        virtualpath: virtualPath,
                         fullpath: currentFullPath,
                         children: [],
                     }
@@ -513,11 +532,7 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     private getRelativePath(fullpath: string): string {
-        let relativePath = fullpath.replace(path.dirname(this.fullPath), '');
-        if (relativePath.startsWith(path.sep))
-            relativePath = relativePath.substring(1);
-
-        return relativePath;
+        return path.relative(path.dirname(this.fullPath), fullpath);
     }
 
     private async getFoldersFromTree(items: any): Promise<string[]> {
