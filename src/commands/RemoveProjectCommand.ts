@@ -6,7 +6,7 @@ import { InputTextCommandParameter } from "./parameters/InputTextCommandParamete
 
 export class RemoveProjectCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
-        super(provider, 'dotnet');
+        super('Remove project', provider, 'dotnet');
     }
 
     protected shouldRun(item: TreeItem): boolean {

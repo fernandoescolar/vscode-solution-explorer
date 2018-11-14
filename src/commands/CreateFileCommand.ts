@@ -8,10 +8,10 @@ import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandPa
 
 export class CreateFileCommand extends CommandBase {
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Create file');
 
         this.parameters = [
-            new InputTextCommandParameter('New file name'),
+            new InputTextCommandParameter('New file name', 'file.extension'),
             new InputOptionsCommandParameter('Select template', () => this.getTemplatesTypes()),
         ];
     }

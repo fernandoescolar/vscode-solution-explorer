@@ -7,7 +7,7 @@ import { SolutionProjectType, ProjectInSolution } from "../model/Solutions";
 export class RemoveSolutionFolderCommand extends CommandBase {
 
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Remove solution folder');
 
         this.parameters = [
         ];

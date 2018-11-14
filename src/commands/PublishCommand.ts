@@ -6,7 +6,7 @@ import { ContextValues } from "../tree";
 
 export class PublishCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
-        super(provider, 'dotnet');
+        super('Publish', provider, 'dotnet');
     }
 
     protected shouldRun(item: TreeItem): boolean {

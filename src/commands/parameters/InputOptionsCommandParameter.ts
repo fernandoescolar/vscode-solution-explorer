@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { ICommandParameter } from "../base/ICommandParameter";
+import { CommandParameterCompiler } from "../base/CommandParameterCompiler";
 
 export type ItemsResolver = () => Promise<string[]>;
 
@@ -13,17 +14,29 @@ export class InputOptionsCommandParameter implements ICommandParameter {
 
     constructor(private readonly placeholder: string, private readonly items: ItemsOrItemsResolver, private readonly option?: string) {
     }
+
+    public get shouldAskUser(): boolean { return true; }
     
-    public async setArguments(): Promise<boolean> {
+    public async setArguments(state: CommandParameterCompiler): Promise<void> {
+        const validate: (value: string) => boolean = value => {
+            if (value !== null && value !== undefined) {
+                this.value = this.getValue(value);
+                return true;
+            }
+            
+            return false;
+        };
         let items = await this.getItems();
 
         if (items.length <= 0) {
-            return true;
+            state.next();
+            return;
         }
 
         if (items.length == 1) {
             this.value = this.getValue(items[0]);
-            return true;
+            state.next();
+            return;
         } 
 
         items.sort((a, b) => {
@@ -32,13 +45,40 @@ export class InputOptionsCommandParameter implements ICommandParameter {
             return x < y ? -1 : x > y ? 1 : 0;
         });
 
-        let value = await vscode.window.showQuickPick(items, { placeHolder: this.placeholder });
-        if (value !== null && value !== undefined) {
-            this.value = this.getValue(value);
-            return true;
-        }
-        
-        return false;
+        let accepted = false;
+        const input = vscode.window.createQuickPick();
+        input.title = state.title;
+        input.step = state.step;
+        input.totalSteps = state.steps;
+        input.placeholder = this.placeholder;
+        input.items = this.createQuickPickItems(items);
+        input.onDidTriggerButton(item => {
+            if (item === vscode.QuickInputButtons.Back) {
+                state.prev();
+            } else {
+                if (validate(input.activeItems[0].label)) {
+                    accepted = true;
+                    state.next();
+                } else  {
+                    state.cancel();
+                }
+            }
+        });
+        input.onDidAccept(() => {
+            if (validate(input.activeItems[0].label)) {
+                accepted = true;
+                state.next();
+            } else {
+                state.cancel();
+            }
+        });
+
+        input.onDidHide(() => {
+           if (!accepted) {
+                state.cancel();
+           }
+        });
+        input.show();
     }
 
     public getArguments(): string[] {
@@ -67,5 +107,9 @@ export class InputOptionsCommandParameter implements ICommandParameter {
     private getValue(value: string) {
         if (Array.isArray(this._items)) return value;
         return this._items[value];
+    }
+
+    private createQuickPickItems(strings: string[]): vscode.QuickPickItem[] {
+        return strings.map(s => { return { label: s } as vscode.QuickPickItem; });
     }
 }

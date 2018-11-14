@@ -6,7 +6,7 @@ import { InputTextCommandParameter } from "./parameters/InputTextCommandParamete
 
 export class RemovePackageCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
-        super(provider, 'dotnet');
+        super('Remove package', provider, 'dotnet');
     }
 
     protected shouldRun(item: TreeItem): boolean {

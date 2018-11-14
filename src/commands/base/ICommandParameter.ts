@@ -1,4 +1,7 @@
+import { CommandParameterCompiler } from "./CommandParameterCompiler";
+
 export interface ICommandParameter {
-    setArguments(): Promise<boolean>;
+    readonly shouldAskUser: boolean;
+    setArguments(state: CommandParameterCompiler): Promise<void>;
     getArguments(): string[];
 }

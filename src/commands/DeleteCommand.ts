@@ -7,7 +7,7 @@ import { ConfirmCommandParameter } from "./parameters/ConfirmCommandParameter";
 export class DeleteCommand extends CommandBase {
 
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Delete');
     }
 
     protected shouldRun(item: TreeItem): boolean {

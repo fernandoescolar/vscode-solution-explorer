@@ -7,7 +7,7 @@ import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandPa
 export class MoveCommand extends CommandBase {
 
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Move');
     }
 
     protected shouldRun(item: TreeItem): boolean {

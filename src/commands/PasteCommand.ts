@@ -9,7 +9,7 @@ import { CommandBase } from "./base/CommandBase";
 export class PasteCommand extends CommandBase {
     
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Paste');
     }
 
     protected shouldRun(item: TreeItem): boolean {

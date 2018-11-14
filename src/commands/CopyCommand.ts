@@ -6,7 +6,7 @@ import { CommandBase } from "./base/CommandBase";
 export class CopyCommand extends CommandBase {
     
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Copy');
     }
 
     protected shouldRun(item: TreeItem): boolean {

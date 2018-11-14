@@ -8,7 +8,7 @@ import { SolutionProjectType, ProjectInSolution } from "../model/Solutions";
 
 export class AddProjectReferenceCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
-        super(provider, 'dotnet');
+        super('Add project reference', provider, 'dotnet');
     }
 
     protected shouldRun(item: TreeItem): boolean {

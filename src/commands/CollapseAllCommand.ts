@@ -6,7 +6,7 @@ import { CommandBase } from "./base/CommandBase";
 export class CollapseAllCommand extends CommandBase {
 
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Collapse All');
     }
 
     protected shouldRun(item: TreeItem): boolean {

@@ -6,7 +6,7 @@ import { CommandBase } from "./base/CommandBase";
 export class RefreshCommand extends CommandBase {
 
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Refresh');
     }
 
     protected shouldRun(item: TreeItem): boolean {

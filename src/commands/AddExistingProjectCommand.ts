@@ -7,7 +7,7 @@ import { OpenFileCommandParameter } from "./parameters/OpenFileCommandParameter"
 
 export class AddExistingProjectCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
-        super(provider, 'dotnet');
+        super('Add existing project', provider, 'dotnet');
     }
 
     protected shouldRun(item: TreeItem): boolean {

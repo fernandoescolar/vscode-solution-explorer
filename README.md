@@ -113,6 +113,8 @@ Bug fixed #51: Updated license to CC-BY-SA.
 
 Bug fixed #49: Modify default 'showMode' and 'trackActiveItem' configuration setting values.
 
+New comand parameter compiler adding a wizard style requesting commad parameters.
+
 ### 0.2.34
 
 Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.

@@ -22,11 +22,11 @@ const ProjectTypes = [
 
 export class AddNewProjectCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
-        super(provider, 'dotnet');
+        super('Add new project', provider, 'dotnet');
     }
 
-    public async run(item: TreeItem): Promise<void> {
-        await super.run(item);
+    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
+        await super.runCommand(item, args);
         await this.addProjectToSolution(item);
     }
 
@@ -35,8 +35,8 @@ export class AddNewProjectCommand extends CliCommandBase {
             new StaticCommandParameter('new'),
             new InputOptionsCommandParameter('Select project type', this.getProjectTypes()),
             new InputOptionsCommandParameter('Select language', () => this.getLanguages(), '-lang'),
-            new InputTextCommandParameter('Project name...', '-n'),
-            new InputTextCommandParameter('Folder name...', '-o', () => this.getDefaultFolder()),
+            new InputTextCommandParameter('Project name', '', '-n'),
+            new InputTextCommandParameter('Folder name', '', '-o', () => this.getDefaultFolder()),
         ];
 
         return true;
@@ -52,7 +52,7 @@ export class AddNewProjectCommand extends CliCommandBase {
 
     private getLanguages(): Promise<string[]> {
         let result: string[] =  [ 'C#' ];
-        let selectedProject = this.args[this.args.length - 1];
+        let selectedProject = this.parameters[1].getArguments()[0];
         let index = ProjectTypes.findIndex(pt => pt.value == selectedProject);
         if (index >= 0)
             result = ProjectTypes[index].languages;
@@ -62,7 +62,7 @@ export class AddNewProjectCommand extends CliCommandBase {
 
     private addProjectToSolution(item: TreeItem): Promise<void> {
         let workingpath = path.dirname(item.path);
-        let projectPath = path.join(workingpath, this.args[this.args.length - 1], this.args[this.args.length - 3]);
+        let projectPath = path.join(workingpath, this.parameters[4].getArguments()[1], this.parameters[3].getArguments()[1]);
         if (this.args[this.args.length - 5] == 'C#') projectPath += '.csproj';
         if (this.args[this.args.length - 5] == 'F#') projectPath += '.fsproj';
         if (this.args[this.args.length - 5] == 'VB') projectPath += '.vbproj';
@@ -71,6 +71,6 @@ export class AddNewProjectCommand extends CliCommandBase {
     }
 
     private getDefaultFolder(): Promise<string> {
-        return Promise.resolve(this.args[this.args.length - 1]);
+        return Promise.resolve(this.parameters[3].getArguments()[1]);
     }
 }

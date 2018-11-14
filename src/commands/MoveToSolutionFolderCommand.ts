@@ -9,7 +9,7 @@ import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandPa
 export class MoveToSolutionFolderCommand extends CommandBase {
 
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Move to solution folder');
     }
 
     protected shouldRun(item: TreeItem): boolean {

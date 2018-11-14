@@ -8,7 +8,7 @@ import { CommandBase } from "./base/CommandBase";
 export class DuplicateCommand extends CommandBase {
     
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Duplicate');
     }
 
     protected shouldRun(item: TreeItem): boolean {

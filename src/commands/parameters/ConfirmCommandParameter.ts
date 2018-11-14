@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { ICommandParameter } from "../base/ICommandParameter";
+import { CommandParameterCompiler } from "../base/CommandParameterCompiler";
 
 export class ConfirmCommandParameter implements ICommandParameter {
     private value: string;
@@ -7,13 +8,15 @@ export class ConfirmCommandParameter implements ICommandParameter {
     constructor(private readonly message: string) {
     }
 
-    public async setArguments(): Promise<boolean> {
+    public get shouldAskUser(): boolean { return true; }
+
+    public async setArguments(state: CommandParameterCompiler): Promise<void> {
         let option = await vscode.window.showWarningMessage(this.message, 'Yes', 'No');
         if (option !== null && option !== undefined && option == 'Yes') {
-            return true;
+            state.next();
         }
 
-        return false;
+        state.cancel();
     }
 
     public getArguments(): string[] {

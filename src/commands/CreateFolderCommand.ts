@@ -8,10 +8,10 @@ import { InputTextCommandParameter } from "./parameters/InputTextCommandParamete
 export class CreateFolderCommand extends CommandBase {
 
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Create folder');
 
         this.parameters = [
-            new InputTextCommandParameter('New folder name')
+            new InputTextCommandParameter('New folder name', '')
         ];
     }
 

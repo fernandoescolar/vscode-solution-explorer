@@ -6,7 +6,7 @@ import { InputTextCommandParameter } from "./parameters/InputTextCommandParamete
 
 export class AddPackageCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
-        super(provider, 'dotnet');
+        super('Add package', provider, 'dotnet');
     }
 
     protected shouldRun(item: TreeItem): boolean {
@@ -14,7 +14,7 @@ export class AddPackageCommand extends CliCommandBase {
             new StaticCommandParameter('add'),
             new StaticCommandParameter(item.project.fullPath),
             new StaticCommandParameter('package'),
-            new InputTextCommandParameter('Package Name...')
+            new InputTextCommandParameter('Package Name', '')
         ];
 
         return true;

@@ -9,12 +9,12 @@ import { InputTextCommandParameter } from "./parameters/InputTextCommandParamete
 export class RenameSolutionItemCommand extends CommandBase {
 
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Rename');
     }
 
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
-            new InputTextCommandParameter(item.label)
+            new InputTextCommandParameter('New solution name', item.label)
         ];
 
         return !!item.solution;

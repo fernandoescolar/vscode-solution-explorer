@@ -11,8 +11,8 @@ import * as configuration from '../../SolutionExplorerConfiguration';
 export abstract class CliCommandBase extends CommandBase {
     private codepage: string = "65001";
 
-    constructor(protected readonly provider: SolutionExplorerProvider, protected readonly app: string) {
-        super();
+    constructor(title: string, protected readonly provider: SolutionExplorerProvider, protected readonly app: string) {
+        super(title);
     }
 
     protected runCommand(item: TreeItem, args: string[]): Promise<void> {

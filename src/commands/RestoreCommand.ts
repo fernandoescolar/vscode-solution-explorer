@@ -6,7 +6,7 @@ import { ContextValues } from "../tree";
 
 export class RestoreCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
-        super(provider, 'dotnet');
+        super('Restore', provider, 'dotnet');
     }
 
     protected shouldRun(item: TreeItem): boolean {

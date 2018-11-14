@@ -1,9 +1,13 @@
 import { TreeItem } from '../../tree';
 import { ICommandParameter } from './ICommandParameter';
+import { CommandParameterCompiler } from './CommandParameterCompiler';
 
 export abstract class CommandBase {
     protected parameters: ICommandParameter[];
     protected args: string[];
+
+    constructor(protected title: string) {
+    }
 
     public async run(item: TreeItem): Promise<void> {
         if (!this.shouldRun(item)) return;
@@ -17,14 +21,8 @@ export abstract class CommandBase {
     protected async getArguments() : Promise<string[]> {
         if (!this.parameters) return [];
 
-        this.args = [];
-        for (let i = 0; i < this.parameters.length; i++) {
-            let parameter = this.parameters[i];
-            let success = await parameter.setArguments();
-            if (!success) return;
-
-            this.args = this.args.concat(parameter.getArguments());
-        }
+        const state = new CommandParameterCompiler(this.title, this.parameters);
+        this.args = await state.compile();  
 
         return this.args;
     }

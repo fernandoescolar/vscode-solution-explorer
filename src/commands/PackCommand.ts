@@ -6,7 +6,7 @@ import { ContextValues } from "../tree";
 
 export class PackCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
-        super(provider, 'dotnet');
+        super('Pack', provider, 'dotnet');
     }
 
     protected shouldRun(item: TreeItem): boolean {

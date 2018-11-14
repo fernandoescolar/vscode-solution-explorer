@@ -4,9 +4,11 @@ export class StaticCommandParameter implements ICommandParameter {
     constructor(private readonly value: string, private readonly option?: string) {
     }
 
-    public setArguments(): Promise<boolean> {
-        return Promise.resolve(true);
+    public setArguments(): Promise<void> {
+        return Promise.resolve();
     }
+
+    public get shouldAskUser(): boolean { return false; }
 
     public getArguments(): string[] {
         if (this.option)

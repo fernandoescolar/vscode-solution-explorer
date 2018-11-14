@@ -8,7 +8,7 @@ export class OpenFileCommand extends CommandBase {
     private lastOpenedDate: Date;
 
     constructor() {
-        super();
+        super('Open file');
     }
 
     protected shouldRun(item: TreeItem): boolean {

@@ -9,10 +9,10 @@ import { SolutionProjectType, ProjectInSolution } from "../model/Solutions";
 export class CreateSolutionFolderCommand extends CommandBase {
 
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super();
+        super('Create solution folder');
 
         this.parameters = [
-            new InputTextCommandParameter('New folder name')
+            new InputTextCommandParameter('New folder name', '')
         ];
     }
 
