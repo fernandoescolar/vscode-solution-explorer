@@ -127,6 +127,8 @@ Bug fixed #54: launch dotnet commands in terminal.
 
 PR #46: Add an option to disable the question about creating the solution template folder - by [remcoros](https://github.com/remcoros).
 
+PR #56: Properly handle project files with paths outside the project root - by [mwpenny](https://github.com/mwpenny)
+
 ### 0.2.34
 
 Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.
@@ -146,5 +148,6 @@ Bug fixed #35: commented "Project" tag lines in the ".xxproj" files are ignored.
 [dfrencham](https://github.com/dfrencham)
 [darkmfj](https://github.com/darkmfj)
 [remcoros](https://github.com/remcoros)
+[mwpenny](https://github.com/mwpenny)
 
 **Enjoy!**
