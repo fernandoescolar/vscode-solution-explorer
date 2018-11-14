@@ -2,8 +2,8 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.2.34",
-    "license": "MIT",
+    "version": "0.3.0",
+    "license": "CC-BY-SA-4.0",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
     "author": {
@@ -860,7 +860,7 @@
                         "explorer",
                         "none"
                     ],
-                    "default": "explorer",
+                    "default": "activityBar",
                     "description": "Show the solution explorer in the activity bar, in the explorer pane or don't show it."
                 },
                 "vssolution.solutionExplorerIcons": {
@@ -880,7 +880,7 @@
                 },
                 "vssolution.trackActiveItem": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Select the active editor file in the solution explorer."
                 },
                 "vssolution.netcoreIgnore": {
@@ -949,16 +949,16 @@
     "devDependencies": {
         "@types/handlebars": "^4.0.39",
         "@types/mocha": "^2.2.48",
-        "@types/node": "^7.0.69",
+        "@types/node": "^7.10.1",
         "@types/xml-js": "^1.0.0",
         "typescript": "^2.9.2",
         "vscode": "^1.1.21"
     },
     "dependencies": {
         "clipboardy": "^1.2.3",
-        "handlebars": "^4.0.11",
+        "handlebars": "^4.0.12",
         "iconv-lite": "^0.4.24",
         "node-uuid": "^1.4.8",
-        "xml-js": "^1.6.7"
+        "xml-js": "^1.6.8"
     }
 }

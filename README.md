@@ -46,7 +46,7 @@ Branded icons are licensed under their copyright license.
 
 - `vssolution.showOutputChannel` Show the solution explorer output channel.
 
-- `vssolution.trackActiveItem` Select the active editor file in the solution explorer.
+- `vssolution.trackActiveItem` Select the active editor file in the solution explorer (not recomended).
 
 - `vssolution.netcoreIgnore` Folder and file names to ignore when get a dotnet core project content.
 
@@ -62,13 +62,13 @@ Branded icons are licensed under their copyright license.
 
 ```javascript
 {
-    "vssolution.showMode": "explorer",
+    "vssolution.showMode": "activityBar",
 
     "vssolution.solutionExplorerIcons": "current-theme",
 
     "vssolution.showOutputChannel": true,
 
-    "vssolution.trackActiveItem": true,
+    "vssolution.trackActiveItem": false,
 
     "vssolution.netcoreIgnore": [
         "bin",
@@ -109,7 +109,9 @@ There is a lot of work to do.
 
 ### 0.3.0
 
-Issue #51: Updated license to CC-BY-SA.
+Bug fixed #51: Updated license to CC-BY-SA.
+
+Bug fixed #49: Modify default 'showMode' and 'trackActiveItem' configuration setting values.
 
 ### 0.2.34
 

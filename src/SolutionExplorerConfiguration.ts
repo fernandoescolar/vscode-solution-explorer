@@ -30,7 +30,7 @@ export function getItemTypes(): { [id: string]: string } {
 }
 
 export function getShowMode(): string {
-    return config.get<string>(ShowModeName, SHOW_MODE_EXPLORER);
+    return config.get<string>(ShowModeName, SHOW_MODE_ACTIVITYBAR);
 }
 
 export function getSolutionExplorerIcons(): string {
@@ -38,7 +38,7 @@ export function getSolutionExplorerIcons(): string {
 }
 
 export function getTrackActiveItem(): boolean {
-    return config.get<boolean>(TrackActiveItemName, true);
+    return config.get<boolean>(TrackActiveItemName, false);
 }
 
 export function getShowOutputChannel(): boolean {
