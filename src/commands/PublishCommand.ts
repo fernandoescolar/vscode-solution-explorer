@@ -11,7 +11,8 @@ export class PublishCommand extends CliCommandBase {
 
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
-            new StaticCommandParameter('publish')
+            new StaticCommandParameter('publish'),
+            new StaticCommandParameter(item.path)
         ];
 
         return true;

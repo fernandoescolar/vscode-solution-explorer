@@ -8,6 +8,8 @@ import { SolutionExplorerProvider } from '../../SolutionExplorerProvider';
 import * as iconv from 'iconv-lite';
 import * as configuration from '../../SolutionExplorerConfiguration';
 
+const TERMINAL_NAME:string = "dotnet";
+
 export abstract class CliCommandBase extends CommandBase {
     private codepage: string = "65001";
 
@@ -22,24 +24,16 @@ export abstract class CliCommandBase extends CommandBase {
 
     protected runCliCommand(app: string, args: string[], path: string): Promise<void> {
         this.checkCurrentEncoding();
-        this.provider.logger.log('Cli: ' + [ app, ...args ].join(' '));
 
-        return new Promise(resolve => {
-            let process = spawn(app, args, { cwd: path });
-            
-            process.stdout.on('data', (data: Buffer) => {
-                this.provider.logger.log(this.decode(data));
-            });
-            
-            process.stderr.on('data', (data: Buffer) => {
-                this.provider.logger.error(this.decode(data));
-            });
-            
-            process.on('exit', (code) => {
-                this.provider.logger.log('End Cli');
-                resolve();
-            });
-        });
+        const terminal = this.ensureTerminal();
+
+        let cargs: string[] = Array<string>(args.length);
+        args.forEach((a, index) => cargs[index] = '"' + a + '"');
+        terminal.sendText( [ app, ...cargs ].join(' '), true);
+        // this.provider.logger.log('Terminal: ' + [ app, ...args ].join(' '));
+        terminal.show();
+
+        return Promise.resolve();
     }
 
     private getWorkingFolder(item: TreeItem): string {
@@ -65,5 +59,15 @@ export abstract class CliCommandBase extends CommandBase {
         }
        
         return data.toString();
+    }
+
+    private ensureTerminal(): vscode.Terminal {
+        let terminal: vscode.Terminal;
+        vscode.window.terminals.forEach(t => { if(t.name === TERMINAL_NAME) terminal = t; });
+        if (!terminal) {
+            terminal = vscode.window.createTerminal(TERMINAL_NAME);
+        }
+
+        return terminal;
     }
 }
