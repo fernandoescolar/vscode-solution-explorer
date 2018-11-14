@@ -134,6 +134,8 @@ PR #46: Add an option to disable the question about creating the solution templa
 
 PR #56: Properly handle project files with paths outside the project root - by [mwpenny](https://github.com/mwpenny)
 
+PR #58: Add support for C/C++ projects (.vcxproj; issue #19) - by [mwpenny](https://github.com/mwpenny)
+
 ### 0.2.34
 
 Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.
