@@ -11,7 +11,8 @@ export class PackCommand extends CliCommandBase {
 
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
-            new StaticCommandParameter('pack')
+            new StaticCommandParameter('pack'),
+            new StaticCommandParameter(item.path)
         ];
 
         return true;

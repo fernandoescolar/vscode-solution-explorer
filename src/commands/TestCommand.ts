@@ -11,11 +11,9 @@ export class TestCommand extends CliCommandBase {
 
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
-            new StaticCommandParameter('test')
+            new StaticCommandParameter('test'),
+            new StaticCommandParameter(item.path)
         ];
-
-        if (item.contextValue.startsWith(ContextValues.Project))
-            this.parameters.push(new StaticCommandParameter(item.path));
 
         return true;
     }

@@ -16,6 +16,8 @@ Bug fixed #55: changed message to create a new solution.
 
 Bug fixed #53: deleted test button from solution level.
 
+Bug fixed #42: added the solution/project path in dotnet commads.
+
 ## 0.2.34
 
 Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.

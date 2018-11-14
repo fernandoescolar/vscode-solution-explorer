@@ -11,7 +11,8 @@ export class RestoreCommand extends CliCommandBase {
 
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
-            new StaticCommandParameter('restore')
+            new StaticCommandParameter('restore'),
+            new StaticCommandParameter(item.path)
         ];
 
         return true;

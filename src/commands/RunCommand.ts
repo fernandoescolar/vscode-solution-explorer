@@ -11,7 +11,8 @@ export class RunCommand extends CliCommandBase {
 
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
-            new StaticCommandParameter('run')
+            new StaticCommandParameter('run'),
+            new StaticCommandParameter(item.path)
         ];
 
         return true;
