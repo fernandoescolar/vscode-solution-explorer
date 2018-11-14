@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.0
+
+Bug fixed #51: Updated license to CC-BY-SA.
+
+Bug fixed #49: Modify default 'showMode' and 'trackActiveItem' configuration setting values.
+
 ## 0.2.34
 
 Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.
