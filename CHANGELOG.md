@@ -20,6 +20,8 @@ Bug fixed #42: added the solution/project path in dotnet commads.
 
 Bug fixed #54: launch dotnet commands in terminal.
 
+PR #46: Add an option to disable the question about creating the solution template folder - by [remcoros](https://github.com/remcoros).
+
 ## 0.2.34
 
 Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.
