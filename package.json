@@ -896,6 +896,11 @@
                     "default": {
                         "*": "Content",
                         "cs": "Compile",
+                        "cpp": "ClCompile",
+                        "cc": "ClCompile",
+                        "c": "ClCompile",
+                        "h": "ClInclude",
+                        "hpp": "ClInclude",
                         "vb": "Compile",
                         "fs": "Compile",
                         "ts": "TypeScriptCompile"

@@ -559,7 +559,16 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     private getXmlNodeNames(): string[] {
-        let result: string[] = ["Compile", "Content", "TypeScriptCompile", "EmbeddedResource", "None", "Folder"];
+        let result: string[] = [
+            "Compile",
+            "ClCompile",
+            "ClInclude",
+            "Content",
+            "TypeScriptCompile",
+            "EmbeddedResource",
+            "None",
+            "Folder"
+        ];
         let itemTypes = SolutionExplorerConfiguration.getItemTypes();
         Object.keys(itemTypes).forEach(key => {
             if (result.indexOf(itemTypes[key]) < 0) {
