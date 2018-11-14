@@ -8,7 +8,7 @@ Adds a Solution Explorer panel where you can find a Visual Studio Solution File 
 
 - Can load any .sln version
 
-- Supports csproj, fsproj and vbproj (from vs2017 and before)
+- Supports csproj, vcxproj, fsproj and vbproj (from vs2017 and before)
 
 - Supports dotnet core projects
 
@@ -80,6 +80,11 @@ Branded icons are licensed under their copyright license.
     "vssolution.xxprojItemTypes": {
         "*": "Content",
         "cs": "Compile",
+        "cpp": "ClCompile",
+        "cc": "ClCompile",
+        "c": "ClCompile",
+        "h": "ClInclude",
+        "hpp": "ClInclude",
         "vb": "Compile",
         "fs": "Compile",
         "ts": "TypeScriptCompile"

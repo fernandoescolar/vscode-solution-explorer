@@ -6,7 +6,7 @@
 export enum SolutionProjectType {
     Unknown,
     /// <summary>
-    /// C#, VB, and VJ# projects
+    /// C#, C++, VB, and VJ# projects
     /// </summary>
     KnownToBeMSBuildFormat,
     /// <summary>
