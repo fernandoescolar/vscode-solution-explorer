@@ -32,7 +32,7 @@ Or you can create a new one by clicking with the rigth mouse button.
 
 ## License
 
-The source code is licensed under the [MIT](License) license.
+The source code is licensed under the [CC-BY-SA](License) license.
 
 The icons from ([vscode-icons extension](https://github.com/vscode-icons/vscode-icons/)) are licensed under the [Creative Commons - ShareAlike (CC BY-SA)](https://creativecommons.org/licenses/by-sa/4.0/) license. 
 
@@ -107,6 +107,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.0
+
+Issue #51: Updated license to CC-BY-SA.
+
 ### 0.2.34
 
 Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.
@@ -120,10 +124,6 @@ Feature #23: Added .njsproj project support.
 Bug fixed #32: If you select "explorer" mode it doesn't show the "activityBar" icon.
 
 Bug fixed #35: commented "Project" tag lines in the ".xxproj" files are ignored.
-
-### 0.2.32
-
-Activated again the activity bar show mode. It's not working right. But some people have ask for it.
 
 ## Thanks to contributors
 
