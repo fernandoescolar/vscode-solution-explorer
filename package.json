@@ -596,11 +596,6 @@
                     "group": "99_dotnet_commands"
                 },
                 {
-                    "command": "solutionExplorer.test",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
-                    "group": "99_dotnet_commands"
-                },
-                {
                     "command": "solutionExplorer.build",
                     "when": "view == solutionExplorer && viewItem == project-cps",
                     "group": "99_dotnet_commands"

@@ -119,6 +119,8 @@ Bug fixed #48: now you can specify the package version when adding a new nuget p
 
 Bug fixed #55: changed message to create a new solution.
 
+Bug fixed #53: deleted test button from solution level.
+
 ### 0.2.34
 
 Added "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.
