@@ -21,6 +21,7 @@ export class ProjectInSolution {
     public dependencies: string[] = [];
     public webProperties: { [id: string] : string } = {};
     public configuration: { [id: string] : ProjectConfigurationInSolution } = {};
+    public solutionItems: { [id: string] : string } = {};
 
     public addDependency(parentGuid): void {
         this.dependencies.push(parentGuid);
@@ -28,6 +29,10 @@ export class ProjectInSolution {
 
     public addWebProperty(name: string, value: string): void {
         this.webProperties[name] = value;
+    }
+
+    public addFile(name: string, filepath: string): void {
+        this.solutionItems[name] = filepath;
     }
 
     public setProjectConfiguration(name: string, configuration: ProjectConfigurationInSolution) {

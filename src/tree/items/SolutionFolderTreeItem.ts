@@ -10,7 +10,7 @@ export class SolutionFolderTreeItem extends TreeItem {
     }
 
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
-        return TreeItemFactory.CreateItemsFromSolution(childContext, this.solution, this.projectInSolution.projectGuid);
+        return TreeItemFactory.CreateItemsFromSolution(childContext, this.solution, this.projectInSolution);
     }
 
     public async search(filepath: string): Promise<TreeItem> {	

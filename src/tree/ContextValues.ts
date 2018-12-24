@@ -1,6 +1,7 @@
 export class ContextValues {
     public static readonly Solution: string = 'solution';
     public static readonly SolutionFolder: string = 'solution-folder';
+    public static readonly SolutionFile: string = 'solution-file';
     public static readonly Project: string = 'project';
     public static readonly ProjectReferences: string = 'project-references';
     public static readonly ProjectReferencedProjects: string = 'project-referenced-projects';

@@ -22,6 +22,10 @@ export abstract class Project {
         this._hasReferences = value;
     }
 
+    public get solutionItems(): { [id: string]: string } {
+        return this.projectInSolution.solutionItems;
+    }
+
     public abstract getProjectReferences() : Promise<ProjectReference[]>;
 
     public abstract getPackageReferences() : Promise<PackageReference[]>;

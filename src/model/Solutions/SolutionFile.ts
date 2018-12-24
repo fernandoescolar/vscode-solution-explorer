@@ -174,6 +174,22 @@ export class SolutionFile {
             {
                 break;
             }
+            else if (line.startsWith("ProjectSection(SolutionItems)"))
+            {
+                // We have a ProjectDependencies section.  Each subsequent line should identify
+                // a dependency.
+                line = this.ReadLine();
+                while ((line != null) && (!line.startsWith("EndProjectSection")))
+                {
+                    const propertyLineRegEx = /(.*)\s*=\s*(.*)/g;
+                    const m = propertyLineRegEx.exec(line);
+                    const fileName: string = path.basename(m[1].trim());
+                    const filePath: string = m[2].trim();
+                    proj.addFile(fileName, filePath);
+
+                    line = this.ReadLine();
+                }
+            }
             else if (line.startsWith("ProjectSection(ProjectDependencies)"))
             {
                 // We have a ProjectDependencies section.  Each subsequent line should identify
