@@ -3,8 +3,13 @@ import { ICommandParameter } from './ICommandParameter';
 import { CommandParameterCompiler } from './CommandParameterCompiler';
 
 export abstract class CommandBase {
+
+    private currentState: CommandParameterCompiler;
     protected parameters: ICommandParameter[];
-    protected args: string[];
+
+    protected get args(): string[] {
+        return this.currentState ? this.currentState.results : [];
+    }
 
     constructor(protected title: string) {
     }
@@ -21,10 +26,10 @@ export abstract class CommandBase {
     protected async getArguments() : Promise<string[]> {
         if (!this.parameters) return [];
 
-        const state = new CommandParameterCompiler(this.title, this.parameters);
-        this.args = await state.compile();  
+        this.currentState = new CommandParameterCompiler(this.title, this.parameters);
+        const args = await this.currentState.compile();  
 
-        return this.args;
+        return args;
     }
 
     protected shouldRun(item: TreeItem): boolean {

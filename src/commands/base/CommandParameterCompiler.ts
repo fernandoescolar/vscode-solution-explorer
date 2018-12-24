@@ -3,6 +3,7 @@ import { ICommandParameter } from "./ICommandParameter";
 export class CommandParameterCompiler {
     private currentStep: number;
     private resolver: (value?: string[] | PromiseLike<string[]>) => void;
+    private result: string[];
 
     constructor(public readonly title: string, private parameters: ICommandParameter[]) {        
     }
@@ -17,6 +18,11 @@ export class CommandParameterCompiler {
         let virtualStep = 0;
         this.parameters.forEach((p, index) => { virtualStep += index <= this.currentStep && p.shouldAskUser ? 1 : 0; } );
         return virtualStep; 
+    }
+
+    public get results(): string[] {
+        this.refreshResult();
+        return this.result;
     }
 
     private get currentCommandParameter(): ICommandParameter { 
@@ -61,9 +67,8 @@ export class CommandParameterCompiler {
 
     private onCompleted(): void {
         if (this.resolver) {
-            let result: string[] = [];
-            this.parameters.forEach(p => { result = result.concat(p.getArguments()); });
-            this.resolver(result);
+            this.refreshResult();
+            this.resolver(this.result);
             this.resolver = null;
         }
     }
@@ -73,5 +78,10 @@ export class CommandParameterCompiler {
             this.resolver(null);
             this.resolver = null;
         }
+    }
+
+    private refreshResult(): void {
+        this.result = [];
+        this.parameters.forEach(p => { this.result = this.result.concat(p.getArguments()); });
     }
 }
