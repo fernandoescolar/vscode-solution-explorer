@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.1
+
+Bug fixed: Create new file, project and solution command issues.
+
+New Feature #61: Now solution file items are shown.
+
 ## 0.3.0
 
 Bug fixed #51: Updated license to CC-BY-SA.

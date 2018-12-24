@@ -112,6 +112,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.1
+
+Bug fixed: Create new file, project and solution command issues.
+
+New Feature #61: Now solution file items are shown.
+
 ### 0.3.0
 
 Bug fixed #51: Updated license to CC-BY-SA.
@@ -143,12 +149,6 @@ Added "win32Encoding" configuration parameter to help people fixing win32 encodi
 Bug fixed #36: chinese encoding problem. Thanks to [darkmfj](https://github.com/darkmfj).
 
 Feature #23: Added .njsproj project support.
-
-### 0.2.33
-
-Bug fixed #32: If you select "explorer" mode it doesn't show the "activityBar" icon.
-
-Bug fixed #35: commented "Project" tag lines in the ".xxproj" files are ignored.
 
 ## Thanks to contributors
 
