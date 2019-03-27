@@ -10,7 +10,7 @@ import { DeployProject } from "./Kinds/DeployProject";
 import { NoReferencesStandardProject } from "./Kinds/NoReferencesStandardProject";
 
 const cpsProjectTypes = [ ProjectTypeIds.cpsCsProjectGuid, ProjectTypeIds.cpsVbProjectGuid, ProjectTypeIds.cpsProjectGuid ];
-const standardProjectTypes = [ ProjectTypeIds.csProjectGuid, ProjectTypeIds.fsProjectGuid, ProjectTypeIds.vbProjectGuid, ProjectTypeIds.vcProjectGuid ];
+const standardProjectTypes = [ ProjectTypeIds.csProjectGuid, ProjectTypeIds.fsProjectGuid, ProjectTypeIds.vbProjectGuid, ProjectTypeIds.vcProjectGuid, ProjectTypeIds.newFsProjectGuid ];
 
 export class ProjectFactory {
     public static parse(project: ProjectInSolution): Promise<Project> {
