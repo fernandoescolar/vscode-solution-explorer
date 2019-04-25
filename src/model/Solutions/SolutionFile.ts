@@ -18,6 +18,7 @@ const cpsVbProjectGuid = "{778DAE3C-4631-46EA-AA77-85C1314464D9}"; //common proj
 const vjProjectGuid = "{E6FDF86B-F3D1-11D4-8576-0002A516ECE8}";
 const vcProjectGuid = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
 const fsProjectGuid = "{F2A71F9B-5D33-465A-A702-920D77279786}";
+const cpsFsProjectGuid = "{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}";
 const dbProjectGuid = "{C8D11400-126E-41CD-887F-60BD40844F9E}";
 const wdProjectGuid = "{2CFEAB61-6A3B-4EB8-B523-560B4BEEF521}";
 const webProjectGuid = "{E24C65DC-7377-472B-9ABA-BC803B73C61A}";
@@ -242,6 +243,7 @@ export class SolutionFile {
             (proj.projectTypeId == cpsCsProjectGuid) ||
             (proj.projectTypeId == cpsVbProjectGuid) ||
             (proj.projectTypeId == fsProjectGuid) ||
+            (proj.projectTypeId == cpsFsProjectGuid) ||
             (proj.projectTypeId == dbProjectGuid) ||
             (proj.projectTypeId == vjProjectGuid))
         {
