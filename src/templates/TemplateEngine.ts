@@ -7,7 +7,7 @@ import { TreeItem, ContextValues } from "../tree";
 const TemplateFoldername: string = "solution-explorer";
 const VsCodeFoldername: string = ".vscode";
 const TemplateFilename: string = "template-list.json";
-const SourceFolder: string = path.join(__filename, "..", "..", "..", "files-vscode-folder");
+const SourceFolder: string = path.join(__dirname, "..", "files-vscode-folder");
 
 export class TemplateEngine {
     private readonly workspaceRoot: string;

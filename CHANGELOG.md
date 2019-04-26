@@ -2,6 +2,13 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.2
+
+PR #72: Added new fsproj cps support - by [marawan31](https://github.com/marawan31)
+
+Bugfix #67 #68 #73 #77: added webpack compilation in order to reduce the modules load time.
+
+
 ## 0.3.1
 
 Bug fixed: Create new file, project and solution command issues.

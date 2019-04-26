@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "license": "CC-BY-SA-4.0",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -20,7 +20,7 @@
         "email": "f.escolar@hotmail.com"
     },
     "engines": {
-        "vscode": "^1.26.1"
+        "vscode": "^1.27.0"
     },
     "categories": [
         "Other"
@@ -945,25 +945,29 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+        "vscode:prepublish": "webpack --mode production",
+        "compile": "webpack --mode development",
+        "watch": "webpack --mode development --watch",
+        "test-compile": "tsc -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "devDependencies": {
-        "@types/handlebars": "^4.0.39",
+        "@types/handlebars": "^4.1.0",
         "@types/mocha": "^2.2.48",
-        "@types/node": "^7.10.1",
+        "@types/node": "^7.10.5",
         "@types/xml-js": "^1.0.0",
+        "awesome-typescript-loader": "^5.2.1",
+        "tslint": "^5.11.0",
         "typescript": "^2.9.2",
-        "vscode": "^1.1.21"
+        "vscode": "^1.1.21",
+        "webpack": "^4.19.1",
+        "webpack-cli": "^3.1.0"
     },
     "dependencies": {
         "clipboardy": "^1.2.3",
         "handlebars": "^4.0.12",
         "iconv-lite": "^0.4.24",
         "node-uuid": "^1.4.8",
-        "xml-js": "^1.6.8"
+        "xml-js": "^1.6.11"
     }
 }

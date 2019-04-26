@@ -1,9 +1,10 @@
 import * as path from "path";
 import * as fs from "fs";
 import { ContextValues } from "./ContextValues";
+var $dirname;
 
 function getFileIconPath(filename: string): string {
-    return path.join(__filename, '..', '..', '..', 'icons', filename);
+    return path.join(__dirname, '..', 'icons', filename);
 }
 
 function getIconPath(lightFilename: string, darkFilename: string = null): { light: string; dark: string } {
