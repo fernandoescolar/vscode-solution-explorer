@@ -112,6 +112,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.3
+
+Bugfix #79: fixed dynamic scripts loading due to webpack use.
+
+Bugfix #25 #80: check if the project loaded XML has no elements in CPS projects.
+
 ### 0.3.2
 
 PR #72: Added new fsproj cps support - by [marawan31](https://github.com/marawan31)
@@ -123,30 +129,6 @@ Bugfix #67 #68 #73 #77: added webpack compilation in order to reduce the modules
 Bug fixed: Create new file, project and solution command issues.
 
 New Feature #61: Now solution file items are shown.
-
-### 0.3.0
-
-Bug fixed #51: Updated license to CC-BY-SA.
-
-Bug fixed #49: Modify default 'showMode' and 'trackActiveItem' configuration setting values.
-
-New comand parameter compiler adding a wizard style requesting commad parameters.
-
-Bug fixed #48: now you can specify the package version when adding a new nuget package to a project.
-
-Bug fixed #55: changed message to create a new solution.
-
-Bug fixed #53: deleted test button from solution level.
-
-Bug fixed #42: added the solution/project path in dotnet commads.
-
-Bug fixed #54: launch dotnet commands in terminal.
-
-PR #46: Add an option to disable the question about creating the solution template folder - by [remcoros](https://github.com/remcoros).
-
-PR #56: Properly handle project files with paths outside the project root - by [mwpenny](https://github.com/mwpenny)
-
-PR #58: Add support for C/C++ projects (.vcxproj; issue #19) - by [mwpenny](https://github.com/mwpenny)
 
 ## Thanks to contributors
 

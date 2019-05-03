@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.3
+
+Bugfix #79: fixed dynamic scripts loading due to webpack use.
+
+Bugfix #25 #80: check if the project loaded XML has no elements in CPS projects.
+
 ## 0.3.2
 
 PR #72: Added new fsproj cps support - by [marawan31](https://github.com/marawan31)

@@ -87,6 +87,10 @@ export class CpsProject extends FileSystemBasedProject {
     private parseDocument(document: any): void {
         this.document = document;
         let project = CpsProject.getProjectElement(this.document);
+        
+        if (!project) project = { elements: [] };
+        if (!project.elements || !Array.isArray(project.elements)) project.elements = [];
+        
         project.elements.forEach(element => {
             if (element.name === 'ItemGroup') {
                 element.elements.forEach(e => {
