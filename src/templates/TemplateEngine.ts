@@ -68,7 +68,8 @@ export class TemplateEngine {
     }
 
     private async getParameters(template: ITemplate, filename: string, item: TreeItem): Promise<{[id: string]: string}> {
-        const parametersGetter = eval(`require('${path.join(this.workingFolder, template.parameters)}')`);
+        const filepath = path.join(this.workingFolder, template.parameters).replace(/\\/g, '\\\\');
+        const parametersGetter = eval(`require('${filepath}')`);
         if (parametersGetter) {
             let result = parametersGetter(filename, item.project ? item.project.fullPath : null, item.contextValue.startsWith(ContextValues.ProjectFolder) ? item.path : null);
             if (Promise.resolve(result) === result) {
