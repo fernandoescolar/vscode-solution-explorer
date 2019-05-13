@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.4
+
+Bugfix #83: fixed dynamic scripts loading due to webpack use.
+
+PR #75: fix: convert dash to underscore in namespace - by [emrahcetiner](https://github.com/emrahcetiner)
+
 ## 0.3.3
 
 Bugfix #79: fixed dynamic scripts loading due to webpack use.
@@ -13,7 +19,6 @@ Bugfix #25 #80: check if the project loaded XML has no elements in CPS projects.
 PR #72: Added new fsproj cps support - by [marawan31](https://github.com/marawan31)
 
 Bugfix #67 #68 #73 #77: added webpack compilation in order to reduce the modules load time.
-
 
 ## 0.3.1
 

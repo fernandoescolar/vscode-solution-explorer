@@ -112,6 +112,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.4
+
+Bugfix #83: fixed dynamic scripts loading due to webpack use.
+
+PR #75: fix: convert dash to underscore in namespace - by [emrahcetiner](https://github.com/emrahcetiner)
+
 ### 0.3.3
 
 Bugfix #79: fixed dynamic scripts loading due to webpack use.
@@ -124,17 +130,13 @@ PR #72: Added new fsproj cps support - by [marawan31](https://github.com/marawan
 
 Bugfix #67 #68 #73 #77: added webpack compilation in order to reduce the modules load time.
 
-### 0.3.1
-
-Bug fixed: Create new file, project and solution command issues.
-
-New Feature #61: Now solution file items are shown.
-
 ## Thanks to contributors
 
 [dfrencham](https://github.com/dfrencham)
 [darkmfj](https://github.com/darkmfj)
-[remcoros](https://github.com/remcoros)
 [mwpenny](https://github.com/mwpenny)
+[remcoros](https://github.com/remcoros)
+[marawan31](https://github.com/marawan31)
+[emrahcetiner](https://github.com/emrahcetiner)
 
 **Enjoy!**
