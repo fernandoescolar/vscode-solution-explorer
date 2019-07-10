@@ -40,7 +40,6 @@ export class SolutionExplorerCommands {
         this.commands['run'] = new cmds.RunCommand(provider);
         this.commands['test'] = new cmds.TestCommand(provider);
         this.commands['locate'] = new cmds.LocateCommand(provider);
-        
     }
 
     public register() {
