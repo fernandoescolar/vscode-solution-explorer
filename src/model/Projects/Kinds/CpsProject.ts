@@ -93,6 +93,7 @@ export class CpsProject extends FileSystemBasedProject {
         
         project.elements.forEach(element => {
             if (element.name === 'ItemGroup') {
+                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
                 element.elements.forEach(e => {
                     if (e.name === 'PackageReference') {
                         this.packages.push(new PackageReference(e.attributes.Include, e.attributes.Include));
