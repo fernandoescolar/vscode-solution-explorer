@@ -92,7 +92,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 		return element.parent;
 	}
 
-	private async selectFile(filepath: string): Promise<void> {
+	public async selectFile(filepath: string): Promise<void> {
 		if (!this.children) return;
 		for(let i = 0; i < this.children.length; i++) {
 			let result = await this.children[i].search(filepath);
