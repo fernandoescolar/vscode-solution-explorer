@@ -291,30 +291,30 @@ export class StandardProject extends FileSystemBasedProject {
 
         project.elements.forEach(element => {
             if (element.name === 'ItemGroup') {
-                if (element.elements) {
-                    element.elements.forEach(e => {
-                        if (e.name === 'Reference') {
-                            let include = this.cleanIncludePath(e.attributes.Include);
-                            this.references.push(new ProjectReference(include, include));
-                            return false;
-                        }
+                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
+                
+                element.elements.forEach(e => {
+                    if (e.name === 'Reference') {
+                        let include = this.cleanIncludePath(e.attributes.Include);
+                        this.references.push(new ProjectReference(include, include));
+                        return false;
+                    }
 
-                        if (e.name === 'Folder') {
+                    if (e.name === 'Folder') {
+                        addFile(e);
+                        let folder = this.cleanIncludePath(e.attributes.Include).replace(/\\/g, path.sep);
+                        if (folder.endsWith(path.sep))
+                            folder = folder.substring(0, folder.length - 1);
+                        folders.push(folder);
+                        return false;
+                    }
+
+                    nodeNames.forEach(nodeName => {
+                        if (e.name === nodeName) {
                             addFile(e);
-                            let folder = this.cleanIncludePath(e.attributes.Include).replace(/\\/g, path.sep);
-                            if (folder.endsWith(path.sep))
-                                folder = folder.substring(0, folder.length - 1);
-                            folders.push(folder);
-                            return false;
                         }
-
-                        nodeNames.forEach(nodeName => {
-                            if (e.name === nodeName) {
-                                addFile(e);
-                            }
-                        });
                     });
-                }
+                });
             }
         });
 
@@ -387,6 +387,8 @@ export class StandardProject extends FileSystemBasedProject {
         let project = StandardProject.getProjectElement(this.document);
         project.elements.forEach(element => {
             if (element.name === 'ItemGroup') {
+                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
+
                 element.elements.forEach(e => {
                     nodeNames.forEach(nodeName => {
                         if (e.name === nodeName) {
@@ -421,6 +423,8 @@ export class StandardProject extends FileSystemBasedProject {
         let project = StandardProject.getProjectElement(this.document);
         project.elements.forEach(element => {
             if (element.name === 'ItemGroup') {
+                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
+
                 element.elements.forEach(e => {
                     nodeNames.forEach(nodeName => {
                         if (e.name === nodeName) {
@@ -450,6 +454,7 @@ export class StandardProject extends FileSystemBasedProject {
         let project = StandardProject.getProjectElement(this.document);
         project.elements.forEach((element, elementIndex) => {
             if (element.name === 'ItemGroup') {
+                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
                 let toDelete: any[] = [];
                 element.elements.forEach(e => {
                     types.forEach(nodeName => {
