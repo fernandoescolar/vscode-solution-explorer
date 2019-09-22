@@ -29,3 +29,4 @@ export * from "./PublishCommand";
 export * from "./RestoreCommand";
 export * from "./RunCommand";
 export * from "./TestCommand";
+export * from "./LocateCommand";

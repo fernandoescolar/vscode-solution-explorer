@@ -112,6 +112,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.5
+
+Bugfix #80: thanks to [martinothamar](https://github.com/martinothamar) for his PR
+
+PR #88: thanks to [jesperbjensen](https://github.com/jesperbjensen)
+
 ### 0.3.4
 
 Bugfix #83: fixed dynamic scripts loading due to webpack use.
@@ -124,12 +130,6 @@ Bugfix #79: fixed dynamic scripts loading due to webpack use.
 
 Bugfix #25 #80: check if the project loaded XML has no elements in CPS projects.
 
-### 0.3.2
-
-PR #72: Added new fsproj cps support - by [marawan31](https://github.com/marawan31)
-
-Bugfix #67 #68 #73 #77: added webpack compilation in order to reduce the modules load time.
-
 ## Thanks to contributors
 
 [dfrencham](https://github.com/dfrencham)
@@ -138,5 +138,7 @@ Bugfix #67 #68 #73 #77: added webpack compilation in order to reduce the modules
 [remcoros](https://github.com/remcoros)
 [marawan31](https://github.com/marawan31)
 [emrahcetiner](https://github.com/emrahcetiner)
+[martinothamar](https://github.com/martinothamar)
+[jesperbjensen](https://github.com/jesperbjensen)
 
 **Enjoy!**

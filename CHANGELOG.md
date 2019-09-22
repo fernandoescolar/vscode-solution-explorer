@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.5
+
+Bugfix #80: thanks to [martinothamar](https://github.com/martinothamar) for his PR
+
+PR #88: thanks to [jesperbjensen](https://github.com/jesperbjensen)
+
 ## 0.3.4
 
 Bugfix #83: fixed dynamic scripts loading due to webpack use.
