@@ -12,6 +12,7 @@ const XmlSpacesName = 'xmlspaces';
 const XmlClosingTagSpace = 'xmlClosingTagSpace';
 const Win32EncodingName = 'win32Encoding';
 const CreateTemplateFolderQuestion = 'createTemplateFolderQuestion';
+const LineEndings = 'lineEndings';
 
 let config: vscode.WorkspaceConfiguration = null;
 
@@ -83,6 +84,13 @@ export function getWin32EncodingTable(): { [id: string]: string } {
 export function getCreateTemplateFolderQuestion() : boolean {
     return config.get<boolean>(CreateTemplateFolderQuestion, true);
 }
+
+
+export function getLineEndings() : LineEndingsType {
+    return config.get<LineEndingsType>(LineEndings, "lf");
+}
+
+export type LineEndingsType = "lf" | "crlf";
 
 export const ICONS_THEME = "current-theme";
 export const ICONS_MIXED = "mix";
