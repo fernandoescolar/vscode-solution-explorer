@@ -28,7 +28,7 @@ Adds a Solution Explorer panel where you can find a Visual Studio Solution File 
 
 You have to open a folder with at least one solution file (".sln") in the root path.
 
-Or you can create a new one by clicking with the rigth mouse button.
+Or you can create a new one by clicking with the right mouse button.
 
 ## License
 
