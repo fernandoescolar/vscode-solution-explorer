@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.7
+
+Trying to cleanup extension .vsix
+
 ## 0.3.6
 
 PR #100 Configurable Line Endings. Thanks to [jesperbjensen](https://github.com/jesperbjensen)
