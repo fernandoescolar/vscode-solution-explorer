@@ -71,16 +71,21 @@ export class StandardProject extends FileSystemBasedProject {
 
         let folders: ProjectFolder[] = [];
         let files: ProjectFile[] = [];
-        for(let i = 0; i < currentLevel.length; i++){
+        for(let i = 0; i < currentLevel.length; i++) {
             let item = currentLevel[i];
-            let stat = await fs.lstat(item.fullpath);
-            if (stat.isDirectory()) {
-                folders.push(new ProjectFolder(item.fullpath));
-            } else {
-                let projectFile = new ProjectFile(item.fullpath);
-                this.addFileDependents(item, projectFile);
-                files.push(projectFile);
-            }    
+            try {
+                let stat = await fs.lstat(item.fullpath);
+                if (stat.isDirectory()) {
+                    folders.push(new ProjectFolder(item.fullpath));
+                } else {
+                    let projectFile = new ProjectFile(item.fullpath);
+                    this.addFileDependents(item, projectFile);
+                    files.push(projectFile);
+                }
+            }
+            catch(err) {
+                console.info("Error: " + item.fullpath + " - " + err.message);
+            }
         }
 
         folders.sort((a, b) => {
