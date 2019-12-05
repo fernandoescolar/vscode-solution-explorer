@@ -299,7 +299,7 @@ export class StandardProject extends FileSystemBasedProject {
                 if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
                 
                 element.elements.forEach(e => {
-                    if (e.name === 'Reference') {
+                    if (e.name === 'Reference' || e.name === 'ProjectReference') {
                         let include = this.cleanIncludePath(e.attributes.Include);
                         this.references.push(new ProjectReference(include, include));
                         return false;
@@ -575,6 +575,7 @@ export class StandardProject extends FileSystemBasedProject {
             "ClInclude",
             "Content",
             "TypeScriptCompile",
+            "CustomBuild",
             "EmbeddedResource",
             "None",
             "Folder"
