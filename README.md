@@ -112,6 +112,18 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.6
+
+PR #100 Configurable Line Endings. Thanks to [jesperbjensen](https://github.com/jesperbjensen)
+
+PR #105 Fixed empty projects and directories on fs.lstat error. Thanks to [Dvvarf](https://github.com/Dvvarf)
+
+PR #106 Added ProjectReference and CustomBuild item support to StandardProject. Thanks to [Dvvarf](https://github.com/Dvvarf)
+
+PR #110 Minor spelling fix in README. Thanks to [vthg2themax](https://github.com/vthg2themax)
+
+Added automated build and publish from Github
+
 ### 0.3.5
 
 Bugfix #80: thanks to [martinothamar](https://github.com/martinothamar) for his PR
@@ -124,12 +136,6 @@ Bugfix #83: fixed dynamic scripts loading due to webpack use.
 
 PR #75: fix: convert dash to underscore in namespace - by [emrahcetiner](https://github.com/emrahcetiner)
 
-### 0.3.3
-
-Bugfix #79: fixed dynamic scripts loading due to webpack use.
-
-Bugfix #25 #80: check if the project loaded XML has no elements in CPS projects.
-
 ## Thanks to contributors
 
 [dfrencham](https://github.com/dfrencham)
@@ -140,5 +146,7 @@ Bugfix #25 #80: check if the project loaded XML has no elements in CPS projects.
 [emrahcetiner](https://github.com/emrahcetiner)
 [martinothamar](https://github.com/martinothamar)
 [jesperbjensen](https://github.com/jesperbjensen)
+[Dvvarf](https://github.com/Dvvarf)
+[vthg2themax](https://github.com/vthg2themax)
 
 **Enjoy!**

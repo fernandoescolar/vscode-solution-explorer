@@ -2,6 +2,18 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.6
+
+PR #100 Configurable Line Endings. Thanks to [jesperbjensen](https://github.com/jesperbjensen)
+
+PR #105 Fixed empty projects and directories on fs.lstat error. Thanks to [Dvvarf](https://github.com/Dvvarf)
+
+PR #106 Added ProjectReference and CustomBuild item support to StandardProject. Thanks to [Dvvarf](https://github.com/Dvvarf)
+
+PR #110 Minor spelling fix in README. Thanks to [vthg2themax](https://github.com/vthg2themax)
+
+Added automated build and publish from Github
+
 ## 0.3.5
 
 Bugfix #80: thanks to [martinothamar](https://github.com/martinothamar) for his PR
