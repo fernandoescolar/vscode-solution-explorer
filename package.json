@@ -967,7 +967,6 @@
         "awesome-typescript-loader": "^5.2.1",
         "tslint": "^5.11.0",
         "typescript": "^2.9.2",
-        "vsce": "^1.70.0",
         "vscode": "^1.1.21",
         "webpack": "^4.19.1",
         "webpack-cli": "^3.1.0"
