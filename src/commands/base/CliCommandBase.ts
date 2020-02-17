@@ -25,7 +25,7 @@ export abstract class CliCommandBase extends CommandBase {
     protected runCliCommand(app: string, args: string[], path: string): Promise<void> {
         this.checkCurrentEncoding();
 
-        const terminal = this.ensureTerminal();
+        const terminal = this.ensureTerminal(path);
 
         let cargs: string[] = Array<string>(args.length);
         args.forEach((a, index) => cargs[index] = '"' + a + '"');
@@ -61,11 +61,13 @@ export abstract class CliCommandBase extends CommandBase {
         return data.toString();
     }
 
-    private ensureTerminal(): vscode.Terminal {
+    private ensureTerminal(path: string): vscode.Terminal {
         let terminal: vscode.Terminal;
         vscode.window.terminals.forEach(t => { if(t.name === TERMINAL_NAME) terminal = t; });
         if (!terminal) {
-            terminal = vscode.window.createTerminal(TERMINAL_NAME);
+            terminal = vscode.window.createTerminal({ name: TERMINAL_NAME, cwd: path });
+        } else {
+            terminal.sendText( [ "cd", path ].join(' '), true);
         }
 
         return terminal;
