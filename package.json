@@ -20,7 +20,7 @@
         "email": "f.escolar@hotmail.com"
     },
     "engines": {
-        "vscode": "^1.27.0"
+        "vscode": "^1.36.0"
     },
     "categories": [
         "Other"
@@ -28,7 +28,7 @@
     "activationEvents": [
         "onView:slnexpl",
         "workspaceContains:**/*.sln",
-        "*"    
+        "*"
     ],
     "main": "./out/extension",
     "contributes": {
