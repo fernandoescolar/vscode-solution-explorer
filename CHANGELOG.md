@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+### 0.3.8
+
+Bugfix #123: Error while deleting an empty folder from project 
+
+Bugfix #115, #122 and #124: Solution explorer is shown in explorer window although preference is set to acitivityBar
+
+Bugfix #113: Add project to solution error. Thanks to [jloureiro09](https://github.com/jloureiro09)
+
 ## 0.3.7
 
 Trying to cleanup extension .vsix

@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.3.7",
+    "version": "0.3.8",
     "license": "CC-BY-SA-4.0",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -26,33 +26,35 @@
         "Other"
     ],
     "activationEvents": [
-        "*"
+        "onView:slnexpl",
+        "workspaceContains:**/*.sln",
+        "*"    
     ],
     "main": "./out/extension",
     "contributes": {
         "viewsContainers": {
             "activitybar": [
                 {
-                    "id": "solution-explorer",
+                    "id": "slnexpl",
                     "title": "Solution",
                     "icon": "images/activity-icon.png",
-                    "when": "!solutionExplorer.viewInExplorer && !solutionExplorer.viewInNone && solutionExplorer.loadedFlag"
+                    "when": "solutionExplorer.viewInActivityBar && solutionExplorer.loadedFlag"
                 }
             ]
         },
         "views": {
             "explorer": [
                 {
-                    "id": "solutionExplorer",
-                    "name": "Solution Explorer",
-                    "when": "!solutionExplorer.viewInActivityBar && !solutionExplorer.viewInNone && solutionExplorer.loadedFlag"
+                    "id": "slnexpl",
+                    "name": "Solution",
+                    "when": "solutionExplorer.viewInExplorer && solutionExplorer.loadedFlag"
                 }
             ],
-            "solution-explorer": [
+            "slnexpl": [
                 {
-                    "id": "solutionExplorer",
+                    "id": "slnbrw",
                     "name": "Explorer",
-                    "when": "!solutionExplorer.viewInExplorer && !solutionExplorer.viewInNone && solutionExplorer.loadedFlag"
+                    "when": "solutionExplorer.viewInActivityBar && solutionExplorer.loadedFlag"
                 }
             ]
         },

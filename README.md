@@ -112,6 +112,14 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.8
+
+Bugfix #123: Error while deleting an empty folder from project 
+
+Bugfix #115, #122 and #124: Solution explorer is shown in explorer window although preference is set to acitivityBar
+
+Bugfix #113: Add project to solution error. Thanks to [jloureiro09](https://github.com/jloureiro09)
+
 ### 0.3.7
 
 Trying to cleanup extension .vsix
@@ -128,18 +136,6 @@ PR #110 Minor spelling fix in README. Thanks to [vthg2themax](https://github.com
 
 Added automated build and publish from Github
 
-### 0.3.5
-
-Bugfix #80: thanks to [martinothamar](https://github.com/martinothamar) for his PR
-
-PR #88: thanks to [jesperbjensen](https://github.com/jesperbjensen)
-
-### 0.3.4
-
-Bugfix #83: fixed dynamic scripts loading due to webpack use.
-
-PR #75: fix: convert dash to underscore in namespace - by [emrahcetiner](https://github.com/emrahcetiner)
-
 ## Thanks to contributors
 
 [dfrencham](https://github.com/dfrencham)
@@ -152,5 +148,6 @@ PR #75: fix: convert dash to underscore in namespace - by [emrahcetiner](https:/
 [jesperbjensen](https://github.com/jesperbjensen)
 [Dvvarf](https://github.com/Dvvarf)
 [vthg2themax](https://github.com/vthg2themax)
+[jloureiro09](https://github.com/jloureiro09)
 
 **Enjoy!**

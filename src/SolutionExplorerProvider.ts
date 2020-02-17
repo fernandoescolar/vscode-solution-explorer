@@ -9,7 +9,7 @@ import { IEventAggegator, EventTypes, IEvent, ISubscription, IFileEvent } from "
 import { ILogger, Logger } from "./log";
 import { ITemplateEngine, TemplateEngine } from "./templates";
 
-export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.TreeItem> {
+export class SolutionExplorerProvider extends vscode.Disposable implements vscode.TreeDataProvider<sln.TreeItem> {
 	private _logger: ILogger;
 	private _templateEngine: ITemplateEngine;
 	private subscription: ISubscription = null;
@@ -20,6 +20,7 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 	//onDidChangeActiveTextEditor
 
 	constructor(public workspaceRoot: string, public readonly eventAggregator: IEventAggegator) {
+		super(() => this.dispose());
 		this._logger = new Logger(this.eventAggregator);
 		this._templateEngine = new TemplateEngine(workspaceRoot);
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
@@ -36,14 +37,18 @@ export class SolutionExplorerProvider implements vscode.TreeDataProvider<sln.Tre
 
 	public register() {
 		let showMode = SolutionExplorerConfiguration.getShowMode();
-		vscode.commands.executeCommand('setContext', 'solutionExplorer.loadedFlag', !false);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInActivityBar', showMode === SolutionExplorerConfiguration.SHOW_MODE_ACTIVITYBAR);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInExplorer', showMode === SolutionExplorerConfiguration.SHOW_MODE_EXPLORER);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === SolutionExplorerConfiguration.SHOW_MODE_NONE);
+		vscode.commands.executeCommand('setContext', 'solutionExplorer.loadedFlag', !false);
 		
 		if (showMode !== SolutionExplorerConfiguration.SHOW_MODE_NONE) {
 			this.subscription = this.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
-			this.treeView = vscode.window.createTreeView('solutionExplorer', { treeDataProvider: this });
+			if (showMode === SolutionExplorerConfiguration.SHOW_MODE_ACTIVITYBAR) {
+				this.treeView = vscode.window.createTreeView('slnbrw', { treeDataProvider: this, showCollapseAll: true });
+			} else if (showMode === SolutionExplorerConfiguration.SHOW_MODE_EXPLORER) {
+				this.treeView = vscode.window.createTreeView('slnexpl', { treeDataProvider: this, showCollapseAll: true });
+			}
 		}
 	}
 
