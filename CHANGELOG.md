@@ -2,7 +2,13 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
-### 0.3.8
+## 0.3.9
+
+Bugfix #125: Right-Click on Solution Nodes does not open context menu
+
+Enhancement #1: Collapse All buttom in explorer panel 
+
+## 0.3.8
 
 Bugfix #123: Error while deleting an empty folder from project 
 

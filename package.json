@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.3.8",
+    "version": "0.3.9",
     "license": "CC-BY-SA-4.0",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -35,7 +35,7 @@
         "viewsContainers": {
             "activitybar": [
                 {
-                    "id": "slnexpl",
+                    "id": "sln_explorer",
                     "title": "Solution",
                     "icon": "images/activity-icon.png",
                     "when": "solutionExplorer.viewInActivityBar && solutionExplorer.loadedFlag"
@@ -50,7 +50,7 @@
                     "when": "solutionExplorer.viewInExplorer && solutionExplorer.loadedFlag"
                 }
             ],
-            "slnexpl": [
+            "sln_explorer": [
                 {
                     "id": "slnbrw",
                     "name": "Explorer",
@@ -212,424 +212,845 @@
             "view/title": [
                 {
                     "command": "solutionExplorer.refresh",
-                    "when": "view == solutionExplorer",
+                    "when": "view == slnexpl",
+                    "group": "navigation"
+                },
+                {
+                    "command": "solutionExplorer.refresh",
+                    "when": "view == slnbrw",
                     "group": "navigation"
                 }
             ],
             "view/item/context": [
                 {
                     "command": "solutionExplorer.refresh",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.refresh",
-                    "when": "view == solutionExplorer && viewItem == solution-folder",
+                    "when": "view == slnexpl && viewItem == solution-folder",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.refresh",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.refresh",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.refresh",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.copy",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "5_cutcopypaste"
                 },
                 {
                     "command": "solutionExplorer.copy",
-                    "when": "view == solutionExplorer && viewItem == project-file",
+                    "when": "view == slnexpl && viewItem == project-file",
                     "group": "5_cutcopypaste"
                 },
                 {
                     "command": "solutionExplorer.duplicate",
-                    "when": "view == solutionExplorer && viewItem == project-file",
+                    "when": "view == slnexpl && viewItem == project-file",
                     "group": "5_cutcopypaste"
                 },
                 {
                     "command": "solutionExplorer.paste",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "5_cutcopypaste"
                 },
                 {
                     "command": "solutionExplorer.paste",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "5_cutcopypaste"
                 },
                 {
                     "command": "solutionExplorer.paste",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "5_cutcopypaste"
                 },
                 {
                     "command": "solutionExplorer.paste",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "5_cutcopypaste"
                 },
                 {
                     "command": "solutionExplorer.renameFile",
-                    "when": "view == solutionExplorer && viewItem == project-file",
+                    "when": "view == slnexpl && viewItem == project-file",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.deleteFile",
-                    "when": "view == solutionExplorer && viewItem == project-file",
+                    "when": "view == slnexpl && viewItem == project-file",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project-file",
+                    "when": "view == slnexpl && viewItem == project-file",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.renameFolder",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.deleteFolder",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project-file",
+                    "when": "view == slnexpl && viewItem == project-file",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.moveFile",
-                    "when": "view == solutionExplorer && viewItem == project-file",
+                    "when": "view == slnexpl && viewItem == project-file",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.moveFolder",
-                    "when": "view == solutionExplorer && viewItem == project-folder",
+                    "when": "view == slnexpl && viewItem == project-folder",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.addPackage",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addPackage",
-                    "when": "view == solutionExplorer && viewItem == project-referenced-packages-cps",
+                    "when": "view == slnexpl && viewItem == project-referenced-packages-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addPackage",
-                    "when": "view == solutionExplorer && viewItem == project-referenced-package-cps",
+                    "when": "view == slnexpl && viewItem == project-referenced-package-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removePackage",
-                    "when": "view == solutionExplorer && viewItem == project-referenced-package-cps",
+                    "when": "view == slnexpl && viewItem == project-referenced-package-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addProjectReference",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addProjectReference",
-                    "when": "view == solutionExplorer && viewItem == project-referenced-projects-cps",
+                    "when": "view == slnexpl && viewItem == project-referenced-projects-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addProjectReference",
-                    "when": "view == solutionExplorer && viewItem == project-referenced-project-cps",
+                    "when": "view == slnexpl && viewItem == project-referenced-project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removeProjectReference",
-                    "when": "view == solutionExplorer && viewItem == project-referenced-project-cps",
+                    "when": "view == slnexpl && viewItem == project-referenced-project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.openFile",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == slnexpl && viewItem == solution",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.openFile",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.openFile",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.openFile",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.openFile",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.createNewSolution",
-                    "when": "view == solutionExplorer && viewItem == no-solution",
+                    "when": "view == slnexpl && viewItem == no-solution",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addNewProject",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == slnexpl && viewItem == solution",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addExistingProject",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == slnexpl && viewItem == solution",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addNewProject",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addExistingProject",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removeProject",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removeProject",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removeProject",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createSolutionFolder",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == slnexpl && viewItem == solution",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createSolutionFolder",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.createSolutionFolder",
-                    "when": "view == solutionExplorer && viewItem == solution-folder",
+                    "when": "view == slnexpl && viewItem == solution-folder",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removeSolutionFolder",
-                    "when": "view == solutionExplorer && viewItem == solution-folder",
+                    "when": "view == slnexpl && viewItem == solution-folder",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.moveToSolutionFolder",
-                    "when": "view == solutionExplorer && viewItem == solution-folder",
+                    "when": "view == slnexpl && viewItem == solution-folder",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.moveToSolutionFolder",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.moveToSolutionFolder",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.moveToSolutionFolder",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.renameSolutionItem",
-                    "when": "view == solutionExplorer && viewItem == solution",
+                    "when": "view == slnexpl && viewItem == solution",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.renameSolutionItem",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.renameSolutionItem",
-                    "when": "view == solutionExplorer && viewItem == solution-folder",
+                    "when": "view == slnexpl && viewItem == solution-folder",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.renameSolutionItem",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.renameSolutionItem",
-                    "when": "view == solutionExplorer && viewItem == project-standard",
+                    "when": "view == slnexpl && viewItem == project-standard",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.renameSolutionItem",
-                    "when": "view == solutionExplorer && viewItem == project-website",
+                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "7_modification"
                 },
                 {
                     "command": "solutionExplorer.build",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.clean",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.pack",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.publish",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.restore",
-                    "when": "view == solutionExplorer && viewItem == solution-cps",
+                    "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.build",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.clean",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.pack",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.publish",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.restore",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.run",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
                     "group": "99_dotnet_commands"
                 },
                 {
                     "command": "solutionExplorer.test",
-                    "when": "view == solutionExplorer && viewItem == project-cps",
+                    "when": "view == slnexpl && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+
+                {
+                    "command": "solutionExplorer.refresh",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.refresh",
+                    "when": "view == slnbrw && viewItem == solution-folder",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.refresh",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.refresh",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.refresh",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.copy",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "5_cutcopypaste"
+                },
+                {
+                    "command": "solutionExplorer.copy",
+                    "when": "view == slnbrw && viewItem == project-file",
+                    "group": "5_cutcopypaste"
+                },
+                {
+                    "command": "solutionExplorer.duplicate",
+                    "when": "view == slnbrw && viewItem == project-file",
+                    "group": "5_cutcopypaste"
+                },
+                {
+                    "command": "solutionExplorer.paste",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "5_cutcopypaste"
+                },
+                {
+                    "command": "solutionExplorer.paste",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "5_cutcopypaste"
+                },
+                {
+                    "command": "solutionExplorer.paste",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "5_cutcopypaste"
+                },
+                {
+                    "command": "solutionExplorer.paste",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "5_cutcopypaste"
+                },
+                {
+                    "command": "solutionExplorer.renameFile",
+                    "when": "view == slnbrw && viewItem == project-file",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.deleteFile",
+                    "when": "view == slnbrw && viewItem == project-file",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == slnbrw && viewItem == project-file",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFile",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.renameFolder",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.deleteFolder",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == slnbrw && viewItem == project-file",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.createFolder",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.moveFile",
+                    "when": "view == slnbrw && viewItem == project-file",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.moveFolder",
+                    "when": "view == slnbrw && viewItem == project-folder",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.addPackage",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addPackage",
+                    "when": "view == slnbrw && viewItem == project-referenced-packages-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addPackage",
+                    "when": "view == slnbrw && viewItem == project-referenced-package-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.removePackage",
+                    "when": "view == slnbrw && viewItem == project-referenced-package-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addProjectReference",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addProjectReference",
+                    "when": "view == slnbrw && viewItem == project-referenced-projects-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addProjectReference",
+                    "when": "view == slnbrw && viewItem == project-referenced-project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.removeProjectReference",
+                    "when": "view == slnbrw && viewItem == project-referenced-project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
+                    "when": "view == slnbrw && viewItem == solution",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.openFile",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.createNewSolution",
+                    "when": "view == slnbrw && viewItem == no-solution",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addNewProject",
+                    "when": "view == slnbrw && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addExistingProject",
+                    "when": "view == slnbrw && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addNewProject",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addExistingProject",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.removeProject",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.removeProject",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.removeProject",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createSolutionFolder",
+                    "when": "view == slnbrw && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createSolutionFolder",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createSolutionFolder",
+                    "when": "view == slnbrw && viewItem == solution-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.removeSolutionFolder",
+                    "when": "view == slnbrw && viewItem == solution-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.moveToSolutionFolder",
+                    "when": "view == slnbrw && viewItem == solution-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.moveToSolutionFolder",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.moveToSolutionFolder",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.moveToSolutionFolder",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == slnbrw && viewItem == solution",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == slnbrw && viewItem == solution-folder",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == slnbrw && viewItem == project-standard",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.renameSolutionItem",
+                    "when": "view == slnbrw && viewItem == project-website",
+                    "group": "7_modification"
+                },
+                {
+                    "command": "solutionExplorer.build",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.clean",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.pack",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.publish",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.restore",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.build",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.clean",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.pack",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.publish",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.restore",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.run",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.test",
+                    "when": "view == slnbrw && viewItem == project-cps",
                     "group": "99_dotnet_commands"
                 }
             ]
@@ -637,211 +1058,422 @@
         "keybindings": [
             {
                 "command": "solutionExplorer.copy",
-                "when": "view == solutionExplorer && viewItem == project-folder",
+                "when": "view == slnexpl && viewItem == project-folder",
                 "key": "ctrl+c",
                 "mac": "cmd+c"
             },
             {
                 "command": "solutionExplorer.copy",
-                "when": "view == solutionExplorer && viewItem == project-file",
+                "when": "view == slnexpl && viewItem == project-file",
                 "key": "ctrl+c",
                 "mac": "cmd+c"
             },
             {
                 "command": "solutionExplorer.paste",
-                "when": "view == solutionExplorer && viewItem == project-folder",
+                "when": "view == slnexpl && viewItem == project-folder",
                 "key": "ctrl+v",
                 "mac": "cmd+v"
             },
             {
                 "command": "solutionExplorer.paste",
-                "when": "view == solutionExplorer && viewItem == project-cps",
+                "when": "view == slnexpl && viewItem == project-cps",
                 "key": "ctrl+v",
                 "mac": "cmd+v"
             },
             {
                 "command": "solutionExplorer.paste",
-                "when": "view == solutionExplorer && viewItem == project-standard",
+                "when": "view == slnexpl && viewItem == project-standard",
                 "key": "ctrl+v",
                 "mac": "cmd+v"
             },
             {
                 "command": "solutionExplorer.paste",
-                "when": "view == solutionExplorer && viewItem == project-website",
+                "when": "view == slnexpl && viewItem == project-website",
                 "key": "ctrl+v",
                 "mac": "cmd+v"
             },
             {
                 "command": "solutionExplorer.renameFile",
-                "when": "view == solutionExplorer && viewItem == project-file",
+                "when": "view == slnexpl && viewItem == project-file",
                 "key": "f2",
                 "mac": "f2"
             },
             {
                 "command": "solutionExplorer.deleteFile",
-                "when": "view == solutionExplorer && viewItem == project-file",
+                "when": "view == slnexpl && viewItem == project-file",
                 "key": "delete",
                 "mac": "delete"
             },
             {
                 "command": "solutionExplorer.renameFolder",
-                "when": "view == solutionExplorer && viewItem == project-folder",
+                "when": "view == slnexpl && viewItem == project-folder",
                 "key": "f2",
                 "mac": "f2"
             },
             {
                 "command": "solutionExplorer.deleteFolder",
-                "when": "view == solutionExplorer && viewItem == project-folder",
+                "when": "view == slnexpl && viewItem == project-folder",
                 "key": "delete",
                 "mac": "delete"
             },
             {
                 "command": "solutionExplorer.createFile",
-                "when": "view == solutionExplorer && viewItem == project-cps",
+                "when": "view == slnexpl && viewItem == project-cps",
                 "key": "ctrl+shift+a",
                 "mac": "cmd+shift+a"
             },
             {
                 "command": "solutionExplorer.createFile",
-                "when": "view == solutionExplorer && viewItem == project-standard",
+                "when": "view == slnexpl && viewItem == project-standard",
                 "key": "ctrl+shift+a",
                 "mac": "cmd+shift+a"
             },
             {
                 "command": "solutionExplorer.createFile",
-                "when": "view == solutionExplorer && viewItem == project-website",
+                "when": "view == slnexpl && viewItem == project-website",
                 "key": "ctrl+shift+a",
                 "mac": "cmd+shift+a"
             },
             {
                 "command": "solutionExplorer.createFile",
-                "when": "view == solutionExplorer && viewItem == project-file",
+                "when": "view == slnexpl && viewItem == project-file",
                 "key": "ctrl+shift+a",
                 "mac": "cmd+shift+a"
             },
             {
                 "command": "solutionExplorer.createFile",
-                "when": "view == solutionExplorer && viewItem == project-folder",
+                "when": "view == slnexpl && viewItem == project-folder",
                 "key": "ctrl+shift+a",
                 "mac": "cmd+shift+a"
             },
             {
                 "command": "solutionExplorer.createFolder",
-                "when": "view == solutionExplorer && viewItem == project-cps",
+                "when": "view == slnexpl && viewItem == project-cps",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
             {
                 "command": "solutionExplorer.createFolder",
-                "when": "view == solutionExplorer && viewItem == project-standard",
+                "when": "view == slnexpl && viewItem == project-standard",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
             {
                 "command": "solutionExplorer.createFolder",
-                "when": "view == solutionExplorer && viewItem == project-website",
+                "when": "view == slnexpl && viewItem == project-website",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
             {
                 "command": "solutionExplorer.createFolder",
-                "when": "view == solutionExplorer && viewItem == project-file",
+                "when": "view == slnexpl && viewItem == project-file",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
             {
                 "command": "solutionExplorer.createFolder",
-                "when": "view == solutionExplorer && viewItem == project-folder",
+                "when": "view == slnexpl && viewItem == project-folder",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
             {
                 "command": "solutionExplorer.removePackage",
-                "when": "view == solutionExplorer && viewItem == project-referenced-package-cps",
+                "when": "view == slnexpl && viewItem == project-referenced-package-cps",
                 "key": "delete",
                 "mac": "delete"
             },
             {
                 "command": "solutionExplorer.removeProjectReference",
-                "when": "view == solutionExplorer && viewItem == project-referenced-project-cps",
+                "when": "view == slnexpl && viewItem == project-referenced-project-cps",
                 "key": "delete",
                 "mac": "delete"
             },
             {
                 "command": "solutionExplorer.createSolutionFolder",
-                "when": "view == solutionExplorer && viewItem == solution",
+                "when": "view == slnexpl && viewItem == solution",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
             {
                 "command": "solutionExplorer.createSolutionFolder",
-                "when": "view == solutionExplorer && viewItem == solution-cps",
+                "when": "view == slnexpl && viewItem == solution-cps",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
             {
                 "command": "solutionExplorer.createSolutionFolder",
-                "when": "view == solutionExplorer && viewItem == solution-folder",
+                "when": "view == slnexpl && viewItem == solution-folder",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
             {
                 "command": "solutionExplorer.removeSolutionFolder",
-                "when": "view == solutionExplorer && viewItem == solution-folder",
+                "when": "view == slnexpl && viewItem == solution-folder",
                 "key": "delete",
                 "mac": "delete"
             },
             {
                 "command": "solutionExplorer.removeProject",
-                "when": "view == solutionExplorer && viewItem == project-cps",
+                "when": "view == slnexpl && viewItem == project-cps",
                 "key": "delete",
                 "mac": "delete"
             },
             {
                 "command": "solutionExplorer.removeProject",
-                "when": "view == solutionExplorer && viewItem == project-standard",
+                "when": "view == slnexpl && viewItem == project-standard",
                 "key": "delete",
                 "mac": "delete"
             },
             {
                 "command": "solutionExplorer.removeProject",
-                "when": "view == solutionExplorer && viewItem == project-website",
+                "when": "view == slnexpl && viewItem == project-website",
                 "key": "delete",
                 "mac": "delete"
             },
             {
                 "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == solutionExplorer && viewItem == solution",
+                "when": "view == slnexpl && viewItem == solution",
                 "key": "f2",
                 "mac": "f2"
             },
             {
                 "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == solutionExplorer && viewItem == solution-cps",
+                "when": "view == slnexpl && viewItem == solution-cps",
                 "key": "f2",
                 "mac": "f2"
             },
             {
                 "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == solutionExplorer && viewItem == solution-folder",
+                "when": "view == slnexpl && viewItem == solution-folder",
                 "key": "f2",
                 "mac": "f2"
             },
             {
                 "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == solutionExplorer && viewItem == project-cps",
+                "when": "view == slnexpl && viewItem == project-cps",
                 "key": "f2",
                 "mac": "f2"
             },
             {
                 "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == solutionExplorer && viewItem == project-standard",
+                "when": "view == slnexpl && viewItem == project-standard",
                 "key": "f2",
                 "mac": "f2"
             },
             {
                 "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == solutionExplorer && viewItem == project-website",
+                "when": "view == slnexpl && viewItem == project-website",
+                "key": "f2",
+                "mac": "f2"
+            },
+
+            {
+                "command": "solutionExplorer.copy",
+                "when": "view == slnbrw && viewItem == project-folder",
+                "key": "ctrl+c",
+                "mac": "cmd+c"
+            },
+            {
+                "command": "solutionExplorer.copy",
+                "when": "view == slnbrw && viewItem == project-file",
+                "key": "ctrl+c",
+                "mac": "cmd+c"
+            },
+            {
+                "command": "solutionExplorer.paste",
+                "when": "view == slnbrw && viewItem == project-folder",
+                "key": "ctrl+v",
+                "mac": "cmd+v"
+            },
+            {
+                "command": "solutionExplorer.paste",
+                "when": "view == slnbrw && viewItem == project-cps",
+                "key": "ctrl+v",
+                "mac": "cmd+v"
+            },
+            {
+                "command": "solutionExplorer.paste",
+                "when": "view == slnbrw && viewItem == project-standard",
+                "key": "ctrl+v",
+                "mac": "cmd+v"
+            },
+            {
+                "command": "solutionExplorer.paste",
+                "when": "view == slnbrw && viewItem == project-website",
+                "key": "ctrl+v",
+                "mac": "cmd+v"
+            },
+            {
+                "command": "solutionExplorer.renameFile",
+                "when": "view == slnbrw && viewItem == project-file",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.deleteFile",
+                "when": "view == slnbrw && viewItem == project-file",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.renameFolder",
+                "when": "view == slnbrw && viewItem == project-folder",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.deleteFolder",
+                "when": "view == slnbrw && viewItem == project-folder",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == slnbrw && viewItem == project-cps",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == slnbrw && viewItem == project-standard",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == slnbrw && viewItem == project-website",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == slnbrw && viewItem == project-file",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFile",
+                "when": "view == slnbrw && viewItem == project-folder",
+                "key": "ctrl+shift+a",
+                "mac": "cmd+shift+a"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == slnbrw && viewItem == project-cps",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == slnbrw && viewItem == project-standard",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == slnbrw && viewItem == project-website",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == slnbrw && viewItem == project-file",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createFolder",
+                "when": "view == slnbrw && viewItem == project-folder",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.removePackage",
+                "when": "view == slnbrw && viewItem == project-referenced-package-cps",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.removeProjectReference",
+                "when": "view == slnbrw && viewItem == project-referenced-project-cps",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.createSolutionFolder",
+                "when": "view == slnbrw && viewItem == solution",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createSolutionFolder",
+                "when": "view == slnbrw && viewItem == solution-cps",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.createSolutionFolder",
+                "when": "view == slnbrw && viewItem == solution-folder",
+                "key": "ctrl+shift+f",
+                "mac": "cmd+shift+f"
+            },
+            {
+                "command": "solutionExplorer.removeSolutionFolder",
+                "when": "view == slnbrw && viewItem == solution-folder",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.removeProject",
+                "when": "view == slnbrw && viewItem == project-cps",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.removeProject",
+                "when": "view == slnbrw && viewItem == project-standard",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.removeProject",
+                "when": "view == slnbrw && viewItem == project-website",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == slnbrw && viewItem == solution",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == slnbrw && viewItem == solution-cps",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == slnbrw && viewItem == solution-folder",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == slnbrw && viewItem == project-cps",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == slnbrw && viewItem == project-standard",
+                "key": "f2",
+                "mac": "f2"
+            },
+            {
+                "command": "solutionExplorer.renameSolutionItem",
+                "when": "view == slnbrw && viewItem == project-website",
                 "key": "f2",
                 "mac": "f2"
             }

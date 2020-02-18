@@ -112,6 +112,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.9
+
+Bugfix #125: Right-Click on Solution Nodes does not open context menu
+
+Enhancement #1: Collapse All buttom in explorer panel 
+
 ### 0.3.8
 
 Bugfix #123: Error while deleting an empty folder from project 
