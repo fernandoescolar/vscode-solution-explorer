@@ -64,10 +64,11 @@ export abstract class CliCommandBase extends CommandBase {
     private ensureTerminal(path: string): vscode.Terminal {
         let terminal: vscode.Terminal;
         vscode.window.terminals.forEach(t => { if(t.name === TERMINAL_NAME) terminal = t; });
+
         if (!terminal) {
             terminal = vscode.window.createTerminal({ name: TERMINAL_NAME, cwd: path });
         } else {
-            terminal.sendText( [ "cd", path ].join(' '), true);
+            terminal.sendText( [ "cd", `"${path}"` ].join(' '), true);
         }
 
         return terminal;
