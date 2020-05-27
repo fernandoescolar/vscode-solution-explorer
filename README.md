@@ -112,6 +112,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.10
+
+Upgrading npm packages
+
+Bugfix #130: space in file path 
+
 ### 0.3.9
 
 Bugfix #125: Right-Click on Solution Nodes does not open context menu
@@ -125,22 +131,6 @@ Bugfix #123: Error while deleting an empty folder from project
 Bugfix #115, #122 and #124: Solution explorer is shown in explorer window although preference is set to acitivityBar
 
 Bugfix #113: Add project to solution error. Thanks to [jloureiro09](https://github.com/jloureiro09)
-
-### 0.3.7
-
-Trying to cleanup extension .vsix
-
-### 0.3.6
-
-PR #100 Configurable Line Endings. Thanks to [jesperbjensen](https://github.com/jesperbjensen)
-
-PR #105 Fixed empty projects and directories on fs.lstat error. Thanks to [Dvvarf](https://github.com/Dvvarf)
-
-PR #106 Added ProjectReference and CustomBuild item support to StandardProject. Thanks to [Dvvarf](https://github.com/Dvvarf)
-
-PR #110 Minor spelling fix in README. Thanks to [vthg2themax](https://github.com/vthg2themax)
-
-Added automated build and publish from Github
 
 ## Thanks to contributors
 
