@@ -637,7 +637,6 @@
                     "when": "view == slnexpl && viewItem == project-cps",
                     "group": "99_dotnet_commands"
                 },
-
                 {
                     "command": "solutionExplorer.refresh",
                     "when": "view == slnbrw && viewItem == project-folder",
@@ -1266,7 +1265,6 @@
                 "key": "f2",
                 "mac": "f2"
             },
-
             {
                 "command": "solutionExplorer.copy",
                 "when": "view == slnbrw && viewItem == project-folder",
@@ -1596,19 +1594,19 @@
     "devDependencies": {
         "@types/handlebars": "^4.1.0",
         "@types/mocha": "^2.2.48",
-        "@types/node": "^7.10.5",
+        "@types/node": "^7.10.11",
         "@types/xml-js": "^1.0.0",
         "awesome-typescript-loader": "^5.2.1",
         "tslint": "^5.11.0",
         "typescript": "^2.9.2",
-        "vscode": "^1.1.21",
-        "webpack": "^4.19.1",
+        "vscode": "^1.1.37",
+        "webpack": "^4.43.0",
         "webpack-cli": "^3.1.0"
     },
     "dependencies": {
         "clipboardy": "^1.2.3",
         "eol": "^0.9.1",
-        "handlebars": "^4.5.3",
+        "handlebars": "^4.7.6",
         "iconv-lite": "^0.4.24",
         "node-uuid": "^1.4.8",
         "xml-js": "^1.6.11"
