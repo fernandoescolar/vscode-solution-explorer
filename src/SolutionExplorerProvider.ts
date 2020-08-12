@@ -25,7 +25,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		this._templateEngine = new TemplateEngine(workspaceRoot);
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		vscode.window.onDidChangeVisibleTextEditors(data => this.onVisibleEditorsChanged(data));
-	}
+  }
 
 	public get logger(): ILogger {
 		return this._logger;
@@ -109,7 +109,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	private selectTreeItem(element: sln.TreeItem): void {
-		if (this.treeView) {
+		if (this.treeView && this.treeView.visible) {
 			this.treeView.reveal(element, { select: true, focus: false });
 		}
 	}
@@ -174,11 +174,4 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	}
 }
-
-
-
-
-
-
-
 
