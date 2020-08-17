@@ -41,7 +41,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInExplorer', showMode === SolutionExplorerConfiguration.SHOW_MODE_EXPLORER);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === SolutionExplorerConfiguration.SHOW_MODE_NONE);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.loadedFlag', !false);
-		
+
 		if (showMode !== SolutionExplorerConfiguration.SHOW_MODE_NONE) {
 			this.subscription = this.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
 			if (showMode === SolutionExplorerConfiguration.SHOW_MODE_ACTIVITYBAR) {
@@ -62,12 +62,11 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	public refresh(item?: sln.TreeItem): void {
-		if (item) {
-			this._onDidChangeTreeData.fire(item);
-		} else {
+		if (!item) {
 			this.children = null;
-			this._onDidChangeTreeData.fire();
 		}
+
+		this._onDidChangeTreeData.fire(item);
 	}
 
 	public getTreeItem(element: sln.TreeItem): vscode.TreeItem {
@@ -79,13 +78,13 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 			this.logger.log('No .sln found in workspace');
 			return Promise.resolve([]);
 		}
-		
+
 		if (element)
 			return element.getChildren();
-		
-		if (!element && this.children) 
+
+		if (!element && this.children)
 			return Promise.resolve(this.children);
-	
+
 		if (!element && !this.children) {
 			return this.createSolutionItems();
 		}
@@ -123,13 +122,13 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 				let altSolutionPaths = await Utilities.searchFilesInDir(path.join(this.workspaceRoot, altFolders[i]), '.sln');
 				solutionPaths = [ ...solutionPaths, ...altSolutionPaths]
 			}
-			
+
 			if (solutionPaths.length <= 0) {
 				this.children .push(await sln.CreateNoSolution(this, this.workspaceRoot));
 				return this.children;
 			}
 		}
-		
+
 		for(let i = 0; i < solutionPaths.length; i++) {
 			let s = solutionPaths[i];
 			let solution = await SolutionFile.Parse(s);
@@ -145,7 +144,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	private onFileEvent(event: IEvent): void {
         let fileEvent = <IFileEvent> event;
 
-		if (path.dirname(fileEvent.path) == this.workspaceRoot 
+		if (path.dirname(fileEvent.path) == this.workspaceRoot
 		    && fileEvent.path.endsWith('.sln')) {
 			this.children = null;
 			this.refresh();
@@ -166,12 +165,12 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		if (!shouldExecute) return;
 		if (!vscode.window.activeTextEditor) return;
 		if (vscode.window.activeTextEditor.document.uri.scheme !== 'file') return;
-		
-		this.selectFile(vscode.window.activeTextEditor.document.uri.fsPath); 
+
+		this.selectFile(vscode.window.activeTextEditor.document.uri.fsPath);
 	}
 
 	private onVisibleEditorsChanged(editors: vscode.TextEditor[]): void {
-		
+
 	}
 }
 
