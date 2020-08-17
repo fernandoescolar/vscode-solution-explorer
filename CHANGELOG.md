@@ -2,21 +2,29 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.11
+
+Upgrading npm packages
+
+Enhancement #139: Add more project templates. Thanks to [jbactad](https://github.com/jbactad)
+
+Bugfix #135: Don't focus tree when tracking active file. Thanks to [jbactad](https://github.com/jbactad)
+
 ## 0.3.10
 
 Upgrading npm packages
 
-Bugfix #130: space in file path 
+Bugfix #130: space in file path
 
 ## 0.3.9
 
 Bugfix #125: Right-Click on Solution Nodes does not open context menu
 
-Enhancement #1: Collapse All buttom in explorer panel 
+Enhancement #1: Collapse All buttom in explorer panel
 
 ## 0.3.8
 
-Bugfix #123: Error while deleting an empty folder from project 
+Bugfix #123: Error while deleting an empty folder from project
 
 Bugfix #115, #122 and #124: Solution explorer is shown in explorer window although preference is set to acitivityBar
 

@@ -34,7 +34,7 @@ Or you can create a new one by clicking with the right mouse button.
 
 The source code is licensed under the [CC-BY-SA](LICENSE.md) license.
 
-The icons from ([vscode-icons extension](https://github.com/vscode-icons/vscode-icons/)) are licensed under the [Creative Commons - ShareAlike (CC BY-SA)](https://creativecommons.org/licenses/by-sa/4.0/) license. 
+The icons from ([vscode-icons extension](https://github.com/vscode-icons/vscode-icons/)) are licensed under the [Creative Commons - ShareAlike (CC BY-SA)](https://creativecommons.org/licenses/by-sa/4.0/) license.
 
 Branded icons are licensed under their copyright license.
 
@@ -112,25 +112,25 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.3.11
+
+Upgrading npm packages
+
+Enhancement #139: Add more project templates. Thanks to [jbactad](https://github.com/jbactad)
+
+Bugfix #135: Don't focus tree when tracking active file. Thanks to [jbactad](https://github.com/jbactad)
+
 ### 0.3.10
 
 Upgrading npm packages
 
-Bugfix #130: space in file path 
+Bugfix #130: space in file path
 
 ### 0.3.9
 
 Bugfix #125: Right-Click on Solution Nodes does not open context menu
 
-Enhancement #1: Collapse All buttom in explorer panel 
-
-### 0.3.8
-
-Bugfix #123: Error while deleting an empty folder from project 
-
-Bugfix #115, #122 and #124: Solution explorer is shown in explorer window although preference is set to acitivityBar
-
-Bugfix #113: Add project to solution error. Thanks to [jloureiro09](https://github.com/jloureiro09)
+Enhancement #1: Collapse All buttom in explorer panel
 
 ## Thanks to contributors
 
@@ -145,5 +145,6 @@ Bugfix #113: Add project to solution error. Thanks to [jloureiro09](https://gith
 [Dvvarf](https://github.com/Dvvarf)
 [vthg2themax](https://github.com/vthg2themax)
 [jloureiro09](https://github.com/jloureiro09)
+[jbactad](https://github.com/jbactad)
 
 **Enjoy!**
