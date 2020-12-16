@@ -48,6 +48,8 @@ export function findIconPath(name: string, path: string, contextValue: string): 
         if (path && path.endsWith("wwwroot"))
             return getIconPath('wwwroot.svg');
 
+        if (path && path.endsWith(".github"))
+            return getIconPath('github.svg');
         return getIconPath('folder.svg');
     } else 
     if (contextValue.startsWith(ContextValues.Project)) {
