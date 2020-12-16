@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.3.12
+
+PR #150: Adding GitHub specific folder visual. Thanks to [timheuer](https://github.com/timheuer)
+
 ## 0.3.11
 
 Upgrading npm packages
