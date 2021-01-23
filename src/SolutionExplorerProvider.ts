@@ -8,6 +8,7 @@ import { SolutionFile } from "./model/Solutions";
 import { IEventAggegator, EventTypes, IEvent, ISubscription, IFileEvent } from "./events";
 import { ILogger, Logger } from "./log";
 import { ITemplateEngine, TemplateEngine } from "./templates";
+import * as glob from "glob";
 
 export class SolutionExplorerProvider extends vscode.Disposable implements vscode.TreeDataProvider<sln.TreeItem> {
 	private _logger: ILogger;
@@ -17,12 +18,14 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	private treeView: vscode.TreeView<sln.TreeItem> = null;
 	private _onDidChangeTreeData: vscode.EventEmitter<sln.TreeItem | undefined> = new vscode.EventEmitter<sln.TreeItem | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<sln.TreeItem | undefined> = this._onDidChangeTreeData.event;
+	public workspaceRoot: string;
 	//onDidChangeActiveTextEditor
 
-	constructor(public workspaceRoot: string, public readonly eventAggregator: IEventAggegator) {
+	constructor(workspaceFolders: string[], public readonly eventAggregator: IEventAggegator) {
 		super(() => this.dispose());
+		this.workspaceRoot = this.findFirstSlnInsideWorkspaceFolders(workspaceFolders);
 		this._logger = new Logger(this.eventAggregator);
-		this._templateEngine = new TemplateEngine(workspaceRoot);
+		this._templateEngine = new TemplateEngine(this.workspaceRoot);
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		vscode.window.onDidChangeVisibleTextEditors(data => this.onVisibleEditorsChanged(data));
   }
@@ -171,6 +174,35 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	private onVisibleEditorsChanged(editors: vscode.TextEditor[]): void {
 
+	}
+
+	/**
+	 * looking all workspace folders for .sln file, the first one is returned
+	 *
+	 * @private
+	 * @param {vscode.WorkspaceFolder[]} WorkspaceFolder
+	 * @returns {string}
+	 * @memberof SolutionExplorerProvider
+	 */
+	private findFirstSlnInsideWorkspaceFolders(workspaceFolders: string[]): string {
+		let solution: string = "";
+		
+		workspaceFolders.forEach(folder=> {
+			if (solution === "") {
+				let files = glob.sync(`${folder}/**/*.sln`, {
+					ignore: ['**/node_modules/**', '**/.git/**']
+				});
+				if (files.length > 0) {
+					solution = files[0];
+				}
+			}
+		});
+
+		if (solution !== ""){
+		return path.dirname(solution);
+		}
+
+		return "";
 	}
 }
 
