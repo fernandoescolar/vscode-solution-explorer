@@ -9,9 +9,10 @@ import { IEventAggegator, EventTypes, IEvent, ISubscription, IFileEvent } from "
 import { ILogger, Logger } from "./log";
 import { ITemplateEngine, TemplateEngine } from "./templates";
 
+interface  FoundPath { root: string, sln: string }
 export class SolutionExplorerProvider extends vscode.Disposable implements vscode.TreeDataProvider<sln.TreeItem> {
 	private _logger: ILogger;
-	private _templateEngine: ITemplateEngine;
+	private _templateEngines: ITemplateEngine[];
 	private subscription: ISubscription = null;
 	private children: sln.TreeItem[] = null;
 	private treeView: vscode.TreeView<sln.TreeItem> = null;
@@ -19,10 +20,10 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	readonly onDidChangeTreeData: vscode.Event<sln.TreeItem | undefined> = this._onDidChangeTreeData.event;
 	//onDidChangeActiveTextEditor
 
-	constructor(public workspaceRoot: string, public readonly eventAggregator: IEventAggegator) {
+	constructor(public workspaceRoots: string[], public readonly eventAggregator: IEventAggegator) {
 		super(() => this.dispose());
 		this._logger = new Logger(this.eventAggregator);
-		this._templateEngine = new TemplateEngine(workspaceRoot);
+		this._templateEngines = [];
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		vscode.window.onDidChangeVisibleTextEditors(data => this.onVisibleEditorsChanged(data));
   }
@@ -31,8 +32,8 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		return this._logger;
 	}
 
-	public get templateEngine(): ITemplateEngine {
-		return this._templateEngine;
+	public getTemplateEngine(name: string): ITemplateEngine {
+		return this._templateEngines[name];
 	}
 
 	public register() {
@@ -74,7 +75,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	public getChildren(element?: sln.TreeItem): Thenable<sln.TreeItem[]> {
-		if (!this.workspaceRoot) {
+		if (!this.workspaceRoots || this.workspaceRoots.length == 0) {
 			this.logger.log('No .sln found in workspace');
 			return Promise.resolve([]);
 		}
@@ -115,25 +116,39 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	private async createSolutionItems(): Promise<sln.TreeItem[]> {
 		this.children = [];
-		let solutionPaths = await Utilities.searchFilesInDir(this.workspaceRoot, '.sln');
+		let solutionPaths: FoundPath[] = [];
+		for (let i = 0; i < this.workspaceRoots.length; i++) {
+			const paths = await Utilities.searchFilesInDir(this.workspaceRoots[i], '.sln');
+			paths.forEach(p => solutionPaths.push({ root: this.workspaceRoots[i], sln: p }));
+		}
+
 		if (solutionPaths.length <= 0) {
 			let altFolders = SolutionExplorerConfiguration.getAlternativeSolutionFolders();
 			for (let i = 0; i < altFolders.length; i++) {
-				let altSolutionPaths = await Utilities.searchFilesInDir(path.join(this.workspaceRoot, altFolders[i]), '.sln');
-				solutionPaths = [ ...solutionPaths, ...altSolutionPaths]
+				const altSolutionPaths: FoundPath[] = [];
+				for (let j = 0; j < this.workspaceRoots.length; j++) {
+					const paths = await Utilities.searchFilesInDir(path.join(this.workspaceRoots[j], altFolders[i]), '.sln');
+					paths.forEach(p => solutionPaths.push({ root: this.workspaceRoots[j], sln: p }));
+				}
+
+				solutionPaths = altSolutionPaths;
 			}
 
-			if (solutionPaths.length <= 0) {
-				this.children .push(await sln.CreateNoSolution(this, this.workspaceRoot));
+			if (solutionPaths.length <= 0 && this.workspaceRoots.length > 0) {
+				this.children .push(await sln.CreateNoSolution(this, this.workspaceRoots[0]));
 				return this.children;
 			}
 		}
 
 		for(let i = 0; i < solutionPaths.length; i++) {
 			let s = solutionPaths[i];
-			let solution = await SolutionFile.Parse(s);
-			let item = await sln.CreateFromSolution(this, solution);
+			let solution = await SolutionFile.Parse(s.sln);
+			let item = await sln.CreateFromSolution(this, solution, s.root);
 			this.children.push(item);
+
+			if (!this._templateEngines[s.root]) {
+				this._templateEngines[s.root] = new TemplateEngine(s.root);
+			}
 		}
 
 		if (this.children.length > 0) this.checkTemplatesToInstall();
@@ -144,7 +159,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	private onFileEvent(event: IEvent): void {
         let fileEvent = <IFileEvent> event;
 
-		if (path.dirname(fileEvent.path) == this.workspaceRoot
+		if (this.workspaceRoots.indexOf(path.dirname(fileEvent.path)) >= 0
 		    && fileEvent.path.endsWith('.sln')) {
 			this.children = null;
 			this.refresh();
@@ -152,10 +167,23 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	private async checkTemplatesToInstall(): Promise<void> {
-		if (SolutionExplorerConfiguration.getCreateTemplateFolderQuestion() && !(await this.templateEngine.existsTemplates())) {
+		if (!SolutionExplorerConfiguration.getCreateTemplateFolderQuestion()) return;
+		const templateEnginesToCreate: ITemplateEngine[] = [];
+		const keys = Object.keys(this._templateEngines);
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
+			const exists = await this._templateEngines[key].existsTemplates();
+			if (!exists) {
+				templateEnginesToCreate.push(this._templateEngines[key]);
+			}
+		}
+
+		if (templateEnginesToCreate.length > 0) {
 			let option = await vscode.window.showWarningMessage("Would you like to create the vscode-solution-explorer templates folder?", 'Yes', 'No');
 			if (option !== null && option !== undefined && option == 'Yes') {
-				await this.templateEngine.creteTemplates();
+				for (let i = 0; i < templateEnginesToCreate.length; i++) {
+					await templateEnginesToCreate[i].creteTemplates();
+				}
 			}
 		}
 	}

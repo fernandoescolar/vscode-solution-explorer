@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.4.0
+
+Enhancement #38 #50 #158: Add multi folder in workspace support. Thanks to [vlesierse](https://github.com/vlesierse) and [m4ss1m0g](https://github.com/m4ss1m0g) for their PRs.
+
+Upgrading npm packages
+
 ## 0.3.12
 
 PR #150: Adding GitHub specific folder visual. Thanks to [timheuer](https://github.com/timheuer)

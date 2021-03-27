@@ -112,6 +112,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.4.0
+
+Enhancement #38 #50 #158: Add multi folder in workspace support. Thanks to [vlesierse](https://github.com/vlesierse) and [m4ss1m0g](https://github.com/m4ss1m0g) for their PRs.
+
+Upgrading npm packages
+
 ### 0.3.11
 
 Upgrading npm packages
@@ -125,12 +131,6 @@ Bugfix #135: Don't focus tree when tracking active file. Thanks to [jbactad](htt
 Upgrading npm packages
 
 Bugfix #130: space in file path
-
-### 0.3.9
-
-Bugfix #125: Right-Click on Solution Nodes does not open context menu
-
-Enhancement #1: Collapse All buttom in explorer panel
 
 ## Thanks to contributors
 
@@ -146,5 +146,7 @@ Enhancement #1: Collapse All buttom in explorer panel
 [vthg2themax](https://github.com/vthg2themax)
 [jloureiro09](https://github.com/jloureiro09)
 [jbactad](https://github.com/jbactad)
+[vlesierse](https://github.com/vlesierse)
+[m4ss1m0g](https://github.com/m4ss1m0g)
 
 **Enjoy!**

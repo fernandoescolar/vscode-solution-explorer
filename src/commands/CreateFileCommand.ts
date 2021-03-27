@@ -7,6 +7,7 @@ import { InputTextCommandParameter } from "./parameters/InputTextCommandParamete
 import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandParameter";
 
 export class CreateFileCommand extends CommandBase {
+    private _workspaceRoot: string = '';
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Create file');
 
@@ -17,7 +18,10 @@ export class CreateFileCommand extends CommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        return !!item.project;
+        if(!!item.project) {
+            this._workspaceRoot = item.workspaceRoot;
+            return true;
+        }
     }
 
     protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
@@ -31,22 +35,31 @@ export class CreateFileCommand extends CommandBase {
             let content = await this.getContent(item);
             let filepath = await item.project.createFile(targetpath, args[0], content);
             let document = await vscode.workspace.openTextDocument(filepath);
-            vscode.window.showTextDocument(document);  
+            vscode.window.showTextDocument(document);
             this.provider.logger.log("File created: " + filepath);
         } catch(ex) {
             this.provider.logger.error('Can not create file: ' + ex);
-        }    
+        }
     }
 
     private async getTemplatesTypes(): Promise<string[]> {
-        let extension = path.extname(this.args[0]).substring(1);
-        let result: string[] =  await this.provider.templateEngine.getTemplates(extension);
+        const extension = path.extname(this.args[0]).substring(1);
+        const templateEngine = this.provider.getTemplateEngine(this._workspaceRoot);
+        let result: string[] = [];
+        if (templateEngine) {
+            result = await this.provider.getTemplateEngine(this._workspaceRoot).getTemplates(extension);
+        }
+
         return result;
     }
 
     private getContent(item: TreeItem): Promise<string> {
         if (!this.args[1]) return Promise.resolve("");
+        const templateEngine = this.provider.getTemplateEngine(this._workspaceRoot);
+        if (templateEngine) {
+            return templateEngine.generate(this.args[0], this.args[1], item);
+        }
 
-        return this.provider.templateEngine.generate(this.args[0], this.args[1], item);
+        return Promise.resolve("");
     }
 }

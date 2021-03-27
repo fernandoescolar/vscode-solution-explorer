@@ -14,9 +14,9 @@ export class TemplateEngine {
     private readonly vscodeFolder: string;
     private readonly workingFolder: string;
     private readonly templateFile: string;
-    
+
     private templates: ITemplate[];
-    
+
 
     constructor(workspaceRoot: string) {
         this.workspaceRoot = workspaceRoot;
@@ -28,7 +28,7 @@ export class TemplateEngine {
     public async getTemplates(extension: string): Promise<string[]> {
         if (!this.templates) {
             if (!(await fs.exists(this.templateFile))) return [];
-            
+
             let content = await fs.readFile(this.templateFile, "utf8");
             this.templates = JSON.parse(content).templates;
         }
@@ -56,10 +56,10 @@ export class TemplateEngine {
         return result;
     }
 
-    public async existsTemplates(): Promise<boolean> {
-		return await fs.exists(this.templateFile);
+    public existsTemplates(): Promise<boolean> {
+		return fs.exists(this.templateFile);
     }
-    
+
     public async creteTemplates(): Promise<void> {
         if (!(await fs.exists(this.vscodeFolder)))
 			await fs.mkdir(this.vscodeFolder);
@@ -89,7 +89,7 @@ export class TemplateEngine {
 		if (exists && isDirectory) {
             if (!(await fs.exists(dest)))
                 await fs.mkdir(dest);
-                
+
 			let items = await fs.readdir(src);
 			for(let i = 0; i < items.length; i++) {
 				let childItemName = items[i];

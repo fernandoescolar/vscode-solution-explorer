@@ -9,7 +9,7 @@ import { Project } from "../model/Projects";
 export { TreeItemCollapsibleState, Command } from "vscode";
 
 export abstract class TreeItem extends vscode.TreeItem {
-	private _allowIconTheme: boolean = true
+	private _allowIconTheme: boolean = true;
 	protected children: TreeItem[] = null;
 
 	constructor(
@@ -23,6 +23,10 @@ export abstract class TreeItem extends vscode.TreeItem {
 		super(label, collapsibleState);
 		this.createId();
 		this.loadIcon();
+	}
+
+	public get workspaceRoot(): string {
+		return this.context.workspaceRoot;
 	}
 
 	public get parent(): TreeItem {
@@ -59,14 +63,14 @@ export abstract class TreeItem extends vscode.TreeItem {
 				this.children = [];
 			}
         }
-		
+
 		return this.children;
     }
 
 	public collapse(): void {
 		if (this.collapsibleState == vscode.TreeItemCollapsibleState.None) return;
 		if (this.children) this.children.forEach(c => c.collapse());
-		
+
 		this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
 		this.context.provider.refresh(this);
 	}
@@ -119,14 +123,14 @@ export abstract class TreeItem extends vscode.TreeItem {
 			id = this.solution.FullPath + '[' + this.contextValue + ']';
 		else
 			id = this.label + '[' + this.contextValue + ']';
-		
+
 		this.id = id;
 	}
 
 	protected loadIcon(): void {
 		let iconType = SolutionExplorerConfiguration.getSolutionExplorerIcons();
-		
-		if (iconType == SolutionExplorerConfiguration.ICONS_CUSTOM 
+
+		if (iconType == SolutionExplorerConfiguration.ICONS_CUSTOM
 		   || (iconType == SolutionExplorerConfiguration.ICONS_MIXED && !this._allowIconTheme)) {
 			this.iconPath = TreeItemIconProvider.findIconPath(this.label, this.path, this.contextValue);
 		} else {
@@ -152,7 +156,7 @@ export abstract class TreeItem extends vscode.TreeItem {
 				}
 			});
 		}
-		
+
 		return result;
     }
 }
