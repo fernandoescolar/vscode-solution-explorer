@@ -17,7 +17,7 @@ export function ParseToJson(content: string): Promise<any> {
     if (result.declaration) {
         delete result.declaration
     }
-    return Promise.resolve(result);    
+    return Promise.resolve(result);
 }
 
 export function ParseToXml(content: any): Promise<string> {
@@ -27,6 +27,15 @@ export function ParseToXml(content: any): Promise<string> {
         let re = /([A-Za-z0-9_\"]+)\/\>/g;
         result = result.replace(re,"$1 />");
     }
+
+    // #118 escape special characters
+    result = result.replace(/&quot;/g, '"')
+                   .replace(/&/g, '&amp;')
+                   .replace(/</g, '&lt;')
+                   .replace(/>/g, '&gt;')
+                   .replace(/"/g, '&quot;')
+                   .replace(/'/g, '&apos;');
+
     // By default the XML module will output files with LF.
     // We will convert that to CRLF if enabled.
     if(getLineEndings() == "crlf") {
