@@ -115,8 +115,10 @@ There is a lot of work to do.
 ### 0.4.1
 
 Bugfix #155: fixing error deleting folders
+
 Bugfix #118: save XML special characters encoded: `& < > " '`
 
+Bugfix #84: avoid errors with non-existing projects in solution
 
 ### 0.4.0
 

@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.4.1
+
+Bugfix #155: fixing error deleting folders
+
+Bugfix #118: save XML special characters encoded: `& < > " '`
+
+Bugfix #84: avoid errors with non-existing projects in solution
+
 ## 0.4.0
 
 Enhancement #38 #50 #158: Add multi folder in workspace support. Thanks to [vlesierse](https://github.com/vlesierse) and [m4ss1m0g](https://github.com/m4ss1m0g) for their PRs.

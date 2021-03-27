@@ -13,45 +13,49 @@ const cpsProjectTypes = [ ProjectTypeIds.cpsCsProjectGuid, ProjectTypeIds.cpsVbP
 const standardProjectTypes = [ ProjectTypeIds.csProjectGuid, ProjectTypeIds.fsProjectGuid, ProjectTypeIds.vbProjectGuid, ProjectTypeIds.vcProjectGuid, ProjectTypeIds.cpsFsProjectGuid ];
 
 export class ProjectFactory {
-    public static parse(project: ProjectInSolution): Promise<Project> {
-        if (project.fullPath.toLocaleLowerCase().endsWith(".njsproj")) {
-            return ProjectFactory.loadNoReferencesStandardProject(project);
-             
+    public static async parse(project: ProjectInSolution): Promise<Project> {
+        if (!(await fs.exists(project.fullPath))) {
+            return null;
         }
-        if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat 
-            && cpsProjectTypes.indexOf(project.projectTypeId) >= 0) {
-            return ProjectFactory.loadCpsProject(project);
-        } 
 
-        if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat 
+        if (project.fullPath.toLocaleLowerCase().endsWith(".njsproj")) {
+            return await ProjectFactory.loadNoReferencesStandardProject(project);
+
+        }
+        if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat
+            && cpsProjectTypes.indexOf(project.projectTypeId) >= 0) {
+            return await ProjectFactory.loadCpsProject(project);
+        }
+
+        if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat
             && standardProjectTypes.indexOf(project.projectTypeId) >= 0) {
-            return ProjectFactory.determineStandardProject(project);
+            return await ProjectFactory.determineStandardProject(project);
         }
 
         if (project.projectType == SolutionProjectType.WebProject) {
-            return ProjectFactory.loadWebsiteProject(project);
+            return await ProjectFactory.loadWebsiteProject(project);
         }
 
         if (project.projectTypeId == ProjectTypeIds.shProjectGuid) {
-            return ProjectFactory.loadSharedProject(project);
+            return await ProjectFactory.loadSharedProject(project);
         }
 
         if (project.projectTypeId == ProjectTypeIds.deployProjectGuid) {
-            return ProjectFactory.loadDeploydProject(project);
+            return await ProjectFactory.loadDeploydProject(project);
         }
 
-        return Promise.resolve(null);
+        return null;
     }
 
     private static async determineStandardProject(project: ProjectInSolution): Promise<Project> {
         let document =  await ProjectFactory.loadProjectDocument(project.fullPath);
         let element: any = Project.getProjectElement(document);
-        
+
         if (!element) {
             return null;
         }
 
-        if (element.attributes.Sdk 
+        if (element.attributes.Sdk
             && element.attributes.Sdk.startsWith("Microsoft.NET.Sdk"))
             return new CpsProject(project, document);
 
