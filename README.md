@@ -112,6 +112,12 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.4.1
+
+Bugfix #155: fixing error deleting folders
+Bugfix #118: save XML special characters encoded: `& < > " '`
+
+
 ### 0.4.0
 
 Enhancement #38 #50 #158: Add multi folder in workspace support. Thanks to [vlesierse](https://github.com/vlesierse) and [m4ss1m0g](https://github.com/m4ss1m0g) for their PRs.
