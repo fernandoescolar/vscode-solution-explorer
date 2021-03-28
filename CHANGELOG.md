@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.4.2
+
+Bugfix #164: revert #118 solution
+
 ## 0.4.1
 
 Bugfix #155: fixing error deleting folders

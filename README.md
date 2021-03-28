@@ -112,6 +112,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+## 0.4.2
+
+Bugfix #164: revert #118 solution
+
 ### 0.4.1
 
 Bugfix #155: fixing error deleting folders
