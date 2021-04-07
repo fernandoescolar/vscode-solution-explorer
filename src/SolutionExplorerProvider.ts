@@ -125,13 +125,10 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		if (solutionPaths.length <= 0) {
 			let altFolders = SolutionExplorerConfiguration.getAlternativeSolutionFolders();
 			for (let i = 0; i < altFolders.length; i++) {
-				const altSolutionPaths: FoundPath[] = [];
 				for (let j = 0; j < this.workspaceRoots.length; j++) {
 					const paths = await Utilities.searchFilesInDir(path.join(this.workspaceRoots[j], altFolders[i]), '.sln');
 					paths.forEach(p => solutionPaths.push({ root: this.workspaceRoots[j], sln: p }));
 				}
-
-				solutionPaths = altSolutionPaths;
 			}
 
 			if (solutionPaths.length <= 0 && this.workspaceRoots.length > 0) {
