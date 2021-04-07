@@ -112,7 +112,13 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
-## 0.4.2
+### 0.4.3
+
+Bugfix #165: fixing error loading solutions from alt folders
+
+Bugfix #118: replacing '&' by '&amp;' in project XML quoted strings
+
+### 0.4.2
 
 Bugfix #164: revert #118 solution
 
@@ -123,26 +129,6 @@ Bugfix #155: fixing error deleting folders
 Bugfix #118: save XML special characters encoded: `& < > " '`
 
 Bugfix #84: avoid errors with non-existing projects in solution
-
-### 0.4.0
-
-Enhancement #38 #50 #158: Add multi folder in workspace support. Thanks to [vlesierse](https://github.com/vlesierse) and [m4ss1m0g](https://github.com/m4ss1m0g) for their PRs.
-
-Upgrading npm packages
-
-### 0.3.11
-
-Upgrading npm packages
-
-Enhancement #139: Add more project templates. Thanks to [jbactad](https://github.com/jbactad)
-
-Bugfix #135: Don't focus tree when tracking active file. Thanks to [jbactad](https://github.com/jbactad)
-
-### 0.3.10
-
-Upgrading npm packages
-
-Bugfix #130: space in file path
 
 ## Thanks to contributors
 

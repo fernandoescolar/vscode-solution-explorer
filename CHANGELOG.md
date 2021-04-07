@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+### 0.4.3
+
+Bugfix #165: fixing error loading solutions from alt folders
+
+Bugfix #118: replacing '&' by '&amp;' in project XML quoted strings
+
 ## 0.4.2
 
 Bugfix #164: revert #118 solution
