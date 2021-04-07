@@ -24,7 +24,7 @@ export function ParseToXml(content: any): Promise<string> {
     writeOptions.spaces = config.getXmlSpaces();
     let result = convert.js2xml(content, writeOptions);
     if (config.getXmlClosingTagSpace()) {
-        let re = /([A-Za-z0-9_\"]+)\/\>/g;
+        const re = /([A-Za-z0-9_\"]+)\/\>/g;
         result = result.replace(re,"$1 />");
     }
 
@@ -33,5 +33,17 @@ export function ParseToXml(content: any): Promise<string> {
     if(getLineEndings() == "crlf") {
         result = eol.crlf(result);
     }
+
+    // #118 look inside quoted strings and replaze '&' by '&amp;'
+    const m = result.match(/"([^"]*)"/g);
+    if (m) {
+        m.forEach(match => {
+            if (match.indexOf('&') >= 0) {
+                const rr = match.replace(/&/g, '&amp;');
+                result = result.replace(match, rr);
+            }
+        });
+    }
+
     return Promise.resolve(result);
 }
