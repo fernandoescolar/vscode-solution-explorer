@@ -1605,7 +1605,7 @@
     "dependencies": {
         "clipboardy": "^1.2.3",
         "eol": "^0.9.1",
-        "handlebars": "^4.7.6",
+        "handlebars": "^4.7.7",
         "iconv-lite": "^0.4.24",
         "node-uuid": "^1.4.8",
         "ssri": ">=8.0.1",
