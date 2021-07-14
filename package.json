@@ -1611,8 +1611,10 @@
         "@types/vscode": "^1.48.0",
         "@types/xml-js": "^1.0.0",
         "awesome-typescript-loader": "^5.2.1",
+        "glob-parent": "^5.1.2",
         "tslint": "^5.11.0",
         "typescript": "^2.9.2",
+        "watchpack": "^2.2.0",
         "webpack": "^4.43.0",
         "webpack-cli": "^3.1.0"
     },
