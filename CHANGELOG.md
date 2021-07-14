@@ -2,7 +2,11 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
-### 0.4.3
+## 0.4.4
+
+Bugfix #177: cleaning `console.log` calls
+
+## 0.4.3
 
 Bugfix #165: fixing error loading solutions from alt folders
 

@@ -35,7 +35,6 @@ export class SolutionExplorerFileWatcher {
     }
 
     private raiseEvent(event: IFileEvent): void {
-        console.log("Event[" + event.eventType + "] " + event.fileEventType + " - " + event.path);
         this.eventAggregator.publish(event);
     }
 

@@ -112,6 +112,10 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.4.4
+
+Bugfix #177: cleaning `console.log` calls
+
 ### 0.4.3
 
 Bugfix #165: fixing error loading solutions from alt folders
@@ -121,14 +125,6 @@ Bugfix #118: replacing '&' by '&amp;' in project XML quoted strings
 ### 0.4.2
 
 Bugfix #164: revert #118 solution
-
-### 0.4.1
-
-Bugfix #155: fixing error deleting folders
-
-Bugfix #118: save XML special characters encoded: `& < > " '`
-
-Bugfix #84: avoid errors with non-existing projects in solution
 
 ## Thanks to contributors
 
