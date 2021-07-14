@@ -204,6 +204,10 @@
                 "title": "Run"
             },
             {
+                "command": "solutionExplorer.watchRun",
+                "title": "Watch Run"
+            },
+            {
                 "command": "solutionExplorer.test",
                 "title": "Test"
             }
@@ -633,6 +637,11 @@
                     "group": "99_dotnet_commands"
                 },
                 {
+                    "command": "solutionExplorer.watchRun",
+                    "when": "view == slnexpl && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
                     "command": "solutionExplorer.test",
                     "when": "view == slnexpl && viewItem == project-cps",
                     "group": "99_dotnet_commands"
@@ -1044,6 +1053,11 @@
                 },
                 {
                     "command": "solutionExplorer.run",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "99_dotnet_commands"
+                },
+                {
+                    "command": "solutionExplorer.watchRun",
                     "when": "view == slnbrw && viewItem == project-cps",
                     "group": "99_dotnet_commands"
                 },

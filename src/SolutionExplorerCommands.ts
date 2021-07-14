@@ -38,6 +38,7 @@ export class SolutionExplorerCommands {
         this.commands['publish'] = new cmds.PublishCommand(provider);
         this.commands['restore'] = new cmds.RestoreCommand(provider);
         this.commands['run'] = new cmds.RunCommand(provider);
+        this.commands['watchRun'] = new cmds.WatchRunCommand(provider);
         this.commands['test'] = new cmds.TestCommand(provider);
         this.commands['locate'] = new cmds.LocateCommand(provider);
     }
@@ -50,7 +51,7 @@ export class SolutionExplorerCommands {
 
     private registerCommand(name: string, command: cmds.ICommand) {
         this.context.subscriptions.push(
-            vscode.commands.registerCommand(name, item => { 
+            vscode.commands.registerCommand(name, item => {
                 command.run(item)
             })
         );

@@ -28,5 +28,6 @@ export * from "./PackCommand";
 export * from "./PublishCommand";
 export * from "./RestoreCommand";
 export * from "./RunCommand";
+export * from "./WatchRunCommand";
 export * from "./TestCommand";
 export * from "./LocateCommand";

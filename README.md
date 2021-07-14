@@ -116,6 +116,8 @@ There is a lot of work to do.
 
 Bugfix #177: cleaning `console.log` calls
 
+Enhancement #175: adding "Watch Run" command
+
 ### 0.4.3
 
 Bugfix #165: fixing error loading solutions from alt folders

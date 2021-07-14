@@ -6,6 +6,8 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Bugfix #177: cleaning `console.log` calls
 
+Enhancement #175: adding "Watch Run" command
+
 ## 0.4.3
 
 Bugfix #165: fixing error loading solutions from alt folders
