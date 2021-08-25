@@ -96,7 +96,7 @@ export class CpsProject extends FileSystemBasedProject {
                 if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
                 element.elements.forEach(e => {
                     if (e.name === 'PackageReference') {
-                        this.packages.push(new PackageReference(e.attributes.Include, e.attributes.Include));
+                        this.packages.push(new PackageReference(e.attributes.Include, e.attributes.Version));
                     }
                     if (e.name === 'ProjectReference') {
                         let ref = e.attributes.Include.replace(/\\/g, path.sep).trim();
