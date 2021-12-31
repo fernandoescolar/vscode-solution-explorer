@@ -1,8 +1,5 @@
-using System;
+namespace {{namespace}};
 
-namespace {{namespace}}
+public class {{name}}
 {
-    public class {{name}}
-    {
-    }
 }
