@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.4.5
+
+Bugfix #183: Pass right parameter into PackageReference contructor (by @Danieladu)
+
+Enhancement #186: update to C# 10 namespace syntax (by @little512)
+
+Fixing Dependabot alerts
+
 ## 0.4.4
 
 Bugfix #177: cleaning `console.log` calls

@@ -112,6 +112,14 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.4.5
+
+Bugfix #183: Pass right parameter into PackageReference contructor (by @Danieladu)
+
+Enhancement #186: update to C# 10 namespace syntax (by @little512)
+
+Fixing Dependabot alerts
+
 ### 0.4.4
 
 Bugfix #177: cleaning `console.log` calls
@@ -125,10 +133,6 @@ Fixing Dependabot alerts
 Bugfix #165: fixing error loading solutions from alt folders
 
 Bugfix #118: replacing '&' by '&amp;' in project XML quoted strings
-
-### 0.4.2
-
-Bugfix #164: revert #118 solution
 
 ## Thanks to contributors
 
@@ -146,5 +150,7 @@ Bugfix #164: revert #118 solution
 [jbactad](https://github.com/jbactad)
 [vlesierse](https://github.com/vlesierse)
 [m4ss1m0g](https://github.com/m4ss1m0g)
+[Coda](https://github.com/little512)
+[Hongyang Du (hond)](https://github.com/Danieladu)
 
 **Enjoy!**
