@@ -1,12 +1,10 @@
 import * as path from "path";
 import * as os from "os";
 import * as vscode from "vscode";
-import { spawn, execSync } from 'child_process';
+import { execSync } from 'child_process';
 import { TreeItem, ContextValues } from '../../tree';
 import { CommandBase } from './CommandBase';
 import { SolutionExplorerProvider } from '../../SolutionExplorerProvider';
-import * as iconv from 'iconv-lite';
-import * as configuration from '../../SolutionExplorerConfiguration';
 
 const TERMINAL_NAME:string = "dotnet";
 
@@ -47,18 +45,6 @@ export abstract class CliCommandBase extends CommandBase {
         if (os.platform() === "win32") {
             this.codepage = execSync('chcp').toString().split(':').pop().trim();
         }
-    }
-
-    private decode(data: Buffer): string {
-        var encodings = configuration.getWin32EncodingTable();
-        var keys = Object.keys(encodings);
-        for (let i = 0; i < keys.length; i++) {
-            if (keys[i] === this.codepage) {
-                return iconv.decode(data, encodings[keys[i]]);
-            }
-        }
-       
-        return data.toString();
     }
 
     private ensureTerminal(path: string): vscode.Terminal {
