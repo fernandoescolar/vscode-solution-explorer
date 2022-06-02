@@ -136,6 +136,18 @@ export async function CreateItemsFromProject(context: TreeItemContext, project: 
                     result.push(new ProjectFileTreeItem(context, cs));
                 }
             } else if(handledPartialClasses.indexOf(cs.fullPath) === -1) {
+                let className = cs.name.split(".")[0];
+
+                let relatedFiles = csharpFiles.filter(r => {
+                    if(r.name.split(".").length === 2) { return false; }
+                    let otherClassName = r.name.split(".")[0];
+                    return className == otherClassName;
+                });
+
+                if(relatedFiles.length > 0) {
+                    handledPartialClasses.push(cs.fullPath);
+                }
+
                 result.push(new ProjectFileTreeItem(context, cs));
             }
         });
