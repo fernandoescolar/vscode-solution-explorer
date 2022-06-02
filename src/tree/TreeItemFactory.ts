@@ -151,6 +151,12 @@ export async function CreateItemsFromProject(context: TreeItemContext, project: 
                 result.push(new ProjectFileTreeItem(context, cs));
             }
         });
+    } else {
+        items.files.forEach(file => {
+            if(file.name.endsWith(".cs")) {
+                result.push(new ProjectFileTreeItem(context, file));
+            }
+        });
     }
 
     items.files.forEach(file => {
