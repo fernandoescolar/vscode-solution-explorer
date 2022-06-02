@@ -138,6 +138,8 @@ Bugfix #177: cleaning `console.log` calls
 
 Enhancement #175: adding "Watch Run" command
 
+Bump minimist from 1.2.5 to 1.2.6 #193 (by @dependabot)
+
 Fixing Dependabot alerts
 
 ## Thanks to contributors
