@@ -1,4 +1,5 @@
 import * as path from "path";
+import { getItemNesting } from "../SolutionExplorerConfiguration";
 import { ProjectInSolution, SolutionProjectType, SolutionFile, ProjectTypeIds } from "../model/Solutions";
 import { Project, ProjectFactory, ProjectFile } from "../model/Projects";
 import { TreeItem } from "./TreeItem";
@@ -96,75 +97,37 @@ async function CreateFromProject(context: TreeItemContext, project: ProjectInSol
 }
 
 export async function CreateItemsFromProject(context: TreeItemContext, project: Project, virtualPath?: string): Promise<TreeItem[]> {
-    let items = await project.getProjectFilesAndFolders(virtualPath);
     let result: TreeItem[] = [];
 
+    let items = await project.getProjectFilesAndFolders(virtualPath);
     items.folders.forEach(folder => {
         result.push(new ProjectFolderTreeItem(context, folder));
     });
 
-    var csharpFiles : ProjectFile[] = items.files.filter(r => r.name.endsWith(".cs"));
-    var partialClassesAreThere : boolean = csharpFiles.map(l => l.name)
-        .map(l => l.split("."))
-        .filter(r => r.length > 2).length > 0;
-    
-
-    if(partialClassesAreThere) {
-        let handledPartialClasses : string[] = [];
-        csharpFiles.forEach(cs => {
-            let hasPartialIdentifier : boolean = cs.name.split(".").length > 2;
-            if(hasPartialIdentifier) {
-                let className = cs.name.split(".")[0];
-
-                let mainFile = csharpFiles.filter(r => r.name == className + ".cs");
-
-                if(mainFile.length > 0) {
-
-                    if(handledPartialClasses.indexOf(mainFile[0].fullPath) === -1) {
-                        handledPartialClasses.push(mainFile[0].fullPath);
-    
-                        let relatedFiles = csharpFiles.filter(r => {
-                            if(r.name.split(".").length === 2) { return false; }
-                            let otherClassName = r.name.split(".")[0];
-                            return className == otherClassName;
-                        });
-    
-                        result.push(new ProjectFileTreeItem(context, mainFile[0], relatedFiles));
-                    }
-
-                } else {
-                    result.push(new ProjectFileTreeItem(context, cs));
-                }
-            } else if(handledPartialClasses.indexOf(cs.fullPath) === -1) {
-                let className = cs.name.split(".")[0];
-
-                let relatedFiles = csharpFiles.filter(r => {
-                    if(r.name.split(".").length === 2) { return false; }
-                    let otherClassName = r.name.split(".")[0];
-                    return className == otherClassName;
-                });
-
-                if(relatedFiles.length > 0) {
-                    handledPartialClasses.push(cs.fullPath);
-                }
-
-                result.push(new ProjectFileTreeItem(context, cs));
-            }
-        });
-    } else {
+    const useNesting = getItemNesting();
+    if (useNesting) {
+        let threePointFiles : ProjectFile[] = items.files.filter(f => f.name.split('.').length > 2)
+        let handledthreePointFiles: ProjectFile[] = [];
         items.files.forEach(file => {
-            if(file.name.endsWith(".cs")) {
+            if (threePointFiles.indexOf(file) >= 0) return;
+            if (threePointFiles.length > 0) {
+                const name = file.name.split('.')[0];
+                const extension = path.extname(file.name).substring(1);
+                const related = threePointFiles.filter(f => f.name.startsWith(name) && f.name.endsWith(extension) && handledthreePointFiles.indexOf(f) < 0);
+                handledthreePointFiles.push(...related);
+                result.push(new ProjectFileTreeItem(context, file, related));
+            } else {
                 result.push(new ProjectFileTreeItem(context, file));
             }
         });
-    }
-
-    items.files.forEach(file => {
-        if(!file.name.endsWith(".cs")) {
+        threePointFiles.filter(f => handledthreePointFiles.indexOf(f) < 0).forEach(file => {
             result.push(new ProjectFileTreeItem(context, file));
-        }
-    });
-
+        });
+    } else {
+        items.files.forEach(file => {
+            result.push(new ProjectFileTreeItem(context, file));
+        });
+    }
 
     Object.keys(project.solutionItems).forEach(k => {
         const fullpath = path.join(context.solution.FolderPath, project.solutionItems[k]);
