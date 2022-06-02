@@ -48,6 +48,8 @@ Branded icons are licensed under their copyright license.
 
 - `vssolution.trackActiveItem` Select the active editor file in the solution explorer (not recomended).
 
+- `vssolution.itemNesting` Sets whether related items will be displayed nested.
+
 - `vssolution.netcoreIgnore` Folder and file names to ignore when get a dotnet core project content.
 
 - `vssolution.xxprojItemTypes` Type of XML element to put in the xxproj files.
@@ -69,6 +71,8 @@ Branded icons are licensed under their copyright license.
     "vssolution.showOutputChannel": true,
 
     "vssolution.trackActiveItem": false,
+
+    "vssolution.itemNesting": false,
 
     "vssolution.netcoreIgnore": [
         "bin",

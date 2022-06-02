@@ -1595,6 +1595,11 @@
                     ],
                     "default": "lf",
                     "description": "Controls line endings of solution and project files."
+                },
+                "vssolution.itemNesting": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Sets whether related items will be displayed nested"
                 }
             }
         }

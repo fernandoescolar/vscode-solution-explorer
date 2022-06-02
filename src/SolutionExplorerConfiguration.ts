@@ -9,10 +9,11 @@ const ShowOutputChannelName = 'showOutputChannel';
 const NetcoreIgnoreName = 'netcoreIgnore';
 const AlternativeSolutionFoldersName = 'altSolutionFolders';
 const XmlSpacesName = 'xmlspaces';
-const XmlClosingTagSpace = 'xmlClosingTagSpace';
+const XmlClosingTagSpaceName = 'xmlClosingTagSpace';
 const Win32EncodingName = 'win32Encoding';
-const CreateTemplateFolderQuestion = 'createTemplateFolderQuestion';
-const LineEndings = 'lineEndings';
+const CreateTemplateFolderQuestionName = 'createTemplateFolderQuestion';
+const LineEndingsName = 'lineEndings';
+const ItemNestingName = 'itemNesting';
 
 let config: vscode.WorkspaceConfiguration = null;
 
@@ -70,7 +71,7 @@ export function getXmlSpaces(): string | number {
 }
 
 export function getXmlClosingTagSpace(): boolean {
-    return config.get<boolean>(XmlClosingTagSpace, false);
+    return config.get<boolean>(XmlClosingTagSpaceName, false);
 }
 
 export function getWin32EncodingTable(): { [id: string]: string } {
@@ -82,12 +83,16 @@ export function getWin32EncodingTable(): { [id: string]: string } {
 }
 
 export function getCreateTemplateFolderQuestion() : boolean {
-    return config.get<boolean>(CreateTemplateFolderQuestion, true);
+    return config.get<boolean>(CreateTemplateFolderQuestionName, true);
 }
 
 
 export function getLineEndings() : LineEndingsType {
-    return config.get<LineEndingsType>(LineEndings, "lf");
+    return config.get<LineEndingsType>(LineEndingsName, "lf");
+}
+
+export function getItemNesting(): boolean {
+    return config.get<boolean>(ItemNestingName, false);
 }
 
 export type LineEndingsType = "lf" | "crlf";
