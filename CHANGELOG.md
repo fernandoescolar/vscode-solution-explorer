@@ -2,6 +2,16 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.4.6
+
+Bugfix #178: Nested items PR #197 (by @callummarshall9)
+
+Enhancement #171: load new project templates from `dotnet new --list` command output.
+
+Fixing Dependabot alerts
+
+Move branch from master to main.
+
 ## 0.4.5
 
 Bugfix #183: Pass right parameter into PackageReference contructor (by @Danieladu)

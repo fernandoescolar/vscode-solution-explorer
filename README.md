@@ -122,6 +122,8 @@ Bugfix #178: Nested items PR #197 (by @callummarshall9)
 
 Enhancement #171: load new project templates from `dotnet new --list` command output.
 
+Fixing Dependabot alerts
+
 Move branch from master to main.
 
 ### 0.4.5
@@ -137,8 +139,6 @@ Fixing Dependabot alerts
 Bugfix #177: cleaning `console.log` calls
 
 Enhancement #175: adding "Watch Run" command
-
-Bump minimist from 1.2.5 to 1.2.6 #193 (by @dependabot)
 
 Fixing Dependabot alerts
 
