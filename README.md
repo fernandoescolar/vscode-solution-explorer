@@ -116,6 +116,14 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.4.6
+
+Bugfix #178: Nested items PR #197 (by @callummarshall9)
+
+Enhancement #171: load new project templates from `dotnet new --list` command output.
+
+Move branch from master to main.
+
 ### 0.4.5
 
 Bugfix #183: Pass right parameter into PackageReference contructor (by @Danieladu)
@@ -131,12 +139,6 @@ Bugfix #177: cleaning `console.log` calls
 Enhancement #175: adding "Watch Run" command
 
 Fixing Dependabot alerts
-
-### 0.4.3
-
-Bugfix #165: fixing error loading solutions from alt folders
-
-Bugfix #118: replacing '&' by '&amp;' in project XML quoted strings
 
 ## Thanks to contributors
 
@@ -156,5 +158,6 @@ Bugfix #118: replacing '&' by '&amp;' in project XML quoted strings
 [m4ss1m0g](https://github.com/m4ss1m0g)
 [Coda](https://github.com/little512)
 [Hongyang Du (hond)](https://github.com/Danieladu)
+[Callum Marshall](https://github.com/callummarshall9)
 
 **Enjoy!**
