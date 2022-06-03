@@ -116,9 +116,19 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 
 There is a lot of work to do.
 
+### 0.4.7
+
+Enhancement #63: prefix commands with "SolutionExplorer: "
+
+Enhancement #167: using runtime icons for tree actions
+
+Enhancement #189: it tries to determine the file extension when you create a new one without extension
+
+Enhancement #159: added new command: "SolutionExplorer: Select Active Document"
+
 ### 0.4.6
 
-Bugfix #178: Nested items PR #197 (by @callummarshall9)
+Bugfix #178: Nested items PR #197 (by @callummarshall9). You can activate this option by setting the `vssolution.itemNesting` parameter to `true`
 
 Enhancement #171: load new project templates from `dotnet new --list` command output.
 
@@ -131,14 +141,6 @@ Move branch from master to main.
 Bugfix #183: Pass right parameter into PackageReference contructor (by @Danieladu)
 
 Enhancement #186: update to C# 10 namespace syntax (by @little512)
-
-Fixing Dependabot alerts
-
-### 0.4.4
-
-Bugfix #177: cleaning `console.log` calls
-
-Enhancement #175: adding "Watch Run" command
 
 Fixing Dependabot alerts
 

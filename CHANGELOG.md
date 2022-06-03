@@ -2,9 +2,19 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.4.7
+
+Enhancement #63: prefix commands with "SolutionExplorer: "
+
+Enhancement #167: using runtime icons for tree actions
+
+Enhancement #189: it tries to determine the file extension when you create a new one without extension
+
+Enhancement #159: added new command: "SolutionExplorer: Select Active Document"
+
 ## 0.4.6
 
-Bugfix #178: Nested items PR #197 (by @callummarshall9)
+Bugfix #178: Nested items PR #197 (by @callummarshall9). You can activate this option by setting the `vssolution.itemNesting` parameter to `true`.
 
 Enhancement #171: load new project templates from `dotnet new --list` command output.
 
