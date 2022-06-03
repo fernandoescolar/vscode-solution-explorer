@@ -11,6 +11,15 @@ import { NoReferencesStandardProject } from "./Kinds/NoReferencesStandardProject
 
 const cpsProjectTypes = [ ProjectTypeIds.cpsCsProjectGuid, ProjectTypeIds.cpsVbProjectGuid, ProjectTypeIds.cpsProjectGuid ];
 const standardProjectTypes = [ ProjectTypeIds.csProjectGuid, ProjectTypeIds.fsProjectGuid, ProjectTypeIds.vbProjectGuid, ProjectTypeIds.vcProjectGuid, ProjectTypeIds.cpsFsProjectGuid ];
+const projectFileExtensions = {
+    [ProjectTypeIds.csProjectGuid]: ".cs",
+    [ProjectTypeIds.fsProjectGuid]: ".fs",
+    [ProjectTypeIds.vbProjectGuid]: ".vb",
+    [ProjectTypeIds.vcProjectGuid]: ".cpp",
+    [ProjectTypeIds.cpsCsProjectGuid]: ".cs",
+    [ProjectTypeIds.cpsVbProjectGuid]: ".vb",
+    [ProjectTypeIds.cpsFsProjectGuid]: ".fs",
+};
 
 export class ProjectFactory {
     public static async parse(project: ProjectInSolution): Promise<Project> {
@@ -18,33 +27,39 @@ export class ProjectFactory {
             return null;
         }
 
+        let result: Project = null;
         if (project.fullPath.toLocaleLowerCase().endsWith(".njsproj")) {
-            return await ProjectFactory.loadNoReferencesStandardProject(project);
+            result = await ProjectFactory.loadNoReferencesStandardProject(project);
 
         }
         if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat
             && cpsProjectTypes.indexOf(project.projectTypeId) >= 0) {
-            return await ProjectFactory.loadCpsProject(project);
+            result = await ProjectFactory.loadCpsProject(project);
         }
 
         if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat
             && standardProjectTypes.indexOf(project.projectTypeId) >= 0) {
-            return await ProjectFactory.determineStandardProject(project);
+            result = await ProjectFactory.determineStandardProject(project);
         }
 
         if (project.projectType == SolutionProjectType.WebProject) {
-            return await ProjectFactory.loadWebsiteProject(project);
+            result = await ProjectFactory.loadWebsiteProject(project);
         }
 
         if (project.projectTypeId == ProjectTypeIds.shProjectGuid) {
-            return await ProjectFactory.loadSharedProject(project);
+            result = await ProjectFactory.loadSharedProject(project);
         }
 
         if (project.projectTypeId == ProjectTypeIds.deployProjectGuid) {
-            return await ProjectFactory.loadDeploydProject(project);
+            result = await ProjectFactory.loadDeploydProject(project);
         }
 
-        return null;
+        const fileExtension = projectFileExtensions[project.projectTypeId];
+        if (fileExtension) {
+            result.fileExtension = fileExtension;
+        }
+
+        return result;
     }
 
     private static async determineStandardProject(project: ProjectInSolution): Promise<Project> {

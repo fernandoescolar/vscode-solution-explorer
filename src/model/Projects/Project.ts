@@ -10,6 +10,8 @@ export abstract class Project {
     constructor(protected readonly projectInSolution: ProjectInSolution, public readonly type: string) {
     }
 
+    public fileExtension: string = '';
+
     public get fullPath(): string {
         return this.projectInSolution.fullPath;
     }

@@ -8,6 +8,7 @@ import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandPa
 
 export class CreateFileCommand extends CommandBase {
     private _workspaceRoot: string = '';
+    private _defaultExtension: string = '';
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Create file');
 
@@ -20,6 +21,7 @@ export class CreateFileCommand extends CommandBase {
     protected shouldRun(item: TreeItem): boolean {
         if(!!item.project) {
             this._workspaceRoot = item.workspaceRoot;
+            this._defaultExtension = item.project.fileExtension;
             return true;
         }
     }
@@ -32,9 +34,10 @@ export class CreateFileCommand extends CommandBase {
             if (!item.contextValue.startsWith(ContextValues.ProjectFolder))
                 targetpath = path.dirname(targetpath);
 
-            let content = await this.getContent(item);
-            let filepath = await item.project.createFile(targetpath, args[0], content);
-            let document = await vscode.workspace.openTextDocument(filepath);
+            const content = await this.getContent(item);
+            const filename = this.getFilename(args[0]);
+            const filepath = await item.project.createFile(targetpath, filename, content);
+            const document = await vscode.workspace.openTextDocument(filepath);
             vscode.window.showTextDocument(document);
             this.provider.logger.log("File created: " + filepath);
         } catch(ex) {
@@ -43,7 +46,7 @@ export class CreateFileCommand extends CommandBase {
     }
 
     private async getTemplatesTypes(): Promise<string[]> {
-        const extension = path.extname(this.args[0]).substring(1);
+        const extension = (path.extname(this.args[0]) || this._defaultExtension ).substring(1);
         const templateEngine = this.provider.getTemplateEngine(this._workspaceRoot);
         let result: string[] = [];
         if (templateEngine) {
@@ -57,9 +60,14 @@ export class CreateFileCommand extends CommandBase {
         if (!this.args[1]) return Promise.resolve("");
         const templateEngine = this.provider.getTemplateEngine(this._workspaceRoot);
         if (templateEngine) {
-            return templateEngine.generate(this.args[0], this.args[1], item);
+            const filename = this.getFilename(this.args[0]);
+            return templateEngine.generate(filename, this.args[1], item);
         }
 
         return Promise.resolve("");
+    }
+
+    private getFilename(filename: string): string {
+        return path.extname(filename) ? filename :filename + this._defaultExtension;
     }
 }
