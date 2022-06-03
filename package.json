@@ -62,18 +62,12 @@
             {
                 "command": "solutionExplorer.refresh",
                 "title": "Refresh",
-                "icon": {
-                    "light": "icons/refresh-light.svg",
-                    "dark": "icons/refresh-dark.svg"
-                }
+                "icon": "$(refresh)"
             },
             {
                 "command": "solutionExplorer.collapseAll",
                 "title": "Collapse All",
-                "icon": {
-                    "light": "icons/collapse-all_light.svg",
-                    "dark": "icons/collapse-all_dark.svg"
-                }
+                "icon": "$(collapse-all)"
             },
             {
                 "command": "solutionExplorer.openFile",
@@ -90,10 +84,7 @@
             {
                 "command": "solutionExplorer.createFile",
                 "title": "Create file",
-                "icon": {
-                    "light": "icons/add-file_light.svg",
-                    "dark": "icons/add-file_dark.svg"
-                }
+                "icon": "$(new-file)"
             },
             {
                 "command": "solutionExplorer.renameFolder",
@@ -106,10 +97,7 @@
             {
                 "command": "solutionExplorer.createFolder",
                 "title": "Create folder",
-                "icon": {
-                    "light": "icons/add-folder_light.svg",
-                    "dark": "icons/add-folder_dark.svg"
-                }
+                "icon": "$(new-folder)"
             },
             {
                 "command": "solutionExplorer.moveFile",
