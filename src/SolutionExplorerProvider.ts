@@ -108,6 +108,10 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		}
 	}
 
+	public selectActiveDocument(): Promise<void> {
+		return this.selectFile(vscode.window.activeTextEditor.document.uri.fsPath);
+	}
+
 	private selectTreeItem(element: sln.TreeItem): void {
 		if (this.treeView && this.treeView.visible) {
 			this.treeView.reveal(element, { select: true, focus: false });
@@ -191,7 +195,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		if (!vscode.window.activeTextEditor) return;
 		if (vscode.window.activeTextEditor.document.uri.scheme !== 'file') return;
 
-		this.selectFile(vscode.window.activeTextEditor.document.uri.fsPath);
+		this.selectActiveDocument();
 	}
 
 	private onVisibleEditorsChanged(editors: vscode.TextEditor[]): void {

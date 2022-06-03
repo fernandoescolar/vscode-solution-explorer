@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { SolutionExplorerProvider } from "./SolutionExplorerProvider";
 import * as cmds from "./commands";
+import { SelectActiveDocumentCommand } from "./commands";
 
 export class SolutionExplorerCommands {
     private commands: { [id:string]: cmds.ICommand } = {};
@@ -41,6 +42,7 @@ export class SolutionExplorerCommands {
         this.commands['watchRun'] = new cmds.WatchRunCommand(provider);
         this.commands['test'] = new cmds.TestCommand(provider);
         this.commands['locate'] = new cmds.LocateCommand(provider);
+        this.commands['showActiveFileInExplorer'] = new SelectActiveDocumentCommand(provider);
     }
 
     public register() {

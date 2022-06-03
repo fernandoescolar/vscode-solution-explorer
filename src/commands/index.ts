@@ -31,3 +31,4 @@ export * from "./RunCommand";
 export * from "./WatchRunCommand";
 export * from "./TestCommand";
 export * from "./LocateCommand";
+export * from "./SelectActiveDocumentCommand";

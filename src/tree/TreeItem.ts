@@ -85,17 +85,15 @@ export abstract class TreeItem extends vscode.TreeItem {
 		if (this.path) {
 			if (this.path === filepath) return this;
 
-			let dirname = path.dirname(this.path);
-			if (filepath.startsWith(dirname)) {
-				try {
-					await this.getChildren();
-				} catch {
-					return null;
-				}
-				for(let i = 0; i < this.children.length; i++) {
-					let result = await this.children[i].search(filepath);
-					if (result) return result;
-				}
+			try {
+				await this.getChildren();
+			} catch {
+				return null;
+			}
+
+			for(let i = 0; i < this.children.length; i++) {
+				let result = await this.children[i].search(filepath);
+				if (result) return result;
 			}
 		}
 

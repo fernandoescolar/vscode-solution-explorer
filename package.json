@@ -198,6 +198,10 @@
             {
                 "command": "solutionExplorer.test",
                 "title": "SolutionExplorer: Test"
+            },
+            {
+                "command": "solutionExplorer.showActiveFileInExplorer",
+                "title": "SolutionExplorer: Select Active Document"
             }
         ],
         "menus": {
