@@ -20,6 +20,7 @@ export class SolutionExplorerCommands {
         this.commands['moveFolder'] = new cmds.MoveCommand(provider);
         this.commands['addPackage'] = new cmds.AddPackageCommand(provider);
         this.commands['removePackage'] = new cmds.RemovePackageCommand(provider);
+        this.commands['updatePackagesVersion'] = new cmds.UpdatePackagesVersionCommand(provider);
         this.commands['addProjectReference'] = new cmds.AddProjectReferenceCommand(provider);
         this.commands['removeProjectReference'] = new cmds.RemoveProjectReferenceCommand(provider);
         this.commands['createNewSolution'] = new cmds.CreateNewSolutionCommand(provider);

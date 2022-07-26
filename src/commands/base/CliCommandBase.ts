@@ -1,7 +1,6 @@
 import * as path from "path";
 import * as os from "os";
 import * as vscode from "vscode";
-import { execSync } from 'child_process';
 import { TreeItem, ContextValues } from '../../tree';
 import { CommandBase } from './CommandBase';
 import { SolutionExplorerProvider } from '../../SolutionExplorerProvider';
@@ -9,7 +8,6 @@ import { SolutionExplorerProvider } from '../../SolutionExplorerProvider';
 const TERMINAL_NAME:string = "dotnet";
 
 export abstract class CliCommandBase extends CommandBase {
-    private codepage: string = "65001";
 
     constructor(title: string, protected readonly provider: SolutionExplorerProvider, protected readonly app: string) {
         super(title);
@@ -43,7 +41,6 @@ export abstract class CliCommandBase extends CommandBase {
 
     private checkCurrentEncoding(): void {
         if (os.platform() === "win32") {
-            this.codepage = execSync('chcp').toString().split(':').pop().trim();
         }
     }
 

@@ -9,6 +9,7 @@ export * from "./CreateFileCommand";
 export * from "./MoveCommand";
 export * from "./AddPackageCommand";
 export * from "./RemovePackageCommand";
+export * from "./UpdatePackagesVersionCommand";
 export * from "./AddProjectReferenceCommand";
 export * from "./RemoveProjectReferenceCommand";
 export * from "./CreateNewSolutionCommand";

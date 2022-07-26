@@ -116,6 +116,10 @@
                 "title": "SolutionExplorer: Remove package"
             },
             {
+                "command": "solutionExplorer.updatePackagesVersion",
+                "title": "SolutionExplorer: Update packages version"
+            },
+            {
                 "command": "solutionExplorer.addProjectReference",
                 "title": "SolutionExplorer: Add reference"
             },
@@ -415,6 +419,21 @@
                 },
                 {
                     "command": "solutionExplorer.removePackage",
+                    "when": "view == slnexpl && viewItem == project-referenced-package-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.updatePackagesVersion",
+                    "when": "view == slnexpl && viewItem == project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.updatePackagesVersion",
+                    "when": "view == slnexpl && viewItem == project-referenced-packages-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.updatePackagesVersion",
                     "when": "view == slnexpl && viewItem == project-referenced-package-cps",
                     "group": "2_workspace"
                 },
@@ -835,6 +854,21 @@
                 },
                 {
                     "command": "solutionExplorer.removePackage",
+                    "when": "view == slnbrw && viewItem == project-referenced-package-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.updatePackagesVersion",
+                    "when": "view == slnbrw && viewItem == project-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.updatePackagesVersion",
+                    "when": "view == slnbrw && viewItem == project-referenced-packages-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.updatePackagesVersion",
                     "when": "view == slnbrw && viewItem == project-referenced-package-cps",
                     "group": "2_workspace"
                 },
