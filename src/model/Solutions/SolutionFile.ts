@@ -1,5 +1,5 @@
 /***********
- * TypeScript simplified version of: 
+ * TypeScript simplified version of:
  * https://github.com/Microsoft/msbuild/blob/master/src/Build/Construction/Solution/SolutionFile.cs
  */
 
@@ -88,7 +88,7 @@ export class SolutionFile {
             solution.fullPath = solutionFullPath;
             solution.folderPath = path.dirname(solutionFullPath);
             solution.name = solutionFullPath.split(path.sep).pop().replace('.sln', '');
-            
+
             fs.readFile(solutionFullPath, 'utf8', (err, data) => {
                 solution.lines = data.split('\n');
                 solution.currentLineIndex = 0;
@@ -101,7 +101,7 @@ export class SolutionFile {
     private ReadLine(): string {
         if (this.currentLineIndex >= this.lines.length)
             return null;
-            
+
         return this.lines[this.currentLineIndex++].trim();
     }
 
@@ -184,8 +184,8 @@ export class SolutionFile {
                 {
                     const propertyLineRegEx = /(.*)\s*=\s*(.*)/g;
                     const m = propertyLineRegEx.exec(line);
-                    const fileName: string = path.basename(m[1].trim());
-                    const filePath: string = m[2].trim();
+                    const fileName: string = path.basename(m[1].replace(/\\/g, path.sep).trim());
+                    const filePath: string = m[2].replace(/\\/g, path.sep).trim();
                     proj.addFile(fileName, filePath);
 
                     line = this.ReadLine();
@@ -209,7 +209,7 @@ export class SolutionFile {
             else if (line.startsWith("ProjectSection(WebsiteProperties)"))
             {
                 // We have a WebsiteProperties section.  This section is present only in Venus
-                // projects, and contains properties that we'll need in order to call the 
+                // projects, and contains properties that we'll need in order to call the
                 // AspNetCompiler task.
                 line = this.ReadLine();
                 while ((line != null) && (!line.startsWith("EndProjectSection")))
@@ -273,7 +273,7 @@ export class SolutionFile {
         {
             proj.projectType = SolutionProjectType.Unknown;
         }
-       
+
     }
 
     private ParseNestedProjects(): void {
@@ -320,7 +320,7 @@ export class SolutionFile {
                 continue;
             }
 
-            let configurationNames: string[] = str.split(nameValueSeparator);         
+            let configurationNames: string[] = str.split(nameValueSeparator);
             let fullConfigurationName: string = configurationNames[0].trim();
 
             if (fullConfigurationName === "DESCRIPTION")
@@ -363,11 +363,11 @@ export class SolutionFile {
     }
 
     private ProcessProjectConfigurationSection(rawProjectConfigurationsEntries: { [id: string]: string }): void {
-        // Instead of parsing the data line by line, we parse it project by project, constructing the 
-        // entry name (e.g. "{A6F99D27-47B9-4EA4-BFC9-25157CBDC281}.Release|Any CPU.ActiveCfg") and retrieving its 
+        // Instead of parsing the data line by line, we parse it project by project, constructing the
+        // entry name (e.g. "{A6F99D27-47B9-4EA4-BFC9-25157CBDC281}.Release|Any CPU.ActiveCfg") and retrieving its
         // value from the raw data. The reason for this is that the IDE does it this way, and as the result
         // the '.' character is allowed in configuration names although it technically separates different
-        // parts of the entry name string. This could lead to ambiguous results if we tried to parse 
+        // parts of the entry name string. This could lead to ambiguous results if we tried to parse
         // the entry name instead of constructing it and looking it up. Although it's pretty unlikely that
         // this would ever be a problem, it's safer to do it the same way VS IDE does it.
         let configPlatformSeparators = '|';
@@ -383,15 +383,15 @@ export class SolutionFile {
                     let entryNameActiveConfig: string = project.projectGuid + "." + solutionConfiguration.fullName + ".ActiveCfg";
 
                     // The "Build.0" entry tells us whether to build the project configuration in the given solution configuration.
-                    // Technically, it specifies a configuration name of its own which seems to be a remnant of an initial, 
-                    // more flexible design of solution configurations (as well as the '.0' suffix - no higher values are ever used). 
-                    // The configuration name is not used, and the whole entry means "build the project configuration" 
+                    // Technically, it specifies a configuration name of its own which seems to be a remnant of an initial,
+                    // more flexible design of solution configurations (as well as the '.0' suffix - no higher values are ever used).
+                    // The configuration name is not used, and the whole entry means "build the project configuration"
                     // if it's present in the solution file, and "don't build" if it's not.
                     let entryNameBuild = project.projectGuid + "." + solutionConfiguration.fullName + ".Build.0";
 
                     if (rawProjectConfigurationsEntries[entryNameActiveConfig]) {
                         let configurationPlatformParts = rawProjectConfigurationsEntries[entryNameActiveConfig].split(configPlatformSeparators);
-                       
+
                         let projectConfiguration = new ProjectConfigurationInSolution(
                             configurationPlatformParts[0],
                             (configurationPlatformParts.length > 1) ? configurationPlatformParts[1] : '',
