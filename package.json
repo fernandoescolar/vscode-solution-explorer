@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.4.7",
+    "version": "0.5.0",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -59,6 +59,11 @@
             ]
         },
         "commands": [
+            {
+                "command": "solutionExplorer.openSolution",
+                "title": "SolutionExplorer: Open Solution",
+                "icon": "$(folder-opened)"
+            },
             {
                 "command": "solutionExplorer.refresh",
                 "title": "SolutionExplorer: Refresh",
@@ -210,6 +215,16 @@
         ],
         "menus": {
             "view/title": [
+                {
+                    "command": "solutionExplorer.openSolution",
+                    "when": "view == slnexpl",
+                    "group": "navigation"
+                },
+                {
+                    "command": "solutionExplorer.openSolution",
+                    "when": "view == slnbrw",
+                    "group": "navigation"
+                },
                 {
                     "command": "solutionExplorer.refresh",
                     "when": "view == slnexpl",
@@ -1518,7 +1533,7 @@
         ],
         "configuration": {
             "type": "object",
-            "title": "vscode-solution-explorer configuration",
+            "title": "vscode-solution-explorer",
             "properties": {
                 "vssolution.showMode": {
                     "type": "string",
@@ -1626,6 +1641,26 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Sets whether related items will be displayed nested"
+                },
+                "vssolution.openSolutions.inRootFolder": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Sets whether solutions will be automatically loaded from the root folder."
+                },
+                "vssolution.openSolutions.inAltFolders": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Sets whether solutions will be automatically loaded from the altSolutionFolders parameter."
+                },
+                "vssolution.openSolutions.inFoldersAndSubfolders": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Sets whether solutions will be automatically loaded from the current opened folder and subfolders."
+                },
+                "vssolution.openSolutions.selectedInOmnisharp": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Sets whether solutions will be automatically loaded from the current selected solution in Omnisharp extension."
                 }
             }
         }

@@ -60,6 +60,14 @@ Branded icons are licensed under their copyright license.
 
 - `vssolution.win32Encoding` Win32 "codepage" to "iconv.js" encoding equivalences.
 
+- `vssolution.openSolutions.inRootFolder` Sets whether solutions will be automatically loaded from the root folder.
+
+- `vssolution.openSolutions.inAltFolders` Sets whether solutions will be automatically loaded from the `vssolution.altSolutionFolders` parameter.
+
+- `vssolution.openSolutions.inFoldersAndSubfolders` Sets whether solutions will be automatically loaded from the current opened folder and subfolders.
+
+- `vssolution.openSolutions.selectedInOmnisharp` Sets whether solutions will be automatically loaded from the current selected solution in Omnisharp extension.
+
 ###### Example
 
 ```javascript
@@ -104,7 +112,12 @@ Branded icons are licensed under their copyright license.
         "932": "Shift_JIS",
         "936": "GBK",
         "950": "BIG5"
-    }
+    },
+
+    "vssolution.openSolutions.inRootFolder": false,
+    "vssolution.openSolutions.inAltFolders": false,
+    "vssolution.openSolutions.inFoldersAndSubfolders": false,
+    "vssolution.openSolutions.selectedInOmnisharp": true
 }
 ```
 
@@ -115,6 +128,14 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 ## Release Notes
 
 There is a lot of work to do.
+
+### 0.5.0
+
+Adding open solution command
+
+Adding different automatic open solution flags: in root folder, in alt folders, in root folders and subfolders, and omnisharp integration
+
+Adding command to update package references versions automatically
 
 ### 0.4.7
 

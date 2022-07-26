@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.5.0
+
+Adding open solution command
+
+Adding different automatic open solution flags: in root folder, in alt folders, in root folders and subfolders, and omnisharp integration
+
+Adding command to update package references versions automatically
+
 ## 0.4.7
 
 Enhancement #63: prefix commands with "SolutionExplorer: "
