@@ -1,16 +1,16 @@
 import { window } from "vscode";
 import { ILogger } from "./ILogger";
-import { IEventAggegator, LogEvent, LogEventType } from "../events";
+import { IEventAggregator, LogEvent, LogEventType } from "../events";
 
 export class Logger implements ILogger {
-    constructor(private readonly eventAggregator: IEventAggegator) {
+    constructor(private readonly eventAggregator: IEventAggregator) {
     }
 
     public log(text: string): void {
         let event = new LogEvent(LogEventType.Append, text);
 		this.eventAggregator.publish(event);
     }
-    
+
     public info(text: string): void {
         if (!text) return;
         this.log("info: " + text);
@@ -22,7 +22,7 @@ export class Logger implements ILogger {
         this.log("error: " + text);
         window.showErrorMessage(text);
     }
-    
+
     public warn(text: string) {
         if (!text) return;
         this.log("warning: " + text);

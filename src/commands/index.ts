@@ -1,4 +1,5 @@
 export * from "./base/ICommand";
+export * from "./OpenSolutionCommand";
 export * from "./RefreshCommand";
 export * from "./CollapseAllCommand";
 export * from "./OpenFileCommand";

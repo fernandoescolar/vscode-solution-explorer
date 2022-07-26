@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "../../async/fs";
 import { DirectorySearchResult } from "./DirectorySearchResult";
 
-export async function searchFilesInDir(startPath:string, extension: string) : Promise<string[]> {
+export async function searchFilesInDir(startPath:string, extension: string, recursive: boolean = false) : Promise<string[]> {
     if (!(await fs.exists(startPath))) {
         return [];
     }
@@ -11,12 +11,19 @@ export async function searchFilesInDir(startPath:string, extension: string) : Pr
     let files = await fs.readdir(startPath);
     for (let i = 0; i < files.length; i++) {
         let filename = path.join(startPath, files[i]);
-        let stat = await fs.lstat(filename);
         if (filename.endsWith(extension)) {
             result.push(filename);
         }
+
+        if (recursive) {
+            let stat = await fs.lstat(filename);
+            if (stat.isDirectory()) {
+                let subresult = await searchFilesInDir(filename, extension, recursive);
+                result = result.concat(subresult);
+            }
+        }
     }
-    
+
     return result;
 }
 
@@ -43,7 +50,7 @@ export async function getDirectoryItems (dirPath: string): Promise<DirectorySear
         let y = b.toLowerCase();
         return x < y ? -1 : x > y ? 1 : 0;
     });
-    
+
     files.sort((a, b) => {
         let x = a.toLowerCase();
         let y = b.toLowerCase();
@@ -87,7 +94,7 @@ export async function createCopyName(filepath: string): Promise<string> {
     let ext = path.extname(filepath);
     let name = path.basename(filepath, ext);
     let folder = path.dirname(filepath);
-    while (await fs.exists(filepath)) {   
+    while (await fs.exists(filepath)) {
         filepath = path.join(folder, name + '.' + counter + ext);
         counter++;
     }

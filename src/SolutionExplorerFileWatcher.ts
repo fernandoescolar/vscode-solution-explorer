@@ -1,10 +1,10 @@
 import { workspace, FileSystemWatcher, Uri } from "vscode";
-import { IFileEvent, FileEvent, FileEventType, IEventAggegator } from "./events";
+import { IFileEvent, FileEvent, FileEventType, IEventAggregator } from "./events";
 
 export class SolutionExplorerFileWatcher {
     private fileWatcher: FileSystemWatcher;
 
-    constructor(public readonly eventAggregator: IEventAggegator){
+    constructor(public readonly eventAggregator: IEventAggregator){
     }
 
     public register(): void {

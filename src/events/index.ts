@@ -11,3 +11,6 @@ export * from "./file/FileEvent";
 export * from "./log/LogEventType";
 export * from "./log/ILogEvent";
 export * from "./log/LogEvent";
+
+export * from "./solution/ISolutionSelected";
+export * from "./solution/SolutionSelected";

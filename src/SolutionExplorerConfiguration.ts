@@ -14,6 +14,10 @@ const Win32EncodingName = 'win32Encoding';
 const CreateTemplateFolderQuestionName = 'createTemplateFolderQuestion';
 const LineEndingsName = 'lineEndings';
 const ItemNestingName = 'itemNesting';
+const OpenSolutionsInRootFolder = 'openSolutions.inRootFolder';
+const OpenSolutionsInAltFolders = 'openSolutions.inAltFolders';
+const OpenSolutionsInFoldersAndSubfolders = 'openSolutions.inFoldersAndSubfolders';
+const OpenSolutionsSelectedInOmnisharp = 'openSolutions.selectedInOmnisharp';
 
 let config: vscode.WorkspaceConfiguration = null;
 
@@ -86,13 +90,28 @@ export function getCreateTemplateFolderQuestion() : boolean {
     return config.get<boolean>(CreateTemplateFolderQuestionName, true);
 }
 
-
 export function getLineEndings() : LineEndingsType {
     return config.get<LineEndingsType>(LineEndingsName, "lf");
 }
 
 export function getItemNesting(): boolean {
     return config.get<boolean>(ItemNestingName, false);
+}
+
+export function getOpenSolutionsInRootFolder(): boolean {
+    return config.get<boolean>(OpenSolutionsInRootFolder, true);
+}
+
+export function getOpenSolutionsInAltFolders(): boolean {
+    return config.get<boolean>(OpenSolutionsInAltFolders, true);
+}
+
+export function getOpenSolutionsInFoldersAndSubfolders(): boolean {
+    return config.get<boolean>(OpenSolutionsInFoldersAndSubfolders, false);
+}
+
+export function getOpenSolutionsSelectedInOmnisharp(): boolean {
+    return config.get<boolean>(OpenSolutionsSelectedInOmnisharp, false);
 }
 
 export type LineEndingsType = "lf" | "crlf";

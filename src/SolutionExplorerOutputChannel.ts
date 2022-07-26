@@ -1,5 +1,5 @@
 import { window, OutputChannel } from "vscode";
-import { EventTypes, IEvent, ILogEvent, LogEventType, IEventAggegator, ISubscription } from "./events";
+import { EventTypes, IEvent, ILogEvent, LogEventType, IEventAggregator, ISubscription } from "./events";
 import * as SolutionExplorerConfiguration from "./SolutionExplorerConfiguration";
 
 export class SolutionExplorerOutputChannel {
@@ -7,7 +7,7 @@ export class SolutionExplorerOutputChannel {
     private subscription: ISubscription;
     private shouldShow: boolean;
 
-    constructor(public readonly eventAggregator: IEventAggegator) {
+    constructor(public readonly eventAggregator: IEventAggregator) {
     }
 
     public register(): void {
@@ -19,11 +19,11 @@ export class SolutionExplorerOutputChannel {
     }
 
     public unregister(): void {
-        if (this.outputChannel) 
+        if (this.outputChannel)
             this.outputChannel.dispose();
         if (this.subscription)
             this.subscription.dispose();
-        
+
         this.outputChannel = null;
         this.subscription = null;
     }

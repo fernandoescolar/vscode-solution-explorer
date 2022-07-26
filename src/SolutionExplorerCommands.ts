@@ -1,12 +1,13 @@
 import * as vscode from "vscode";
-import { SolutionExplorerProvider } from "./SolutionExplorerProvider";
 import * as cmds from "./commands";
-import { SelectActiveDocumentCommand } from "./commands";
+import { SolutionExplorerProvider } from "./SolutionExplorerProvider";
+import { IEventAggregator } from "./events";
 
 export class SolutionExplorerCommands {
     private commands: { [id:string]: cmds.ICommand } = {};
 
-    constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider) {
+    constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider, private readonly eventAggregator: IEventAggregator) {
+        this.commands['openSolution'] = new cmds.OpenSolutionCommand(eventAggregator);
         this.commands['refresh'] = new cmds.RefreshCommand(provider);
         this.commands['collapseAll'] = new cmds.CollapseAllCommand(provider);
         this.commands['openFile'] = new cmds.OpenFileCommand();
@@ -43,7 +44,7 @@ export class SolutionExplorerCommands {
         this.commands['watchRun'] = new cmds.WatchRunCommand(provider);
         this.commands['test'] = new cmds.TestCommand(provider);
         this.commands['locate'] = new cmds.LocateCommand(provider);
-        this.commands['showActiveFileInExplorer'] = new SelectActiveDocumentCommand(provider);
+        this.commands['showActiveFileInExplorer'] = new cmds.SelectActiveDocumentCommand(provider);
     }
 
     public register() {
