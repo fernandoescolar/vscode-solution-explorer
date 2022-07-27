@@ -2,6 +2,24 @@
 
 This extension adds a Visual Studio Solution File explorer panel in Visual Studio Code. Now you can navigate into your solution following the original Visual Studio structure.
 
+## Getting Started
+
+To activate `vscode-solution-explorer` you must first open a folder or workspace.
+
+Then, you can find this extension displayed as
+- a tab in the "Explorer" activity
+![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-tab.png)
+- an activity with the Visual Studio icon
+![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-activity.png)
+
+You can configure it in the Visual Studio Code settings panel:
+
+![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-show-mode.png)
+
+## Open Solutions
+
+
+
 ## Features
 
 Adds a Solution Explorer panel where you can find a Visual Studio Solution File Explorer.
@@ -17,6 +35,8 @@ Adds a Solution Explorer panel where you can find a Visual Studio Solution File 
 - You can create, delete, rename or move solution, solution folders and projects.
 
 - You can add or remove packages and references when the project is of kind CPS (dotnet core).
+
+- You can update all packages when the project is of kind CPS (dotnet core).
 
 ![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-1.gif)
 
@@ -133,9 +153,13 @@ There is a lot of work to do.
 
 Adding open solution command
 
-Adding different automatic open solution flags: in root folder, in alt folders, in root folders and subfolders, and omnisharp integration
+Adding different automatic open solution flags: in root folder, in alt folders, in root folders and subfolders (Enhancement #204), and omnisharp integration
 
 Adding command to update package references versions automatically
+
+Bugfix #205: README images fixed thanks to [Philippe Desmarais](https://github.com/CephalonAhmes)
+
+Adding welcome view when no solution found
 
 ### 0.4.7
 
@@ -157,14 +181,6 @@ Fixing Dependabot alerts
 
 Move branch from master to main.
 
-### 0.4.5
-
-Bugfix #183: Pass right parameter into PackageReference contructor (by @Danieladu)
-
-Enhancement #186: update to C# 10 namespace syntax (by @little512)
-
-Fixing Dependabot alerts
-
 ## Thanks to contributors
 
 [dfrencham](https://github.com/dfrencham)
@@ -184,5 +200,6 @@ Fixing Dependabot alerts
 [Coda](https://github.com/little512)
 [Hongyang Du (hond)](https://github.com/Danieladu)
 [Callum Marshall](https://github.com/callummarshall9)
+[Philippe Desmarais](https://github.com/CephalonAhmes)
 
 **Enjoy!**
