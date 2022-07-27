@@ -38,6 +38,8 @@ You can enable omnisharp integration and vscode-solution-explorer will open the 
 
 > It will ignore .csproj files because vscode-solution-explorer cannot open a project file without a Solution.
 
+> You have to install [Microsoft C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) to enable omnisharp integration.
+
 ### Find Solution files
 
 You can use the automatic solution file finder activating some options in the Visual Studio Code settings panel.
@@ -82,12 +84,6 @@ Adds a Solution Explorer panel where you can find a Visual Studio Solution File 
 ![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-2.gif)
 
 ![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-3.gif)
-
-## Requirements
-
-You have to open a folder with at least one solution file (".sln") in the root path.
-
-Or you can create a new one by clicking with the right mouse button.
 
 ## Extension Settings
 
@@ -191,6 +187,8 @@ Adding command to update package references versions automatically
 Bugfix #205: README images fixed thanks to [Philippe Desmarais](https://github.com/CephalonAhmes)
 
 Adding welcome view when no solution found
+
+Updating README
 
 ### 0.4.7
 

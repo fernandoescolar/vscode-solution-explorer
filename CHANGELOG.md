@@ -6,9 +6,15 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Adding open solution command
 
-Adding different automatic open solution flags: in root folder, in alt folders, in root folders and subfolders, and omnisharp integration
+Adding different automatic open solution flags: in root folder, in alt folders, in root folders and subfolders (Enhancement #204), and omnisharp integration
 
 Adding command to update package references versions automatically
+
+Bugfix #205: README images fixed thanks to [Philippe Desmarais](https://github.com/CephalonAhmes)
+
+Adding welcome view when no solution found
+
+Updating README
 
 ## 0.4.7
 
