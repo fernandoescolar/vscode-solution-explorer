@@ -4,21 +4,60 @@ This extension adds a Visual Studio Solution File explorer panel in Visual Studi
 
 ## Getting Started
 
-To activate `vscode-solution-explorer` you must first open a folder or workspace.
+To activate `vscode-solution-explorer` you have to **first open a folder or workspace**.
 
-Then, you can find this extension displayed as
+Then, you can find this extension displayed as:
+
 - a tab in the "Explorer" activity
-![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-tab.png)
+
+![Visual Studio Code Explorer tab](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-tab.png)
+
 - an activity with the Visual Studio icon
-![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-activity.png)
 
-You can configure it in the Visual Studio Code settings panel:
+![Visual Studio Code Activity](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-activity.png)
 
-![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-show-mode.png)
+You can configure it in the Visual Studio Code settings panel, looking for "VsSolution: **Show Mode**" section:
+
+![Visual Studio Code Settings: Show Modes](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-show-mode.png)
 
 ## Open Solutions
 
+`vscode-solution-explorer` has several ways to open the solution files and you can configure them in the Visual Studio Code configuration panel.
 
+### Open Solution command
+
+You can execute the "Open solution" command from the command palette or from the welcome view (if no solution has been found).
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-open-command.png)
+
+### Omnisharp integration
+
+You can enable omnisharp integration and vscode-solution-explorer will open the same .sln file you open with Microsoft extension.
+
+![Activate Omnisharp integration in settings panel](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/omnisharp-integration.png)
+
+> It will ignore .csproj files because vscode-solution-explorer cannot open a project file without a Solution.
+
+### Find Solution files
+
+You can use the automatic solution file finder activating some options in the Visual Studio Code settings panel.
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/search-in-root-folder.png)
+
+The `vssolution.openSolutions.inRootFolder` setting will look for the solution files in the root folder.
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/search-in-root-folder-recursive.png)
+
+The `vssolution.openSolutions.inFoldersAndSubfolders` setting will search for the solution files in the root folder and its subfolders.
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/search-in-alt-folders.png)
+
+And if you want to specify the subfolders where you want to look for the solution files you have to activate the `vssolution.openSolutions.inAltFolders` setting and specify the folders in the `vssolution.altSolutionFolders` setting:
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-alt-folders.png)
+
+
+*You can combine all of these options to find the best configuration for you.*
 
 ## Features
 
@@ -49,14 +88,6 @@ Adds a Solution Explorer panel where you can find a Visual Studio Solution File 
 You have to open a folder with at least one solution file (".sln") in the root path.
 
 Or you can create a new one by clicking with the right mouse button.
-
-## License
-
-The source code is licensed under the [MIT](LICENSE) license.
-
-The icons from ([vscode-icons extension](https://github.com/vscode-icons/vscode-icons/)) are licensed under the [Creative Commons - ShareAlike (CC BY-SA)](https://creativecommons.org/licenses/by-sa/4.0/) license.
-
-Branded icons are licensed under their copyright license.
 
 ## Extension Settings
 
@@ -180,6 +211,14 @@ Enhancement #171: load new project templates from `dotnet new --list` command ou
 Fixing Dependabot alerts
 
 Move branch from master to main.
+
+## License
+
+The source code is licensed under the [MIT](LICENSE) license.
+
+The icons from ([vscode-icons extension](https://github.com/vscode-icons/vscode-icons/)) are licensed under the [Creative Commons - ShareAlike (CC BY-SA)](https://creativecommons.org/licenses/by-sa/4.0/) license.
+
+Branded icons are licensed under their copyright license.
 
 ## Thanks to contributors
 
