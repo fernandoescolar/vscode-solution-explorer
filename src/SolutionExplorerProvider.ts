@@ -135,8 +135,8 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 		let solutionPaths = await this.solutionFinder.findSolutions();
 		if (solutionPaths.length <= 0 && this.workspaceRoots.length > 0) {
-			this.children .push(await sln.CreateNoSolution(this, this.workspaceRoots[0]));
-			return this.children;
+			// return empty to show welcome view
+			return [];
 		}
 
 		for(let i = 0; i < solutionPaths.length; i++) {

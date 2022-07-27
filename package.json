@@ -58,6 +58,16 @@
                 }
             ]
         },
+        "viewsWelcome": [
+            {
+                "view": "slnexpl",
+                "contents": "No visual studio solution found [learn more](https://github.com/fernandoescolar/vscode-solution-explorer#open-solutions).\n[Open solution](command:solutionExplorer.openSolution)\n[Create New Solution](command:solutionExplorer.createNewSolution)"
+            },
+            {
+                "view": "slnbrw",
+                "contents": "No visual studio solution found [learn more](https://github.com/fernandoescolar/vscode-solution-explorer#open-solutions).\n[Open solution](command:solutionExplorer.openSolution)\n[Create New Solution](command:solutionExplorer.createNewSolution)"
+            }
+        ],
         "commands": [
             {
                 "command": "solutionExplorer.openSolution",
