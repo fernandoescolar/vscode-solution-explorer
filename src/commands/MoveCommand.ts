@@ -1,8 +1,7 @@
-import * as vscode from "vscode";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem, ContextValues } from "../tree";
-import { CommandBase } from "./base/CommandBase";
-import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandParameter";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem, ContextValues } from "@tree";
+import { CommandBase } from "@commands/base";
+import { InputOptionsCommandParameter } from "@commands/parameters/InputOptionsCommandParameter";
 
 export class MoveCommand extends CommandBase {
 
@@ -11,28 +10,31 @@ export class MoveCommand extends CommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
+        if (!item || !item.project) { return false; }
+
         this.parameters = [
-            new InputOptionsCommandParameter('Select folder...', () => item.project.getFolderList())
+            new InputOptionsCommandParameter('Select folder...', async () => await item.project?.getFolderList() ?? [])
         ];
 
-        return !!item.project;
+        return true;
     }
 
     protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!args || args.length <= 0) return;
+        if (!args || args.length <= 0 || !item || !item.project || !item.path) { return; }
 
         try {
             let newPath: string;
-            if (item.contextValue.startsWith(ContextValues.ProjectFile))
+            if (item.contextValue.startsWith(ContextValues.projectFile)) {
                 newPath = await item.project.moveFile(item.path, args[0]);
-            else if (item.contextValue.startsWith(ContextValues.ProjectFolder))
+            } else if (item.contextValue.startsWith(ContextValues.projectFolder)) {
                 newPath = await item.project.moveFolder(item.path, args[0]);
-            else 
+            } else {
                 return;
+            }
 
             this.provider.logger.log("Moved: " + item.path + " -> " + newPath);
         } catch(ex) {
             this.provider.logger.error('Can not move item: ' + ex);
-        }    
+        }
     }
 }

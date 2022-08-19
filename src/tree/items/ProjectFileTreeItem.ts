@@ -1,13 +1,9 @@
-import * as vscode from "vscode";
-import { TreeItem, TreeItemCollapsibleState } from "../";
-import { TreeItemContext } from "../TreeItemContext";
-import { ContextValues } from "../ContextValues";
-import { Project } from "../../model/Projects";
-import { ProjectFile } from "../../model/Projects/ProjectFile";
+import { ProjectFile } from "@core/Projects";
+import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } from "@tree";
 
 export class ProjectFileTreeItem extends TreeItem {
     constructor(context: TreeItemContext, private readonly projectFile: ProjectFile, private readonly relatedFiles: ProjectFile[] = []) {
-        super(context, projectFile.name, (projectFile.hasDependents || relatedFiles.length > 0) ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None, ContextValues.ProjectFile, projectFile.fullPath);
+        super(context, projectFile.name, (projectFile.hasDependents || relatedFiles.length > 0) ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None, ContextValues.projectFile, projectFile.fullPath);
     }
 
     command = {

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import * as cmds from "./commands";
-import { SolutionExplorerProvider } from "./SolutionExplorerProvider";
-import { IEventAggregator } from "./events";
+import * as cmds from "@commands";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { IEventAggregator } from "@events";
 
 export class SolutionExplorerCommands {
     private commands: { [id:string]: cmds.ICommand } = {};
@@ -56,7 +56,7 @@ export class SolutionExplorerCommands {
     private registerCommand(name: string, command: cmds.ICommand) {
         this.context.subscriptions.push(
             vscode.commands.registerCommand(name, item => {
-                command.run(item)
+                command.run(item);
             })
         );
     }

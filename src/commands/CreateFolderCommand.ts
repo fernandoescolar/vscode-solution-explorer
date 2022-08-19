@@ -1,9 +1,8 @@
-import * as vscode from "vscode";
-import * as path from "path";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem, ContextValues } from "../tree";
-import { CommandBase } from "./base/CommandBase";
-import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
+import * as path from "@extensions/path";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem, ContextValues } from "@tree";
+import { CommandBase } from "@commands/base";
+import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
 
 export class CreateFolderCommand extends CommandBase {
 
@@ -20,18 +19,19 @@ export class CreateFolderCommand extends CommandBase {
     }
 
     protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!args || args.length <= 0) return;
+        if (!args || args.length <= 0 || !item || !item.project || !item.path) { return; }
 
         try {
             let targetpath: string = item.path;
-            if (!item.contextValue.startsWith(ContextValues.ProjectFolder))
+            if (!item.contextValue.startsWith(ContextValues.projectFolder)) {
                 targetpath = path.dirname(targetpath);
-                
+            }
+
             let folderpath = path.join(targetpath, args[0]);
             await item.project.createFolder(folderpath);
             this.provider.logger.log("Folder created: " + args[0]);
         } catch(ex) {
             this.provider.logger.error('Can not create folder: ' + ex);
-        }    
+        }
     }
 }

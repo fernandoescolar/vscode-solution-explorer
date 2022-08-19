@@ -1,9 +1,8 @@
 import * as vscode from "vscode";
-import { ICommandParameter } from "../base/ICommandParameter";
-import { CommandParameterCompiler } from "../base/CommandParameterCompiler";
+import { ICommandParameter, CommandParameterCompiler } from "@commands/base";
 
 export class OpenFileCommandParameter implements ICommandParameter {
-    private value: string;
+    private value: string | undefined;
 
     constructor(private readonly options: vscode.OpenDialogOptions, private readonly option?: string) {
     }
@@ -12,7 +11,7 @@ export class OpenFileCommandParameter implements ICommandParameter {
 
     public async setArguments(state: CommandParameterCompiler): Promise<void> {
         let uris = await vscode.window.showOpenDialog(this.options);
-        if (uris !== null && uris.length == 1) {
+        if (uris !== null && uris !== undefined && uris.length === 1) {
             this.value = uris[0].fsPath;
             state.next();
         }
@@ -21,10 +20,11 @@ export class OpenFileCommandParameter implements ICommandParameter {
     }
 
     public getArguments(): string[] {
-        if (this.option)
-            return [ this.option, this.value ];
+        if (this.option) {
+            return [ this.option, this.value || "" ];
+        }
 
-        return [ this.value ];
+        return [ this.value || "" ];
     }
 
 }

@@ -3,8 +3,8 @@
  * https://github.com/Microsoft/msbuild/blob/master/src/Build/Construction/Solution/SolutionFile.cs
  */
 
-import * as path from "path";
-import * as fs from "fs";
+import * as path from "@extensions/path";
+import * as fs from "@extensions/fs";
 import { ProjectInSolution } from "./ProjectInSolution";
 import { SolutionConfigurationInSolution } from "./SolutionConfigurationInSolution";
 import { SolutionProjectType } from "./SolutionProjectType";
@@ -26,111 +26,114 @@ const solutionFolderGuid = "{2150E333-8FDC-42A3-9474-1A3956D46DE8}";
 
 
 export class SolutionFile {
-    private lines: string[];
-    private currentLineIndex: number;
-    private projects:{ [id: string] : ProjectInSolution; } = {};
-    private solutionConfigurations: SolutionConfigurationInSolution[] = [];
-    private currentVisualStudioVersion: string;
-    private name: string;
-    private fullPath: string;
-    private folderPath: string;
-    private version: string;
-    private solutionContainsWebProjects: boolean = false;
-    private solutionContainsWebDeploymentProjects: boolean = false;
+    private _lines: string[] = [];
+    private _currentLineIndex: number = -1;
+    private _projects:{ [id: string] : ProjectInSolution; } = {};
+    private _solutionConfigurations: SolutionConfigurationInSolution[] = [];
+    private _currentVisualStudioVersion: string = "";
+    private _name: string = "";
+    private _fullPath: string = "";
+    private _folderPath: string = "";
+    private _version: string = "";
+    private _solutionContainsWebProjects: boolean = false;
+    private _solutionContainsWebDeploymentProjects: boolean = false;
 
     private constructor() {
     }
 
-    public get Name(): string {
-        return this.name;
+    public get name(): string {
+        return this._name;
     }
 
-    public get FullPath(): string {
-        return this.fullPath;
+    public get fullPath(): string {
+        return this._fullPath;
     }
 
-    public get FolderPath(): string {
-        return this.folderPath;
+    public get folderPath(): string {
+        return this._folderPath;
     }
 
-    public get Version(): string {
-        return this.version;
+    public get version(): string {
+        return this._version;
     }
 
-    public get ContainsWebProjects(): boolean {
-        return this.solutionContainsWebProjects;
+    public get currentVisualStudioVersion(): string {
+        return this._currentVisualStudioVersion;
     }
 
-    public get ContainsWebDeploymentProjects(): boolean {
-        return this.solutionContainsWebDeploymentProjects;
+    public get containsWebProjects(): boolean {
+        return this._solutionContainsWebProjects;
     }
 
-    public get ProjectsById(): { [id: string] : ProjectInSolution; } {
-        return this.projects;
+    public get containsWebDeploymentProjects(): boolean {
+        return this._solutionContainsWebDeploymentProjects;
     }
 
-    public get Projects(): ProjectInSolution[] {
+    public get projectsById(): { [id: string] : ProjectInSolution; } {
+        return this._projects;
+    }
+
+    public get projects(): ProjectInSolution[] {
         let result: ProjectInSolution[] = [];
-        Object.keys(this.projects).forEach(key => {
-            result.push(this.projects[key]);
+        Object.keys(this._projects).forEach(key => {
+            result.push(this._projects[key]);
         });
 
         return result;
     }
 
-    public get Configurations(): SolutionConfigurationInSolution[] {
-        return this.solutionConfigurations;
+    public get configurations(): SolutionConfigurationInSolution[] {
+        return this._solutionConfigurations;
     }
 
-    public static Parse(solutionFullPath: string) : Thenable<SolutionFile> {
-        return new Promise(resolve => {
-            let solution = new SolutionFile();
-            solution.fullPath = solutionFullPath;
-            solution.folderPath = path.dirname(solutionFullPath);
-            solution.name = solutionFullPath.split(path.sep).pop().replace('.sln', '');
+    public static async parse(solutionFullPath: string) : Promise<SolutionFile> {
+        let solution = new SolutionFile();
+        solution._fullPath = solutionFullPath;
+        solution._folderPath = path.dirname(solutionFullPath);
+        solution._name = (solutionFullPath.split(path.sep).pop() || "").replace('.sln', '');
 
-            fs.readFile(solutionFullPath, 'utf8', (err, data) => {
-                solution.lines = data.split('\n');
-                solution.currentLineIndex = 0;
-                solution.ParseSolution();
-                resolve(solution);
-            });
-        });
+        const content = await fs.readFile(solutionFullPath);
+        solution._lines = content.split('\n');
+        solution._currentLineIndex = 0;
+        solution.parseSolution();
+
+        return solution;
     }
 
-    private ReadLine(): string {
-        if (this.currentLineIndex >= this.lines.length)
+    private readLine(): string | null {
+        if (this._currentLineIndex >= this._lines.length) {
             return null;
+        }
 
-        return this.lines[this.currentLineIndex++].trim();
+        return this._lines[this._currentLineIndex++].trim();
     }
 
-    private ParseSolution(): void {
-        this.ParseFileHeader();
+    private parseSolution(): void {
+        this.parseFileHeader();
 
-        let str: string;
-        let rawProjectConfigurationsEntries: { [id: string]: any };
-        while ((str = this.ReadLine()) != null)
+        let str: string | null;
+        let rawProjectConfigurationsEntries: { [id: string]: any } | null = null;
+        while ((str = this.readLine()) !== null)
         {
             if (str.startsWith("Project("))
             {
-                this.ParseProject(str);
+                this.parseProject(str);
             }
             else if (str.startsWith("GlobalSection(NestedProjects)"))
             {
-                this.ParseNestedProjects();
+                this.parseNestedProjects();
             }
             else if (str.startsWith("GlobalSection(SolutionConfigurationPlatforms)"))
             {
-                this.ParseSolutionConfigurations();
+                this.parseSolutionConfigurations();
             }
             else if (str.startsWith("GlobalSection(ProjectConfigurationPlatforms)"))
             {
-                rawProjectConfigurationsEntries = this.ParseProjectConfigurations();
+                rawProjectConfigurationsEntries = this.parseProjectConfigurations();
             }
             else if (str.startsWith("VisualStudioVersion"))
             {
-                this.currentVisualStudioVersion = this.ParseVisualStudioVersion(str);
+                this._currentVisualStudioVersion = this.parseVisualStudioVersion(str);
             }
             else
             {
@@ -139,39 +142,39 @@ export class SolutionFile {
             }
         }
 
-        if (rawProjectConfigurationsEntries != null)
+        if (rawProjectConfigurationsEntries !== null)
         {
-            this.ProcessProjectConfigurationSection(rawProjectConfigurationsEntries);
+            this.processProjectConfigurationSection(rawProjectConfigurationsEntries);
         }
     }
 
-    private ParseFileHeader(): void {
+    private parseFileHeader(): void {
         const slnFileHeaderNoVersion: string = "Microsoft Visual Studio Solution File, Format Version ";
         for (let i = 1; i <= 2; i++) {
-            let str: string = this.ReadLine();
-            if (str == null) {
+            let str: string | null = this.readLine();
+            if (str === null) {
                 break;
             }
 
             if (str.startsWith(slnFileHeaderNoVersion)) {
                 // Found it.  Validate the version.
-                this.version = str.substring(slnFileHeaderNoVersion.length);
+                this._version = str.substring(slnFileHeaderNoVersion.length);
                 return;
             }
         }
     }
 
-    private ParseProject(firstLine: string): void {
+    private parseProject(firstLine: string): void {
         let proj = new ProjectInSolution(this);
 
         // Extract the important information from the first line.
-        this.ParseFirstProjectLine(firstLine, proj);
+        this.parseFirstProjectLine(firstLine, proj);
 
-        let line: string;
-        while ((line = this.ReadLine()) != null)
+        let line: string | null;
+        while ((line = this.readLine()) !== null)
         {
             // If we see an "EndProject", well ... that's the end of this project!
-            if (line == "EndProject")
+            if (line === "EndProject")
             {
                 break;
             }
@@ -179,31 +182,35 @@ export class SolutionFile {
             {
                 // We have a ProjectDependencies section.  Each subsequent line should identify
                 // a dependency.
-                line = this.ReadLine();
-                while ((line != null) && (!line.startsWith("EndProjectSection")))
+                line = this.readLine();
+                while ((line !== null) && (!line.startsWith("EndProjectSection")))
                 {
                     const propertyLineRegEx = /(.*)\s*=\s*(.*)/g;
                     const m = propertyLineRegEx.exec(line);
-                    const fileName: string = path.basename(m[1].replace(/\\/g, path.sep).trim());
-                    const filePath: string = m[2].replace(/\\/g, path.sep).trim();
-                    proj.addFile(fileName, filePath);
+                    if (m && m.length >= 3) {
+                        const fileName: string = path.basename(m[1].replace(/\\/g, path.sep).trim());
+                        const filePath: string = m[2].replace(/\\/g, path.sep).trim();
+                        proj.addFile(fileName, filePath);
+                    }
 
-                    line = this.ReadLine();
+                    line = this.readLine();
                 }
             }
             else if (line.startsWith("ProjectSection(ProjectDependencies)"))
             {
                 // We have a ProjectDependencies section.  Each subsequent line should identify
                 // a dependency.
-                line = this.ReadLine();
-                while ((line != null) && (!line.startsWith("EndProjectSection")))
+                line = this.readLine();
+                while ((line !== null) && (!line.startsWith("EndProjectSection")))
                 {
                     let propertyLineRegEx = /(.*)\s*=\s*(.*)/g;
                     let m = propertyLineRegEx.exec(line);
-                    let parentGuid: string = m[1].trim();
-                    proj.addDependency(parentGuid);
+                    if (m && m.length >= 2) {
+                        let parentGuid: string = m[1].trim();
+                        proj.addDependency(parentGuid);
+                    }
 
-                    line = this.ReadLine();
+                    line = this.readLine();
                 }
             }
             else if (line.startsWith("ProjectSection(WebsiteProperties)"))
@@ -211,77 +218,81 @@ export class SolutionFile {
                 // We have a WebsiteProperties section.  This section is present only in Venus
                 // projects, and contains properties that we'll need in order to call the
                 // AspNetCompiler task.
-                line = this.ReadLine();
-                while ((line != null) && (!line.startsWith("EndProjectSection")))
+                line = this.readLine();
+                while ((line !== null) && (!line.startsWith("EndProjectSection")))
                 {
                     let propertyLineRegEx = /(.*)\s*=\s*(.*)/g;
                     let m = propertyLineRegEx.exec(line);
-                    let propertyName: string = m[1].trim();
-                    let propertyValue: string = m[2].trim();
+                    if (m && m.length >= 3) {
+                        let propertyName: string = m[1].trim();
+                        let propertyValue: string = m[2].trim();
+                        proj.addWebProperty(propertyName, propertyValue);
+                    }
 
-                    proj.addWebProperty(propertyName, propertyValue);
-
-                    line = this.ReadLine();
+                    line = this.readLine();
                 }
             }
         }
     }
 
-    private ParseFirstProjectLine(firstLine: string, proj: ProjectInSolution): void {
+    private parseFirstProjectLine(firstLine: string, proj: ProjectInSolution): void {
         let projectRegEx = /Project\("(.*)"\)\s*=\s*"(.*)"\s*,\s*"(.*)"\s*,\s*"(.*)"/g;
         let m = projectRegEx.exec(firstLine);
-        proj.projectTypeId = m[1].trim();
-        proj.projectName = m[2].trim();
-        proj.relativePath = m[3].trim();
-        proj.fullPath = path.join(this.FolderPath, m[3].replace(/\\/g, path.sep)).trim();
-        proj.projectGuid = m[4].trim();
-        this.projects[proj.projectGuid] = proj;
-
-        if ((proj.projectTypeId == vbProjectGuid) ||
-            (proj.projectTypeId == csProjectGuid) ||
-            (proj.projectTypeId == cpsProjectGuid) ||
-            (proj.projectTypeId == cpsCsProjectGuid) ||
-            (proj.projectTypeId == cpsVbProjectGuid) ||
-            (proj.projectTypeId == fsProjectGuid) ||
-            (proj.projectTypeId == cpsFsProjectGuid) ||
-            (proj.projectTypeId == dbProjectGuid) ||
-            (proj.projectTypeId == vjProjectGuid))
-        {
-            proj.projectType = SolutionProjectType.KnownToBeMSBuildFormat;
+        if (m && m.length >= 5) {
+            proj.projectTypeId = m[1].trim();
+            proj.projectName = m[2].trim();
+            proj.relativePath = m[3].trim();
+            proj.fullPath = path.join(this.folderPath, m[3].replace(/\\/g, path.sep)).trim();
+            proj.projectGuid = m[4].trim();
         }
-        else if (proj.projectTypeId == solutionFolderGuid)
+
+        this._projects[proj.projectGuid] = proj;
+
+        if ((proj.projectTypeId === vbProjectGuid) ||
+            (proj.projectTypeId === csProjectGuid) ||
+            (proj.projectTypeId === cpsProjectGuid) ||
+            (proj.projectTypeId === cpsCsProjectGuid) ||
+            (proj.projectTypeId === cpsVbProjectGuid) ||
+            (proj.projectTypeId === fsProjectGuid) ||
+            (proj.projectTypeId === cpsFsProjectGuid) ||
+            (proj.projectTypeId === dbProjectGuid) ||
+            (proj.projectTypeId === vjProjectGuid))
         {
-            proj.projectType = SolutionProjectType.SolutionFolder;
+            proj.projectType = SolutionProjectType.knownToBeMSBuildFormat;
+        }
+        else if (proj.projectTypeId === solutionFolderGuid)
+        {
+            proj.projectType = SolutionProjectType.solutionFolder;
         }
         // MSBuild format VC projects have the same project type guid as old style VC projects.
         // If it's not an old-style VC project, we'll assume it's MSBuild format
-        else if (proj.projectTypeId == vcProjectGuid)
+        else if (proj.projectTypeId === vcProjectGuid)
         {
-            proj.projectType = SolutionProjectType.KnownToBeMSBuildFormat;
+            proj.projectType = SolutionProjectType.knownToBeMSBuildFormat;
         }
-        else if (proj.projectTypeId == webProjectGuid)
+        else if (proj.projectTypeId === webProjectGuid)
         {
-            proj.projectType = SolutionProjectType.WebProject;
-            this.solutionContainsWebProjects = true;
+            proj.projectType = SolutionProjectType.webProject;
+            this._solutionContainsWebProjects = true;
         }
-        else if (proj.projectTypeId == wdProjectGuid)
+        else if (proj.projectTypeId === wdProjectGuid)
         {
-            proj.projectType = SolutionProjectType.WebDeploymentProject;
-            this.solutionContainsWebDeploymentProjects = true;
+            proj.projectType = SolutionProjectType.webDeploymentProject;
+            this._solutionContainsWebDeploymentProjects = true;
         }
         else
         {
-            proj.projectType = SolutionProjectType.Unknown;
+            proj.projectType = SolutionProjectType.unknown;
         }
 
     }
 
-    private ParseNestedProjects(): void {
-        let str: string;
+    private parseNestedProjects(): void {
+        let str: string | null;
         do
         {
-            str = this.ReadLine();
-            if ((str == null) || (str == "EndGlobalSection")) {
+            str = this.readLine();
+            if ((str === null) || (str === "EndGlobalSection")) {
                 break;
             }
 
@@ -291,28 +302,30 @@ export class SolutionFile {
 
             let propertyLineRegEx = /(.*)\s*=\s*(.*)/g;
             let m = propertyLineRegEx.exec(str);
-            let projectGuid: string = m[1].trim();
-            let parentProjectGuid: string = m[2].trim();
+            if (m && m.length >= 3) {
+                let projectGuid: string = m[1].trim();
+                let parentProjectGuid: string = m[2].trim();
 
-            let proj: ProjectInSolution = this.projects[projectGuid];
-            if (!proj) {
-                // error
+                let proj: ProjectInSolution = this._projects[projectGuid];
+                if (!proj) {
+                    // error
+                }
+
+                proj.parentProjectGuid = parentProjectGuid;
             }
-
-            proj.parentProjectGuid = parentProjectGuid;
         } while (true);
     }
 
-    private ParseSolutionConfigurations(): void {
-        let str: string;
+    private parseSolutionConfigurations(): void {
+        let str: string | null;
         let nameValueSeparator: string = '=' ;
         let configPlatformSeparators: string = '|';
 
         do
         {
-            str = this.ReadLine();
+            str = this.readLine();
 
-            if ((str == null) || (str == "EndGlobalSection")) {
+            if ((str === null) || (str === "EndGlobalSection")) {
                 break;
             }
 
@@ -323,23 +336,24 @@ export class SolutionFile {
             let configurationNames: string[] = str.split(nameValueSeparator);
             let fullConfigurationName: string = configurationNames[0].trim();
 
-            if (fullConfigurationName === "DESCRIPTION")
+            if (fullConfigurationName === "DESCRIPTION") {
                 continue;
+            }
 
             let configurationPlatformParts: string[] = fullConfigurationName.split(configPlatformSeparators);
 
-            this.solutionConfigurations.push(new SolutionConfigurationInSolution(configurationPlatformParts[0], configurationPlatformParts[1]));
+            this._solutionConfigurations.push(new SolutionConfigurationInSolution(configurationPlatformParts[0], configurationPlatformParts[1]));
         } while (true);
     }
 
-    private ParseProjectConfigurations(): { [id: string]: any } {
+    private parseProjectConfigurations(): { [id: string]: any } {
         let rawProjectConfigurationsEntries: { [id: string]: string } = {};
-        let str : string;
+        let str : string | null;
         do
         {
-            str = this.ReadLine();
+            str = this.readLine();
 
-            if ((str == null) || (str == "EndGlobalSection")) {
+            if ((str === null) || (str === "EndGlobalSection")) {
                 break;
             }
 
@@ -354,7 +368,7 @@ export class SolutionFile {
         return rawProjectConfigurationsEntries;
     }
 
-    private ParseVisualStudioVersion(str: string): string
+    private parseVisualStudioVersion(str: string): string
     {
         let delimiterChars: string = '=';
         let words: string[] = str.split(delimiterChars);
@@ -362,7 +376,7 @@ export class SolutionFile {
         return words[1].trim();
     }
 
-    private ProcessProjectConfigurationSection(rawProjectConfigurationsEntries: { [id: string]: string }): void {
+    private processProjectConfigurationSection(rawProjectConfigurationsEntries: { [id: string]: string }): void {
         // Instead of parsing the data line by line, we parse it project by project, constructing the
         // entry name (e.g. "{A6F99D27-47B9-4EA4-BFC9-25157CBDC281}.Release|Any CPU.ActiveCfg") and retrieving its
         // value from the raw data. The reason for this is that the IDE does it this way, and as the result
@@ -372,12 +386,12 @@ export class SolutionFile {
         // this would ever be a problem, it's safer to do it the same way VS IDE does it.
         let configPlatformSeparators = '|';
 
-        Object.keys(this.projects).forEach(key => {
-            let project = this.projects[key];
+        Object.keys(this._projects).forEach(key => {
+            let project = this._projects[key];
             // Solution folders don't have configurations
-            if (project.projectType != SolutionProjectType.SolutionFolder)
+            if (project.projectType !== SolutionProjectType.solutionFolder)
             {
-                this.solutionConfigurations.forEach(solutionConfiguration => {
+                this._solutionConfigurations.forEach(solutionConfiguration => {
                     // The "ActiveCfg" entry defines the active project configuration in the given solution configuration
                     // This entry must be present for every possible solution configuration/project combination.
                     let entryNameActiveConfig: string = project.projectGuid + "." + solutionConfiguration.fullName + ".ActiveCfg";

@@ -1,12 +1,9 @@
-import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
-import { ContextValues } from "../ContextValues";
-import { TreeItemContext } from "../TreeItemContext";
-import { PackageReference } from "../../model/Projects";
-
+import { PackageReference } from "@core/Projects";
+import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } from "@tree";
 
 export class ProjectReferencedPackageTreeItem extends TreeItem {
     constructor(context: TreeItemContext, pkgRef: PackageReference) {
-        super(context, pkgRef.name + ' (' + pkgRef.version + ')', TreeItemCollapsibleState.None, ContextValues.ProjectReferencedPackage, pkgRef.name);
+        super(context, pkgRef.name + ' (' + pkgRef.version + ')', TreeItemCollapsibleState.None, ContextValues.projectReferencedPackage, pkgRef.name);
         this.allowIconTheme = false;
         this.addContextValueSuffix();
     }

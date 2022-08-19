@@ -1,9 +1,9 @@
 
 import { OpenDialogOptions } from "vscode";
-import { CommandBase } from "./base/CommandBase";
-import { TreeItem } from "../tree/TreeItem";
-import { OpenFileCommandParameter } from "./parameters/OpenFileCommandParameter";
-import { IEventAggregator, SolutionSelected } from "../events";
+import { TreeItem } from "@tree";
+import { IEventAggregator, SolutionSelected } from "@events";
+import { CommandBase } from "@commands/base";
+import { OpenFileCommandParameter } from "@commands/parameters/OpenFileCommandParameter";
 
 export class OpenSolutionCommand extends CommandBase {
     constructor(public readonly eventAggregator: IEventAggregator) {
@@ -15,7 +15,7 @@ export class OpenSolutionCommand extends CommandBase {
 		    openLabel: 'Open solution',
     		canSelectFolders: false,
     		canSelectMany: false,
-		    filters: { 'Solution files': [ 'sln' ] }
+		    filters: { ['Solution files']: [ 'sln' ] }
         };
         this.parameters = [
             new OpenFileCommandParameter(options)

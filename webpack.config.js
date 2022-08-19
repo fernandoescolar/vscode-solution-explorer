@@ -28,25 +28,33 @@ const config = {
     },
     resolve: { // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
         extensions: ['.ts', '.js'],
-        modules: [path.resolve(__dirname, 'node_modules')]
+        modules: [path.resolve(__dirname, 'node_modules')],
+        alias: {
+			["@SolutionExplorerProvider"]: path.resolve(__dirname, './src/SolutionExplorerProvider.ts'),
+			["@commands"]: path.resolve(__dirname, './src/commands'),
+			["@core"]: path.resolve(__dirname, './src/core'),
+			["@events"]: path.resolve(__dirname, './src/events'),
+			["@extensions"]: path.resolve(__dirname, './src/extensions'),
+			["@logs"]: path.resolve(__dirname, './src/logs'),
+			["@templates"]: path.resolve(__dirname, './src/templates'),
+			["@tree"]: path.resolve(__dirname, './src/tree')
+		}
     },
     resolveLoader: {
         modules: [ path.resolve(__dirname, 'node_modules') ]
     },
     module: {
-        rules: [{
-            test: /\.ts$/,
-            exclude: /node_modules/,
-            use: [{
-                loader: 'awesome-typescript-loader?silent=true',
-                options: {
-                    compilerOptions: {
-                        "module": "es6" // override `tsconfig.json` so that TypeScript emits native JavaScript modules.
-                    }
-                }
-            }]
-        }]
-    },
+		rules: [{
+			test: /\.ts$/,
+			exclude: /node_modules/,
+			use: [{
+				loader: 'ts-loader'
+			}]
+		}]
+	},
+    performance: {
+		hints: false
+	}
 }
 
 module.exports = config;

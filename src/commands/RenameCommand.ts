@@ -1,8 +1,7 @@
-import * as vscode from "vscode";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem, ContextValues } from "../tree";
-import { CommandBase } from "./base/CommandBase";
-import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem, ContextValues } from "@tree";
+import { CommandBase } from "@commands/base";
+import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
 
 export class RenameCommand extends CommandBase {
 
@@ -12,26 +11,27 @@ export class RenameCommand extends CommandBase {
 
     protected shouldRun(item: TreeItem): boolean {
         this.parameters = [
-            new InputTextCommandParameter('New name', item.label, null, item.label)
+            new InputTextCommandParameter('New name', item.label, undefined, item.label)
         ];
 
         return !!item.project;
     }
 
     protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!args || args.length <= 0) return;
+        if (!args || args.length <= 0 || !item || !item.project || !item.path) { return; }
 
         try {
-            if (item.contextValue.startsWith(ContextValues.ProjectFile))
+            if (item.contextValue.startsWith(ContextValues.projectFile)) {
                 await item.project.renameFile(item.path, args[0]);
-            else if (item.contextValue.startsWith(ContextValues.ProjectFolder))
+            } else if (item.contextValue.startsWith(ContextValues.projectFolder)) {
                 await item.project.renameFolder(item.path, args[0]);
-            else 
+            } else {
                 return;
+            }
 
             this.provider.logger.log("Renamed: " + item.path + " -> " + args[0]);
         } catch(ex) {
             this.provider.logger.error('Can not rename item: ' + ex);
-        }    
+        }
     }
 }

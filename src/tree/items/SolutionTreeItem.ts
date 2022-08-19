@@ -1,41 +1,40 @@
-import { TreeItem, TreeItemCollapsibleState } from "../TreeItem";
-import { TreeItemContext } from "../TreeItemContext";
-import { ContextValues } from "../ContextValues";
-import { SolutionFile } from "../../model/Solutions";
-import * as TreeItemFactory from "../TreeItemFactory";
-import { ISubscription, EventTypes, IEvent, IFileEvent, FileEventType } from "../../events";
+import { ISubscription, EventTypes, IEvent, IFileEvent, FileEventType } from "@events";
+import { SolutionFile } from "@core/Solutions";
+import { TreeItem, TreeItemCollapsibleState, TreeItemFactory, TreeItemContext, ContextValues } from "@tree";
 
 export class SolutionTreeItem extends TreeItem {
-    private subscription: ISubscription = null;
+    private subscription: ISubscription | undefined;
 
     constructor(context: TreeItemContext) {
-        super(context, context.solution.Name, TreeItemCollapsibleState.Expanded, ContextValues.Solution, context.solution.FullPath);
+        super(context, context.solution.name, TreeItemCollapsibleState.Expanded, ContextValues.solution, context.solution.fullPath);
         this.allowIconTheme = false;
-        this.subscription = context.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
+        this.subscription = context.eventAggregator.subscribe(EventTypes.file, evt => this.onFileEvent(evt));
     }
 
     public refreshContextValue(): void {
-        if (this.containsContextValueChildren(ContextValues.Project + '-cps')) {
-            this.contextValue = ContextValues.Solution + '-cps';
+        if (this.containsContextValueChildren(ContextValues.project + '-cps')) {
+            this.contextValue = ContextValues.solution + '-cps';
         } else {
-            this.contextValue = ContextValues.Solution;
+            this.contextValue = ContextValues.solution;
         }
     }
 
     public dispose(): void {
-        this.subscription.dispose();
-        this.subscription = null;
+        if (this.subscription) {
+            this.subscription.dispose();
+            this.subscription = undefined;
+        }
         super.dispose();
     }
 
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
-        return TreeItemFactory.CreateItemsFromSolution(childContext, this.solution);
+        return TreeItemFactory.createItemsFromSolution(childContext, this.solution);
     }
 
     private onFileEvent(event: IEvent): void {
         let fileEvent = <IFileEvent> event;
-        if (fileEvent.path == this.solution.FullPath && fileEvent.fileEventType != FileEventType.Delete) {
-            SolutionFile.Parse(this.solution.FullPath).then(res => {
+        if (fileEvent.path === this.solution.fullPath && fileEvent.fileEventType !== FileEventType.delete) {
+            SolutionFile.parse(this.solution.fullPath).then(res => {
                 this.context = new TreeItemContext(this.context.provider, res, this.workspaceRoot);
                 this.refresh();
             });

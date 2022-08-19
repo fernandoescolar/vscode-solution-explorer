@@ -1,8 +1,8 @@
 import { workspace, FileSystemWatcher, Uri } from "vscode";
-import { IFileEvent, FileEvent, FileEventType, IEventAggregator } from "./events";
+import { IFileEvent, FileEvent, FileEventType, IEventAggregator } from "@events";
 
 export class SolutionExplorerFileWatcher {
-    private fileWatcher: FileSystemWatcher;
+    private fileWatcher: FileSystemWatcher | undefined;
 
     constructor(public readonly eventAggregator: IEventAggregator){
     }
@@ -15,22 +15,24 @@ export class SolutionExplorerFileWatcher {
     }
 
     public unregister(): void {
-        this.fileWatcher.dispose();
-        this.fileWatcher = null;
+        if (this.fileWatcher) {
+            this.fileWatcher.dispose();
+            this.fileWatcher = undefined;
+        }
     }
 
     private onChange(uri: Uri): void {
-        let event: IFileEvent = new FileEvent(FileEventType.Modify, this.parseUri(uri));
+        let event: IFileEvent = new FileEvent(FileEventType.modify, this.parseUri(uri));
         this.raiseEvent(event);
     }
 
     private onCreate(uri: Uri): void {
-        let event: IFileEvent = new FileEvent(FileEventType.Create, this.parseUri(uri));
+        let event: IFileEvent = new FileEvent(FileEventType.create, this.parseUri(uri));
         this.raiseEvent(event);
     }
 
     private onDelete(uri: Uri): void {
-        let event: IFileEvent = new FileEvent(FileEventType.Delete, this.parseUri(uri));
+        let event: IFileEvent = new FileEvent(FileEventType.delete, this.parseUri(uri));
         this.raiseEvent(event);
     }
 

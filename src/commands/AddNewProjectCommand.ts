@@ -1,13 +1,15 @@
-import * as path from "path";
 import { execSync } from 'child_process';
-import { CliCommandBase } from "./base/CliCommandBase";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree/TreeItem";
-import { StaticCommandParameter } from "./parameters/StaticCommandParameter";
-import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
-import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandParameter";
+import * as path from "@extensions/path";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem } from "@tree";
+import { CliCommandBase } from "@commands/base";
+import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
+import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
+import { InputOptionsCommandParameter } from "@commands/parameters/InputOptionsCommandParameter";
 
-const ProjectTypes = [
+type ProjectType = { name: string, value: string, languages: string[] };
+
+const PROJECT_TYPES: ProjectType[] = [
     // { name: 'Console application', value: 'console', languages: ['C#', 'F#', 'VB'] },
     // { name: 'Class library', value: 'classlib', languages: ['C#', 'F#', 'VB'] },
     // { name: 'WPF Application', value: 'wpf', languages: ['C#'] },
@@ -57,7 +59,7 @@ export class AddNewProjectCommand extends CliCommandBase {
     }
 
     private loadProjectTemplates(): void {
-        if (ProjectTypes.length > 0) return;
+        if (PROJECT_TYPES.length > 0) { return; }
 
         let buffer = execSync('dotnet new --list');
         if (!buffer) {
@@ -70,7 +72,7 @@ export class AddNewProjectCommand extends CliCommandBase {
             lines.forEach(line => {
                 let parts = line.split('  ').filter(element => element);
                 if (parts.length > 2) {
-                    ProjectTypes.push({
+                    PROJECT_TYPES.push({
                         name: parts[0].trim(),
                         value: parts[1].trim(),
                         languages: parts[2].split(',').map(element => element.trim().replace('[', '').replace(']', ''))
@@ -82,7 +84,7 @@ export class AddNewProjectCommand extends CliCommandBase {
 
     private getProjectTypes(): { [id:string]: string } {
         let result: { [id:string]: string } = {};
-        ProjectTypes.forEach(pt => {
+        PROJECT_TYPES.forEach(pt => {
             result[pt.name] = pt.value;
         });
         return result;
@@ -90,25 +92,32 @@ export class AddNewProjectCommand extends CliCommandBase {
 
     private getLanguages(): Promise<string[]> {
         let result: string[] =  [ 'C#' ];
-        let selectedProject = this.parameters[1].getArguments()[0];
-        let index = ProjectTypes.findIndex(pt => pt.value == selectedProject);
-        if (index >= 0)
-            result = ProjectTypes[index].languages;
+        if (this.parameters && this.parameters.length > 0) {
+            let selectedProject = this.parameters[1].getArguments()[0];
+            let index = PROJECT_TYPES.findIndex(pt => pt.value === selectedProject);
+            if (index >= 0) {
+                result = PROJECT_TYPES[index].languages;
+            }
+        }
 
         return Promise.resolve(result);
     }
 
     private addProjectToSolution(item: TreeItem): Promise<void> {
+        if (!item || !item.path || !this.parameters || this.parameters.length < 5) { return Promise.resolve(); }
+
         let workingpath = path.dirname(item.path);
         let projectPath = path.join(workingpath, this.parameters[4].getArguments()[1], this.parameters[3].getArguments()[1]);
-        if (this.args[this.args.length - 5] == 'C#') projectPath += '.csproj';
-        if (this.args[this.args.length - 5] == 'F#') projectPath += '.fsproj';
-        if (this.args[this.args.length - 5] == 'VB') projectPath += '.vbproj';
+        if (this.args[this.args.length - 5] === 'C#') { projectPath += '.csproj'; }
+        if (this.args[this.args.length - 5] === 'F#') { projectPath += '.fsproj'; }
+        if (this.args[this.args.length - 5] === 'VB') { projectPath += '.vbproj'; }
 
         return this.runCliCommand('dotnet', ['sln', item.path, 'add', projectPath], workingpath);
     }
 
     private getDefaultFolder(): Promise<string> {
+        if (!this.parameters || this.parameters.length < 4) { return Promise.resolve(""); }
+
         return Promise.resolve(this.parameters[3].getArguments()[1]);
     }
 }

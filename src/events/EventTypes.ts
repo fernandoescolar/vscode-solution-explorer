@@ -1,5 +1,5 @@
 export enum EventTypes {
-    File = 'file',
-    Solution = 'solution',
-    Log = 'log'
+    file = 'file',
+    solution = 'solution',
+    log = 'log'
 }

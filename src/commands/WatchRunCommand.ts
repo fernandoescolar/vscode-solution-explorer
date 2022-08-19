@@ -1,7 +1,7 @@
-import { CliCommandBase } from "./base/CliCommandBase";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree/TreeItem";
-import { StaticCommandParameter } from "./parameters/StaticCommandParameter";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem } from "@tree";
+import { CliCommandBase } from "@commands/base";
+import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
 
 export class WatchRunCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
@@ -9,6 +9,8 @@ export class WatchRunCommand extends CliCommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
+        if (!item || !item.path) { return false; }
+
         this.parameters = [
             new StaticCommandParameter('watch'),
             new StaticCommandParameter('run'),

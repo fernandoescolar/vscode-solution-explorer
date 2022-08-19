@@ -1,9 +1,8 @@
-import * as path from "path";
-import * as os from "os";
 import * as vscode from "vscode";
-import { TreeItem, ContextValues } from '../../tree';
+import * as path from "@extensions/path";
+import { TreeItem, ContextValues } from '@tree';
+import { SolutionExplorerProvider } from '@SolutionExplorerProvider';
 import { CommandBase } from './CommandBase';
-import { SolutionExplorerProvider } from '../../SolutionExplorerProvider';
 
 const TERMINAL_NAME:string = "dotnet";
 
@@ -19,8 +18,6 @@ export abstract class CliCommandBase extends CommandBase {
     }
 
     protected runCliCommand(app: string, args: string[], path: string): Promise<void> {
-        this.checkCurrentEncoding();
-
         const terminal = this.ensureTerminal(path);
 
         let cargs: string[] = Array<string>(args.length);
@@ -33,20 +30,15 @@ export abstract class CliCommandBase extends CommandBase {
     }
 
     private getWorkingFolder(item: TreeItem): string {
-        if (item && item.path && item.contextValue !== ContextValues.ProjectReferencedPackage) return path.dirname(item.path);
-        if (item && item.project) return path.dirname(item.project.fullPath);
-        if (item && item.solution) return item.solution.FolderPath;
-        return vscode.workspace.rootPath;
-    }
-
-    private checkCurrentEncoding(): void {
-        if (os.platform() === "win32") {
-        }
+        if (item && item.path && item.contextValue !== ContextValues.projectReferencedPackage) { return path.dirname(item.path); }
+        if (item && item.project) { return path.dirname(item.project.fullPath); }
+        if (item && item.solution) { return item.solution.folderPath; }
+        return vscode.workspace.rootPath || "";
     }
 
     private ensureTerminal(path: string): vscode.Terminal {
-        let terminal: vscode.Terminal;
-        vscode.window.terminals.forEach(t => { if(t.name === TERMINAL_NAME) terminal = t; });
+        let terminal: vscode.Terminal | undefined;
+        vscode.window.terminals.forEach(t => { if(t.name === TERMINAL_NAME) { terminal = t; } });
 
         if (!terminal) {
             terminal = vscode.window.createTerminal({ name: TERMINAL_NAME, cwd: path });

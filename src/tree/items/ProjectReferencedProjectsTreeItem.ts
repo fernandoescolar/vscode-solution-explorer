@@ -1,18 +1,15 @@
-import { TreeItem, TreeItemCollapsibleState } from "../index";
-import { TreeItemContext } from "../TreeItemContext";
-import { ContextValues } from "../ContextValues";
-import { ProjectInSolution } from "../../model/Solutions";
-import { Project, ProjectReference } from "../../model/Projects";
+import { ProjectReference } from "@core/Projects";
+import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } from "@tree";
 import { ProjectReferencedProjectTreeItem } from "./ProjectReferencedProjectTreeItem";
 
 export class ProjectReferencedProjectsTreeItem extends TreeItem {
     constructor(context: TreeItemContext) {
-        super(context, "projects", TreeItemCollapsibleState.Collapsed, ContextValues.ProjectReferencedProjects);
+        super(context, "projects", TreeItemCollapsibleState.Collapsed, ContextValues.projectReferencedProjects);
         this.allowIconTheme = false;
         this.addContextValueSuffix();
     }
 
-    protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {  
+    protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
         var refs = await this.getProjectReferences();
 
         let result: TreeItem[] = [];
@@ -24,6 +21,10 @@ export class ProjectReferencedProjectsTreeItem extends TreeItem {
     }
 
     private async getProjectReferences(): Promise<ProjectReference[]> {
+        if (!this.project) {
+            return [];
+        }
+
         var refs = await this.project.getProjectReferences();
         refs.sort((a, b) => {
             var x = a.name.toLowerCase();

@@ -7,6 +7,6 @@ export class FileEvent implements IFileEvent {
     }
 
     public get eventType(): string {
-        return EventTypes.File;
+        return EventTypes.file;
     }
 }

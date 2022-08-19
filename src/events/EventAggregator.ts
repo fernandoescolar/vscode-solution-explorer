@@ -1,4 +1,4 @@
-import { IEventAggregator } from "./IEventAggregator";
+import { IEventAggregator, Callback } from "./IEventAggregator";
 import { IEvent } from "./IEvent";
 import { ISubscription } from "./ISubscription";
 import { EventTypes } from "./EventTypes";
@@ -36,7 +36,7 @@ export class EventAggregator implements IEventAggregator {
         }, 1);
     }
 
-    public subscribe(eventType: string | EventTypes, callback: Function): ISubscription {
+    public subscribe(eventType: string | EventTypes, callback: Callback): ISubscription {
         if (!eventType) {
             throw new Error('Event type was invalid.');
         }
@@ -56,7 +56,7 @@ export class EventAggregator implements IEventAggregator {
         };
     }
 
-    public subscribeOnce(eventType: string | EventTypes, callback: Function): ISubscription {
+    public subscribeOnce(eventType: string | EventTypes, callback: Callback): ISubscription {
         let sub = this.subscribe(eventType, (event) => {
             sub.dispose();
             return callback(event);

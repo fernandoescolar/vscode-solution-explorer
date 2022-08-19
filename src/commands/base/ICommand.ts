@@ -1,4 +1,4 @@
-import { TreeItem } from '../../tree';
+import { TreeItem } from '@tree';
 
 export interface ICommand {
     run(item: TreeItem): Promise<void>;

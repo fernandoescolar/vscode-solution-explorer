@@ -1,6 +1,6 @@
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree";
-import { CommandBase } from "./base/CommandBase";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem } from "@tree";
+import { CommandBase } from "@commands/base";
 
 export class SelectActiveDocumentCommand extends CommandBase {
 

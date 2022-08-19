@@ -1,22 +1,22 @@
 import * as vscode from "vscode";
-import * as path from "path";
-import * as Utilities from "./model/Utilities";
-import * as SolutionExplorerConfiguration from "./SolutionExplorerConfiguration";
-import { EventTypes, IEvent, IEventAggregator, ISolutionSelected, ISubscription } from "./events";
+import * as path from "@extensions/path";
+import * as SolutionExplorerConfiguration from "@extensions/config";
+import * as Utilities from "@core/Utilities";
+import { EventTypes, IEvent, IEventAggregator, ISolutionSelected, ISubscription } from "@events";
 
 export interface FoundPath { root: string, sln: string }
 
 export class SolutionFinder extends vscode.Disposable {
 
-    private subscription: ISubscription;
-    private _selectedSolutionPath: string;
+    private subscription: ISubscription | undefined;
+    private _selectedSolutionPath: string | undefined;
 
     constructor(public workspaceRoots: string[], public readonly eventAggregator: IEventAggregator) {
         super(() => this.disposing());
     }
 
 	public register() {
-		this.subscription = this.eventAggregator.subscribe(EventTypes.Solution, evt => this.onSolutionEvent(evt))
+		this.subscription = this.eventAggregator.subscribe(EventTypes.solution, evt => this.onSolutionEvent(evt));
 	}
 
     public async findSolutions(): Promise<FoundPath[]> {
@@ -56,7 +56,7 @@ export class SolutionFinder extends vscode.Disposable {
     private disposing() {
         if (this.subscription) {
             this.subscription.dispose();
-            this.subscription = null;
+            this.subscription = undefined;
         }
     }
 

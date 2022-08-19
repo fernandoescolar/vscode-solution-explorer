@@ -1,15 +1,14 @@
 import * as vscode from "vscode";
-import { ICommandParameter } from "../base/ICommandParameter";
-import { CommandParameterCompiler } from "../base/CommandParameterCompiler";
+import { ICommandParameter, CommandParameterCompiler } from "@commands/base";
 
 export class OptionalCommandParameter implements ICommandParameter {
     private executed: boolean = false;
 
-    constructor(private readonly message, private readonly commandParameter: ICommandParameter) {
+    constructor(private readonly message: string, private readonly commandParameter: ICommandParameter) {
     }
 
     public get shouldAskUser(): boolean { return true; }
-    
+
     public async setArguments(state: CommandParameterCompiler): Promise<void> {
         this.executed = false;
         const option = await this.showConfirmMessage(state);
@@ -28,7 +27,7 @@ export class OptionalCommandParameter implements ICommandParameter {
         } else {
             return [];
         }
-    } 
+    }
 
     private showConfirmMessage(state: CommandParameterCompiler): Promise<string>
     {
@@ -39,7 +38,7 @@ export class OptionalCommandParameter implements ICommandParameter {
             input.step = state.step;
             input.totalSteps = state.steps;
             input.placeholder = this.message;
-            input.items = [ { label: 'Yes' }, { label: 'No' } ];   
+            input.items = [ { label: 'Yes' }, { label: 'No' } ];
             input.onDidAccept(() => {
                 accepted = true;
                 resolve(input.activeItems[0].label);

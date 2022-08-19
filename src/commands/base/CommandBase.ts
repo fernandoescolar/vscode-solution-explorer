@@ -1,11 +1,11 @@
-import { TreeItem } from '../../tree';
+import { TreeItem } from '@tree';
 import { ICommandParameter } from './ICommandParameter';
 import { CommandParameterCompiler } from './CommandParameterCompiler';
 
 export abstract class CommandBase {
 
-    private currentState: CommandParameterCompiler;
-    protected parameters: ICommandParameter[];
+    private currentState: CommandParameterCompiler | undefined;
+    protected parameters: ICommandParameter[] | undefined;
 
     protected get args(): string[] {
         return this.currentState ? this.currentState.results : [];
@@ -15,19 +15,19 @@ export abstract class CommandBase {
     }
 
     public async run(item: TreeItem): Promise<void> {
-        if (!this.shouldRun(item)) return;
+        if (!this.shouldRun(item)) { return; }
 
         let args = await this.getArguments();
-        if (!args) return;
-        
+        if (!args) { return; }
+
         await this.runCommand(item, args);
     }
 
-    protected async getArguments() : Promise<string[]> {
-        if (!this.parameters) return [];
+    protected async getArguments() : Promise<string[] | undefined> {
+        if (!this.parameters) { return []; }
 
         this.currentState = new CommandParameterCompiler(this.title, this.parameters);
-        const args = await this.currentState.compile();  
+        const args = await this.currentState.compile();
 
         return args;
     }

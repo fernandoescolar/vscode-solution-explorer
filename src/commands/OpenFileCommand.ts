@@ -1,35 +1,37 @@
 import * as vscode from "vscode";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree";
-import { CommandBase } from "./base/CommandBase";
+import { TreeItem } from "@tree";
+import { CommandBase } from "@commands/base";
 
 export class OpenFileCommand extends CommandBase {
-    private lastOpenedFile: string;
-    private lastOpenedDate: Date;
+    private lastOpenedFile: string | undefined;
+    private lastOpenedDate: Date | undefined;
 
     constructor() {
         super('Open file');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (item && item.path) return true; // return item && item.path; // raises an error
+        if (item && item.path) { return true; } // return item && item.path; // raises an error
         return false;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {    
-        let options: vscode.TextDocumentShowOptions = {
+    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
+        if (!item || !item.path) { return; }
+
+        const options: vscode.TextDocumentShowOptions = {
             preview: !this.checkDoubleClick(item),
             preserveFocus: true
         };
-        let filepath = item.path;
-        let document = await vscode.workspace.openTextDocument(filepath);
-        vscode.window.showTextDocument(document, options);  
+        const filepath = item.path;
+        const uri = vscode.Uri.file(filepath);
+        const document = await vscode.workspace.openTextDocument(uri);
+        vscode.window.showTextDocument(document, options);
     }
 
     private checkDoubleClick(item: TreeItem): boolean {
         let result = false;
         if (this.lastOpenedFile && this.lastOpenedDate) {
-            let isTheSameFile = this.lastOpenedFile == item.path;
+            let isTheSameFile = this.lastOpenedFile === item.path;
             let dateDiff = <number>(<any>new Date() - <any>this.lastOpenedDate);
             result =  isTheSameFile && dateDiff < 500;
         }

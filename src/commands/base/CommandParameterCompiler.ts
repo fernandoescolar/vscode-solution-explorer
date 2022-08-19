@@ -1,23 +1,25 @@
 import { ICommandParameter } from "./ICommandParameter";
 
-export class CommandParameterCompiler {
-    private currentStep: number;
-    private resolver: (value?: string[] | PromiseLike<string[]>) => void;
-    private result: string[];
+type Resolver = (value?: string[] | PromiseLike<string[]>) => void;
 
-    constructor(public readonly title: string, private parameters: ICommandParameter[]) {        
+export class CommandParameterCompiler {
+    private currentStep: number = 0;
+    private resolver: Resolver | undefined;
+    private result: string[] = [];
+
+    constructor(public readonly title: string, private parameters: ICommandParameter[]) {
     }
 
-    public get steps(): number { 
+    public get steps(): number {
         let numberOfSteps = 0;
         this.parameters.forEach(p => { numberOfSteps += p.shouldAskUser ? 1 : 0; } );
-        return numberOfSteps; 
+        return numberOfSteps;
     }
 
-    public get step(): number { 
+    public get step(): number {
         let virtualStep = 0;
         this.parameters.forEach((p, index) => { virtualStep += index <= this.currentStep && p.shouldAskUser ? 1 : 0; } );
-        return virtualStep; 
+        return virtualStep;
     }
 
     public get results(): string[] {
@@ -25,25 +27,25 @@ export class CommandParameterCompiler {
         return this.result;
     }
 
-    private get currentCommandParameter(): ICommandParameter { 
-        return this.parameters[this.currentStep]; 
+    private get currentCommandParameter(): ICommandParameter {
+        return this.parameters[this.currentStep];
     }
 
     public next(): void {
-        if (!this.resolver) return;
+        if (!this.resolver) { return; }
         if (this.currentStep + 1 < this.parameters.length) {
             this.currentStep++;
             this.currentCommandParameter.setArguments(this);
             if (!this.currentCommandParameter.shouldAskUser) {
                 this.next();
-            } 
+            }
         } else {
             this.onCompleted();
         }
     }
 
     public prev(): void {
-        if (!this.resolver) return;
+        if (!this.resolver) { return; }
         if (this.currentStep - 1 <= 0) {
             this.currentStep--;
             this.currentCommandParameter.setArguments(this);
@@ -57,7 +59,7 @@ export class CommandParameterCompiler {
         this.onCancel();
     }
 
-    public compile(): Promise<string[]> {
+    public compile(): Promise<string[] | undefined> {
         return new Promise(resolve => {
             this.resolver = resolve;
             this.currentStep = -1;
@@ -69,14 +71,14 @@ export class CommandParameterCompiler {
         if (this.resolver) {
             this.refreshResult();
             this.resolver(this.result);
-            this.resolver = null;
+            this.resolver = undefined;
         }
     }
 
     private onCancel(): void {
         if (this.resolver) {
-            this.resolver(null);
-            this.resolver = null;
+            this.resolver(undefined);
+            this.resolver = undefined;
         }
     }
 

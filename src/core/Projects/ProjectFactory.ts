@@ -1,5 +1,5 @@
-import * as fs from "../../async/fs"
-import * as xml from "../../async/xml";
+import * as fs from "@extensions/fs";
+import * as xml from "@extensions/xml";
 import { ProjectInSolution, SolutionProjectType, ProjectTypeIds } from "../Solutions";
 import { CpsProject } from "./Kinds/CpsProject";
 import { StandardProject } from "./Kinds/StandardProject";
@@ -22,47 +22,47 @@ const projectFileExtensions = {
 };
 
 export class ProjectFactory {
-    public static async parse(project: ProjectInSolution): Promise<Project> {
+    public static async parse(project: ProjectInSolution): Promise<Project | null> {
         if (!(await fs.exists(project.fullPath))) {
             return null;
         }
 
-        let result: Project = null;
+        let result: Project | null = null;
         if (project.fullPath.toLocaleLowerCase().endsWith(".njsproj")) {
             result = await ProjectFactory.loadNoReferencesStandardProject(project);
 
         }
-        if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat
+        if (project.projectType === SolutionProjectType.knownToBeMSBuildFormat
             && cpsProjectTypes.indexOf(project.projectTypeId) >= 0) {
             result = await ProjectFactory.loadCpsProject(project);
         }
 
-        if (project.projectType == SolutionProjectType.KnownToBeMSBuildFormat
+        if (project.projectType === SolutionProjectType.knownToBeMSBuildFormat
             && standardProjectTypes.indexOf(project.projectTypeId) >= 0) {
             result = await ProjectFactory.determineStandardProject(project);
         }
 
-        if (project.projectType == SolutionProjectType.WebProject) {
+        if (project.projectType === SolutionProjectType.webProject) {
             result = await ProjectFactory.loadWebsiteProject(project);
         }
 
-        if (project.projectTypeId == ProjectTypeIds.shProjectGuid) {
+        if (project.projectTypeId === ProjectTypeIds.shProjectGuid) {
             result = await ProjectFactory.loadSharedProject(project);
         }
 
-        if (project.projectTypeId == ProjectTypeIds.deployProjectGuid) {
+        if (project.projectTypeId === ProjectTypeIds.deployProjectGuid) {
             result = await ProjectFactory.loadDeploydProject(project);
         }
 
         const fileExtension = projectFileExtensions[project.projectTypeId];
-        if (fileExtension) {
+        if (result && fileExtension) {
             result.fileExtension = fileExtension;
         }
 
         return result;
     }
 
-    private static async determineStandardProject(project: ProjectInSolution): Promise<Project> {
+    private static async determineStandardProject(project: ProjectInSolution): Promise<Project | null> {
         let document =  await ProjectFactory.loadProjectDocument(project.fullPath);
         let element: any = Project.getProjectElement(document);
 
@@ -70,16 +70,16 @@ export class ProjectFactory {
             return null;
         }
 
-        if (element.attributes.Sdk
-            && element.attributes.Sdk.startsWith("Microsoft.NET.Sdk"))
+        if (element.attributes.Sdk && element.attributes.Sdk.startsWith("Microsoft.NET.Sdk")) {
             return new CpsProject(project, document);
+        }
 
         return new StandardProject(project, document);
     }
 
     private static async loadProjectDocument(projectFullPath: string): Promise<any> {
-        let content = await fs.readFile(projectFullPath, 'utf8');
-        return  await xml.ParseToJson(content);
+        let content = await fs.readFile(projectFullPath);
+        return  await xml.parseToJson(content);
     }
 
     private static async loadCpsProject(project: ProjectInSolution): Promise<any> {

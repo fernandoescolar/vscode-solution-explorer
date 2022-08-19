@@ -1,4 +1,4 @@
-import { ICommandParameter } from "../base/ICommandParameter";
+import { ICommandParameter } from "@commands/base";
 
 export class StaticCommandParameter implements ICommandParameter {
     constructor(private readonly value: string, private readonly option?: string) {
@@ -11,10 +11,11 @@ export class StaticCommandParameter implements ICommandParameter {
     public get shouldAskUser(): boolean { return false; }
 
     public getArguments(): string[] {
-        if (this.option)
-            return [ this.option, this.value ];
+        if (this.option) {
+            return [ this.option, this.value || "" ];
+        }
 
-        return [ this.value ];
+        return [ this.value  || "" ];
     }
 
 }

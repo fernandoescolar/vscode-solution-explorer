@@ -1,30 +1,29 @@
-import * as path from "path";
-import { getItemNesting } from "../SolutionExplorerConfiguration";
-import { ProjectInSolution, SolutionProjectType, SolutionFile, ProjectTypeIds } from "../model/Solutions";
-import { Project, ProjectFactory, ProjectFile } from "../model/Projects";
-import { TreeItem } from "./TreeItem";
-import { TreeItemContext } from "./TreeItemContext";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { SolutionFolderTreeItem } from "./items/SolutionFolderTreeItem";
-import { UnknownProjectTreeItem } from "./items/UnknownProjectTreeItem";
-import { ProjectTreeItem } from "./items/ProjectTreeItem";
-import { SolutionTreeItem } from "./items/SolutionTreeItem";
-import { ProjectFolderTreeItem } from "./items/ProjectFolderTreeItem";
-import { ProjectFileTreeItem } from "./items/ProjectFileTreeItem";
-import { CpsProjectTreeItem } from "./items/cps/CpsProjectTreeItem";
-import { StandardProjectTreeItem } from "./items/standard/StandardProjectTreeItem";
-import { WebSiteProjectTreeItem } from "./items/website/WebSiteProjectTreeItem";
-import { NoSolutionTreeItem } from "./items/NoSolutionTreeItem";
-import { SharedProjectTreeItem } from "./items/standard/SharedProjectTreeItem";
-import { DeployProjectTreeItem } from "./items/standard/DeployProjectTreeItem";
-import { SolutionFileTreeItem } from "./items/SolutionFileTreeItem";
+import * as path from "@extensions/path";
+import { getItemNesting } from "@extensions/config";
+import { ProjectInSolution, SolutionProjectType, SolutionFile, ProjectTypeIds } from "@core/Solutions";
+import { Project, ProjectFactory, ProjectFile } from "@core/Projects";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem } from "@tree/TreeItem";
+import { TreeItemContext } from "@tree/TreeItemContext";
+import { SolutionFolderTreeItem } from "@tree/items/SolutionFolderTreeItem";
+import { UnknownProjectTreeItem } from "@tree/items/UnknownProjectTreeItem";
+import { ProjectTreeItem } from "@tree/items/ProjectTreeItem";
+import { SolutionTreeItem } from "@tree/items/SolutionTreeItem";
+import { ProjectFolderTreeItem } from "@tree/items/ProjectFolderTreeItem";
+import { ProjectFileTreeItem } from "@tree/items/ProjectFileTreeItem";
+import { CpsProjectTreeItem } from "@tree/items/cps/CpsProjectTreeItem";
+import { StandardProjectTreeItem } from "@tree/items/standard/StandardProjectTreeItem";
+import { WebSiteProjectTreeItem } from "@tree/items/website/WebSiteProjectTreeItem";
+import { SharedProjectTreeItem } from "@tree/items/standard/SharedProjectTreeItem";
+import { DeployProjectTreeItem } from "@tree/items/standard/DeployProjectTreeItem";
+import { SolutionFileTreeItem } from "@tree/items/SolutionFileTreeItem";
 
-export function CreateNoSolution(provider: SolutionExplorerProvider, rootPath: string): Promise<TreeItem> {
-    let context = new TreeItemContext(provider, null, rootPath);
-    return Promise.resolve(new NoSolutionTreeItem(context, rootPath));
-}
+// export function CreateNoSolution(provider: SolutionExplorerProvider, rootPath: string): Promise<TreeItem> {
+//     let context = new TreeItemContext(provider, undefined, rootPath);
+//     return Promise.resolve(new NoSolutionTreeItem(context, rootPath));
+// }
 
-export async function CreateFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile, workspaceRoot: string): Promise<TreeItem> {
+export async function createFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile, workspaceRoot: string): Promise<TreeItem> {
     let context = new TreeItemContext(provider, solution, workspaceRoot);
     let treeItem = new SolutionTreeItem(context);
     await treeItem.getChildren();
@@ -32,17 +31,18 @@ export async function CreateFromSolution(provider: SolutionExplorerProvider, sol
     return treeItem;
 }
 
-export async function CreateItemsFromSolution(context: TreeItemContext, solution: SolutionFile, projectInSolution?: ProjectInSolution): Promise<TreeItem[]> {
+export async function createItemsFromSolution(context: TreeItemContext, solution: SolutionFile, projectInSolution?: ProjectInSolution): Promise<TreeItem[]> {
     let result: TreeItem[] = [];
     let folders: ProjectInSolution[] = [];
     let projects: ProjectInSolution[] = [];
-    solution.Projects.forEach(project => {
-        if (!projectInSolution && project.parentProjectGuid) return false;
-        if (projectInSolution && project.parentProjectGuid != projectInSolution.projectGuid) return false;
-        if (project.projectType == SolutionProjectType.SolutionFolder)
+    solution.projects.forEach(project => {
+        if (!projectInSolution && project.parentProjectGuid) { return false; }
+        if (projectInSolution && project.parentProjectGuid !== projectInSolution.projectGuid) { return false; }
+        if (project.projectType === SolutionProjectType.solutionFolder) {
             folders.push(project);
-        else
+        } else {
             projects.push(project);
+        }
     });
 
     folders.sort((a, b) => {
@@ -58,16 +58,16 @@ export async function CreateItemsFromSolution(context: TreeItemContext, solution
     });
 
     for(let i = 0; i < folders.length; i++) {
-        result.push(await CreateFromProject(context, folders[i]));
+        result.push(await createFromProject(context, folders[i]));
     }
 
     for(let i = 0; i < projects.length; i++) {
-        result.push(await CreateFromProject(context, projects[i]));
+        result.push(await createFromProject(context, projects[i]));
     }
 
     if (projectInSolution) {
         Object.keys(projectInSolution.solutionItems).forEach(k => {
-            const fullpath = path.join(solution.FolderPath, projectInSolution.solutionItems[k]);
+            const fullpath = path.join(solution.folderPath, projectInSolution.solutionItems[k]);
             result.push(new SolutionFileTreeItem(context, k, fullpath));
         });
     }
@@ -75,28 +75,28 @@ export async function CreateItemsFromSolution(context: TreeItemContext, solution
     return result;
 }
 
-async function CreateFromProject(context: TreeItemContext, project: ProjectInSolution): Promise<TreeItem> {
-    if (project.projectType == SolutionProjectType.SolutionFolder) {
-        let treeItem = new SolutionFolderTreeItem(context, project);
+async function createFromProject(context: TreeItemContext, project: ProjectInSolution): Promise<TreeItem> {
+    if (project.projectType === SolutionProjectType.solutionFolder) {
+        let treeItem = await SolutionFolderTreeItem.create(context, project);
         await treeItem.getChildren();
         return treeItem;
     }
 
     let p = await ProjectFactory.parse(project);
-    let projectContext = context.copy(p);
+    let projectContext = context.copy(p ?? undefined);
     if (p) {
-        if (p.type == 'cps') return new CpsProjectTreeItem(projectContext, project);
-        if (p.type == 'standard') return new StandardProjectTreeItem(projectContext, project);
-        if (p.type == 'shared') return new SharedProjectTreeItem(projectContext, project);
-        if (p.type == 'website') return new WebSiteProjectTreeItem(projectContext, project);
-        if (p.type == 'deploy') return new DeployProjectTreeItem(projectContext, project);
+        if (p.type === 'cps') { return new CpsProjectTreeItem(projectContext, project); }
+        if (p.type === 'standard') { return new StandardProjectTreeItem(projectContext, project); }
+        if (p.type === 'shared') { return new SharedProjectTreeItem(projectContext, project); }
+        if (p.type === 'website') { return new WebSiteProjectTreeItem(projectContext, project); }
+        if (p.type === 'deploy') { return new DeployProjectTreeItem(projectContext, project); }
         return new ProjectTreeItem(projectContext, project);
     }
 
     return new UnknownProjectTreeItem(projectContext, project);
 }
 
-export async function CreateItemsFromProject(context: TreeItemContext, project: Project, virtualPath?: string): Promise<TreeItem[]> {
+export async function createItemsFromProject(context: TreeItemContext, project: Project, virtualPath?: string): Promise<TreeItem[]> {
     let result: TreeItem[] = [];
 
     let items = await project.getProjectFilesAndFolders(virtualPath);
@@ -106,10 +106,10 @@ export async function CreateItemsFromProject(context: TreeItemContext, project: 
 
     const useNesting = getItemNesting();
     if (useNesting) {
-        let threePointFiles : ProjectFile[] = items.files.filter(f => f.name.split('.').length > 2)
+        let threePointFiles : ProjectFile[] = items.files.filter(f => f.name.split('.').length > 2);
         let handledthreePointFiles: ProjectFile[] = [];
         items.files.forEach(file => {
-            if (threePointFiles.indexOf(file) >= 0) return;
+            if (threePointFiles.indexOf(file) >= 0) { return; }
             if (threePointFiles.length > 0) {
                 const name = file.name.split('.')[0];
                 const extension = path.extname(file.name).substring(1);
@@ -130,7 +130,7 @@ export async function CreateItemsFromProject(context: TreeItemContext, project: 
     }
 
     Object.keys(project.solutionItems).forEach(k => {
-        const fullpath = path.join(context.solution.FolderPath, project.solutionItems[k]);
+        const fullpath = path.join(context.solution.folderPath, project.solutionItems[k]);
         result.push(new SolutionFileTreeItem(context, k, fullpath));
     });
 

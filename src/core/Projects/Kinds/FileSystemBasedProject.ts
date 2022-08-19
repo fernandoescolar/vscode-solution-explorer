@@ -1,5 +1,5 @@
-import * as path from "path";
-import * as fs from "../../../async/fs";
+import * as path from "@extensions/path";
+import * as fs from "@extensions/fs";
 import * as Utilities from "../../Utilities";
 import { ProjectInSolution } from "../../Solutions";
 import { Project } from "../Project";
@@ -13,9 +13,10 @@ export abstract class FileSystemBasedProject extends Project {
 
     public async getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[], folders: ProjectFolder[] }> {
         let folderPath = path.dirname(this.projectInSolution.fullPath);
-        if (virtualPath)
+        if (virtualPath) {
             folderPath = path.join(folderPath, virtualPath);
-        
+        }
+
         let result = await Utilities.getDirectoryItems(folderPath);
         let files: ProjectFile[] = [];
         let folders: ProjectFolder[] = [];
@@ -50,7 +51,7 @@ export abstract class FileSystemBasedProject extends Project {
     }
 
     public deleteFolder(folderpath: string): Promise<void> {
-        return fs.rmdir_recursive(folderpath);
+        return fs.rmdirRecursive(folderpath);
     }
 
     public async createFolder(folderpath: string): Promise<string> {
@@ -77,7 +78,7 @@ export abstract class FileSystemBasedProject extends Project {
     private async moveItem(itemPath: string, newfolderPath: string): Promise<string> {
         let folderPath = path.dirname(this.projectInSolution.fullPath);
         let fullFolderPath = path.join(folderPath, newfolderPath);
-        let itemName = itemPath.split(path.sep).pop();
+        let itemName = itemPath.split(path.sep).pop() || "";
         let newItemPath = path.join(fullFolderPath, itemName);
         await fs.rename(itemPath, newItemPath);
         return newItemPath;

@@ -1,8 +1,8 @@
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { IEventAggregator } from "../events";
+import { IEventAggregator } from "@events";
+import { SolutionFile } from "@core/Solutions";
+import { Project } from "@core/Projects";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "./";
-import { SolutionFile } from "../model/Solutions";
-import { Project } from "../model/Projects";
 
 export class TreeItemContext {
     constructor(public readonly provider: SolutionExplorerProvider, public readonly solution: SolutionFile, public readonly workspaceRoot: string, public readonly project?: Project, public readonly parent?: TreeItem) {

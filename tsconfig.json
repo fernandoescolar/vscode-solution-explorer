@@ -1,14 +1,33 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es6",
+        "target": "ES2020",
         "outDir": "out",
         "lib": [
-            "es6"
+            "ES2020",
+			"dom"
         ],
         "sourceMap": true,
         "rootDir": "src",
-        "skipLibCheck": true
+        "moduleResolution": "node",
+		"baseUrl": "./src/",
+		"paths": {
+			"@SolutionExplorerProvider": ["./SolutionExplorerProvider"],
+			"@commands": ["commands"],
+			"@commands/*": ["commands/*"],
+			"@core/*": ["core/*"],
+			"@events": ["events"],
+			"@extensions/*": ["extensions/*"],
+			"@logs": ["logs"],
+			"@templates": ["templates"],
+			"@tree": ["tree"],
+			"@tree/*": ["tree/*"],
+		},
+		"strict": true   /* enable all strict type-checking options */
+		/* Additional Checks */
+		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
+		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
+		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
     },
     "exclude": [
         "node_modules",

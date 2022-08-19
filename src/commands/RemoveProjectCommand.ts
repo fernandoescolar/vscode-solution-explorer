@@ -1,8 +1,7 @@
-import { CliCommandBase } from "./base/CliCommandBase";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree/TreeItem";
-import { StaticCommandParameter } from "./parameters/StaticCommandParameter";
-import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem } from "@tree";
+import { CliCommandBase } from "@commands/base";
+import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
 
 export class RemoveProjectCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
@@ -10,9 +9,11 @@ export class RemoveProjectCommand extends CliCommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
+        if (!item || !item.path) { return false; }
+
         this.parameters = [
             new StaticCommandParameter('sln'),
-            new StaticCommandParameter(item.solution.FullPath),
+            new StaticCommandParameter(item.solution.fullPath),
             new StaticCommandParameter('remove'),
             new StaticCommandParameter(item.path),
         ];

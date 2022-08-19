@@ -1,7 +1,7 @@
-import * as path from "path";
-import * as fs from "../../../async/fs";
-import * as xml from "../../../async/xml";
-import * as SolutionExplorerConfiguration from "../../../SolutionExplorerConfiguration";
+import * as path from "@extensions/path";
+import * as fs from "@extensions/fs";
+import * as xml from "@extensions/xml";
+import * as SolutionExplorerConfiguration from "@extensions/config";
 import { ProjectInSolution } from "../../Solutions";
 import { ProjectFile } from "../ProjectFile";
 import { ProjectFolder } from "../ProjectFolder";
@@ -16,7 +16,7 @@ function commonPrefix(x: string, y: string): string {
 
     let i = 0;
     for (; i < x.length; i++) {
-        if (x[i] != y[i]) {
+        if (x[i] !== y[i]) {
             break;
         }
     }
@@ -33,8 +33,8 @@ export class StandardProject extends FileSystemBasedProject {
     private filesTree: any = null;
     private currentItemGroup: any = null;
     private shouldReload: boolean = true;
-    protected dependents: { [id: string]: string[] };
-    protected includePrefix: string = null;
+    protected dependents: { [id: string]: string[] } = {};
+    protected includePrefix: string | null = null;
 
     constructor(projectInSolution: ProjectInSolution, document?: any, type?: string) {
         super(projectInSolution, type ? type : 'standard');
@@ -62,10 +62,10 @@ export class StandardProject extends FileSystemBasedProject {
         if (virtualPath) {
             let pathParts = virtualPath.split(path.sep);
             pathParts.forEach(part => {
-                let existingPathIndex = currentLevel.findIndex(i => i.name == part);
+                let existingPathIndex = currentLevel.findIndex((i: any) => i.name === part);
                 if (existingPathIndex >= 0) {
                     currentLevel = currentLevel[existingPathIndex].children;
-                } 
+                }
             });
         }
 
@@ -74,8 +74,8 @@ export class StandardProject extends FileSystemBasedProject {
         for(let i = 0; i < currentLevel.length; i++) {
             let item = currentLevel[i];
             try {
-                let stat = await fs.lstat(item.fullpath);
-                if (stat.isDirectory()) {
+                let isDirectory = await fs.isDirectory(item.fullpath);
+                if (isDirectory) {
                     folders.push(new ProjectFolder(item.fullpath));
                 } else {
                     let projectFile = new ProjectFile(item.fullpath);
@@ -83,7 +83,7 @@ export class StandardProject extends FileSystemBasedProject {
                     files.push(projectFile);
                 }
             }
-            catch(err) {
+            catch(err: any) {
                 console.info("Error: " + item.fullpath + " - " + err.message);
             }
         }
@@ -93,7 +93,7 @@ export class StandardProject extends FileSystemBasedProject {
             let y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
-    
+
         files.sort((a, b) => {
             let x = a.name.toLowerCase();
             let y = b.name.toLowerCase();
@@ -118,7 +118,7 @@ export class StandardProject extends FileSystemBasedProject {
         let relativePath = this.getRelativePath(filepath);
         let folderRelativePath = path.dirname(relativePath);
         this.removeInNodes(relativePath);
-        if (folderRelativePath != '.' && this.countInNodes(folderRelativePath, true) == 0) {
+        if (folderRelativePath !== '.' && this.countInNodes(folderRelativePath, true) === 0) {
             this.currentItemGroupAdd('Folder', folderRelativePath, true);
         }
         await super.deleteFile(filepath);
@@ -127,10 +127,10 @@ export class StandardProject extends FileSystemBasedProject {
 
     public async createFile(folderpath: string, filename: string, content?: string): Promise<string> {
         await this.checkProjectLoaded();
-        
+
         let folderRelativePath = this.getRelativePath(folderpath);
         let relativePath = path.join(folderRelativePath, filename);
-        let extension = relativePath.split('.').pop().toLocaleLowerCase();
+        let extension = (relativePath.split('.').pop() || "").toLocaleLowerCase();
 
         let type = 'None';
         let itemTypes = SolutionExplorerConfiguration.getItemTypes();
@@ -140,12 +140,15 @@ export class StandardProject extends FileSystemBasedProject {
             type = itemTypes['*'];
         }
 
-        if (!type) type = 'None';
+        if (!type)  {
+            type = 'None';
+        }
 
-        if (folderRelativePath) { 
+        if (folderRelativePath) {
             // maybe the folder was empty
             this.removeInNodes(folderRelativePath, true, ['Folder']);
         }
+
         this.currentItemGroupAdd(type, relativePath);
         await this.saveProject();
         return await super.createFile(folderpath, filename, content);
@@ -173,7 +176,7 @@ export class StandardProject extends FileSystemBasedProject {
         await this.checkProjectLoaded();
         let folderRelativePath = this.getRelativePath(folderpath);
         let parentRelativePath = path.dirname(folderRelativePath);
-        if (parentRelativePath) { 
+        if (parentRelativePath) {
             // maybe the container folder was empty
             this.removeInNodes(parentRelativePath, true, ['Folder']);
         }
@@ -243,7 +246,7 @@ export class StandardProject extends FileSystemBasedProject {
 
     private async checkProjectLoaded(): Promise<void> {
         if (!this.loaded) {
-            let content = await fs.readFile(this.fullPath, 'utf8');
+            let content = await fs.readFile(this.fullPath);
             await this.parseProject(content);
             this.loaded = true;
         }
@@ -255,16 +258,16 @@ export class StandardProject extends FileSystemBasedProject {
 
     private async saveProject(): Promise<void> {
         this.shouldReload = false;
-        let content = await xml.ParseToXml(this.document);
+        let content = await xml.parseToXml(this.document);
         await fs.writeFile(this.fullPath, content);
         await this.parseProject(content);
     }
 
     private async parseProject(content: string): Promise<void> {
-        let document =  await xml.ParseToJson(content);
+        let document =  await xml.parseToJson(content);
         this.parseDocument(document);
     }
-    
+
     private parseDocument(document: any): void {
         this.loaded = true;
         this.document = document;
@@ -273,14 +276,14 @@ export class StandardProject extends FileSystemBasedProject {
         let files: string[] = [];
         let folders: string[] = [];
         let dependents: { [id: string]: string[] } = {};
-        let addFile = ref => {
+        let addFile = (ref: any) => {
             let isDependent = false;
             if (ref.elements) {
-                ref.elements.forEach(e => {
+                ref.elements.forEach((e: any) => {
                     if (e.name === 'DependentUpon') {
                         isDependent = true;
                         let parent = e.elements[0].text;
-                        if (!dependents[parent]) dependents[parent] = [];
+                        if (!dependents[parent]) { dependents[parent] = []; }
                         dependents[parent].push(this.cleanIncludePath(ref.attributes.Include).replace(/\\/g, path.sep));
                     }
                 });
@@ -291,14 +294,18 @@ export class StandardProject extends FileSystemBasedProject {
             }
         };
 
-        if (!project) project = { elements: [] };
-        if (!project.elements || !Array.isArray(project.elements)) project.elements = [];
+        project = project || { elements: [] };
+        if (!project.elements || !Array.isArray(project.elements)) {
+            project.elements = [];
+        }
 
-        project.elements.forEach(element => {
+        project.elements.forEach((element: any) => {
             if (element.name === 'ItemGroup') {
-                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
-                
-                element.elements.forEach(e => {
+                if (!element.elements || !Array.isArray(element.elements)) {
+                    element.elements = [];
+                }
+
+                element.elements.forEach((e: any) => {
                     if (e.name === 'Reference' || e.name === 'ProjectReference') {
                         let include = this.cleanIncludePath(e.attributes.Include);
                         this.references.push(new ProjectReference(include, include));
@@ -308,8 +315,10 @@ export class StandardProject extends FileSystemBasedProject {
                     if (e.name === 'Folder') {
                         addFile(e);
                         let folder = this.cleanIncludePath(e.attributes.Include).replace(/\\/g, path.sep);
-                        if (folder.endsWith(path.sep))
+                        if (folder.endsWith(path.sep)) {
                             folder = folder.substring(0, folder.length - 1);
+                        }
+
                         folders.push(folder);
                         return false;
                     }
@@ -331,18 +340,18 @@ export class StandardProject extends FileSystemBasedProject {
     private async parsePackages(): Promise<void> {
         this.packages = [];
         let packagesPath = path.join(path.dirname(this.fullPath), 'packages.config');
-        if (!(await fs.exists(packagesPath))) return;
-        
-        let content = await fs.readFile(packagesPath, 'utf8');
+        if (!(await fs.exists(packagesPath))) { return; }
+
+        let content = await fs.readFile(packagesPath);
         let packageRegEx = /<package\s+id=\"(.*)\"\s+version=\"(.*)\"\s+targetFramework=\"(.*)\"/g;
-        let m: RegExpExecArray;        
+        let m: RegExpExecArray | null;
         while ((m = packageRegEx.exec(content)) !== null) {
             this.packages.push(new PackageReference(m[1].trim(), m[2].trim()));
         }
     }
 
     private parseToTree(files: string[]): any {
-        let tree = [];
+        let tree: any[] = [];
         files.forEach(filepath => {
             // Get absolute path of file
             filepath = filepath.replace(/\\/g, path.sep);
@@ -355,9 +364,9 @@ export class StandardProject extends FileSystemBasedProject {
             let pathParts = virtualPath.split(path.sep);
             let currentLevel = tree;
             pathParts.forEach(part => {
-                if (!part) return;
+                if (!part) { return; }
                 currentFullPath = path.join(currentFullPath, part);
-                let existingPathIndex = currentLevel.findIndex(i => i.name == part);
+                let existingPathIndex = currentLevel.findIndex(i => i.name === part);
                 if (existingPathIndex >= 0) {
                     currentLevel = currentLevel[existingPathIndex].children;
                 } else {
@@ -366,7 +375,7 @@ export class StandardProject extends FileSystemBasedProject {
                         virtualpath: virtualPath,
                         fullpath: currentFullPath,
                         children: [],
-                    }
+                    };
 
                     currentLevel.push(newPart);
                     currentLevel = newPart.children;
@@ -379,10 +388,10 @@ export class StandardProject extends FileSystemBasedProject {
 
     private countInNodes(pattern: string, isFolder: boolean = false): number {
         pattern = pattern.replace(/\//g, '\\') + (isFolder ? '\\' : '');
-        if (this.includePrefix) pattern = this.includePrefix + pattern;
+        if (this.includePrefix) { pattern = this.includePrefix + pattern; }
 
         let counter = 0;
-        let findPattern = ref => {
+        let findPattern = (ref: any) => {
             if (ref.attributes.Include.startsWith(pattern)) {
                 counter++;
             }
@@ -390,11 +399,13 @@ export class StandardProject extends FileSystemBasedProject {
 
         let nodeNames = this.getXmlNodeNames();
         let project = StandardProject.getProjectElement(this.document);
-        project.elements.forEach(element => {
+        project.elements.forEach((element: any) => {
             if (element.name === 'ItemGroup') {
-                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
+                if (!element.elements || !Array.isArray(element.elements)) {
+                    element.elements = [];
+                }
 
-                element.elements.forEach(e => {
+                element.elements.forEach((e: any) => {
                     nodeNames.forEach(nodeName => {
                         if (e.name === nodeName) {
                             findPattern(e);
@@ -416,8 +427,8 @@ export class StandardProject extends FileSystemBasedProject {
             newPattern = this.includePrefix + newPattern;
         }
 
-        let findPattern = ref => {
-            this.replaceDependsUponNode(ref, pattern, newPattern); 
+        let findPattern = (ref: any) => {
+            this.replaceDependsUponNode(ref, pattern, newPattern);
 
             if (ref.attributes.Include.startsWith(pattern)) {
                 ref.attributes.Include = ref.attributes.Include.replace(pattern, newPattern);
@@ -426,11 +437,13 @@ export class StandardProject extends FileSystemBasedProject {
 
         let nodeNames = this.getXmlNodeNames();
         let project = StandardProject.getProjectElement(this.document);
-        project.elements.forEach(element => {
+        project.elements.forEach((element: any) => {
             if (element.name === 'ItemGroup') {
-                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
+                if (!element.elements || !Array.isArray(element.elements)) {
+                    element.elements = [];
+                }
 
-                element.elements.forEach(e => {
+                element.elements.forEach((e: any) => {
                     nodeNames.forEach(nodeName => {
                         if (e.name === nodeName) {
                             findPattern(e);
@@ -442,26 +455,35 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     protected replaceDependsUponNode(ref: any, pattern: string, newPattern: string) {
-        if (!ref.elements) return;
+        if (!ref.elements) { return; }
 
-        ref.elements.forEach(e => {
+        ref.elements.forEach((e: any) => {
             if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
                 e.elements[0].text = e.elements[0].text.replace(pattern, newPattern);
             }
         });
     }
 
-    private removeInNodes(pattern: string, isFolder: boolean = false, types: string[] = null): void {
+    private removeInNodes(pattern: string, isFolder: boolean = false, types: string[] | null = null): void {
         pattern = pattern.replace(/\//g, '\\') + (isFolder ? '\\' : '');
-        if (this.includePrefix) pattern = this.includePrefix + pattern;
-        if (!types) types = this.getXmlNodeNames();
+        if (this.includePrefix) {
+            pattern = this.includePrefix + pattern;
+        }
+
+        if (!types) {
+            types = this.getXmlNodeNames();
+        }
 
         let project = StandardProject.getProjectElement(this.document);
-        project.elements.forEach((element, elementIndex) => {
+        project.elements.forEach((element: any, elementIndex: number) => {
             if (element.name === 'ItemGroup') {
-                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
+                if (!element.elements || !Array.isArray(element.elements)) {
+                    element.elements = [];
+                }
+
                 let toDelete: any[] = [];
-                element.elements.forEach(e => {
+                element.elements.forEach((e: any) => {
+                    if (types === null) { return; }
                     types.forEach(nodeName => {
                         if (e.name === nodeName) {
                             this.deleteDependsUponNode(e, pattern);
@@ -475,7 +497,7 @@ export class StandardProject extends FileSystemBasedProject {
                 toDelete.forEach(e => {
                     element.elements.splice(element.elements.indexOf(e), 1);
                 });
-                
+
 
                 if (element.elements.length === 0) {
                     project.elements.splice(elementIndex, 1);
@@ -485,9 +507,9 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     protected deleteDependsUponNode(node: any, pattern: string) {
-        if (!node.elements) return;
+        if (!node.elements) { return; }
 
-        node.elements.forEach((e, eIndex) => {
+        node.elements.forEach((e: any, eIndex: number) => {
             if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
                 node.elements.splice(eIndex, 1);
             }
@@ -500,16 +522,18 @@ export class StandardProject extends FileSystemBasedProject {
 
     private currentItemGroupAdd(type: string, include: string, isFolder: boolean = false) {
         this.checkCurrentItemGroup();
-        
+
         include = include.replace(/\//g, '\\') + (isFolder ? '\\' : '');
 
-        if (this.includePrefix) include = this.includePrefix + include;
+        if (this.includePrefix) {
+            include = this.includePrefix + include;
+        }
 
         this.currentItemGroup.elements.push({
             type: 'element',
             name: type,
             attributes: {
-                Include: include
+                ["Include"]: include
             }
         });
     }
@@ -518,7 +542,7 @@ export class StandardProject extends FileSystemBasedProject {
         let project = StandardProject.getProjectElement(this.document);
         let current: any;
         let lastElement: any;
-        project.elements.forEach(element => {
+        project.elements.forEach((element: any) => {
             if (element.name === 'ItemGroup') {
                 lastElement = element;
             }
@@ -532,7 +556,7 @@ export class StandardProject extends FileSystemBasedProject {
                 type: 'element',
                 name: 'ItemGroup',
                 elements: []
-            }
+            };
             project.elements.push(current);
         } else if (!current) {
             current = lastElement;
@@ -546,25 +570,29 @@ export class StandardProject extends FileSystemBasedProject {
     }
 
     private async getFoldersFromTree(items: any): Promise<string[]> {
-        if (!Array.isArray(items)) return [];
+        if (!Array.isArray(items)) {
+            return [];
+        }
+
         let result: string[] = [];
         for (let i = 0; i < items.length; i++) {
             let item = items[i];
-            let stat = await fs.lstat(item.fullpath);
-            if (stat.isDirectory()) {
+            let isDirectory = await fs.isDirectory(item.fullpath);
+            if (isDirectory) {
                 result.push(item.fullpath);
                 let subItems = await this.getFoldersFromTree(item.children);
                 subItems.forEach(si => result.push(si));
             }
         }
-        
+
         return result;
     }
 
     private cleanIncludePath(include: string): string {
-        if (this.includePrefix)
+        if (this.includePrefix) {
             return include.replace(this.includePrefix, "");
-        
+        }
+
         return include;
     }
 
@@ -586,6 +614,7 @@ export class StandardProject extends FileSystemBasedProject {
                 result.push(itemTypes[key]);
             }
         });
+
         return result;
     }
 }

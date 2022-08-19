@@ -1,8 +1,8 @@
-import * as path from "path";
+import * as path from "@extensions/path";
 
 export class ProjectFile {
     constructor(public readonly fullPath: string) {
-        this.name = this.fullPath.split(path.sep).pop();
+        this.name = this.fullPath.split(path.sep).pop() || "";
     }
 
     public name: string;

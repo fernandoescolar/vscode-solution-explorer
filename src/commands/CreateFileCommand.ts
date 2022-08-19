@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
-import * as path from "path";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem, ContextValues } from "../tree";
-import { CommandBase } from "./base/CommandBase";
-import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
-import { InputOptionsCommandParameter } from "./parameters/InputOptionsCommandParameter";
+import * as path from "@extensions/path";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem, ContextValues } from "@tree";
+import { CommandBase } from "@commands/base";
+import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
+import { InputOptionsCommandParameter } from "@commands/parameters/InputOptionsCommandParameter";
 
 export class CreateFileCommand extends CommandBase {
     private _workspaceRoot: string = '';
@@ -24,15 +24,18 @@ export class CreateFileCommand extends CommandBase {
             this._defaultExtension = item.project.fileExtension;
             return true;
         }
+
+        return false;
     }
 
     protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!args || args.length <= 0) return;
+        if (!args || args.length <= 0 || !item || !item.project || !item.path) { return; }
 
         try {
             let targetpath: string = item.path;
-            if (!item.contextValue.startsWith(ContextValues.ProjectFolder))
+            if (!item.contextValue.startsWith(ContextValues.projectFolder)) {
                 targetpath = path.dirname(targetpath);
+            }
 
             const content = await this.getContent(item);
             const filename = this.getFilename(args[0]);
@@ -56,15 +59,16 @@ export class CreateFileCommand extends CommandBase {
         return result;
     }
 
-    private getContent(item: TreeItem): Promise<string> {
-        if (!this.args[1]) return Promise.resolve("");
+    private async getContent(item: TreeItem): Promise<string> {
+        if (!this.args[1]) { return ""; }
+
         const templateEngine = this.provider.getTemplateEngine(this._workspaceRoot);
         if (templateEngine) {
             const filename = this.getFilename(this.args[0]);
-            return templateEngine.generate(filename, this.args[1], item);
+            return await templateEngine.generate(filename, this.args[1], item) || "";
         }
 
-        return Promise.resolve("");
+        return "";
     }
 
     private getFilename(filename: string): string {

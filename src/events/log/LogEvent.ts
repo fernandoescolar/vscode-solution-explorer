@@ -7,6 +7,6 @@ export class LogEvent implements ILogEvent {
     }
 
     public get eventType(): string {
-        return EventTypes.Log;
+        return EventTypes.log;
     }
 }

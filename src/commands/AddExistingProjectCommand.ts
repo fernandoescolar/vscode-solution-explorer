@@ -1,9 +1,9 @@
 import { OpenDialogOptions } from "vscode";
-import { CliCommandBase } from "./base/CliCommandBase";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree/TreeItem";
-import { StaticCommandParameter } from "./parameters/StaticCommandParameter";
-import { OpenFileCommandParameter } from "./parameters/OpenFileCommandParameter";
+import { TreeItem } from "@tree";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { CliCommandBase } from "@commands/base/CliCommandBase";
+import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
+import { OpenFileCommandParameter } from "@commands/parameters/OpenFileCommandParameter";
 
 export class AddExistingProjectCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
@@ -11,11 +11,13 @@ export class AddExistingProjectCommand extends CliCommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
+        if (!item || !item.path) { return false; }
+
         let options: OpenDialogOptions = {
 		    openLabel: 'Add',
     		canSelectFolders: false,
     		canSelectMany: false,
-		    filters: { 'Projects': [ 'csproj', 'vbproj', 'fsproj' ] }
+		    filters: { ['Projects']: [ 'csproj', 'vbproj', 'fsproj' ] }
         };
         this.parameters = [
             new StaticCommandParameter('sln'),

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import * as SolutionExplorerConfiguration from "./SolutionExplorerConfiguration";
-import { IEventAggregator, SolutionSelected } from "./events";
+import * as SolutionExplorerConfiguration from "@extensions/config";
+import { IEventAggregator, SolutionSelected } from "@events";
 
 interface BaseEvent {
     type: number;
@@ -15,14 +15,14 @@ interface EventStream {
     subscribe(eventHandler: (event: BaseEvent) => void): Subscription;
 }
 
-const CSharpExtensionId = 'ms-dotnettools.csharp';
-const SelectSolutionEventType = 4;
-const SolutionExtension = '.sln';
+const CSHARP_EXTENSION_ID = 'ms-dotnettools.csharp';
+const SELECT_SOLUTION_EVENT_TYPE = 4;
+const SOLUTION_EXTENSION = '.sln';
 
 export class OmnisharpIntegrationService extends vscode.Disposable {
 
-    private subscription: Subscription;
-    private active: boolean;
+    private subscription: Subscription | undefined;
+    private active: boolean = false;
 
     constructor(public readonly eventAggregator: IEventAggregator) {
         super(() => this.unregister());
@@ -30,10 +30,10 @@ export class OmnisharpIntegrationService extends vscode.Disposable {
 
     public register() {
         this.active = SolutionExplorerConfiguration.getOpenSolutionsSelectedInOmnisharp();
-        if (!this.active) return;
+        if (!this.active) { return; }
 
         const checker = setInterval(() => {
-            const extension = vscode.extensions.getExtension(CSharpExtensionId);
+            const extension = vscode.extensions.getExtension(CSHARP_EXTENSION_ID) as any;
             if (!extension) {
                 clearInterval(checker);
             }
@@ -51,12 +51,12 @@ export class OmnisharpIntegrationService extends vscode.Disposable {
     public unregister(): void {
         if (this.active && this.subscription) {
             this.subscription.unsubscribe();
-            this.subscription = null;
+            this.subscription = undefined;
         }
     }
 
     private start(extension: vscode.Extension<any>): void {
-        if (extension.id === CSharpExtensionId) {
+        if (extension.id === CSHARP_EXTENSION_ID) {
             const eventStream = extension.exports.eventStream as EventStream;
             if (eventStream) {
                 this.subscription = eventStream.subscribe(event => this.handleEvent(event));
@@ -65,8 +65,8 @@ export class OmnisharpIntegrationService extends vscode.Disposable {
     }
 
     private handleEvent(event: BaseEvent): void {
-        if (event.type === SelectSolutionEventType) {
-            if (event.solutionPath && event.solutionPath.toLocaleLowerCase().endsWith(SolutionExtension)) {
+        if (event.type === SELECT_SOLUTION_EVENT_TYPE) {
+            if (event.solutionPath && event.solutionPath.toLocaleLowerCase().endsWith(SOLUTION_EXTENSION)) {
                 const e = new SolutionSelected(event.solutionPath);
                 this.eventAggregator.publish(e);
             }

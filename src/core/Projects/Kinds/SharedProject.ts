@@ -1,11 +1,9 @@
-import * as path from "path";
+import * as path from "@extensions/path";
 import { ProjectInSolution } from "../../Solutions";
 import { PackageReference } from "../PackageReference";
 import { ProjectReference } from "../ProjectReference";
 import { StandardProject } from "./StandardProject";
 import { ProjectFile } from "..";
-
-const projectFileName: string = "";
 
 export class SharedProject extends StandardProject {
     constructor(projectInSolution: ProjectInSolution) {
@@ -15,15 +13,15 @@ export class SharedProject extends StandardProject {
     }
 
     public get fullPath(): string {
-        return this.projectInSolution.fullPath.replace(".shproj", ".projitems");        
+        return this.projectInSolution.fullPath.replace(".shproj", ".projitems");
     }
 
     public getProjectReferences(): Promise<ProjectReference[]> {
-        return Promise.resolve(null);
+        return Promise.resolve([]);
     }
 
     public getPackageReferences(): Promise<PackageReference[]> {
-        return Promise.resolve(null);
+        return Promise.resolve([]);
     }
 
     protected addFileDependents(item: any, projectFile: ProjectFile) {
@@ -38,7 +36,7 @@ export class SharedProject extends StandardProject {
     }
 
     protected replaceDependsUponNode(ref: any, pattern: string, newPattern: string) {
-        ref.elements.forEach(e => {
+        ref.elements.forEach((e: any) => {
             if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
                 e.elements[0].text = e.elements[0].text.replace(pattern, newPattern);
             }
@@ -46,9 +44,9 @@ export class SharedProject extends StandardProject {
     }
 
     protected deleteDependsUponNode(node: any, pattern: string) {
-        if (!node.elements) return;
+        if (!node.elements) { return; }
 
-        node.elements.forEach((e, eIndex) => {
+        node.elements.forEach((e: any, eIndex: number) => {
             if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
                 node.elements.splice(eIndex, 1);
             }

@@ -55,7 +55,7 @@ export abstract class Project {
     public abstract refresh(): Promise<void>;
 
     public static getProjectElement(document: any): any {
-        if (document.elements.length == 1) {
+        if (document.elements.length === 1) {
             return document.elements[0];
         } else {
             for(let i = 0; i < document.elements.length; i++) {

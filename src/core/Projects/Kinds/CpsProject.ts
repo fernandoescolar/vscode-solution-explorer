@@ -1,7 +1,7 @@
-import * as path from "path";
-import * as fs from "../../../async/fs";
-import * as xml from "../../../async/xml";
-import * as SolutionExplorerConfiguration from "../../../SolutionExplorerConfiguration";
+import * as path from "@extensions/path";
+import * as fs from "@extensions/fs";
+import * as xml from "@extensions/xml";
+import * as SolutionExplorerConfiguration from "@extensions/config";
 import * as Utilities from "../../Utilities";
 import { ProjectInSolution } from "../../Solutions";
 import { ProjectFile } from "../ProjectFile";
@@ -49,16 +49,18 @@ export class CpsProject extends FileSystemBasedProject {
 
         let ignore = SolutionExplorerConfiguration.getNetCoreIgnore();
         result.files.forEach(file => {
-            if (!this.fullPath.endsWith(file.fullPath) && ignore.indexOf(file.name.toLocaleLowerCase()) < 0)
+            if (!this.fullPath.endsWith(file.fullPath) && ignore.indexOf(file.name.toLocaleLowerCase()) < 0) {
                 files.push(file);
+            }
         });
 
-        
+
         result.folders.forEach(folder => {
-            if (ignore.indexOf(folder.name.toLocaleLowerCase()) < 0)
+            if (ignore.indexOf(folder.name.toLocaleLowerCase()) < 0) {
                 folders.push(folder);
+            }
         });
-        
+
         return { files, folders };
     }
 
@@ -72,29 +74,36 @@ export class CpsProject extends FileSystemBasedProject {
     }
 
     private async checkProjectLoaded() {
-        if (this.loaded) return;
+        if (this.loaded) {
+            return;
+        }
 
         await this.parseProject(this.fullPath);
         this.loaded = true;
     }
 
     private async parseProject(projectPath: string): Promise<void> {
-        let content = await fs.readFile(projectPath, 'utf8');
-        let document = await xml.ParseToJson(content);
+        let content = await fs.readFile(projectPath);
+        let document = await xml.parseToJson(content);
         this.parseDocument(document);
     }
 
     private parseDocument(document: any): void {
         this.document = document;
         let project = CpsProject.getProjectElement(this.document);
-        
-        if (!project) project = { elements: [] };
-        if (!project.elements || !Array.isArray(project.elements)) project.elements = [];
-        
-        project.elements.forEach(element => {
+
+        project = project || { elements: [] };
+        if (!project.elements || !Array.isArray(project.elements)) {
+            project.elements = [];
+        }
+
+        project.elements.forEach( (element: any) => {
             if (element.name === 'ItemGroup') {
-                if (!element.elements || !Array.isArray(element.elements)) element.elements = [];
-                element.elements.forEach(e => {
+                if (!element.elements || !Array.isArray(element.elements)) {
+                    element.elements = [];
+                }
+
+                element.elements.forEach((e: any) => {
                     if (e.name === 'PackageReference') {
                         this.packages.push(new PackageReference(e.attributes.Include, e.attributes.Version));
                     }

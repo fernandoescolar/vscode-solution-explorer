@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import { CliCommandBase } from "./base/CliCommandBase";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree/TreeItem";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem } from "@tree";
+import { CliCommandBase } from "@commands/base";
 
 export class UpdatePackagesVersionCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
@@ -13,11 +13,13 @@ export class UpdatePackagesVersionCommand extends CliCommandBase {
     }
 
     protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
+        if (!item || !item.project) { return; }
+
         var references = await item.project.getPackageReferences();
         for(let i = 0; i < references.length; i++) {
             const reference = references[i];
             const parameters = [ 'add', item.project.fullPath, 'package', reference.name ];
-            await this.runCliCommand('dotnet', parameters, vscode.workspace.rootPath);
+            await this.runCliCommand('dotnet', parameters, vscode.workspace.rootPath || "");
         }
     }
 }

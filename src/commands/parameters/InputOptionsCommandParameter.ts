@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
-import { ICommandParameter } from "../base/ICommandParameter";
-import { CommandParameterCompiler } from "../base/CommandParameterCompiler";
+import { ICommandParameter, CommandParameterCompiler } from "@commands/base";
 
 export type ItemsResolver = () => Promise<string[]>;
 
@@ -9,21 +8,21 @@ export type MapItemsResolver = () => Promise<{ [id: string]: string }>;
 export type ItemsOrItemsResolver = string[] | ItemsResolver | { [id: string]: string } | MapItemsResolver;
 
 export class InputOptionsCommandParameter implements ICommandParameter {
-    private value: string;
-    private _items: string[] | { [id: string] : string };
+    private value: string | undefined | null;
+    private _items: string[] | { [id: string] : string } | undefined;
 
     constructor(private readonly placeholder: string, private readonly items: ItemsOrItemsResolver, private readonly option?: string) {
     }
 
     public get shouldAskUser(): boolean { return true; }
-    
+
     public async setArguments(state: CommandParameterCompiler): Promise<void> {
         const validate: (value: string) => boolean = value => {
             if (value !== null && value !== undefined) {
                 this.value = this.getValue(value);
                 return true;
             }
-            
+
             return false;
         };
         let items = await this.getItems();
@@ -33,11 +32,11 @@ export class InputOptionsCommandParameter implements ICommandParameter {
             return;
         }
 
-        if (items.length == 1) {
+        if (items.length === 1) {
             this.value = this.getValue(items[0]);
             state.next();
             return;
-        } 
+        }
 
         items.sort((a, b) => {
             let x = a.toLowerCase();
@@ -82,31 +81,33 @@ export class InputOptionsCommandParameter implements ICommandParameter {
     }
 
     public getArguments(): string[] {
-        if (this.option)
-            return [ this.option, this.value ];
+        if (this.option) {
+            return [ this.option, this.value || "" ];
+        }
 
-        return [ this.value ];
+        return [ this.value || "" ];
     }
 
     private async getItems(): Promise<string[]> {
-        if (typeof(this.items) == 'function') {
+        if (typeof(this.items) === 'function') {
             this._items = await this.items();
-            
+
         } else {
             this._items = this.items;
         }
-       
+
         return this.parseItems(this._items);
     }
 
     private parseItems(items: string[] | { [id: string]: string }): string[] {
-        if (Array.isArray(items)) return items;
+        if (Array.isArray(items)) { return items; }
         return Object.keys(items);
     }
 
-    private getValue(value: string) {
-        if (Array.isArray(this._items)) return value;
-        return this._items[value];
+    private getValue(value: string): string | undefined {
+        if (Array.isArray(this._items)) { return value; }
+        if (this._items) { return this._items[value]; }
+        return;
     }
 
     private createQuickPickItems(strings: string[]): vscode.QuickPickItem[] {

@@ -1,8 +1,8 @@
-import { CliCommandBase } from "./base/CliCommandBase";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree/TreeItem";
-import { StaticCommandParameter } from "./parameters/StaticCommandParameter";
-import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem } from "@tree";
+import { CliCommandBase } from "@commands/base";
+import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
+import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
 
 export class CreateNewSolutionCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {

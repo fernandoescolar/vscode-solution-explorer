@@ -1,5 +1,5 @@
-import * as path from "path";
-import * as fs from "../../async/fs";
+import * as path from "@extensions/path";
+import * as fs from "@extensions/fs";
 import { DirectorySearchResult } from "./DirectorySearchResult";
 
 export async function searchFilesInDir(startPath:string, extension: string, recursive: boolean = false) : Promise<string[]> {
@@ -16,8 +16,8 @@ export async function searchFilesInDir(startPath:string, extension: string, recu
         }
 
         if (recursive) {
-            let stat = await fs.lstat(filename);
-            if (stat.isDirectory()) {
+            let isDirectory = await fs.isDirectory(filename);
+            if (isDirectory) {
                 let subresult = await searchFilesInDir(filename, extension, recursive);
                 result = result.concat(subresult);
             }
@@ -29,15 +29,15 @@ export async function searchFilesInDir(startPath:string, extension: string, recu
 
 export async function getDirectoryItems (dirPath: string): Promise<DirectorySearchResult> {
     if (!(await fs.exists(dirPath))) {
-        throw "Directory doesn't exist";
+        throw new Error("Directory doesn't exist");
     }
 
-    let directories = [],  files = []
+    let directories = [],  files = [];
     let items = await fs.readdir(dirPath);
     for(let i = 0; i < items.length; i++){
         let filename = path.join(dirPath, items[i]);
-        let stat = await fs.lstat(filename);
-        if (stat.isDirectory()){
+        let isDirectory = await fs.isDirectory(filename);
+        if (isDirectory){
             directories.push(filename);
         }
         else {
@@ -62,16 +62,16 @@ export async function getDirectoryItems (dirPath: string): Promise<DirectorySear
 
 export async function getAllDirectoriesRecursive(dirPath: string, ignore?:string[]): Promise<string[]> {
     if (!(await fs.exists(dirPath))) {
-        throw "Directory doesn't exist";
+        throw new Error("Directory doesn't exist");
     }
 
     let result: string[] = [];
     let items = await fs.readdir(dirPath);
     for(let i = 0; i < items.length; i++){
-        if (ignore && ignore.indexOf(items[i].toLocaleLowerCase()) >= 0) continue;
+        if (ignore && ignore.indexOf(items[i].toLocaleLowerCase()) >= 0) { continue; }
         let filename = path.join(dirPath, items[i]);
-        let stat = await fs.lstat(filename);
-        if (stat.isDirectory()){
+        let isDirectory = await fs.isDirectory(filename);
+        if (isDirectory){
             result.push(filename);
             let subDirs = await getAllDirectoriesRecursive(filename);
             subDirs.forEach(path => {

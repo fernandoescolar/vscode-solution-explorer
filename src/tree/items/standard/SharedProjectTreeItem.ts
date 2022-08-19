@@ -1,11 +1,13 @@
+import { FileEvent } from "@events";
 import { StandardProjectTreeItem } from "./StandardProjectTreeItem";
-import { FileEvent } from "../../../events";
 
 export class SharedProjectTreeItem extends StandardProjectTreeItem {
-    
+
     protected shouldHandleFileEvent(fileEvent: FileEvent): boolean {
+        if (!this.path) { return false; }
+
         let path = this.path.replace(".shproj", ".projitems");
-        return fileEvent.path == path;
+        return fileEvent.path === path;
     }
 
     protected addContextValueSuffix(): void {

@@ -1,7 +1,6 @@
 import * as convert from "xml-js";
 import * as eol from "eol";
-import * as config from "../SolutionExplorerConfiguration";
-import { getLineEndings } from "../SolutionExplorerConfiguration";
+import * as config from "./config";
 
 const readOptions: convert.Options.XML2JSON = {
     compact: false
@@ -12,15 +11,15 @@ const writeOptions: convert.Options.JS2XML = {
     spaces: 2
 };
 
-export function ParseToJson(content: string): Promise<any> {
+export function parseToJson(content: string): Promise<any> {
     let result = <any>convert.xml2js(content, readOptions);
     if (result.declaration) {
-        delete result.declaration
+        delete result.declaration;
     }
     return Promise.resolve(result);
 }
 
-export function ParseToXml(content: any): Promise<string> {
+export function parseToXml(content: any): Promise<string> {
     writeOptions.spaces = config.getXmlSpaces();
     let result = convert.js2xml(content, writeOptions);
     if (config.getXmlClosingTagSpace()) {
@@ -30,14 +29,14 @@ export function ParseToXml(content: any): Promise<string> {
 
     // By default the XML module will output files with LF.
     // We will convert that to CRLF if enabled.
-    if(getLineEndings() == "crlf") {
+    if(config.getLineEndings() === "crlf") {
         result = eol.crlf(result);
     }
 
     // #118 look inside quoted strings and replaze '&' by '&amp;'
     const m = result.match(/"([^"]*)"/g);
     if (m) {
-        m.forEach(match => {
+        m.forEach((match: any) => {
             if (match.indexOf('&') >= 0) {
                 const rr = match.replace(/&/g, '&amp;');
                 result = result.replace(match, rr);

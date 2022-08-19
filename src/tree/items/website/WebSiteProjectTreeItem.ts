@@ -1,31 +1,35 @@
-import * as path from "path";
-import { ProjectTreeItem } from "../ProjectTreeItem";
-import { TreeItemContext } from "../../TreeItemContext";
-import { Project } from "../../../model/Projects";
-import { ProjectInSolution } from "../../../model/Solutions";
-import { EventTypes, IEvent, ISubscription, IFileEvent } from "../../../events/index";
+import * as path from "@extensions/path";
+import { EventTypes, IEvent, ISubscription, IFileEvent } from "@events";
+import { TreeItemContext } from "@tree";
+import { ProjectInSolution } from "@core/Solutions";
+import { ProjectTreeItem } from "@tree/items/ProjectTreeItem";
 
 export class WebSiteProjectTreeItem extends ProjectTreeItem {
-    private subscription: ISubscription = null;
+    private subscription: ISubscription | undefined;
 
     constructor(context: TreeItemContext, projectInSolution: ProjectInSolution) {
         super(context, projectInSolution);
-        this.subscription = context.eventAggregator.subscribe(EventTypes.File, evt => this.onFileEvent(evt))
+        this.subscription = context.eventAggregator.subscribe(EventTypes.file, evt => this.onFileEvent(evt));
     }
 
     public dispose(): void {
-        this.subscription.dispose();
-        this.subscription = null;
+        if (this.subscription) {
+            this.subscription.dispose();
+            this.subscription = undefined;
+        }
+
         super.dispose();
     }
 
     private onFileEvent(event: IEvent): void {
         let fileEvent = <IFileEvent> event;
-        let workingdir = path.dirname(this.path);
-        let dirname = path.dirname(fileEvent.path);
-     
-        if (dirname.startsWith(workingdir)) {
-            this.refresh();
+        if (this.path) {
+            let workingdir = path.dirname(this.path);
+            let dirname = path.dirname(fileEvent.path);
+
+            if (dirname.startsWith(workingdir)) {
+                this.refresh();
+            }
         }
     }
 }

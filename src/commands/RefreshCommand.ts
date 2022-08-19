@@ -1,7 +1,6 @@
-import * as vscode from "vscode";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree";
-import { CommandBase } from "./base/CommandBase";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem } from "@tree";
+import { CommandBase } from "@commands/base";
 
 export class RefreshCommand extends CommandBase {
 
@@ -13,7 +12,7 @@ export class RefreshCommand extends CommandBase {
         return true;
     }
 
-    protected runCommand(item: TreeItem, args: string[]): Promise<void> {       
+    protected runCommand(item: TreeItem, args: string[]): Promise<void> {
         if (item) {
             item.refresh();
             this.provider.logger.log("Refreshed " + item.path);

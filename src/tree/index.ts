@@ -1,4 +1,5 @@
 export * from "./TreeItem";
-export * from "./TreeItemFactory";
+export * as TreeItemFactory from "./TreeItemFactory";
+export * from "./TreeItemContext";
 export * from "./ContextValues";
 

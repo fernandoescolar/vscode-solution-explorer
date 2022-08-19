@@ -14,10 +14,10 @@ export class WebsiteProject extends FileSystemBasedProject {
     }
 
     public getProjectReferences(): Promise<ProjectReference[]> {
-        return Promise.resolve(null);
+        return Promise.resolve([]);
     }
 
     public getPackageReferences(): Promise<PackageReference[]> {
-        return Promise.resolve(null);
+        return Promise.resolve([]);
     }
 }

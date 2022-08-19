@@ -1,4 +1,4 @@
 export enum LogEventType {
-    Clear,
-    Append
+    clear,
+    append
 }

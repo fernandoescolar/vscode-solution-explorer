@@ -1,11 +1,10 @@
 import * as vscode from "vscode";
-import { ICommandParameter } from "../base/ICommandParameter";
-import { CommandParameterCompiler } from "../base/CommandParameterCompiler";
+import { ICommandParameter, CommandParameterCompiler } from "@commands/base";
 
 export type ValueResolver = () => Promise<string>;
 
 export class InputTextCommandParameter implements ICommandParameter {
-    private value: string;
+    private value: string | undefined | null;
 
     constructor(private readonly description: string, private readonly placeholder?: string, private readonly option?: string, private readonly initialValue?: string | ValueResolver) {
     }
@@ -59,17 +58,18 @@ export class InputTextCommandParameter implements ICommandParameter {
     }
 
     public getArguments(): string[] {
-        if (this.option)
-            return [ this.option, this.value ];
+        if (this.option) {
+            return [ this.option, this.value || "" ];
+        }
 
-        return [ this.value ];
+        return [ this.value || "" ];
     }
 
     public getInitialValue(): Promise<string> {
-        if (typeof(this.initialValue) == 'function') {
+        if (typeof(this.initialValue) === 'function') {
             return this.initialValue();
         }
-        
-        return Promise.resolve(this.initialValue);
+
+        return Promise.resolve(this.initialValue || "");
     }
 }

@@ -1,9 +1,9 @@
-import { CliCommandBase } from "./base/CliCommandBase";
-import { SolutionExplorerProvider } from "../SolutionExplorerProvider";
-import { TreeItem } from "../tree/TreeItem";
-import { StaticCommandParameter } from "./parameters/StaticCommandParameter";
-import { InputTextCommandParameter } from "./parameters/InputTextCommandParameter";
-import { OptionalCommandParameter } from "./parameters/OptionalCommandParameter";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import { TreeItem } from "@tree";
+import { CliCommandBase } from "@commands/base";
+import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
+import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
+import { OptionalCommandParameter } from "@commands/parameters/OptionalCommandParameter";
 
 export class AddPackageCommand extends CliCommandBase {
     constructor(provider: SolutionExplorerProvider) {
@@ -11,6 +11,8 @@ export class AddPackageCommand extends CliCommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
+        if (!item || !item.project) { return false; }
+
         this.parameters = [
             new StaticCommandParameter('add'),
             new StaticCommandParameter(item.project.fullPath),

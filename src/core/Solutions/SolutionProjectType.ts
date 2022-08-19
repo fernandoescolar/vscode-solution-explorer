@@ -1,28 +1,28 @@
 /***********
- * TypeScript simplified version of: 
+ * TypeScript simplified version of:
  * https://github.com/Microsoft/msbuild/blob/master/src/Build/Construction/Solution/ProjectInSolution.cs
  */
 
 export enum SolutionProjectType {
-    Unknown,
+    unknown,
     /// <summary>
     /// C#, C++, VB, and VJ# projects
     /// </summary>
-    KnownToBeMSBuildFormat,
+    knownToBeMSBuildFormat,
     /// <summary>
     /// Solution folders appear in the .sln file, but aren't buildable projects.
     /// </summary>
-    SolutionFolder,
+    solutionFolder,
     /// <summary>
     /// ASP.NET projects
     /// </summary>
-    WebProject,
+    webProject,
     /// <summary>
     /// Web Deployment (.wdproj) projects
     /// </summary>
-    WebDeploymentProject, //  MSBuildFormat, but Whidbey-era ones specify ProjectReferences differently
+    webDeploymentProject, //  MSBuildFormat, but Whidbey-era ones specify ProjectReferences differently
     /// <summary>
     /// Project inside an Enterprise Template project
     /// </summary>
-    EtpSubProject
+    etpSubProject
 }

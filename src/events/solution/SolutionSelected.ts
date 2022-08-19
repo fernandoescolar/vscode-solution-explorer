@@ -6,6 +6,6 @@ export class SolutionSelected implements ISolutionSelected {
     }
 
     public get eventType(): string {
-        return EventTypes.Solution;
+        return EventTypes.solution;
     }
 }

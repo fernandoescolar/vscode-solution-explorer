@@ -1,5 +1,5 @@
 export enum FileEventType {
-    Create,
-    Modify,
-    Delete
+    create,
+    modify,
+    delete
 }
