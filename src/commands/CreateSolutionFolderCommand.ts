@@ -1,4 +1,4 @@
-import * as uuid from "node-uuid";
+import { v4 as uuidv4 } from "uuid";
 import * as fs from "@extensions/fs";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
@@ -39,7 +39,7 @@ export class CreateSolutionFolderCommand extends CommandBase {
         try {
             let data: string = await fs.readFile(item.solution.fullPath);
             let lines: string[] = data.split('\n');
-            let guid: string = uuid.v1().toUpperCase();
+            let guid: string = uuidv4().toUpperCase();
             let done = lines.some((line, index, arr) => {
                 if (line.trim() === 'Global') {
                     lines.splice(index, 0,

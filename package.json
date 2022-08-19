@@ -1694,6 +1694,7 @@
         "webpack-cli": "^4.10.0"
     },
     "dependencies": {
+        "@types/uuid": "^8.3.4",
         "clipboardy": "^3.0.0",
         "eol": "^0.9.1",
         "handlebars": "^4.7.7",
