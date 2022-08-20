@@ -71,156 +71,193 @@
         "commands": [
             {
                 "command": "solutionExplorer.openSolution",
-                "title": "SolutionExplorer: Open Solution",
+                "title": "Open Solution",
+                "category": "Solution Explorer",
                 "icon": "$(folder-opened)"
             },
             {
                 "command": "solutionExplorer.refresh",
-                "title": "SolutionExplorer: Refresh",
+                "title": "Refresh",
+                "category": "Solution Explorer",
                 "icon": "$(refresh)"
             },
             {
                 "command": "solutionExplorer.collapseAll",
-                "title": "SolutionExplorer: Collapse All",
+                "title": "Collapse All",
+                "category": "Solution Explorer",
                 "icon": "$(collapse-all)"
             },
             {
                 "command": "solutionExplorer.openFile",
-                "title": "SolutionExplorer: Open File"
+                "title": "Open File",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.renameFile",
-                "title": "SolutionExplorer: Rename"
+                "title": "Rename",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.deleteFile",
-                "title": "SolutionExplorer: Delete"
+                "title": "Delete",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.createFile",
-                "title": "SolutionExplorer: Create file",
+                "title": "Create file",
+                "category": "Solution Explorer",
                 "icon": "$(new-file)"
             },
             {
                 "command": "solutionExplorer.renameFolder",
-                "title": "SolutionExplorer: Rename"
+                "title": "Rename",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.deleteFolder",
-                "title": "SolutionExplorer: Delete"
+                "title": "Delete",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.createFolder",
-                "title": "SolutionExplorer: Create folder",
+                "title": "Create folder",
+                "category": "Solution Explorer",
                 "icon": "$(new-folder)"
             },
             {
                 "command": "solutionExplorer.moveFile",
-                "title": "SolutionExplorer: Move to folder"
+                "title": "Move to folder",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.moveFolder",
-                "title": "SolutionExplorer: Move to folder"
+                "title": "Move to folder",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.addPackage",
-                "title": "SolutionExplorer: Add package"
+                "title": "Add package",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.removePackage",
-                "title": "SolutionExplorer: Remove package"
+                "title": "Remove package",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.updatePackagesVersion",
-                "title": "SolutionExplorer: Update packages version"
+                "title": "Update packages version",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.addProjectReference",
-                "title": "SolutionExplorer: Add reference"
+                "title": "Add reference",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.removeProjectReference",
-                "title": "SolutionExplorer: Remove reference"
+                "title": "Remove reference",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.createNewSolution",
-                "title": "SolutionExplorer: Create new empty solution"
+                "title": "Create new empty solution",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.addNewProject",
-                "title": "SolutionExplorer: Add new project"
+                "title": "Add new project",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.addExistingProject",
-                "title": "SolutionExplorer: Add existing project"
+                "title": "Add existing project",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.createSolutionFolder",
-                "title": "SolutionExplorer: Create folder"
+                "title": "Create folder",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.renameSolutionItem",
-                "title": "SolutionExplorer: Rename"
+                "title": "Rename",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.moveToSolutionFolder",
-                "title": "SolutionExplorer: Move"
+                "title": "Move",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.removeSolutionFolder",
-                "title": "SolutionExplorer: Remove"
+                "title": "Remove",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.removeProject",
-                "title": "SolutionExplorer: Remove project from solution"
+                "title": "Remove project from solution",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.copy",
-                "title": "SolutionExplorer: Copy"
+                "title": "Copy",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.duplicate",
-                "title": "SolutionExplorer: Create a copy"
+                "title": "Create a copy",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.paste",
-                "title": "SolutionExplorer: Paste"
+                "title": "Paste",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.build",
-                "title": "SolutionExplorer: Build"
+                "title": "Build",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.clean",
-                "title": "SolutionExplorer: Clean"
+                "title": "Clean",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.pack",
-                "title": "SolutionExplorer: Pack"
+                "title": "Pack",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.publish",
-                "title": "SolutionExplorer: Publish"
+                "title": "Publish",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.restore",
-                "title": "SolutionExplorer: Restore"
+                "title": "Restore",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.run",
-                "title": "SolutionExplorer: Run"
+                "title": "Run",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.watchRun",
-                "title": "SolutionExplorer: Watch Run"
+                "title": "Watch Run",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.test",
-                "title": "SolutionExplorer: Test"
+                "title": "Test",
+                "category": "Solution Explorer"
             },
             {
                 "command": "solutionExplorer.showActiveFileInExplorer",
-                "title": "SolutionExplorer: Select Active Document"
+                "title": "Select Active Document",
+                "category": "Solution Explorer"
             }
         ],
         "menus": {
