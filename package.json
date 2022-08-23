@@ -100,7 +100,8 @@
             {
                 "command": "solutionExplorer.deleteFile",
                 "title": "Delete",
-                "category": "Solution Explorer"
+                "category": "Solution Explorer",
+                "icon": "$(trash)"
             },
             {
                 "command": "solutionExplorer.createFile",
@@ -137,12 +138,14 @@
             {
                 "command": "solutionExplorer.addPackage",
                 "title": "Add package",
-                "category": "Solution Explorer"
+                "category": "Solution Explorer",
+                "icon": "$(add)"
             },
             {
                 "command": "solutionExplorer.removePackage",
                 "title": "Remove package",
-                "category": "Solution Explorer"
+                "category": "Solution Explorer",
+                "icon": "$(trash)"
             },
             {
                 "command": "solutionExplorer.updatePackagesVersion",
@@ -152,12 +155,14 @@
             {
                 "command": "solutionExplorer.addProjectReference",
                 "title": "Add reference",
-                "category": "Solution Explorer"
+                "category": "Solution Explorer",
+                "icon": "$(add)"
             },
             {
                 "command": "solutionExplorer.removeProjectReference",
                 "title": "Remove reference",
-                "category": "Solution Explorer"
+                "category": "Solution Explorer",
+                "icon": "$(trash)"
             },
             {
                 "command": "solutionExplorer.createNewSolution",
@@ -476,13 +481,18 @@
                 },
                 {
                     "command": "solutionExplorer.addPackage",
+                    "when": "view == slnexpl && viewItem == project-referenced-packages-cps",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.removePackage",
                     "when": "view == slnexpl && viewItem == project-referenced-package-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removePackage",
                     "when": "view == slnexpl && viewItem == project-referenced-package-cps",
-                    "group": "2_workspace"
+                    "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.updatePackagesVersion",
@@ -492,11 +502,6 @@
                 {
                     "command": "solutionExplorer.updatePackagesVersion",
                     "when": "view == slnexpl && viewItem == project-referenced-packages-cps",
-                    "group": "2_workspace"
-                },
-                {
-                    "command": "solutionExplorer.updatePackagesVersion",
-                    "when": "view == slnexpl && viewItem == project-referenced-package-cps",
                     "group": "2_workspace"
                 },
                 {
@@ -511,13 +516,18 @@
                 },
                 {
                     "command": "solutionExplorer.addProjectReference",
+                    "when": "view == slnexpl && viewItem == project-referenced-projects-cps",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.removeProjectReference",
                     "when": "view == slnexpl && viewItem == project-referenced-project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removeProjectReference",
                     "when": "view == slnexpl && viewItem == project-referenced-project-cps",
-                    "group": "2_workspace"
+                    "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.openFile",
@@ -911,13 +921,18 @@
                 },
                 {
                     "command": "solutionExplorer.addPackage",
+                    "when": "view == slnbrw && viewItem == project-referenced-packages-cps",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.removePackage",
                     "when": "view == slnbrw && viewItem == project-referenced-package-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removePackage",
                     "when": "view == slnbrw && viewItem == project-referenced-package-cps",
-                    "group": "2_workspace"
+                    "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.updatePackagesVersion",
@@ -927,11 +942,6 @@
                 {
                     "command": "solutionExplorer.updatePackagesVersion",
                     "when": "view == slnbrw && viewItem == project-referenced-packages-cps",
-                    "group": "2_workspace"
-                },
-                {
-                    "command": "solutionExplorer.updatePackagesVersion",
-                    "when": "view == slnbrw && viewItem == project-referenced-package-cps",
                     "group": "2_workspace"
                 },
                 {
@@ -946,13 +956,18 @@
                 },
                 {
                     "command": "solutionExplorer.addProjectReference",
+                    "when": "view == slnbrw && viewItem == project-referenced-projects-cps",
+                    "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.removeProjectReference",
                     "when": "view == slnbrw && viewItem == project-referenced-project-cps",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removeProjectReference",
                     "when": "view == slnbrw && viewItem == project-referenced-project-cps",
-                    "group": "2_workspace"
+                    "group": "inline"
                 },
                 {
                     "command": "solutionExplorer.openFile",
