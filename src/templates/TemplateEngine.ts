@@ -1,4 +1,4 @@
-import * as Handlebars from "handlebars/runtime";
+import * as Handlebars from "handlebars";
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import { TreeItem, ContextValues } from "@tree";
@@ -96,7 +96,7 @@ export class TemplateEngine implements ITemplateEngine {
 
 	private async copyFolder(src: string, dest: string): Promise<void> {
 		var exists = await fs.exists(src);
-		var isDirectory = exists && fs.isDirectory(src);
+		var isDirectory = exists && await fs.isDirectory(src);
 		if (exists && isDirectory) {
             if (!(await fs.exists(dest))) {
                 await fs.mkdir(dest);
