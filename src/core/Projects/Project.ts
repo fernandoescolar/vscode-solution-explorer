@@ -4,6 +4,8 @@ import { ProjectFolder } from "./ProjectFolder";
 import { PackageReference } from "./PackageReference";
 import { ProjectReference } from "./ProjectReference";
 
+export type ProjectFileStat = { exists: boolean, filename: string, fullpath: string };
+
 export abstract class Project {
     private _hasReferences: boolean = true;
 
@@ -47,6 +49,8 @@ export abstract class Project {
     public abstract createFolder(folderpath: string): Promise<string>;
 
     public abstract getFolderList(): Promise<string[]>;
+
+    public abstract statFile(filepath: string, folderPath: string): Promise<ProjectFileStat>;
 
     public abstract moveFile(filepath: string, newfolderPath: string): Promise<string>;
 

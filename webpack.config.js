@@ -31,6 +31,7 @@ const config = {
         modules: [path.resolve(__dirname, 'node_modules')],
         alias: {
 			["@SolutionExplorerProvider"]: path.resolve(__dirname, './src/SolutionExplorerProvider.ts'),
+            ["@actions"]: path.resolve(__dirname, './src/actions'),
 			["@commands"]: path.resolve(__dirname, './src/commands'),
 			["@core"]: path.resolve(__dirname, './src/core'),
 			["@events"]: path.resolve(__dirname, './src/events'),

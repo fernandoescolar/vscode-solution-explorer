@@ -39,6 +39,9 @@ export function activate(context: vscode.ExtensionContext) {
     register(solutionExplorerFileWatcher);
     register(solutionExplorerOutputChannel);
     register(omnisharpIntegrationService);
+
+    context.subscriptions.push(solutionExplorerProvider);
+    context.subscriptions.push(omnisharpIntegrationService);
 }
 
 export function deactivate() {

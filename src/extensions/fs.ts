@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as p from '@extensions/path';
 
 export async function copy(sourcePath: string, targetPath: string): Promise<void> {
     const sourceUri = vscode.Uri.file(sourcePath);
@@ -58,4 +59,18 @@ export async function readdir(path: string): Promise<string[]> {
     const uri = vscode.Uri.file(path);
     const items = await vscode.workspace.fs.readDirectory(uri);
     return items.map(item => item[0]);
+}
+
+export async function getNotExistingCopyPath(path: string): Promise<string> {
+    const extension = p.extname(path);
+    const filename = p.basename(path, extension);
+    const folder = p.dirname(path);
+
+    let copyPath = p.join(folder, `${filename}_copy${extension}`);
+    let counter = 1;
+    while (await exists(copyPath)) {
+        copyPath = p.join(folder, `${filename}_copy${counter++}${extension}`);
+    }
+
+    return copyPath;
 }

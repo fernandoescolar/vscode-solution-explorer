@@ -8,7 +8,8 @@ import { IEventAggregator, EventTypes, IEvent, ISubscription, IFileEvent } from 
 import { ILogger, Logger } from "@logs";
 import { ITemplateEngine, TemplateEngine } from "@templates";
 
-import { SolutionFinder } from "./SolutionFinder";
+import { SolutionFinder } from "@core/Solutions";
+import { SolutionExplorerDragAndDropController } from "./SolutionExplorerDragAndDropController";
 
 export class SolutionExplorerProvider extends vscode.Disposable implements vscode.TreeDataProvider<sln.TreeItem> {
 	private _logger: ILogger;
@@ -16,6 +17,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	private solutionFinder: SolutionFinder | undefined;
 	private fileSubscription: ISubscription | undefined;
 	private solutionSubscription: ISubscription | undefined;
+	private dragAndDropController: SolutionExplorerDragAndDropController | undefined;
 	private children: sln.TreeItem[] | undefined;
 	private treeView: vscode.TreeView<sln.TreeItem> | undefined;
 	private _onDidChangeTreeData: vscode.EventEmitter<sln.TreeItem | undefined> = new vscode.EventEmitter<sln.TreeItem | undefined>();
@@ -23,6 +25,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	constructor(public workspaceRoots: string[], public readonly eventAggregator: IEventAggregator) {
 		super(() => this.dispose());
 		this.solutionFinder = new SolutionFinder(workspaceRoots, eventAggregator);
+		this.dragAndDropController = new SolutionExplorerDragAndDropController(this);
 		this._logger = new Logger(this.eventAggregator);
 		this._templateEngines = {};
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
@@ -35,14 +38,6 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	public get logger(): ILogger {
 		return this._logger;
-	}
-
-	public get dropMimeTypes(): string[] {
-		return ['application/vnd.code.tree.testViewDragAndDrop'];
-	}
-
-	public get dragMimeTypes(): string[] {
-		return ['text/uri-list'];
 	}
 
 	public getTemplateEngine(name: string): ITemplateEngine {
@@ -58,18 +53,30 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInExplorer', showMode === SolutionExplorerConfiguration.SHOW_MODE_EXPLORER);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === SolutionExplorerConfiguration.SHOW_MODE_NONE);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.loadedFlag', !false);
+
 		if (showMode !== SolutionExplorerConfiguration.SHOW_MODE_NONE) {
+			const options = {
+				treeDataProvider: this,
+				dragAndDropController: this.dragAndDropController,
+				canSelectMany: true,
+				showCollapseAll: true
+			};
 			this.solutionSubscription = this.eventAggregator.subscribe(EventTypes.solution, evt => this.onSolutionEvent(evt));
 			this.fileSubscription = this.eventAggregator.subscribe(EventTypes.file, evt => this.onFileEvent(evt));
 			if (showMode === SolutionExplorerConfiguration.SHOW_MODE_ACTIVITYBAR) {
-				this.treeView = vscode.window.createTreeView('slnbrw', { treeDataProvider: this, showCollapseAll: true });
+				this.treeView = vscode.window.createTreeView('slnbrw', options);
 			} else if (showMode === SolutionExplorerConfiguration.SHOW_MODE_EXPLORER) {
-				this.treeView = vscode.window.createTreeView('slnexpl', { treeDataProvider: this, showCollapseAll: true });
+				this.treeView = vscode.window.createTreeView('slnexpl', options);
 			}
 		}
 	}
 
 	public unregister() {
+		if (this.dragAndDropController) {
+			this.dragAndDropController.dispose();
+			this.dragAndDropController = undefined;
+		}
+
 		if (this.solutionFinder) {
 			this.solutionFinder.dispose();
 			this.solutionFinder = undefined;

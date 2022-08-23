@@ -1,21 +1,19 @@
-import * as vscode from "vscode";
 import * as path from "@extensions/path";
 import * as SolutionExplorerConfiguration from "@extensions/config";
 import * as Utilities from "@core/Utilities";
 import { EventTypes, IEvent, IEventAggregator, ISolutionSelected, ISubscription } from "@events";
 
-export interface FoundPath { root: string, sln: string }
+export type FoundPath = { root: string, sln: string };
 
-export class SolutionFinder extends vscode.Disposable {
+export class SolutionFinder {
 
     private subscription: ISubscription | undefined;
     private _selectedSolutionPath: string | undefined;
 
     constructor(public workspaceRoots: string[], public readonly eventAggregator: IEventAggregator) {
-        super(() => this.disposing());
     }
 
-	public register() {
+	public register(): void {
 		this.subscription = this.eventAggregator.subscribe(EventTypes.solution, evt => this.onSolutionEvent(evt));
 	}
 
@@ -53,7 +51,7 @@ export class SolutionFinder extends vscode.Disposable {
 		return SolutionFinder.removeDuplicates(solutionPaths);
 	}
 
-    private disposing() {
+    public dispose() {
         if (this.subscription) {
             this.subscription.dispose();
             this.subscription = undefined;

@@ -13,6 +13,7 @@
 		"baseUrl": "./src/",
 		"paths": {
 			"@SolutionExplorerProvider": ["./SolutionExplorerProvider"],
+			"@actions": ["actions"],
 			"@commands": ["commands"],
 			"@commands/*": ["commands/*"],
 			"@core/*": ["core/*"],
