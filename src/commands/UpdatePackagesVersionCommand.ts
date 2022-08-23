@@ -1,4 +1,3 @@
-import * as vscode from "vscode";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
 import { CliCommandBase } from "@commands/base";
@@ -19,7 +18,7 @@ export class UpdatePackagesVersionCommand extends CliCommandBase {
         for(let i = 0; i < references.length; i++) {
             const reference = references[i];
             const parameters = [ 'add', item.project.fullPath, 'package', reference.name ];
-            await this.runCliCommand('dotnet', parameters, vscode.workspace.rootPath || "");
+            await this.runCliCommand('dotnet', parameters, this.getWorkingFolder(item));
         }
     }
 }

@@ -1,4 +1,3 @@
-import { OpenDialogOptions } from "vscode";
 import { TreeItem } from "@tree";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { CliCommandBase } from "@commands/base/CliCommandBase";
@@ -13,7 +12,7 @@ export class AddExistingProjectCommand extends CliCommandBase {
     protected shouldRun(item: TreeItem): boolean {
         if (!item || !item.path) { return false; }
 
-        let options: OpenDialogOptions = {
+        let options = {
 		    openLabel: 'Add',
     		canSelectFolders: false,
     		canSelectMany: false,

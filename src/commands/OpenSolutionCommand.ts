@@ -1,5 +1,4 @@
 
-import { OpenDialogOptions } from "vscode";
 import { TreeItem } from "@tree";
 import { IEventAggregator, SolutionSelected } from "@events";
 import { CommandBase } from "@commands/base";
@@ -11,7 +10,7 @@ export class OpenSolutionCommand extends CommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        let options: OpenDialogOptions = {
+        let options = {
 		    openLabel: 'Open solution',
     		canSelectFolders: false,
     		canSelectMany: false,
