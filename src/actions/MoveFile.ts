@@ -1,7 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "@extensions/path";
 import { Project } from "@core/Projects";
-import { Action, ActionContext, FileOptions } from "./Action";
+import { Action, ActionContext } from "./base/Action";
+
+type MoveFileOptions = 'Overwrite' | 'Keep Both' | 'Skip' | 'Cancel';
 
 export class MoveFile implements Action {
     constructor(private readonly project: Project, private readonly sourcePath: string, private readonly targetPath: string) {
@@ -46,7 +48,7 @@ export class MoveFile implements Action {
         }
     }
 
-    private async showOptions(context: ActionContext): Promise<FileOptions> {
+    private async showOptions(context: ActionContext): Promise<MoveFileOptions> {
         const filename = path.basename(this.sourcePath);
         const options = ['Overwrite', 'Keep Both', 'Skip'];
         if (context.overwriteAll) {
@@ -86,6 +88,6 @@ export class MoveFile implements Action {
             return 'Cancel';
         }
 
-        return option as FileOptions;
+        return option as MoveFileOptions;
     }
 }

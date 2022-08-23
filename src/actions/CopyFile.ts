@@ -2,7 +2,9 @@ import * as vscode from "vscode";
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import { Project } from "@core/Projects";
-import { Action, ActionContext, FileOptions } from "./Action";
+import { Action, ActionContext } from "./base/Action";
+
+type CopyFileOptions = 'Overwrite' | 'Keep Both' | 'Skip' | 'Cancel';
 
 export class CopyFile implements Action {
     constructor(private readonly project: Project, private readonly sourcePath: string, private readonly targetPath: string) {
@@ -45,7 +47,7 @@ export class CopyFile implements Action {
         }
     }
 
-    private async showOptions(context: ActionContext): Promise<FileOptions> {
+    private async showOptions(context: ActionContext): Promise<CopyFileOptions> {
         const filename = path.basename(this.sourcePath);
         const options = ['Overwrite', 'Keep Both', 'Skip'];
         if (context.overwriteAll) {
@@ -84,6 +86,6 @@ export class CopyFile implements Action {
             return 'Cancel';
         }
 
-        return option as FileOptions;
+        return option as CopyFileOptions;
     }
 }

@@ -19,14 +19,14 @@ export class SolutionExplorerCommands {
         this.commands['createFolder'] = new cmds.CreateFolderCommand(provider);
         this.commands['moveFile'] = new cmds.MoveCommand(provider);
         this.commands['moveFolder'] = new cmds.MoveCommand(provider);
-        this.commands['addPackage'] = new cmds.AddPackageCommand(provider);
+        this.commands['addPackage'] = new cmds.AddPackageCommand();
         this.commands['removePackage'] = new cmds.RemovePackageCommand(provider);
         this.commands['updatePackagesVersion'] = new cmds.UpdatePackagesVersionCommand(provider);
         this.commands['addProjectReference'] = new cmds.AddProjectReferenceCommand(provider);
         this.commands['removeProjectReference'] = new cmds.RemoveProjectReferenceCommand(provider);
         this.commands['createNewSolution'] = new cmds.CreateNewSolutionCommand(provider);
-        this.commands['addNewProject'] = new cmds.AddNewProjectCommand(provider);
-        this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand(provider);
+        this.commands['addNewProject'] = new cmds.AddNewProjectCommand();
+        this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand();
         this.commands['removeProject'] = new cmds.RemoveProjectCommand(provider);
         this.commands['createSolutionFolder'] = new cmds.CreateSolutionFolderCommand(provider);
         this.commands['removeSolutionFolder'] = new cmds.RemoveSolutionFolderCommand(provider);

@@ -1,11 +1,9 @@
 import { execSync } from 'child_process';
 import * as path from "@extensions/path";
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { TreeItem } from "@tree";
-import { CliCommandBase } from "@commands/base";
-import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
-import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
-import { InputOptionsCommandParameter } from "@commands/parameters/InputOptionsCommandParameter";
+import * as dialogs from '@extensions/dialogs';
+import { ContextValues, TreeItem } from "@tree";
+import { Action, AddExistingProject, CreateProject } from '@actions';
+import { ActionCommand } from "@commands/base";
 
 type ProjectType = { name: string, value: string, languages: string[] };
 
@@ -35,27 +33,40 @@ const PROJECT_TYPES: ProjectType[] = [
     // { name: 'Razor Class Library', value: 'razorclasslib', languages: ['C#'] },
 ];
 
-export class AddNewProjectCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Add new project', provider, 'dotnet');
-    }
+export class AddNewProjectCommand extends ActionCommand {
+    private wizard: dialogs.Wizard | undefined;
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        await super.runCommand(item, args);
-        await this.addProjectToSolution(item);
+    constructor() {
+        super('Add new project');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        this.loadProjectTemplates();
-        this.parameters = [
-            new StaticCommandParameter('new'),
-            new InputOptionsCommandParameter('Select project type', this.getProjectTypes()),
-            new InputOptionsCommandParameter('Select language', () => this.getLanguages(), '-lang'),
-            new InputTextCommandParameter('Project name', '', '-n'),
-            new InputTextCommandParameter('Folder name', '', '-o', () => this.getDefaultFolder()),
-        ];
+        return item && !!item.path && (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps');
+    }
 
-        return true;
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || ! item.path) { return []; }
+
+        this.loadProjectTemplates();
+        this.wizard = dialogs.wizard('Add new project')
+                             .selectOption('Select project type', this.getProjectTypes())
+                             .selectOption('Select language', () => this.getLanguages())
+                             .getText('Project name')
+                             .getText('Folder name', '', () => this.getCurrentProjectName());
+
+        const parameters = await this.wizard .run();
+        if (!parameters) { return []; }
+
+        const workingpath = path.dirname(item.path);
+        let projectPath = path.join(workingpath, parameters[3], parameters[2]);
+        if (parameters[1] === 'C#') { projectPath += '.csproj'; }
+        if (parameters[1] === 'F#') { projectPath += '.fsproj'; }
+        if (parameters[1] === 'VB') { projectPath += '.vbproj'; }
+
+        return [
+            new CreateProject(parameters[0], parameters[1], parameters[2], parameters[3], workingpath),
+            new AddExistingProject(item.path, projectPath)
+        ];
     }
 
     private loadProjectTemplates(): void {
@@ -72,11 +83,14 @@ export class AddNewProjectCommand extends CliCommandBase {
             lines.forEach(line => {
                 let parts = line.split('  ').filter(element => element);
                 if (parts.length > 2) {
-                    PROJECT_TYPES.push({
+                    const projectType = {
                         name: parts[0].trim(),
                         value: parts[1].trim(),
                         languages: parts[2].split(',').map(element => element.trim().replace('[', '').replace(']', ''))
-                    });
+                    };
+                    if (projectType.languages.length > 0) {
+                        PROJECT_TYPES.push(projectType);
+                    }
                 }
             });
         }
@@ -92,8 +106,8 @@ export class AddNewProjectCommand extends CliCommandBase {
 
     private getLanguages(): Promise<string[]> {
         let result: string[] =  [ 'C#' ];
-        if (this.parameters && this.parameters.length > 0) {
-            let selectedProject = this.parameters[1].getArguments()[0];
+        if (this.wizard && this.wizard.context && this.wizard.context.results[0]) {
+            let selectedProject = this.wizard.context.results[0];
             let index = PROJECT_TYPES.findIndex(pt => pt.value === selectedProject);
             if (index >= 0) {
                 result = PROJECT_TYPES[index].languages;
@@ -103,21 +117,11 @@ export class AddNewProjectCommand extends CliCommandBase {
         return Promise.resolve(result);
     }
 
-    private addProjectToSolution(item: TreeItem): Promise<void> {
-        if (!item || !item.path || !this.parameters || this.parameters.length < 5) { return Promise.resolve(); }
+    private getCurrentProjectName(): Promise<string> {
+        if (this.wizard && this.wizard.context && this.wizard.context.results[2]) {
+            return Promise.resolve(this.wizard.context.results[2]);
+        }
 
-        let workingpath = path.dirname(item.path);
-        let projectPath = path.join(workingpath, this.parameters[4].getArguments()[1], this.parameters[3].getArguments()[1]);
-        if (this.args[this.args.length - 5] === 'C#') { projectPath += '.csproj'; }
-        if (this.args[this.args.length - 5] === 'F#') { projectPath += '.fsproj'; }
-        if (this.args[this.args.length - 5] === 'VB') { projectPath += '.vbproj'; }
-
-        return this.runCliCommand('dotnet', ['sln', item.path, 'add', projectPath], workingpath);
-    }
-
-    private getDefaultFolder(): Promise<string> {
-        if (!this.parameters || this.parameters.length < 4) { return Promise.resolve(""); }
-
-        return Promise.resolve(this.parameters[3].getArguments()[1]);
+        return Promise.resolve("");
     }
 }

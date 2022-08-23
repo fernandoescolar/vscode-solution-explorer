@@ -1,7 +1,9 @@
 import * as vscode from "vscode";
 import * as path from "@extensions/path";
 import { Project } from "@core/Projects";
-import { Action, ActionContext, FolderOptions } from "./Action";
+import { Action, ActionContext } from "./base/Action";
+
+type MoveFolderOptions = 'Skip' | 'Cancel';
 
 export class MoveFolder implements Action {
     constructor(private readonly project: Project, private readonly sourcePath: string, private readonly targetPath: string) {
@@ -30,7 +32,7 @@ export class MoveFolder implements Action {
         }
     }
 
-    private async showOptions(context: ActionContext): Promise<FolderOptions> {
+    private async showOptions(context: ActionContext): Promise<MoveFolderOptions> {
         const foldername = path.basename(this.sourcePath);
         const options = [];
 
@@ -53,6 +55,6 @@ export class MoveFolder implements Action {
             return 'Cancel';
         }
 
-        return option as FolderOptions;
+        return option as MoveFolderOptions;
     }
 }

@@ -1,30 +1,23 @@
-import { TreeItem } from "@tree";
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { CliCommandBase } from "@commands/base/CliCommandBase";
-import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
-import { OpenFileCommandParameter } from "@commands/parameters/OpenFileCommandParameter";
+import * as dialogs from "@extensions/dialogs";
+import { ContextValues, TreeItem } from "@tree";
+import { Action, AddExistingProject } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class AddExistingProjectCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Add existing project', provider, 'dotnet');
+export class AddExistingProjectCommand extends ActionCommand {
+    constructor() {
+        super('Add existing project');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (!item || !item.path) { return false; }
+        return item && !!item.path && (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps');
+    }
 
-        let options = {
-		    openLabel: 'Add',
-    		canSelectFolders: false,
-    		canSelectMany: false,
-		    filters: { ['Projects']: [ 'csproj', 'vbproj', 'fsproj' ] }
-        };
-        this.parameters = [
-            new StaticCommandParameter('sln'),
-            new StaticCommandParameter(item.path),
-            new StaticCommandParameter('add'),
-            new OpenFileCommandParameter(options)
-        ];
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        const projectPath = await dialogs.openProjectFile('Select a project file to add');
+        if (!item.path || !projectPath) {
+            return [];
+        }
 
-        return true;
+        return [ new AddExistingProject(item.path, projectPath) ];
     }
 }
