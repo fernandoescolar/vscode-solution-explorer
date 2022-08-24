@@ -43,6 +43,7 @@ export class SolutionExplorerDragAndDropController extends vscode.Disposable imp
 
         const context: ActionContext = {
             multipleActions: actions.length > 1,
+            yesAll: false,
             overwriteAll: false,
             keepBothAll: false,
             skipAll: false,

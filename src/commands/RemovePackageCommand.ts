@@ -1,22 +1,19 @@
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { TreeItem } from "@tree";
-import { CliCommandBase } from "@commands/base";
-import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
+import { ContextValues, TreeItem } from "@tree";
+import { Action, RemovePackageReference } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class RemovePackageCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Remove package', provider, 'dotnet');
+export class RemovePackageCommand extends ActionCommand {
+    constructor() {
+        super('Remove package');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (!item || !item.project || !item.path) { return false; }
-        this.parameters = [
-            new StaticCommandParameter('remove'),
-            new StaticCommandParameter(item.project.fullPath),
-            new StaticCommandParameter('package'),
-            new StaticCommandParameter(item.path)
-        ];
+        return !!item && !!item.project && !!item.path && item.contextValue === ContextValues.projectReferencedPackage + '-cps';
+    }
 
-        return true;
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.project || !item.path) { return []; }
+
+        return [ new RemovePackageReference(item.project.fullPath, item.path) ];
     }
 }

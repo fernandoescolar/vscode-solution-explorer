@@ -1,22 +1,18 @@
-import * as vscode from "vscode";
 import * as path from "@extensions/path";
-import * as fs from "@extensions/fs";
+import * as dialogs from "@extensions/dialogs";
 import { Project } from "@core/Projects";
 import { Action, ActionContext } from "./base/Action";
 
-type CopyFileOptions = 'Overwrite' | 'Keep Both' | 'Skip' | 'Cancel';
+type MoveFileOptions = 'Overwrite' | 'Keep Both' | 'Skip' | 'Cancel';
 
-export class CopyFile implements Action {
+export class MoveProjectFile implements Action {
     constructor(private readonly project: Project, private readonly sourcePath: string, private readonly targetPath: string) {
     }
 
     public async execute(context: ActionContext): Promise<void> {
-        const content = await fs.readFile(this.sourcePath);
         const stat = await this.project.statFile(this.sourcePath, this.targetPath);
-        const folderPath = path.dirname(stat.fullpath);
-        const filename = path.basename(stat.fullpath);
         if (!stat.exists) {
-            await this.project.createFile(folderPath, filename, content);
+            await this.project.moveFile(this.sourcePath, this.targetPath);
             return;
         }
 
@@ -31,23 +27,28 @@ export class CopyFile implements Action {
             return;
         }
 
+        if (option === 'Skip') {
+            return;
+        }
+
         if (option === 'Overwrite') {
-            await fs.writeFile(stat.fullpath, content);
+            await this.project.deleteFile(stat.fullpath);
+            await this.project.moveFile(this.sourcePath, this.targetPath);
             return;
         }
 
         if (option === 'Keep Both') {
-            const copyPath = await fs.getNotExistingCopyPath(stat.fullpath);
-            this.project.createFile(folderPath, path.basename(copyPath), content);
-            return;
-        }
-
-        if (option === 'Skip') {
+            const extension = path.extname(this.sourcePath);
+            const name = path.basename(this.sourcePath, extension);
+            const copyName = `${name}_copy${extension}`;
+            await this.project.renameFile(this.sourcePath, copyName);
+            const copyPath = path.join(path.dirname(this.sourcePath), copyName);
+            await this.project.moveFile(copyPath, this.targetPath);
             return;
         }
     }
 
-    private async showOptions(context: ActionContext): Promise<CopyFileOptions> {
+    private async showOptions(context: ActionContext): Promise<MoveFileOptions> {
         const filename = path.basename(this.sourcePath);
         const options = ['Overwrite', 'Keep Both', 'Skip'];
         if (context.overwriteAll) {
@@ -66,7 +67,7 @@ export class CopyFile implements Action {
             options.push('Overwrite All', 'Keep Both All', 'Skip All');
         }
 
-        const option = await vscode.window.showWarningMessage(`Are you sure you want to move '${filename}' overriding the existing file?`, { modal: true }, ...options);
+        const option = await dialogs.confirm(`Are you sure you want to move '${filename}' overriding the existing file?`, ...options);
 
         if (option === 'Overwrite All') {
             context.overwriteAll = true;
@@ -76,7 +77,8 @@ export class CopyFile implements Action {
         if (option === 'Keep Both All') {
             context.keepBothAll = true;
             return 'Keep Both';
-        }4
+        }
+
         if (option === 'Skip All') {
             context.skipAll = true;
             return 'Skip';
@@ -86,6 +88,6 @@ export class CopyFile implements Action {
             return 'Cancel';
         }
 
-        return option as CopyFileOptions;
+        return option as MoveFileOptions;
     }
 }

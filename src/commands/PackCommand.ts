@@ -1,21 +1,19 @@
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { TreeItem } from "@tree";
-import { CliCommandBase } from "@commands/base";
-import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
+import { ContextValues, TreeItem } from "@tree";
+import { Action, Pack } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class PackCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Pack', provider, 'dotnet');
+export class PackCommand extends ActionCommand {
+    constructor() {
+        super('Pack');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (!item || !item.path) { return false; }
+        return item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
+    }
 
-        this.parameters = [
-            new StaticCommandParameter('pack'),
-            new StaticCommandParameter(item.path)
-        ];
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.path) { return []; }
 
-        return true;
+        return [ new Pack(item.path) ];
     }
 }

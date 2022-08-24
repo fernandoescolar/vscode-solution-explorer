@@ -1,40 +1,31 @@
+import * as dialogs from "@extensions/dialogs";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem, ContextValues } from "@tree";
-import { CommandBase } from "@commands/base";
-import { InputOptionsCommandParameter } from "@commands/parameters/InputOptionsCommandParameter";
+import { Action, MoveProjectFile, MoveProjectFolder } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class MoveCommand extends CommandBase {
-
+export class MoveCommand extends ActionCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Move');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (!item || !item.project) { return false; }
-
-        this.parameters = [
-            new InputOptionsCommandParameter('Select folder...', async () => await item.project?.getFolderList() ?? [])
-        ];
-
-        return true;
+       return !!item && !!item.project && !!item.path && ( item.contextValue.startsWith(ContextValues.projectFile) || item.contextValue.startsWith(ContextValues.projectFolder) );
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!args || args.length <= 0 || !item || !item.project || !item.path) { return; }
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.project || !item.path) { return []; }
 
-        try {
-            let newPath: string;
-            if (item.contextValue.startsWith(ContextValues.projectFile)) {
-                newPath = await item.project.moveFile(item.path, args[0]);
-            } else if (item.contextValue.startsWith(ContextValues.projectFolder)) {
-                newPath = await item.project.moveFolder(item.path, args[0]);
-            } else {
-                return;
-            }
+        const folders = await item.project?.getFolderList() ?? [];
+        const folder = await dialogs.selectOption('Select folder...', folders);
+        if (!folder) { return []; }
 
-            this.provider.logger.log("Moved: " + item.path + " -> " + newPath);
-        } catch(ex) {
-            this.provider.logger.error('Can not move item: ' + ex);
+        if (item.contextValue.startsWith(ContextValues.projectFile)) {
+            return [ new MoveProjectFile(item.project, item.path, folder) ];
+        } else if (item.contextValue.startsWith(ContextValues.projectFolder)) {
+            return [ new MoveProjectFolder(item.project, item.path, folder) ];
+        } else {
+            return [];
         }
     }
 }

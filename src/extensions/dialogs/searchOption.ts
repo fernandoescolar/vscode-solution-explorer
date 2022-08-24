@@ -1,13 +1,8 @@
 import * as vscode from "vscode";
+import { SearchResolver } from "./SearchResolver";
 import { WizardContext } from "./WizardContext";
 
-export type SearchItemsResolver = (search: string) => Promise<string[]>;
-
-export type SearchMapItemsResolver = (search: string) => Promise<{ [id: string]: string }>;
-
-export type SearchResolver = SearchItemsResolver | SearchMapItemsResolver;
-
-export async function searchSelectOption(placeholder: string, initialSearch: string, itemsResolver: SearchResolver, wizard?: WizardContext): Promise<string | undefined> {
+export async function searchOption(placeholder: string, initialSearch: string, itemsResolver: SearchResolver, wizard?: WizardContext): Promise<string | undefined> {
     let items: string[] | { [id: string]: string } = [];
 
     const validate: (value: string) => boolean = value => {
@@ -40,6 +35,7 @@ export async function searchSelectOption(placeholder: string, initialSearch: str
         input.placeholder = placeholder;
         input.canSelectMany = false;
         input.items = [];
+        input.value = initialSearch;
 
         input.onDidChangeValue(async (value) => {
             if (value) {

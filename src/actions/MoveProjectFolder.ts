@@ -1,11 +1,11 @@
-import * as vscode from "vscode";
 import * as path from "@extensions/path";
+import * as dialogs from "@extensions/dialogs";
 import { Project } from "@core/Projects";
 import { Action, ActionContext } from "./base/Action";
 
 type MoveFolderOptions = 'Skip' | 'Cancel';
 
-export class MoveFolder implements Action {
+export class MoveProjectFolder implements Action {
     constructor(private readonly project: Project, private readonly sourcePath: string, private readonly targetPath: string) {
     }
 
@@ -44,7 +44,7 @@ export class MoveFolder implements Action {
             options.push('Skip', 'Skip All');
         }
 
-        const option = await vscode.window.showWarningMessage(`There is already a folder named '${foldername}'`, { modal: true }, ...options);
+        const option = await dialogs.confirm(`There is already a folder named '${foldername}'`, ...options);
 
         if (option === 'Skip All') {
             context.skipAll = true;

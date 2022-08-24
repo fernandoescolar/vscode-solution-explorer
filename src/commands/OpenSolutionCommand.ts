@@ -1,32 +1,18 @@
 
+import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
 import { IEventAggregator, SolutionSelected } from "@events";
-import { CommandBase } from "@commands/base";
-import { OpenFileCommandParameter } from "@commands/parameters/OpenFileCommandParameter";
+import { ICommand } from "@commands/base";
 
-export class OpenSolutionCommand extends CommandBase {
+export class OpenSolutionCommand implements ICommand {
     constructor(public readonly eventAggregator: IEventAggregator) {
-        super('Open solution');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
-        let options = {
-		    openLabel: 'Open solution',
-    		canSelectFolders: false,
-    		canSelectMany: false,
-		    filters: { ['Solution files']: [ 'sln' ] }
-        };
-        this.parameters = [
-            new OpenFileCommandParameter(options)
-        ];
+    public async run(item: TreeItem): Promise<void> {
+        const solutionPath = await dialogs.openSolutionFile('Open solution');
+        if (!solutionPath) { return; }
 
-        return true;
-    }
-
-    protected runCommand(item: TreeItem, args: string[]): Promise<void> {
-        const e = new SolutionSelected(args[0]);
+        const e = new SolutionSelected(solutionPath);
         this.eventAggregator.publish(e);
-
-        return Promise.resolve();
     }
 }

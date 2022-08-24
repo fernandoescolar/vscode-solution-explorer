@@ -1,9 +1,9 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
-import { CommandBase } from "@commands/base";
+import { Action, CollapseAll } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class CollapseAllCommand extends CommandBase {
-
+export class CollapseAllCommand extends ActionCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Collapse All');
     }
@@ -12,10 +12,9 @@ export class CollapseAllCommand extends CommandBase {
         return true;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        let items = await this.provider.getChildren();
-        if (items && items.length > 0) {
-            items.forEach(i => i.collapse());
-        }
+    protected getActions(item: TreeItem): Promise<Action[]> {
+        return Promise.resolve([
+            new CollapseAll(this.provider)
+        ]);
     }
 }

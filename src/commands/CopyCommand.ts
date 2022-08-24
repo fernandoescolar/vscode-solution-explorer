@@ -1,21 +1,19 @@
-import clipboardy from "clipboardy";
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { TreeItem, ContextValues } from "@tree";
-import { CommandBase } from "@commands/base";
+import { TreeItem } from "@tree";
+import { Action, Copy } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class CopyCommand extends CommandBase {
-
-    constructor(private readonly provider: SolutionExplorerProvider) {
+export class CopyCommand extends ActionCommand {
+    constructor() {
         super('Copy');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (item && item.path) { return true; }
-        return false;
+        return !!item && !!item.path;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!item || !item.path) { return Promise.resolve(); }
-        await clipboardy.write(item.path);
+    protected getActions(item: TreeItem): Promise<Action[]> {
+        if(!item.path) { return Promise.resolve([]); }
+
+        return Promise.resolve([new Copy(item.path)]);
     }
 }

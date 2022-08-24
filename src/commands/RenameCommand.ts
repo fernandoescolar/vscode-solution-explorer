@@ -1,37 +1,30 @@
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import * as dialogs from "@extensions/dialogs";
 import { TreeItem, ContextValues } from "@tree";
-import { CommandBase } from "@commands/base";
-import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
+import { Action, RenameProjectFile, RenameProjectFolder } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class RenameCommand extends CommandBase {
-
-    constructor(private readonly provider: SolutionExplorerProvider) {
+export class RenameCommand extends ActionCommand {
+    constructor() {
         super('Rename');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        this.parameters = [
-            new InputTextCommandParameter('New name', item.label, undefined, item.label)
-        ];
-
-        return !!item.project;
+        return !!item.project && !!item.path;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!args || args.length <= 0 || !item || !item.project || !item.path) { return; }
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.project || !item.path) { return []; }
 
-        try {
-            if (item.contextValue.startsWith(ContextValues.projectFile)) {
-                await item.project.renameFile(item.path, args[0]);
-            } else if (item.contextValue.startsWith(ContextValues.projectFolder)) {
-                await item.project.renameFolder(item.path, args[0]);
-            } else {
-                return;
-            }
+        const newname = await dialogs.getText('New name', 'New name', item.label);
+        if (!newname) { return []; }
 
-            this.provider.logger.log("Renamed: " + item.path + " -> " + args[0]);
-        } catch(ex) {
-            this.provider.logger.error('Can not rename item: ' + ex);
+        if (item.contextValue.startsWith(ContextValues.projectFile)) {
+            return [ new RenameProjectFile(item.project, item.path, newname) ];
+
+        } else if (item.contextValue.startsWith(ContextValues.projectFolder)) {
+            return [ new RenameProjectFolder(item.project, item.path, newname) ];
         }
+
+        return [];
     }
 }

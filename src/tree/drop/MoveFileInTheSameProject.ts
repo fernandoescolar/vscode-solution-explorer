@@ -1,5 +1,5 @@
 import { TreeItem, ContextValues } from "@tree";
-import { Action, MoveFile } from "@actions";
+import { Action, MoveProjectFile } from "@actions";
 import { DropHandler } from "./DropHandler";
 
 export class MoveFileInTheSameProject extends DropHandler {
@@ -11,6 +11,6 @@ export class MoveFileInTheSameProject extends DropHandler {
     public async handle(source: TreeItem, target: TreeItem): Promise<Action[]> {
         const targetpath = await DropHandler.findPath(target);
         if (!target.project || !source.path || targetpath === undefined) { return []; }
-        return [ new MoveFile(target.project, source.path, targetpath) ];
+        return [ new MoveProjectFile(target.project, source.path, targetpath) ];
     }
 }

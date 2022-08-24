@@ -10,6 +10,7 @@ type NugetPackage = { id: string, version: string, versions: NugetPackageVersion
 
 export class AddPackageCommand extends ActionCommand {
     private lastNugetPackages: NugetPackage[] = [];
+    private wizard: dialogs.Wizard | undefined;
     constructor() {
         super('Add package');
     }
@@ -27,18 +28,16 @@ export class AddPackageCommand extends ActionCommand {
         }
         const searchQueryServiceUrl = services['SearchQueryService'];
 
-        const packageId = await dialogs.searchSelectOption('Search a package', '', search => this.searchAndMapNugetPackages(searchQueryServiceUrl, search));
-        const nugetPackage = this.lastNugetPackages.find(p => p.id === packageId);
-        if (!nugetPackage) {
+        this.wizard = new dialogs.Wizard('Add package')
+                                 .searchOption('Search a package', search => this.searchAndMapNugetPackages(searchQueryServiceUrl, search), '')
+                                 .selectOption('Select a package', () => this.getCurrentPackageVersions(), () => this.getCurrentPackageDefaultVersion());
+
+        const parameters = await this.wizard.run();
+        if (!parameters) {
             return [];
         }
 
-        const version = await dialogs.selectOption('Select a version', nugetPackage.versions.map(v => v.version), nugetPackage.version);
-        if (version === undefined) {
-            return [];
-        }
-
-        return [ new AddPackageReference(item.project.fullPath, nugetPackage.id, version) ];
+        return [ new AddPackageReference(item.project.fullPath, parameters[0], parameters[1]) ];
     }
 
     private async getNugetApiServices(): Promise<{[id: string]: string}> {
@@ -70,5 +69,29 @@ export class AddPackageCommand extends ActionCommand {
     private async searchAndMapNugetPackages(searchQueryServiceUrl: string, packageName: string): Promise<string[]> {
         this.lastNugetPackages = await this.searchNugetPackage(searchQueryServiceUrl, packageName);
         return this.lastNugetPackages.map(p => p.id);
+    }
+
+    private getCurrentPackageVersions(): Promise<string[]> {
+        if (!this.wizard || !this.wizard.context || !this.wizard.context.results) {
+            return Promise.resolve([]);
+        }
+
+        const nugetPackage = this.lastNugetPackages.find(p => p.id === this.wizard?.context?.results[0]);
+        if (!nugetPackage) {
+            return Promise.resolve([]);
+        }
+
+        return Promise.resolve(nugetPackage.versions.map(v => v.version));
+    }
+
+    private getCurrentPackageDefaultVersion(): Promise<string> {
+        if (!this.wizard || !this.wizard.context || !this.wizard.context.results) { return Promise.resolve(""); }
+
+        const nugetPackage = this.lastNugetPackages.find(p => p.id === this.wizard?.context?.results[0]);
+        if (!nugetPackage) {
+            return Promise.resolve("");
+        }
+
+        return Promise.resolve(nugetPackage.version);
     }
 }

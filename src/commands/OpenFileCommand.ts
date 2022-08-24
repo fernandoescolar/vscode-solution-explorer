@@ -1,8 +1,9 @@
-import * as vscode from "vscode";
+import * as fs from "@extensions/fs";
 import { TreeItem } from "@tree";
-import { CommandBase } from "@commands/base";
+import { Action, OpenFile } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class OpenFileCommand extends CommandBase {
+export class OpenFileCommand extends ActionCommand {
     private lastOpenedFile: string | undefined;
     private lastOpenedDate: Date | undefined;
 
@@ -11,21 +12,17 @@ export class OpenFileCommand extends CommandBase {
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (item && item.path) { return true; } // return item && item.path; // raises an error
-        return false;
+        return !!item && !!item.path;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!item || !item.path) { return; }
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.path) { return []; }
+        if (!(await fs.exists(item.path))) {
+            return [];
+        }
 
-        const options: vscode.TextDocumentShowOptions = {
-            preview: !this.checkDoubleClick(item),
-            preserveFocus: true
-        };
-        const filepath = item.path;
-        const uri = vscode.Uri.file(filepath);
-        const document = await vscode.workspace.openTextDocument(uri);
-        vscode.window.showTextDocument(document, options);
+        const preview = !this.checkDoubleClick(item);
+        return [ new OpenFile(item.path, preview) ];
     }
 
     private checkDoubleClick(item: TreeItem): boolean {

@@ -1,90 +1,35 @@
 import * as path from "@extensions/path";
-import * as fs from "@extensions/fs";
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { TreeItem } from "@tree";
+import * as dialogs from "@extensions/dialogs";
+import { ContextValues, TreeItem } from "@tree";
 import { SolutionProjectType, ProjectInSolution, SolutionFile } from "@core/Solutions";
-import { CommandBase } from "@commands/base";
-import { InputOptionsCommandParameter } from "@commands/parameters/InputOptionsCommandParameter";
+import { Action, MoveProject, MoveSolutionFolder } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class MoveToSolutionFolderCommand extends CommandBase {
-
-    constructor(private readonly provider: SolutionExplorerProvider) {
+export class MoveToSolutionFolderCommand extends ActionCommand {
+    constructor() {
         super('Move to solution folder');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        this.parameters = [
-            new InputOptionsCommandParameter('Select folder...', () => this.getFolders(item.solution))
-        ];
-
-        return !!item.solution;
+        return !!item && !!item.solution &&  !!(<any>item).projectInSolution;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!args || args.length <= 0) { return; }
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        const folder = await dialogs.selectOption('Select folder...', () => this.getFolders(item.solution));
+        if (!folder) { return []; }
 
-        let projectInSolution: ProjectInSolution = (<any>item).projectInSolution;
-        if (!projectInSolution) {
-            this.provider.logger.error('Can not move this item');
-            return;
+        const projectInSolution = (<any>item).projectInSolution;
+        if (!projectInSolution) { return []; }
+
+        if (item.contextValue.startsWith(ContextValues.project)) {
+            return [ new MoveProject(item.solution, projectInSolution, folder) ];
         }
 
-        try {
-            let data: string = await fs.readFile(item.solution.fullPath);
-            let lines: string[] = data.split('\n');
-            let done: boolean = false;
-            if (!projectInSolution.parentProjectGuid) {
-                if (args[0] === 'root') {
-                    return;
-                }
-
-                let endGlobalIndex: number = -1;
-                done = lines.some((line, index, arr) => {
-                    if (projectInSolution && line.trim() === 'GlobalSection(NestedProjects) = preSolution') {
-                        lines.splice(index + 1, 0,
-                            '		' + projectInSolution.projectGuid + ' = ' + args[0] + '\r',
-                        );
-                        return true;
-                    }
-
-                    if (line.trim() === 'EndGlobal') {
-                        endGlobalIndex = index;
-                    }
-
-                    return false;
-                });
-
-                if (!done && endGlobalIndex > 0) {
-                    lines.splice(endGlobalIndex, 0,
-                        '	GlobalSection(NestedProjects) = preSolution\r',
-                        '		' + projectInSolution.projectGuid + ' = ' + args[0] + '\r',
-                        '	EndGlobalSection\r');
-                    done = true;
-                }
-            } else if (args[0] !== 'root') {
-                let index = lines.findIndex(l => l.trim().startsWith(projectInSolution.projectGuid + ' = ' + projectInSolution.parentProjectGuid));
-                if (index >= 0) {
-                    lines.splice(index, 1,
-                        '		' + projectInSolution.projectGuid + ' = ' + args[0] + '\r',);
-                        done = true;
-                }
-            } else {
-                let index = lines.findIndex(l => l.trim().startsWith(projectInSolution.projectGuid + ' = ' + projectInSolution.parentProjectGuid));
-                if (index >= 0) {
-                    lines.splice(index, 1);
-                    done = true;
-                }
-            }
-
-            if (done) {
-                await fs.writeFile(item.solution.fullPath, lines.join('\n'));
-                this.provider.logger.log("Solution item moved");
-            } else {
-                this.provider.logger.error('Can not move this item');
-            }
-        } catch(ex) {
-            this.provider.logger.error('Can not move this item: ' + ex);
+        if (item.contextValue.startsWith(ContextValues.solutionFolder)) {
+            return [ new MoveSolutionFolder(item.solution, projectInSolution, folder) ];
         }
+
+        return [];
     }
 
     private getFolders(solution: SolutionFile): Promise<{[id:string]: string}> {
@@ -110,7 +55,7 @@ export class MoveToSolutionFolderCommand extends CommandBase {
         return Promise.resolve(result);
     }
 
-    private getFolderName(p: ProjectInSolution, solution: SolutionFile): any {
+    private getFolderName(p: ProjectInSolution, solution: SolutionFile): string {
         if (!p.parentProjectGuid) { return  path.sep + p.projectName; }
 
         let parent = solution.projectsById[p.parentProjectGuid];

@@ -1,18 +1,13 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
-import { CommandBase } from "@commands/base";
+import { ICommand } from "@commands/base";
 
-export class SelectActiveDocumentCommand extends CommandBase {
+export class SelectActiveDocumentCommand implements ICommand {
 
-    constructor(private readonly provider: SolutionExplorerProvider) {
-        super('Select Active Document');
+    constructor(private provider: SolutionExplorerProvider) {
     }
 
-    protected shouldRun(item: TreeItem): boolean {
-        return true;
-    }
-
-    protected runCommand(item: TreeItem, args: string[]): Promise<void> {
+    public run(item: TreeItem): Promise<void> {
         return this.provider.selectActiveDocument();
     }
 }

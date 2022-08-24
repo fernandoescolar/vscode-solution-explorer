@@ -1,21 +1,19 @@
-import { CliCommandBase } from "@commands/base";
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { TreeItem } from "@tree";
-import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
+import { ContextValues, TreeItem } from "@tree";
+import { Action, Build } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class BuildCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Build', provider, 'dotnet');
+export class BuildCommand extends ActionCommand {
+    constructor() {
+        super('Build');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (!item || !item.path) { return false; }
+        return item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
+    }
 
-        this.parameters = [
-            new StaticCommandParameter('build'),
-            new StaticCommandParameter(item.path)
-        ];
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.path) { return []; }
 
-        return true;
+        return [ new Build(item.path) ];
     }
 }

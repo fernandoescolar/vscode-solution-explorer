@@ -20,6 +20,7 @@ export abstract class ActionCommand implements ICommand {
     protected async runActions(actions: Action[], item: TreeItem): Promise<void> {
         const context: ActionContext = {
             cancelled: false,
+            yesAll: false,
             overwriteAll: false,
             keepBothAll: false,
             skipAll: false,

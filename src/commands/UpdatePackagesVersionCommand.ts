@@ -1,24 +1,21 @@
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
-import { CliCommandBase } from "@commands/base";
+import { Action, AddPackageReference } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class UpdatePackagesVersionCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Restore', provider, 'dotnet');
+export class UpdatePackagesVersionCommand extends ActionCommand {
+    constructor() {
+        super('UpdatePackagesVersion');
     }
 
     protected shouldRun(item: TreeItem): boolean {
         return !!item && !!item.project;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!item || !item.project) { return; }
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.project || !item.project.fullPath) { return []; }
 
-        var references = await item.project.getPackageReferences();
-        for(let i = 0; i < references.length; i++) {
-            const reference = references[i];
-            const parameters = [ 'add', item.project.fullPath, 'package', reference.name ];
-            await this.runCliCommand('dotnet', parameters, this.getWorkingFolder(item));
-        }
+        const references = await item.project.getPackageReferences();
+        const project = item.project;
+        return references.map(reference => new AddPackageReference(project.fullPath, reference.name));
     }
 }

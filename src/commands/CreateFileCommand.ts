@@ -1,77 +1,83 @@
-import * as vscode from "vscode";
 import * as path from "@extensions/path";
+import * as dialogs from "@extensions/dialogs";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem, ContextValues } from "@tree";
-import { CommandBase } from "@commands/base";
-import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
-import { InputOptionsCommandParameter } from "@commands/parameters/InputOptionsCommandParameter";
+import { Action, CreateProjectFile, OpenFile } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class CreateFileCommand extends CommandBase {
-    private _workspaceRoot: string = '';
-    private _defaultExtension: string = '';
+export class CreateFileCommand extends ActionCommand {
+    private workspaceRoot: string = '';
+    private defaultExtension: string = '';
+    private wizard: dialogs.Wizard | undefined;
+
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Create file');
-
-        this.parameters = [
-            new InputTextCommandParameter('New file name', 'file.extension'),
-            new InputOptionsCommandParameter('Select template', () => this.getTemplatesTypes()),
-        ];
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if(!!item.project) {
-            this._workspaceRoot = item.workspaceRoot;
-            this._defaultExtension = item.project.fileExtension;
-            return true;
-        }
-
-        return false;
+        return item && !!item.project;
     }
 
-    protected async runCommand(item: TreeItem, args: string[]): Promise<void> {
-        if (!args || args.length <= 0 || !item || !item.project || !item.path) { return; }
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.project || !item.path) { return []; }
 
-        try {
-            let targetpath: string = item.path;
-            if (!item.contextValue.startsWith(ContextValues.projectFolder)) {
-                targetpath = path.dirname(targetpath);
-            }
+        this.workspaceRoot = item.workspaceRoot;
+        this.defaultExtension = item.project.fileExtension;
 
-            const content = await this.getContent(item);
-            const filename = this.getFilename(args[0]);
-            const filepath = await item.project.createFile(targetpath, filename, content);
-            const document = await vscode.workspace.openTextDocument(filepath);
-            vscode.window.showTextDocument(document);
-            this.provider.logger.log("File created: " + filepath);
-        } catch(ex) {
-            this.provider.logger.error('Can not create file: ' + ex);
+
+
+        this.wizard = dialogs.wizard(this.title)
+                             .getText('New file name', 'file.extension')
+                             .selectOption('Select template', () => this.getTemplatesTypes());
+
+        const parameters = await this.wizard.run();
+        if (!parameters) {
+            return [];
         }
+
+        const content = await this.getContent(item, parameters[0], parameters[1]);
+        const folderpath: string = this.getFolderPath(item);
+        const filename = this.getFilename(parameters[0]);
+        const filepath = path.join(folderpath, filename);
+
+        return [
+            new CreateProjectFile(item.project, folderpath, filename, content),
+            new OpenFile(filepath)
+        ];
+    }
+
+    private getFolderPath(item: TreeItem) {
+        let targetpath: string = item.path || "";
+        if (!item.contextValue.startsWith(ContextValues.projectFolder)) {
+            targetpath = path.dirname(targetpath);
+        }
+        return targetpath;
     }
 
     private async getTemplatesTypes(): Promise<string[]> {
-        const extension = (path.extname(this.args[0]) || this._defaultExtension ).substring(1);
-        const templateEngine = this.provider.getTemplateEngine(this._workspaceRoot);
+        const extension = (path.extname(this.wizard?.context?.results[0] || "") || this.defaultExtension ).substring(1);
+        const templateEngine = this.provider.getTemplateEngine(this.workspaceRoot);
         let result: string[] = [];
         if (templateEngine) {
-            result = await this.provider.getTemplateEngine(this._workspaceRoot).getTemplates(extension);
+            result = await this.provider.getTemplateEngine(this.workspaceRoot).getTemplates(extension);
         }
 
         return result;
     }
 
-    private async getContent(item: TreeItem): Promise<string> {
-        if (!this.args[1]) { return ""; }
+    private async getContent(item: TreeItem, filename: string, templateName: string): Promise<string> {
+        if (!templateName) { return ""; }
 
-        const templateEngine = this.provider.getTemplateEngine(this._workspaceRoot);
+        const templateEngine = this.provider.getTemplateEngine(this.workspaceRoot);
         if (templateEngine) {
-            const filename = this.getFilename(this.args[0]);
-            return await templateEngine.generate(filename, this.args[1], item) || "";
+            filename = this.getFilename(filename);
+            return await templateEngine.generate(filename, templateName, item) || "";
         }
 
         return "";
     }
 
     private getFilename(filename: string): string {
-        return path.extname(filename) ? filename :filename + this._defaultExtension;
+        return path.extname(filename) ? filename : filename + this.defaultExtension;
     }
 }

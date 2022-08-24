@@ -1,20 +1,20 @@
 import * as vscode from "vscode";
+import { ItemsOrItemsResolver } from "./ItemsOrItemsResolver";
+import { TextValue } from "./TextValue";
 import { WizardContext } from "./WizardContext";
 
-export type ItemsResolver = () => Promise<string[]>;
-
-export type MapItemsResolver = () => Promise<{ [id: string]: string }>;
-
-export type ItemsOrItemsResolver = string[] | ItemsResolver | { [id: string]: string } | MapItemsResolver;
-
 export function selectOption(placeholder: string, items: ItemsOrItemsResolver): Promise<string | undefined>;
-export function selectOption(placeholder: string, items: ItemsOrItemsResolver, selected: string): Promise<string | undefined>;
+export function selectOption(placeholder: string, items: ItemsOrItemsResolver, selected: TextValue): Promise<string | undefined>;
 export function selectOption(placeholder: string, items: ItemsOrItemsResolver, wizard: WizardContext): Promise<string | undefined>;
-export function selectOption(placeholder: string, items: ItemsOrItemsResolver, selected: string, wizard: WizardContext): Promise<string | undefined>;
-export async function selectOption(placeholder: string, items: ItemsOrItemsResolver, selected?: string | WizardContext, wizard?: WizardContext): Promise<string | undefined> {
-    if (selected && typeof selected !== "string") {
+export function selectOption(placeholder: string, items: ItemsOrItemsResolver, selected: TextValue, wizard: WizardContext): Promise<string | undefined>;
+export async function selectOption(placeholder: string, items: ItemsOrItemsResolver, selected?: TextValue | WizardContext, wizard?: WizardContext): Promise<string | undefined> {
+    if (selected && typeof selected !== "string" && typeof selected !== "function") {
         wizard = selected;
         selected = undefined;
+    }
+
+    if (selected && typeof selected === "function") {
+        selected = await selected();
     }
 
     if (typeof(items) === 'function') {

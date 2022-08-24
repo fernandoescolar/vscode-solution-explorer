@@ -1,0 +1,22 @@
+import * as vscode from "vscode";
+import { Action, ActionContext } from "./base/Action";
+
+export class OpenFile implements Action {
+    constructor(private readonly filePath: string, private readonly preview: boolean = true) {
+    }
+
+    public async execute(context: ActionContext): Promise<void> {
+        if (context.cancelled) {
+            return;
+        }
+
+        const options: vscode.TextDocumentShowOptions = {
+            preview: this.preview,
+            preserveFocus: true
+        };
+        const document = await vscode.workspace.openTextDocument(this.filePath);
+        vscode.window.showTextDocument(document, options);
+    }
+}
+
+

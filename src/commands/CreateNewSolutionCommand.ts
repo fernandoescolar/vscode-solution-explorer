@@ -1,25 +1,25 @@
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
+import * as vscode from "vscode";
+import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
-import { CliCommandBase } from "@commands/base";
-import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
-import { InputTextCommandParameter } from "@commands/parameters/InputTextCommandParameter";
+import { Action, CreateSolution } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class CreateNewSolutionCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Create solution', provider, 'dotnet');
+export class CreateNewSolutionCommand extends ActionCommand {
+    constructor() {
+        super('Create solution');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        this.parameters = [
-            new StaticCommandParameter('new'),
-            new StaticCommandParameter('sln'),
-            new InputTextCommandParameter('Solution name', '', '-n')
-        ];
+        return true;
+    }
 
-        if (item && item.path) {
-            this.parameters.push(new StaticCommandParameter(item.path, '-o'));
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        const solutionName = await dialogs.getText('Solution name');
+        const workingFolder = vscode.workspace.rootPath;
+        if (!solutionName || !workingFolder) {
+            return [];
         }
 
-        return true;
+        return [ new CreateSolution(solutionName, workingFolder) ];
     }
 }

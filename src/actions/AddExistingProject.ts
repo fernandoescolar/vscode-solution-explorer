@@ -5,3 +5,4 @@ export class AddExistingProject extends DotnetAction {
         super(["sln", solutionPath, "add", projectPath], AddExistingProject.getWorkingPath(solutionPath));
     }
 }
+

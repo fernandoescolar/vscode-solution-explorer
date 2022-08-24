@@ -1,18 +1,12 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
-import { CommandBase } from "@commands/base";
+import { ICommand } from "@commands/base";
 
-export class RefreshCommand extends CommandBase {
-
+export class RefreshCommand implements ICommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
-        super('Refresh');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
-        return true;
-    }
-
-    protected runCommand(item: TreeItem, args: string[]): Promise<void> {
+    public run(item: TreeItem): Promise<void> {
         if (item) {
             item.refresh();
             this.provider.logger.log("Refreshed " + item.path);

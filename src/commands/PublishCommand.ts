@@ -1,21 +1,19 @@
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { TreeItem } from "@tree";
-import { CliCommandBase } from "@commands/base";
-import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
+import { ContextValues, TreeItem } from "@tree";
+import { Action, Publish } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class PublishCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Publish', provider, 'dotnet');
+export class PublishCommand extends ActionCommand {
+    constructor() {
+        super('Publish');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (!item || !item.path) { return false; }
+        return item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
+    }
 
-        this.parameters = [
-            new StaticCommandParameter('publish'),
-            new StaticCommandParameter(item.path)
-        ];
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.path) { return []; }
 
-        return true;
+        return [ new Publish(item.path) ];
     }
 }

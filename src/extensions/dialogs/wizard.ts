@@ -1,5 +1,9 @@
-import { getText, TextValue } from "./getText";
-import { ItemsOrItemsResolver, selectOption } from "./selectOption";
+import { getText } from "./getText";
+import { TextValue } from "./TextValue";
+import { searchOption } from "./searchOption";
+import { SearchResolver } from "./SearchResolver";
+import { selectOption } from "./selectOption";
+import { ItemsOrItemsResolver } from "./ItemsOrItemsResolver";
 import { WizardContext } from "./WizardContext";
 
 export function wizard(title: string): Wizard {
@@ -19,15 +23,20 @@ export class Wizard {
         return this.currentContext;
     }
 
-    public selectOption(placeholder: string, items: ItemsOrItemsResolver, selected?: string): Wizard {
-        this.stepList.push((context) => selectOption(placeholder, items, selected || "", context));
-        return this;
-    }
-
     public getText(description: string, placeholder?: string, initialValue?: TextValue): Wizard {
         this.stepList.push((context) => getText(description, placeholder || "", initialValue || "", context));
         return this;
     }
+
+    public selectOption(placeholder: string, items: ItemsOrItemsResolver, selected?: TextValue): Wizard {
+        this.stepList.push((context) => selectOption(placeholder, items, selected || "", context));
+        return this;
+    }
+
+    public searchOption(placeholder: string, items: SearchResolver, selected?: string): Wizard {
+        this.stepList.push((context) => searchOption(placeholder, selected || "", items, context));
+        return this;
+   }
 
     public async run(): Promise<string[] | undefined> {
         const context = this.createWizardContext();

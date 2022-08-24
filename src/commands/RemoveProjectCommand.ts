@@ -1,23 +1,19 @@
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { TreeItem } from "@tree";
-import { CliCommandBase } from "@commands/base";
-import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
+import { ContextValues, TreeItem } from "@tree";
+import { Action, RemoveExistingProject } from "@actions";
+import { ActionCommand } from "@commands/base";
 
-export class RemoveProjectCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Remove project', provider, 'dotnet');
+export class RemoveProjectCommand extends ActionCommand {
+    constructor() {
+        super('Remove project');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (!item || !item.path) { return false; }
+        return !!item && !!item.project && !!item.path && item.contextValue .startsWith(ContextValues.project);
+    }
 
-        this.parameters = [
-            new StaticCommandParameter('sln'),
-            new StaticCommandParameter(item.solution.fullPath),
-            new StaticCommandParameter('remove'),
-            new StaticCommandParameter(item.path),
-        ];
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.project || !item.path) { return []; }
 
-        return true;
+        return [ new RemoveExistingProject(item.project.fullPath, item.path) ];
     }
 }

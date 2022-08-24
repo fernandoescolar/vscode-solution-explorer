@@ -1,27 +1,27 @@
 import * as path from "@extensions/path";
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
 import { SolutionProjectType, ProjectInSolution } from "@core/Solutions";
-import { CliCommandBase } from "@commands/base";
-import { StaticCommandParameter } from "@commands/parameters/StaticCommandParameter";
-import { InputOptionsCommandParameter } from "@commands/parameters/InputOptionsCommandParameter";
+import { ActionCommand } from "@commands/base";
+import { Action, AddProjectReference } from "@actions";
+import * as dialogs from '@extensions/dialogs';
 
-export class AddProjectReferenceCommand extends CliCommandBase {
-    constructor(provider: SolutionExplorerProvider) {
-        super('Add project reference', provider, 'dotnet');
+export class AddProjectReferenceCommand extends ActionCommand {
+
+    constructor() {
+        super('Add project reference');
     }
 
     protected shouldRun(item: TreeItem): boolean {
-        if (!item || !item.project) { return false; }
+        return item && !!item.project && item.project.type === 'cps';
+    }
 
-        this.parameters = [
-            new StaticCommandParameter('add'),
-            new StaticCommandParameter(item.project.fullPath),
-            new StaticCommandParameter('reference'),
-            new InputOptionsCommandParameter('Select project...', () => this.getCPSProjects(item))
-        ];
+    protected async getActions(item: TreeItem): Promise<Action[]> {
+        if (!item || !item.project) { return []; }
 
-        return true;
+        const projectPath = await dialogs.selectOption('Select project...', () => this.getCPSProjects(item));
+        if (!projectPath) { return []; }
+
+        return [ new AddProjectReference(item.project.fullPath, projectPath) ];
     }
 
     private getCPSProjects(item: TreeItem): Promise<{[id: string]: string}> {

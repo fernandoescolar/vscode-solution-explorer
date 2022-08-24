@@ -1,9 +1,6 @@
 import * as vscode from "vscode";
+import { TextValue } from "./TextValue";
 import { WizardContext } from "./WizardContext";
-
-export type ValueResolver = () => Promise<string>;
-
-export type TextValue = string | ValueResolver;
 
 export function getText(description: string): Promise<string | undefined>;
 export function getText(description: string, placeholder: string, initialValue: TextValue): Promise<string | undefined>;
