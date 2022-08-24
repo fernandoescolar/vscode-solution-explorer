@@ -6,9 +6,7 @@ This extension adds a Visual Studio Solution File explorer panel in Visual Studi
 
 ![Visual Studio Code Solution Explorer Showcase](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-show-case.gif)
 
-If you like my work you can "buy me a beer" and show that love 😁
-
-<a href="https://www.buymeacoffee.com/fernandoescolar" style="color: #fff; background-color: #E99A55;border-radius: 5px;box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);padding: 8px 18px;display: inline-block;text-align: center;margin-top: 6px;" rel="nofollow" target="_blank" title="Buy me a beer">🍺 buy me a beer</a>
+If you like my work you can [🍺 buy me a beer](https://www.buymeacoffee.com/fernandoescolar) and show that love 😁
 
 ## Getting Started
 
