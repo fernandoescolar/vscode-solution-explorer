@@ -8,8 +8,7 @@ This extension adds a Visual Studio Solution File explorer panel in Visual Studi
 
 If you like my work you can "buy me a beer" and show that love 😁
 
-<style> .bymeabeer {color: #fff; background-color: #E99A55;border-radius: 5px;box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);padding: 8px 18px;display: inline-block;text-align: center;margin-top: 6px;}</style>
-<a href="https://www.buymeacoffee.com/fernandoescolar" class="bymeabeer" rel="nofollow" target="_blank" title="Buy me a beer">🍺 buy me a beer</a>
+<a href="https://www.buymeacoffee.com/fernandoescolar" style="color: #fff; background-color: #E99A55;border-radius: 5px;box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);padding: 8px 18px;display: inline-block;text-align: center;margin-top: 6px;" rel="nofollow" target="_blank" title="Buy me a beer">🍺 buy me a beer</a>
 
 ## Getting Started
 
