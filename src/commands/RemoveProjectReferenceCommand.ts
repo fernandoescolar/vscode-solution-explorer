@@ -8,7 +8,7 @@ export class RemoveProjectReferenceCommand extends ActionsCommand {
     }
 
     public  shouldRun(item: TreeItem): boolean {
-        return !!item && !!item.project && !!item.path && item.contextValue === ContextValues.projectReferencedPackage + '-cps';
+        return !!item && !!item.project && !!item.path && item.contextValue === ContextValues.projectReferencedProject + '-cps';
     }
 
     public async getActions(item: TreeItem): Promise<Action[]> {
