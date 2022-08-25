@@ -20,11 +20,11 @@ Then, you can find this extension displayed as:
 
 - a tab in the "Explorer" activity
 
-![Visual Studio Code Explorer tab](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-tab.png)
+![Visual Studio Code Explorer tab](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-as-explorer-tab.gif)
 
 - an activity with the Visual Studio icon
 
-![Visual Studio Code Activity](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-activity.png)
+![Visual Studio Code Activity](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-as-activity.png)
 
 You can configure it in the Visual Studio Code settings panel, looking for "VsSolution: **Show Mode**" section:
 
@@ -185,6 +185,20 @@ Please report your issues: [vscode-solution-explorer GitHub page](https://github
 ## Release Notes
 
 There is a lot of work to do.
+
+### 0.6.0
+
+Improving add nuget package command: now it searches in the nuget repository for the package and let you select the version
+
+Adding drag and drop functionality: move  projects, folders and files arround the solution, and copy files and folders between projects
+
+Updating README
+
+Updating to latests node and vscode dependencies versions
+
+Updating  to typescript v4.7.4
+
+New internal activity system to run features
 
 ### 0.5.0
 
