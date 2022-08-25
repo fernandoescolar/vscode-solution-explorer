@@ -17,6 +17,13 @@ Table of Content:
     - [Omnisharp integration](#omnisharp-integration)
     - [Find Solution files](#find-solution-files)
   - [Features](#features)
+    - [Run dotnet commands in solutions and projects](#run-dotnet-commands-in-solutions-and-projects)
+    - [Drag and drop files, folders and projects](#drag-and-drop-files-folders-and-projects)
+    - [Create, delete, rename or project folders and files](#create-delete-rename-or-project-folders-and-files)
+    - [Create, delete, rename or move solution, solution folders and projects](#create-delete-rename-or-move-solution-solution-folders-and-projects)
+    - [Add or remove nuget packages](#add-or-remove-nuget-packages)
+    - [Update all nuget packages versions](#update-all-nuget-packages-versions)
+    - [Add or remove project references](#add-or-remove-project-references)
   - [Extension Settings](#extension-settings)
   - [Known Issues](#known-issues)
   - [Release Notes](#release-notes)
@@ -37,7 +44,7 @@ Then, you can find this extension displayed as:
 
 - an activity with the Visual Studio icon
 
-![Visual Studio Code Activity](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-as-activity.png)
+![Visual Studio Code Activity](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-as-activity.gif)
 
 You can configure it in the Visual Studio Code settings panel, looking for "VsSolution: **Show Mode**" section:
 
@@ -86,29 +93,57 @@ And if you want to specify the subfolders where you want to look for the solutio
 
 ## Features
 
-Adds a Solution Explorer panel where you can find a Visual Studio Solution File Explorer.
+Adds a Solution Explorer panel where you can find a Visual Studio Solution File Explorer:
 
-- Can load any .sln version
+### Run dotnet commands in solutions and projects
 
-- Supports csproj, vcxproj, fsproj and vbproj (from vs2017 and before)
+Only available when the project is of kind CPS (dotnet core).
 
-- Supports dotnet core projects
+- Build: `dotnet build`
+- Clean: `dotnet clean`
+- New: `dotnet new`
+- Pack: `dotnet pack`
+- Publish: `dotnet publish`
+- Restore: `dotnet restore`
+- Run: `dotnet run`
+- Watch: `dotnet watch run`
 
-- You can create, delete, rename or move project folders and files.
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-dotnet-commands.gif)
 
-- You can create, delete, rename or move solution, solution folders and projects.
+### Drag and drop files, folders and projects
 
-- You can add or remove packages and references when the project is of kind CPS (dotnet core).
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-drag-and-drop.gif)
 
-- You can update all packages when the project is of kind CPS (dotnet core).
 
-![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-1.gif)
+### Create, delete, rename or project folders and files
 
-![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-2.gif)
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-project-files.gif)
 
-![Solution Explorer](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-3.gif)
+### Create, delete, rename or move solution, solution folders and projects
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-solution-files.gif)
+
+### Add or remove nuget packages
+
+Only available when the project is of kind CPS (dotnet core).
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-package-references.gif)
+
+### Update all nuget packages versions
+
+Only available when the project is of kind CPS (dotnet core).
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-update-packages-versions.gif)
+
+### Add or remove project references
+
+Only available when the project is of kind CPS (dotnet core).
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-package-references.gif)
 
 ## Extension Settings
+
+You can configure the extension in the Visual Studio Code settings panel:
 
 - `vssolution.showMode` Show the solution explorer in the "activityBar", in the "explorer" pane or "none" to hide it. This feature is only for testing pourposes.
 
