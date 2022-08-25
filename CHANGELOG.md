@@ -2,6 +2,28 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.6.0
+
+Improving add nuget package command: now it searches in the nuget repository for the package and let you select the version
+
+Improving move and copy commands: now it prevents replacing existing files
+
+Improving the output channel behavior
+
+Enhancement #9: Adding drag and drop functionality: move  projects, folders and files arround the solution, and copy files and folders between projects
+
+Updating README
+
+Updating to latests node and vscode dependencies versions
+
+Updating  to typescript v4.7.4
+
+New internal activity system to run features
+
+Using vscode fs API
+
+Using vscode clipboard API
+
 ## 0.5.0
 
 Adding open solution command
