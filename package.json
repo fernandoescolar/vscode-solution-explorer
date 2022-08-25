@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -96,6 +96,12 @@
                 "command": "solutionExplorer.renameFile",
                 "title": "Rename",
                 "category": "Solution Explorer"
+            },
+            {
+                "command": "solutionExplorer.revealFileInOS",
+                "title": "Reveal in OS File Manager",
+                "category": "Solution Explorer",
+                "icon": "$(trash)"
             },
             {
                 "command": "solutionExplorer.deleteFile",
@@ -356,6 +362,11 @@
                 },
                 {
                     "command": "solutionExplorer.deleteFile",
+                    "when": "view == slnexpl && viewItem == project-file",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.revealFileInOS",
                     "when": "view == slnexpl && viewItem == project-file",
                     "group": "2_workspace"
                 },
@@ -796,6 +807,11 @@
                 },
                 {
                     "command": "solutionExplorer.deleteFile",
+                    "when": "view == slnbrw && viewItem == project-file",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.revealFileInOS",
                     "when": "view == slnbrw && viewItem == project-file",
                     "group": "2_workspace"
                 },

@@ -29,6 +29,7 @@ export * from "./CleanCommand";
 export * from "./PackCommand";
 export * from "./PublishCommand";
 export * from "./RestoreCommand";
+export * from "./RevealInOSCommand";
 export * from "./RunCommand";
 export * from "./WatchRunCommand";
 export * from "./TestCommand";

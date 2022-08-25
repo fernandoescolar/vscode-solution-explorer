@@ -35,6 +35,7 @@ export * from "./RenameProjectFolder";
 export * from "./RenameSolution";
 export * from "./RenameSolutionFolder";
 export * from "./Restore";
+export * from "./RevealInOS";
 export * from "./Run";
 export * from "./SelectActiveDocumentInTree";
 export * from "./Test";

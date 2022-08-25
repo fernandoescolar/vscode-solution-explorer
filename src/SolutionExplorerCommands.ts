@@ -46,6 +46,7 @@ export class SolutionExplorerCommands {
         this.commands['watchRun'] = new cmds.WatchRunCommand();
         this.commands['test'] = new cmds.TestCommand();
         this.commands['showActiveFileInExplorer'] = new cmds.SelectActiveDocumentCommand(provider);
+        this.commands['revealFileInOS'] = new cmds.RevealInOSCommand();
     }
 
     public register() {
