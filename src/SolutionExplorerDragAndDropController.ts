@@ -1,9 +1,8 @@
 import * as vscode from "vscode";
-
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { TreeItem } from "@tree";
+import { SolutionTreeItemCollection, TreeItem } from "@tree";
 import * as drop from "@tree/drop";
-import { Action, ActionContext } from "@actions";
+import { Action } from "@actions";
+import { ActionsRunner } from "./ActionsRunner";
 
 const SOLUTION_EXPLORER_MIME_TYPE = 'application/vnd.code.tree.solutionExplorer';
 // const URI_LIST_MIME_TYPE = 'text/uri-list';
@@ -11,8 +10,8 @@ const SOLUTION_EXPLORER_MIME_TYPE = 'application/vnd.code.tree.solutionExplorer'
 export class SolutionExplorerDragAndDropController extends vscode.Disposable implements vscode.TreeDragAndDropController<TreeItem> {
     private readonly dropHandlers: drop.DropHandler[];
 
-    constructor(private readonly parent: SolutionExplorerProvider) {
-        super(() => this.dispose());
+    constructor(private readonly actionsRunner: ActionsRunner, private readonly solutionTreeItemCollection: SolutionTreeItemCollection) {
+        super(() => this.disposing());
         this.dropHandlers = [
             new drop.CopyExternalFileInProjects(),
             new drop.MoveFileInTheSameProject(),
@@ -33,34 +32,17 @@ export class SolutionExplorerDragAndDropController extends vscode.Disposable imp
     public async handleDrop(target: TreeItem | undefined, sources: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
         if (!target) { return; }
 
-        const treeItems = await this.getTreeItems(sources);
+        const treeItems = this.getTreeItems(sources);
         if (token.isCancellationRequested) {
-            return Promise.resolve();
+            return;
         }
 
         const actions = await this.getDropActions(target, treeItems);
         if (token.isCancellationRequested) {
-            return Promise.resolve();
+            return;
         }
 
-        const context: ActionContext = {
-            multipleActions: actions.length > 1,
-            yesAll: false,
-            overwriteAll: false,
-            keepBothAll: false,
-            skipAll: false,
-            cancelled: false
-        };
-
-        for (const action of actions) {
-            if (token.isCancellationRequested) {
-                return Promise.resolve();
-            }
-
-            await action.execute(context);
-        }
-
-        return Promise.resolve();
+        await this.actionsRunner.run(actions, token);
     }
 
 	public handleDrag(sources: TreeItem[], treeDataTransfer: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
@@ -74,20 +56,15 @@ export class SolutionExplorerDragAndDropController extends vscode.Disposable imp
         return Promise.resolve();
 	}
 
-    public dispose(): void {
-		// nothing to dispose
-	}
-
-    private async getTreeItems(sources: vscode.DataTransfer): Promise<TreeItem[]> {
+    private getTreeItems(sources: vscode.DataTransfer): TreeItem[] {
         const transferItem = sources.get(SOLUTION_EXPLORER_MIME_TYPE);
         if (!transferItem) {
             return [];
         }
 
-        const children = await this.parent.getChildren() || [];
         const treeItems: TreeItem[] = [];
         for (const id of transferItem.value) {
-            const treeItem = await SolutionExplorerDragAndDropController.getTreeItemById(id, children);
+            const treeItem = this.solutionTreeItemCollection.getLoadedChildTreeItemById(id);
             if (treeItem) {
                 treeItems.push(treeItem);
             }
@@ -114,22 +91,7 @@ export class SolutionExplorerDragAndDropController extends vscode.Disposable imp
         return actions;
     }
 
-    private static async getTreeItemById(id: string, children: TreeItem[]): Promise<TreeItem | undefined> {
-        for (const child of children) {
-            if (!child) {
-                continue;
-            }
-            console.log(`Comparing ${child.id}`);
-            if (child.id === id) {
-                return child;
-            }
-
-            const found = await SolutionExplorerDragAndDropController.getTreeItemById(id, (child as any).children || []);
-            if (found) {
-                return found;
-            }
-        }
-
-        return undefined;
+    private disposing(): void {
+        this.dropHandlers.length = 0;
     }
 }

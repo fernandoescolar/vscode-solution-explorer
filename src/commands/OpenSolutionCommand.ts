@@ -1,18 +1,23 @@
 
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
-import { IEventAggregator, SolutionSelected } from "@events";
-import { ICommand } from "@commands/base";
+import { IEventAggregator } from "@events";
+import { Action, OpenSolution } from "@actions";
+import { ActionsCommand } from "@commands";
 
-export class OpenSolutionCommand implements ICommand {
-    constructor(public readonly eventAggregator: IEventAggregator) {
+export class OpenSolutionCommand extends ActionsCommand {
+    constructor(private readonly eventAggregator: IEventAggregator) {
+        super('Open Solution');
     }
 
-    public async run(item: TreeItem): Promise<void> {
-        const solutionPath = await dialogs.openSolutionFile('Open solution');
-        if (!solutionPath) { return; }
+    public  shouldRun(item: TreeItem): boolean {
+        return true;
+    }
 
-        const e = new SolutionSelected(solutionPath);
-        this.eventAggregator.publish(e);
+    public async getActions(item: TreeItem): Promise<Action[]> {
+        const solutionPath = await dialogs.openSolutionFile('Open solution');
+        if (!solutionPath) { return []; }
+
+        return [new OpenSolution(solutionPath, this.eventAggregator)];
     }
 }

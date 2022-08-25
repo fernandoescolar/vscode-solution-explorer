@@ -1,21 +1,21 @@
 import * as path from "@extensions/path";
 import { TreeItem } from "@tree";
 import { SolutionProjectType, ProjectInSolution } from "@core/Solutions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 import { Action, AddProjectReference } from "@actions";
 import * as dialogs from '@extensions/dialogs';
 
-export class AddProjectReferenceCommand extends ActionCommand {
+export class AddProjectReferenceCommand extends ActionsCommand {
 
     constructor() {
         super('Add project reference');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return item && !!item.project && item.project.type === 'cps';
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.project) { return []; }
 
         const projectPath = await dialogs.selectOption('Select project...', () => this.getCPSProjects(item));

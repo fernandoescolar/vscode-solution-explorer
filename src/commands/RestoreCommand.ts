@@ -1,17 +1,17 @@
 import { ContextValues, TreeItem } from "@tree";
 import { Action, Restore } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class RestoreCommand extends ActionCommand {
+export class RestoreCommand extends ActionsCommand {
     constructor() {
         super('Restore');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
         return [ new Restore(item.path) ];

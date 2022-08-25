@@ -1,4 +1,4 @@
-export * from "./base/ICommand";
+export * from "./ActionsCommand";
 export * from "./OpenSolutionCommand";
 export * from "./RefreshCommand";
 export * from "./CollapseAllCommand";
@@ -32,5 +32,4 @@ export * from "./RestoreCommand";
 export * from "./RunCommand";
 export * from "./WatchRunCommand";
 export * from "./TestCommand";
-export * from "./LocateCommand";
 export * from "./SelectActiveDocumentCommand";

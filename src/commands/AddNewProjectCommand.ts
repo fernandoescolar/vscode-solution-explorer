@@ -3,7 +3,7 @@ import * as path from "@extensions/path";
 import * as dialogs from '@extensions/dialogs';
 import { ContextValues, TreeItem } from "@tree";
 import { Action, AddExistingProject, CreateProject } from '@actions';
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
 type ProjectType = { name: string, value: string, languages: string[] };
 
@@ -33,18 +33,18 @@ const PROJECT_TYPES: ProjectType[] = [
     // { name: 'Razor Class Library', value: 'razorclasslib', languages: ['C#'] },
 ];
 
-export class AddNewProjectCommand extends ActionCommand {
+export class AddNewProjectCommand extends ActionsCommand {
     private wizard: dialogs.Wizard | undefined;
 
     constructor() {
         super('Add new project');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return item && !!item.path && (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps');
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || ! item.path) { return []; }
 
         this.loadProjectTemplates();

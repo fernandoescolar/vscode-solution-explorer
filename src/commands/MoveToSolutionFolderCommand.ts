@@ -3,18 +3,18 @@ import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
 import { SolutionProjectType, ProjectInSolution, SolutionFile } from "@core/Solutions";
 import { Action, MoveProject, MoveSolutionFolder } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class MoveToSolutionFolderCommand extends ActionCommand {
+export class MoveToSolutionFolderCommand extends ActionsCommand {
     constructor() {
         super('Move to solution folder');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return !!item && !!item.solution &&  !!(<any>item).projectInSolution;
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         const folder = await dialogs.selectOption('Select folder...', () => this.getFolders(item.solution));
         if (!folder) { return []; }
 

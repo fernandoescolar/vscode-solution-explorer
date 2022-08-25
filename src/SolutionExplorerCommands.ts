@@ -2,11 +2,13 @@ import * as vscode from "vscode";
 import * as cmds from "@commands";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { IEventAggregator } from "@events";
+import { ActionsRunner } from "ActionsRunner";
+import { TreeItem } from "@tree";
 
 export class SolutionExplorerCommands {
-    private commands: { [id:string]: cmds.ICommand } = {};
+    private commands: { [id:string]: cmds.ActionsCommand } = {};
 
-    constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider, private readonly eventAggregator: IEventAggregator) {
+    constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider, private readonly actionsRunner: ActionsRunner, private readonly eventAggregator: IEventAggregator) {
         this.commands['openSolution'] = new cmds.OpenSolutionCommand(eventAggregator);
         this.commands['refresh'] = new cmds.RefreshCommand(provider);
         this.commands['collapseAll'] = new cmds.CollapseAllCommand(provider);
@@ -43,7 +45,6 @@ export class SolutionExplorerCommands {
         this.commands['run'] = new cmds.RunCommand();
         this.commands['watchRun'] = new cmds.WatchRunCommand();
         this.commands['test'] = new cmds.TestCommand();
-        this.commands['locate'] = new cmds.LocateCommand(provider);
         this.commands['showActiveFileInExplorer'] = new cmds.SelectActiveDocumentCommand(provider);
     }
 
@@ -53,10 +54,15 @@ export class SolutionExplorerCommands {
         });
     }
 
-    private registerCommand(name: string, command: cmds.ICommand) {
+    private registerCommand(name: string, command: cmds.ActionsCommand) {
         this.context.subscriptions.push(
-            vscode.commands.registerCommand(name, item => {
-                command.run(item);
+            vscode.commands.registerCommand(name, async (item) => {
+                if (command.shouldRun(item as TreeItem)) {
+                    const actions = await command.getActions(item);
+                    if (actions.length > 0) {
+                        await this.actionsRunner.run(actions, { isCancellationRequested: false  });
+                    }
+                }
             })
         );
     }

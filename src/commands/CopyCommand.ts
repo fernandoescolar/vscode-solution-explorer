@@ -1,17 +1,17 @@
 import { TreeItem } from "@tree";
 import { Action, Copy } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class CopyCommand extends ActionCommand {
+export class CopyCommand extends ActionsCommand {
     constructor() {
         super('Copy');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return !!item && !!item.path;
     }
 
-    protected getActions(item: TreeItem): Promise<Action[]> {
+    public getActions(item: TreeItem): Promise<Action[]> {
         if(!item.path) { return Promise.resolve([]); }
 
         return Promise.resolve([new Copy(item.path)]);

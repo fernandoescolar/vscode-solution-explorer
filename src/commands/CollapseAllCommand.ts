@@ -1,18 +1,18 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
 import { Action, CollapseAll } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class CollapseAllCommand extends ActionCommand {
+export class CollapseAllCommand extends ActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Collapse All');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return true;
     }
 
-    protected getActions(item: TreeItem): Promise<Action[]> {
+    public getActions(item: TreeItem): Promise<Action[]> {
         return Promise.resolve([
             new CollapseAll(this.provider)
         ]);

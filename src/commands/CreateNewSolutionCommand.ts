@@ -2,18 +2,18 @@ import * as vscode from "vscode";
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
 import { Action, CreateSolution } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class CreateNewSolutionCommand extends ActionCommand {
+export class CreateNewSolutionCommand extends ActionsCommand {
     constructor() {
         super('Create solution');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return true;
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         const solutionName = await dialogs.getText('Solution name');
         const workingFolder = vscode.workspace.rootPath;
         if (!solutionName || !workingFolder) {

@@ -1,17 +1,17 @@
 import { ContextValues, TreeItem } from "@tree";
 import { Action, Build } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class BuildCommand extends ActionCommand {
+export class BuildCommand extends ActionsCommand {
     constructor() {
         super('Build');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
         return [ new Build(item.path) ];

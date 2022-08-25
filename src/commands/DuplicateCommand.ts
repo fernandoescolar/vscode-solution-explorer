@@ -3,18 +3,18 @@ import * as fs from "@extensions/fs";
 import { createCopyName } from "@core/Utilities";
 import { ContextValues, TreeItem } from "@tree";
 import { Action, CreateProjectFile, OpenFile } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class DuplicateCommand extends ActionCommand {
+export class DuplicateCommand extends ActionsCommand {
     constructor() {
         super('Duplicate');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
        return item && !!item.path && item.contextValue.startsWith(ContextValues.projectFile);
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         const filepath = await createCopyName(item.path);

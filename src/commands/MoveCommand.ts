@@ -2,18 +2,18 @@ import * as dialogs from "@extensions/dialogs";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, MoveProjectFile, MoveProjectFolder } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class MoveCommand extends ActionCommand {
+export class MoveCommand extends ActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Move');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
        return !!item && !!item.project && !!item.path && ( item.contextValue.startsWith(ContextValues.projectFile) || item.contextValue.startsWith(ContextValues.projectFolder) );
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         const folders = await item.project?.getFolderList() ?? [];

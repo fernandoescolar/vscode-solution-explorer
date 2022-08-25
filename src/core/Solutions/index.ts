@@ -4,4 +4,4 @@ export * from "./ProjectTypeIds";
 export * from "./SolutionConfigurationInSolution";
 export * from "./SolutionFile";
 export * from "./SolutionProjectType";
-export * from "./SolutionFinder";
+export * from "../../SolutionFinder";

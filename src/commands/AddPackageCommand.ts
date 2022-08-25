@@ -2,24 +2,24 @@ import fetch from 'node-fetch';
 import { TreeItem } from "@tree";
 import * as dialogs from '@extensions/dialogs';
 import { Action, AddPackageReference } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
 type NugetPackageVersion = { version: string, downloads: number, '@id': string };
 
 type NugetPackage = { id: string, version: string, versions: NugetPackageVersion[], '@id': string};
 
-export class AddPackageCommand extends ActionCommand {
+export class AddPackageCommand extends ActionsCommand {
     private lastNugetPackages: NugetPackage[] = [];
     private wizard: dialogs.Wizard | undefined;
     constructor() {
         super('Add package');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return item && !!item.project && item.project.type === 'cps';
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.project) { return []; }
 
         const services = await this.getNugetApiServices();

@@ -1,9 +1,9 @@
 import * as fs from "@extensions/fs";
 import { TreeItem } from "@tree";
 import { Action, OpenFile } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class OpenFileCommand extends ActionCommand {
+export class OpenFileCommand extends ActionsCommand {
     private lastOpenedFile: string | undefined;
     private lastOpenedDate: Date | undefined;
 
@@ -11,11 +11,11 @@ export class OpenFileCommand extends ActionCommand {
         super('Open file');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return !!item && !!item.path;
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.path) { return []; }
         if (!(await fs.exists(item.path))) {
             return [];

@@ -1,17 +1,17 @@
 import { TreeItem } from "@tree";
 import { Action, AddPackageReference } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class UpdatePackagesVersionCommand extends ActionCommand {
+export class UpdatePackagesVersionCommand extends ActionsCommand {
     constructor() {
         super('UpdatePackagesVersion');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return !!item && !!item.project;
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.project || !item.project.fullPath) { return []; }
 
         const references = await item.project.getPackageReferences();

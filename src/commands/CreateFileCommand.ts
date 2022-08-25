@@ -3,9 +3,9 @@ import * as dialogs from "@extensions/dialogs";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, CreateProjectFile, OpenFile } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class CreateFileCommand extends ActionCommand {
+export class CreateFileCommand extends ActionsCommand {
     private workspaceRoot: string = '';
     private defaultExtension: string = '';
     private wizard: dialogs.Wizard | undefined;
@@ -14,11 +14,11 @@ export class CreateFileCommand extends ActionCommand {
         super('Create file');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return item && !!item.project;
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         this.workspaceRoot = item.workspaceRoot;

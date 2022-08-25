@@ -1,18 +1,18 @@
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
 import { Action, CreateSolutionFolder } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class CreateSolutionFolderCommand extends ActionCommand {
+export class CreateSolutionFolderCommand extends ActionsCommand {
     constructor() {
         super('Create solution folder');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return !!item && !!item.solution;
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         const folderName = await dialogs.getText('New folder name');
 
         if (!folderName) {

@@ -1,18 +1,18 @@
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, RenameProjectFile, RenameProjectFolder } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class RenameCommand extends ActionCommand {
+export class RenameCommand extends ActionsCommand {
     constructor() {
         super('Rename');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return !!item.project && !!item.path;
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         const newname = await dialogs.getText('New name', 'New name', item.label);

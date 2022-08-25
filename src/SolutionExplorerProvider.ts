@@ -1,32 +1,28 @@
 import * as vscode from "vscode";
-import * as path from "@extensions/path";
 import * as SolutionExplorerConfiguration from "@extensions/config";
 import * as sln from "@tree";
 
-import { SolutionFile } from "@core/Solutions";
 import { IEventAggregator, EventTypes, IEvent, ISubscription, IFileEvent } from "@events";
-import { ILogger, Logger } from "@logs";
+import { ILogger } from "@logs";
 import { ITemplateEngine, TemplateEngine } from "@templates";
-
-import { SolutionFinder } from "@core/Solutions";
+import { SolutionFinder } from "./SolutionFinder";
 import { SolutionExplorerDragAndDropController } from "./SolutionExplorerDragAndDropController";
+import { SolutionTreeItemCollection } from "./SolutionTreeItemCollection";
 
 export class SolutionExplorerProvider extends vscode.Disposable implements vscode.TreeDataProvider<sln.TreeItem> {
-	private _logger: ILogger;
 	private _templateEngines: { [id: string]: ITemplateEngine };
-	private solutionFinder: SolutionFinder | undefined;
 	private fileSubscription: ISubscription | undefined;
 	private solutionSubscription: ISubscription | undefined;
-	private dragAndDropController: SolutionExplorerDragAndDropController | undefined;
-	private children: sln.TreeItem[] | undefined;
 	private treeView: vscode.TreeView<sln.TreeItem> | undefined;
 	private _onDidChangeTreeData: vscode.EventEmitter<sln.TreeItem | undefined> = new vscode.EventEmitter<sln.TreeItem | undefined>();
 
-	constructor(public workspaceRoots: string[], public readonly eventAggregator: IEventAggregator) {
+	constructor(private readonly solutionFinder: SolutionFinder,
+		        private readonly solutionTreeItemCollection: SolutionTreeItemCollection,
+				private readonly dragAndDropController: SolutionExplorerDragAndDropController,
+				public readonly eventAggregator: IEventAggregator,
+				public readonly logger: ILogger) {
+
 		super(() => this.dispose());
-		this.solutionFinder = new SolutionFinder(workspaceRoots, eventAggregator);
-		this.dragAndDropController = new SolutionExplorerDragAndDropController(this);
-		this._logger = new Logger(this.eventAggregator);
 		this._templateEngines = {};
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		//vscode.window.onDidChangeVisibleTextEditors(data => this.onVisibleEditorsChanged(data));
@@ -34,10 +30,6 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	public get onDidChangeTreeData(): vscode.Event<sln.TreeItem | undefined> {
 		return this._onDidChangeTreeData.event;
-	}
-
-	public get logger(): ILogger {
-		return this._logger;
 	}
 
 	public getTemplateEngine(name: string): ITemplateEngine {
@@ -72,15 +64,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	public unregister() {
-		if (this.dragAndDropController) {
-			this.dragAndDropController.dispose();
-			this.dragAndDropController = undefined;
-		}
-
-		if (this.solutionFinder) {
-			this.solutionFinder.dispose();
-			this.solutionFinder = undefined;
-		}
+		this.solutionTreeItemCollection.reset();
 
 		if (this.solutionSubscription) {
 			this.solutionSubscription.dispose();
@@ -100,7 +84,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	public refresh(item?: sln.TreeItem): void {
 		if (!item) {
-			this.children = undefined;
+			this.solutionTreeItemCollection.reset();
 		}
 
 		this._onDidChangeTreeData.fire(item);
@@ -111,7 +95,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	public getChildren(element?: sln.TreeItem): Thenable<sln.TreeItem[]> | undefined {
-		if (!this.workspaceRoots || this.workspaceRoots.length === 0) {
+		if (!this.solutionFinder.hasWorkspaceRoots) {
 			this.logger.log('No .sln found in workspace');
 			return Promise.resolve([]);
 		}
@@ -120,11 +104,11 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 			return element.getChildren();
 		}
 
-		if (!element && this.children) {
-			return Promise.resolve(this.children);
+		if (!element && this.solutionTreeItemCollection.hasChildren) {
+			return Promise.resolve(this.solutionTreeItemCollection.items);
 		}
 
-		if (!element && !this.children) {
+		if (!element && !this.solutionTreeItemCollection.hasChildren) {
 			return this.createSolutionItems();
 		}
 	}
@@ -134,9 +118,9 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	public async selectFile(filepath: string): Promise<void> {
-		if (!this.children) { return; }
-		for(let i = 0; i < this.children.length; i++) {
-			let result = await this.children[i].search(filepath);
+		if (!this.solutionTreeItemCollection.hasChildren) { return; }
+		for(let i = 0; i < this.solutionTreeItemCollection.length; i++) {
+			let result = await this.solutionTreeItemCollection.getItem(i).search(filepath);
 			if (result) {
 				this.selectTreeItem(result);
 				return;
@@ -159,45 +143,42 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	private async createSolutionItems(): Promise<sln.TreeItem[]> {
-		this.children = [];
-		if (!this.solutionFinder) { return this.children; }
+		if (!this.solutionFinder) { return []; }
 
 		let solutionPaths = await this.solutionFinder.findSolutions();
-		if (solutionPaths.length <= 0 && this.workspaceRoots.length > 0) {
+		if (solutionPaths.length <= 0 && this.solutionFinder.hasWorkspaceRoots) {
 			// return empty to show welcome view
 			return [];
 		}
 
 		for(let i = 0; i < solutionPaths.length; i++) {
 			let s = solutionPaths[i];
-			let solution = await SolutionFile.parse(s.sln);
-			let item = await sln.TreeItemFactory.createFromSolution(this, solution, s.root);
-			this.children.push(item);
+
+			await this.solutionTreeItemCollection.addSolution(s.sln, s.root, this);
 
 			if (!this._templateEngines[s.root]) {
 				this._templateEngines[s.root] = new TemplateEngine(s.root);
 			}
 		}
 
-		if (this.children.length > 0) {
+		if (this.solutionTreeItemCollection.hasChildren && this.solutionTreeItemCollection.length > 0) {
 			this.checkTemplatesToInstall();
 		}
 
-		return this.children;
+		return this.solutionTreeItemCollection.items;
 	}
 
 	private onFileEvent(event: IEvent): void {
         let fileEvent = <IFileEvent> event;
 
-		if (this.workspaceRoots.indexOf(path.dirname(fileEvent.path)) >= 0
-		    && fileEvent.path.endsWith('.sln')) {
-			this.children = undefined;
+		if (this.solutionFinder.isWorkspaceSolutionFile(fileEvent.path)) {
+			this.solutionTreeItemCollection.reset();
 			this.refresh();
         }
 	}
 
 	private onSolutionEvent(event: IEvent): void {
-		this.children = undefined;
+		this.solutionTreeItemCollection.reset();
 		this.refresh();
 	}
 

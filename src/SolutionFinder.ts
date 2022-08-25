@@ -8,20 +8,29 @@ export type FoundPath = { root: string, sln: string };
 export class SolutionFinder {
 
     private subscription: ISubscription | undefined;
-    private _selectedSolutionPath: string | undefined;
+    private openCommandSolutionPath: string | undefined;
 
-    constructor(public workspaceRoots: string[], public readonly eventAggregator: IEventAggregator) {
+    constructor(private workspaceRoots: string[], private readonly eventAggregator: IEventAggregator) {
     }
+
+	public get hasWorkspaceRoots(): boolean {
+		return this.workspaceRoots.length > 0;
+	}
 
 	public register(): void {
 		this.subscription = this.eventAggregator.subscribe(EventTypes.solution, evt => this.onSolutionEvent(evt));
 	}
 
+	public isWorkspaceSolutionFile(filePath: string): boolean {
+		return this.workspaceRoots.indexOf(path.dirname(filePath)) >= 0
+		    	&& filePath.endsWith('.sln');
+	}
+
     public async findSolutions(): Promise<FoundPath[]> {
 		let solutionPaths: FoundPath[] = [];
 
-		if (this._selectedSolutionPath) {
-			solutionPaths.push({ root: path.dirname(this._selectedSolutionPath), sln: this._selectedSolutionPath });
+		if (this.openCommandSolutionPath) {
+			solutionPaths.push({ root: path.dirname(this.openCommandSolutionPath), sln: this.openCommandSolutionPath });
 		}
 
 		if (SolutionExplorerConfiguration.getOpenSolutionsInRootFolder()) {
@@ -51,7 +60,7 @@ export class SolutionFinder {
 		return SolutionFinder.removeDuplicates(solutionPaths);
 	}
 
-    public dispose() {
+    public unregister() {
         if (this.subscription) {
             this.subscription.dispose();
             this.subscription = undefined;
@@ -60,7 +69,7 @@ export class SolutionFinder {
 
     private onSolutionEvent(event: IEvent): void {
 		let solutionEvent = <ISolutionSelected> event;
-		this._selectedSolutionPath = solutionEvent.slnPath;
+		this.openCommandSolutionPath = solutionEvent.slnPath;
 	}
 
 	private static removeDuplicates(array: FoundPath[]): FoundPath[] {

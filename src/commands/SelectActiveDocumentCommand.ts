@@ -1,13 +1,18 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
-import { ICommand } from "@commands/base";
+import { Action, SelectActiveDocumentInTree } from "@actions";
+import { ActionsCommand } from "@commands";
 
-export class SelectActiveDocumentCommand implements ICommand {
-
+export class SelectActiveDocumentCommand extends ActionsCommand {
     constructor(private provider: SolutionExplorerProvider) {
+        super('Select Active Document')
     }
 
-    public run(item: TreeItem): Promise<void> {
-        return this.provider.selectActiveDocument();
+    public  shouldRun(item: TreeItem): boolean {
+        return true;
+    }
+
+    public getActions(item: TreeItem): Promise<Action[]> {
+        return Promise.resolve([new SelectActiveDocumentInTree(this.provider)]);
     }
 }

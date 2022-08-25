@@ -3,18 +3,18 @@ import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { ContextValues, TreeItem } from "@tree";
 import { ProjectInSolution } from "@core/Solutions";
 import { Action, RenameProject, RenameSolution, RenameSolutionFolder } from "@actions";
-import { ActionCommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
 
-export class RenameSolutionItemCommand extends ActionCommand {
+export class RenameSolutionItemCommand extends ActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Rename');
     }
 
-    protected shouldRun(item: TreeItem): boolean {
+    public  shouldRun(item: TreeItem): boolean {
         return !!item.solution;
     }
 
-    protected async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem): Promise<Action[]> {
         const newname = await dialogs.getText('New name', 'New name', item.label);
         if (!newname) { return []; }
 

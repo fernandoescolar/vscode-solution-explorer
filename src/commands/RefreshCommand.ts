@@ -1,20 +1,25 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
-import { ICommand } from "@commands/base";
+import { ActionsCommand } from "@commands";
+import { Action, RefreshTree, RefreshTreeItem } from "@actions";
 
-export class RefreshCommand implements ICommand {
+export class RefreshCommand extends ActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
+        super('Refresh');
     }
 
-    public run(item: TreeItem): Promise<void> {
+    public  shouldRun(item: TreeItem): boolean {
+        return true;
+    }
+
+    public getActions(item: TreeItem): Promise<Action[]> {
+        const result: Action[] = [];
         if (item) {
-            item.refresh();
-            this.provider.logger.log("Refreshed " + item.path);
+            result.push(new RefreshTreeItem(item));
         } else {
-            this.provider.refresh();
-            this.provider.logger.log("Refreshed");
+            result.push(new RefreshTree(this.provider));
         }
 
-        return Promise.resolve();
+        return Promise.resolve(result);
     }
 }
