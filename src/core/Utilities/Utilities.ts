@@ -95,7 +95,7 @@ export async function createCopyName(filepath: string): Promise<string> {
     let name = path.basename(filepath, ext);
     let folder = path.dirname(filepath);
     while (await fs.exists(filepath)) {
-        filepath = path.join(folder, name + '.' + counter + ext);
+        filepath = path.join(folder, name + ' copy' + (counter > 1 ? " " + counter : "")+ ext);
         counter++;
     }
 
