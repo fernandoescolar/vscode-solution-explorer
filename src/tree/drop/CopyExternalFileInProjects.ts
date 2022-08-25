@@ -5,8 +5,7 @@ import { DropHandler } from "./DropHandler";
 export class CopyExternalFileInProjects extends DropHandler {
     public async canHandle(source: TreeItem, target: TreeItem): Promise<boolean> {
         return source.contextValue === ContextValues.projectFile
-            && source.project !== target.project
-            || source.contextValue === ContextValues.solutionFile;
+            && source.project !== target.project;
     }
 
     public async handle(source: TreeItem, target: TreeItem): Promise<Action[]> {

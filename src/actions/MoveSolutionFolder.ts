@@ -7,6 +7,8 @@ export class MoveSolutionFolder implements Action {
     }
 
     public async execute(context: ActionContext): Promise<void> {
+        if (context.cancelled) { return; }
+
         let data: string = await fs.readFile(this.solution.fullPath);
         let lines: string[] = data.split('\n');
         let done: boolean = false;

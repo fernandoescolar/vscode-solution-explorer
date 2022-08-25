@@ -12,10 +12,12 @@ export class CopyProjectFile implements Action {
     }
 
     public toString(): string {
-        return `Copy file ${this.sourcePath} to ${this.targetPath}`;
+        return `Copy file ${this.sourcePath} to ${this.targetPath} in project ${this.project.name}`;
     }
 
     public async execute(context: ActionContext): Promise<void> {
+        if (context.cancelled) { return; }
+
         const content = await fs.readFile(this.sourcePath);
         const stat = await this.project.statFile(this.sourcePath, this.targetPath);
         const folderPath = path.dirname(stat.fullpath);

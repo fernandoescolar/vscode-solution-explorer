@@ -14,6 +14,7 @@ export class SolutionExplorerDragAndDropController extends vscode.Disposable imp
         super(() => this.disposing());
         this.dropHandlers = [
             new drop.CopyExternalFileInProjects(),
+            new drop.CopyExternalFolderInProjects(),
             new drop.MoveFileInTheSameProject(),
             new drop.MoveFolderInTheSameProject(),
             new drop.MoveProjectInTheSameSolution(),

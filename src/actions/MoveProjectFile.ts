@@ -14,6 +14,8 @@ export class MoveProjectFile implements Action {
     }
 
     public async execute(context: ActionContext): Promise<void> {
+        if (context.cancelled) { return; }
+
         const stat = await this.project.statFile(this.sourcePath, this.targetPath);
         if (!stat.exists) {
             await this.project.moveFile(this.sourcePath, this.targetPath);

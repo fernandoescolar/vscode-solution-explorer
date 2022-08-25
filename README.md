@@ -10,6 +10,19 @@ If you want to enjoy the full experience, you should install:
 - [.Net Core SDK](https://dotnet.microsoft.com/en-us/download) (dotnet command line is required)
 - [Microsoft C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) (aka Omnisharp)
 
+Table of Content:
+  - [Getting Started](#getting-started)
+  - [Open Solutions](#open-solutions)
+    - [Open Solution command](#open-solution-command)
+    - [Omnisharp integration](#omnisharp-integration)
+    - [Find Solution files](#find-solution-files)
+  - [Features](#features)
+  - [Extension Settings](#extension-settings)
+  - [Known Issues](#known-issues)
+  - [Release Notes](#release-notes)
+  - [License](#license)
+  - [Thanks to contributors](#thanks-to-contributors)
+
 If you like my work you can [🍺 buy me a beer](https://www.buymeacoffee.com/fernandoescolar) and show that love 😁
 
 ## Getting Started
@@ -190,7 +203,11 @@ There is a lot of work to do.
 
 Improving add nuget package command: now it searches in the nuget repository for the package and let you select the version
 
-Adding drag and drop functionality: move  projects, folders and files arround the solution, and copy files and folders between projects
+Improving move and copy commands: now it prevents replacing existing files
+
+Improving the output channel behavior
+
+Enhancement #9: Adding drag and drop functionality: move  projects, folders and files arround the solution, and copy files and folders between projects
 
 Updating README
 
@@ -199,6 +216,10 @@ Updating to latests node and vscode dependencies versions
 Updating  to typescript v4.7.4
 
 New internal activity system to run features
+
+Using vscode fs API
+
+Using vscode clipboard API
 
 ### 0.5.0
 
@@ -223,16 +244,6 @@ Enhancement #167: using runtime icons for tree actions
 Enhancement #189: it tries to determine the file extension when you create a new one without extension
 
 Enhancement #159: added new command: "SolutionExplorer: Select Active Document"
-
-### 0.4.6
-
-Bugfix #178: Nested items PR #197 (by @callummarshall9). You can activate this option by setting the `vssolution.itemNesting` parameter to `true`
-
-Enhancement #171: load new project templates from `dotnet new --list` command output.
-
-Fixing Dependabot alerts
-
-Move branch from master to main.
 
 ## License
 
