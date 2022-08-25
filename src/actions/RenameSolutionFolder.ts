@@ -7,6 +7,10 @@ export class RenameSolutionFolder implements Action {
     constructor(protected readonly solution: SolutionFile, private readonly folderName: string, private readonly newFolderName: string) {
     }
 
+    public toString(): string {
+        return `Rename folder ${this.folderName} to ${this.newFolderName} in solution ${this.solution.name}`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         if (context.cancelled) {
             return;

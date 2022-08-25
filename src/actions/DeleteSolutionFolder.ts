@@ -7,6 +7,10 @@ export class DeleteSolutionFolder implements Action {
     constructor(private readonly solution: SolutionFile, private readonly projectInSolution: ProjectInSolution) {
     }
 
+    public toString(): string {
+        return `Delete folder ${this.projectInSolution.projectName} from solution ${this.solution.name}`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         if (context.cancelled) { return; }
 

@@ -12,6 +12,10 @@ export class RenameProject extends RenameSolutionFolder {
         super(solution, projectname, newprojectname);
     }
 
+    public toString(): string {
+        return `Rename project ${this.projectname} to ${this.newprojectname} in ${this.solution.name}`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         if (context.cancelled) {
             return;

@@ -7,6 +7,10 @@ export class CreateSolutionFolder implements Action {
     constructor(private readonly solution: SolutionFile, private readonly folderName: string, private readonly projectInSolution?: ProjectInSolution) {
     }
 
+    public toString(): string {
+        return `Create solution folder ${this.folderName} in solution ${this.solution.name}`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         if (context.cancelled) { return; }
 

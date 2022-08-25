@@ -2,5 +2,6 @@ export type ActionContext = { multipleActions: boolean, yesAll: boolean, overwri
 
 export interface Action {
     execute(context: ActionContext): Promise<void>;
+    toString(): string;
 }
 

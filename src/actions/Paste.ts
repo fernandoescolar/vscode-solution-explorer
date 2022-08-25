@@ -9,6 +9,10 @@ export class Paste implements Action {
     constructor(private readonly project: Project, private readonly targetPath: string) {
     }
 
+    public toString(): string {
+        return `Paste`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         const data = await clipboard.readText();
         if (!data) { return; }

@@ -9,6 +9,10 @@ export class MoveProjectFolder implements Action {
     constructor(private readonly project: Project, private readonly sourcePath: string, private readonly targetPath: string) {
     }
 
+    public toString(): string {
+        return `Move folder ${this.sourcePath} to ${this.targetPath} in project ${this.project.name}`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         const stat = await this.project.statFile(this.sourcePath, this.targetPath);
         if (!stat.exists) {

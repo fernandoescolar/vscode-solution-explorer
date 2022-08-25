@@ -12,4 +12,8 @@ export class CreateProjectFolder implements Action {
 
         this.project.createFolder(this.folderPath);
     }
+
+    public toString(): string {
+        return `Create folder ${this.folderPath} in project ${this.project.name}`;
+    }
 }

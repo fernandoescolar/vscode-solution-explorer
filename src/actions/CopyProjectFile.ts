@@ -11,6 +11,10 @@ export class CopyProjectFile implements Action {
     constructor(private readonly project: Project, private readonly sourcePath: string, private readonly targetPath: string) {
     }
 
+    public toString(): string {
+        return `Copy file ${this.sourcePath} to ${this.targetPath}`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         const content = await fs.readFile(this.sourcePath);
         const stat = await this.project.statFile(this.sourcePath, this.targetPath);

@@ -9,4 +9,8 @@ export class Copy implements Action {
         return clipboard.writeText(this.content);
     }
 
+    public toString(): string {
+        return `Copy: ${this.content}`;
+    }
+
 }

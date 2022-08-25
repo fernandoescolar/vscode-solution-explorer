@@ -14,6 +14,10 @@ export abstract class Project {
 
     public fileExtension: string = '';
 
+    public get name(): string {
+        return this.projectInSolution.projectName;
+    }
+
     public get fullPath(): string {
         return this.projectInSolution.fullPath;
     }

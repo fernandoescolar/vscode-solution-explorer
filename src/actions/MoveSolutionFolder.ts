@@ -3,7 +3,7 @@ import { Action, ActionContext } from "./base/Action";
 import { ProjectInSolution, SolutionFile } from "@core/Solutions";
 
 export class MoveSolutionFolder implements Action {
-    constructor(private readonly solution: SolutionFile, private readonly projectInSolution: ProjectInSolution, private readonly targetPath: string) {
+    constructor(protected readonly solution: SolutionFile, protected readonly projectInSolution: ProjectInSolution, protected readonly targetPath: string) {
     }
 
     public async execute(context: ActionContext): Promise<void> {
@@ -58,5 +58,9 @@ export class MoveSolutionFolder implements Action {
         } else {
             throw new Error('Can not move this item');
         }
+    }
+
+    public toString(): string {
+        return `Move solution folder ${this.projectInSolution.projectName} to ${this.targetPath}in ${this.solution.name}`;
     }
 }

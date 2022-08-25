@@ -17,6 +17,10 @@ export class OpenFile implements Action {
         const document = await vscode.workspace.openTextDocument(this.filePath);
         vscode.window.showTextDocument(document, options);
     }
+
+    public toString(): string {
+        return `Open file ${this.filePath} ${this.preview ? 'in preview' : ''}`;
+    }
 }
 
 

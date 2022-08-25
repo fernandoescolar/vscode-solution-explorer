@@ -8,6 +8,10 @@ export class RenameSolution implements Action {
     constructor(private readonly solutionPath: string, private readonly solutionname: string) {
     }
 
+    public toString(): string {
+        return `Rename solution ${this.solutionPath} to ${this.solutionname}`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         if (context.cancelled) {
             return;

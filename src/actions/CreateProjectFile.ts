@@ -12,4 +12,8 @@ export class CreateProjectFile implements Action {
 
         this.project.createFile(this.folderPath, this.filename, this.content);
     }
+
+    public toString(): string {
+        return `Create file ${this.filename} in project ${this.project.name}`;
+    }
 }

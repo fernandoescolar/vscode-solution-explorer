@@ -9,6 +9,10 @@ export class DeleteProjectFile implements Action {
     constructor(private readonly project: Project, private readonly filePath: string) {
     }
 
+    public toString(): string {
+        return `Delete file ${this.filePath} from project ${this.project.name}`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         if (context.cancelled) {
             return;

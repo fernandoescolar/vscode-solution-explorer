@@ -8,6 +8,10 @@ export class RenameProjectFile implements Action {
     constructor(private readonly project: Project, private readonly filePath: string, private readonly filename: string) {
     }
 
+    public toString(): string {
+        return `Rename file ${this.filePath} to ${this.filename} in project ${this.project.name}`;
+    }
+
     public async execute(context: ActionContext): Promise<void> {
         if (context.cancelled) {
             return;

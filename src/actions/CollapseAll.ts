@@ -15,4 +15,8 @@ export class CollapseAll implements Action {
             items.forEach(i => i.collapse());
         }
     }
+
+    public toString(): string {
+        return "Collapse all";
+    }
 }
