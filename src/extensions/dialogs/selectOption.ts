@@ -45,12 +45,6 @@ export async function selectOption(placeholder: string, items: ItemsOrItemsResol
         return getItemValue(options[0]);
     }
 
-    options.sort((a, b) => {
-        let x = a.toLowerCase();
-        let y = b.toLowerCase();
-        return x < y ? -1 : x > y ? 1 : 0;
-    });
-
     const result = new Promise<string | undefined>((resolve, reject) => {
         let accepted = false;
         const input = vscode.window.createQuickPick();

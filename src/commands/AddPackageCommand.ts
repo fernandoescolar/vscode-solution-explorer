@@ -81,7 +81,7 @@ export class AddPackageCommand extends ActionsCommand {
             return Promise.resolve([]);
         }
 
-        return Promise.resolve(nugetPackage.versions.map(v => v.version));
+        return Promise.resolve(nugetPackage.versions.map(v => v.version).reverse());
     }
 
     private getCurrentPackageDefaultVersion(): Promise<string> {
