@@ -23,7 +23,7 @@ export class ActionsRunner {
 
             try {
                 await action.execute(context);
-                this.logger.info(`${action.toString()}`);
+                this.logger.log(`${action.toString()}`);
             } catch (error) {
                 this.logger.error(`Error running ${action.toString()}: ${JSON.stringify(error)}`);
             }
