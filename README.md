@@ -129,6 +129,33 @@ Only available when the project is of kind CPS (dotnet core).
 
 ![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-package-references.gif)
 
+If you want to use custom nuget feeds it will look for a file called `nuget.config` in the root folder of the project and its parent folders. If it finds this file, it will read the configuration and use it. If it does not find it, it will use the default nuget feed.
+
+As an Example:
+
+```xml
+<configuration>
+  <packageSources>
+    <add key="Nuget.org" value="https://api.nuget.org/v3/index.json" />
+    <add key="PrivateFeed" value="https://mydomain.com/myfeed/index.json" />
+  </packageSources>
+  <packageSourceCredentials>
+	  <PrivateFeed>
+	    <add key="Username" value="me@email.com" />
+      <add key="ClearTextPassword" value="my_super_strong_password" />
+	  </PrivateFeed>
+  </packageSourceCredentials>
+</configuration>
+```
+
+If you are working with `/drive/path/to/project.csproj`, it will look for:
+- `/drive/path/to/nuget.config`
+- `/drive/path/nuget.config`
+- `/drivenuget.config`
+- `/nuget.config`
+
+> Note vscode-solution-explorer only supports ClearTextPassword credencials in nuget.config
+
 ### Update all nuget packages versions
 
 Only available when the project is of kind CPS (dotnet core).
@@ -229,56 +256,6 @@ You can configure the extension in the Visual Studio Code settings panel:
 ## Known Issues
 
 Please report your issues: [vscode-solution-explorer GitHub page](https://github.com/fernandoescolar/vscode-solution-explorer/issues)
-
-## Release Notes
-
-There is a lot of work to do.
-
-### 0.6.0
-
-Improving add nuget package command: now it searches in the nuget repository for the package and let you select the version
-
-Improving move and copy commands: now it prevents replacing existing files
-
-Improving the output channel behavior
-
-Enhancement #9: Adding drag and drop functionality: move  projects, folders and files arround the solution, and copy files and folders between projects
-
-Updating README
-
-Updating to latests node and vscode dependencies versions
-
-Updating  to typescript v4.7.4
-
-New internal activity system to run features
-
-Using vscode fs API
-
-Using vscode clipboard API
-
-### 0.5.0
-
-Adding open solution command
-
-Adding different automatic open solution flags: in root folder, in alt folders, in root folders and subfolders (Enhancement #204), and omnisharp integration
-
-Adding command to update package references versions automatically
-
-Bugfix #205: README images fixed thanks to [Philippe Desmarais](https://github.com/CephalonAhmes)
-
-Adding welcome view when no solution found
-
-Updating README
-
-### 0.4.7
-
-Enhancement #63: prefix commands with "SolutionExplorer: "
-
-Enhancement #167: using runtime icons for tree actions
-
-Enhancement #189: it tries to determine the file extension when you create a new one without extension
-
-Enhancement #159: added new command: "SolutionExplorer: Select Active Document"
 
 ## License
 

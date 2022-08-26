@@ -6,6 +6,8 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Enhancement #94: add "Reveal In OS File Manager" command
 
+Add nuget.config support for custom feed sources (only ClearTextPassword credencials are supported)
+
 ## 0.6.0
 
 Improving add nuget package command: now it searches in the nuget repository for the package and let you select the version
