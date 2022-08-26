@@ -139,7 +139,7 @@ Only available when the project is of kind CPS (dotnet core).
 
 Only available when the project is of kind CPS (dotnet core).
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-package-references.gif)
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-project-references.gif)
 
 ## Extension Settings
 
