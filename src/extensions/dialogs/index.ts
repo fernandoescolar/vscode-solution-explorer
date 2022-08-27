@@ -3,6 +3,7 @@ export * from "./getText";
 export * from "./ItemsOrItemsResolver";
 export * from "./ItemsResolver";
 export * from "./MapItemsResolver";
+export * from "./openFile";
 export * from "./openProjectFile";
 export * from "./openSolutionFile";
 export * from "./SearchItemsResolver";

@@ -10,7 +10,7 @@ export type ProjectFileStat = { exists: boolean, filename: string, fullpath: str
 export abstract class Project {
     private _hasReferences: boolean = true;
 
-    constructor(protected readonly projectInSolution: ProjectInSolution, public readonly type: string) {
+    constructor(public readonly projectInSolution: ProjectInSolution, public readonly type: string) {
     }
 
     public fileExtension: string = '';
