@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 export async function copy(sourcePath: string, targetPath: string): Promise<void> {
     const sourceUri = vscode.Uri.file(sourcePath);
     const targetUri = vscode.Uri.file(targetPath);
-    await vscode.workspace.fs.copy(sourceUri, targetUri);
+    await vscode.workspace.fs.copy(sourceUri, targetUri, { overwrite: true });
 }
 
 export async function exists(path: string): Promise<boolean> {

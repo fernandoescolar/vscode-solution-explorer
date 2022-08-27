@@ -24,6 +24,7 @@ Table of Content:
     - [Add or remove nuget packages](#add-or-remove-nuget-packages)
     - [Update all nuget packages versions](#update-all-nuget-packages-versions)
     - [Add or remove project references](#add-or-remove-project-references)
+    - [Create file templates](#create-file-templates)
   - [Extension Settings](#extension-settings)
   - [Known Issues](#known-issues)
   - [Release Notes](#release-notes)
@@ -78,15 +79,15 @@ You can use the automatic solution file finder activating some options in the Vi
 
 The `vssolution.openSolutions.inRootFolder` setting will look for the solution files in the root folder.
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/search-in-root-folder-recursive.png)
+![inRootFolder](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/search-in-root-folder-recursive.png)
 
 The `vssolution.openSolutions.inFoldersAndSubfolders` setting will search for the solution files in the root folder and its subfolders.
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/search-in-alt-folders.png)
+![inFoldersAndSubfolders](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/search-in-alt-folders.png)
 
 And if you want to specify the subfolders where you want to look for the solution files you have to activate the `vssolution.openSolutions.inAltFolders` setting and specify the folders in the `vssolution.altSolutionFolders` setting:
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-alt-folders.png)
+![inAltFolders](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-alt-folders.png)
 
 
 *You can combine all of these options to find the best configuration for you.*
@@ -108,26 +109,26 @@ Only available when the project is of kind CPS (dotnet core).
 - Run: `dotnet run`
 - Watch: `dotnet watch run`
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-dotnet-commands.gif)
+![Run dotnet commands in solutions and projects](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-dotnet-commands.gif)
 
 ### Drag and drop files, folders and projects
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-drag-and-drop.gif)
+![Drag and drop files, folders and projects](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-drag-and-drop.gif)
 
 
 ### Create, delete, rename or project folders and files
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-project-files.gif)
+![Create, delete, rename or project folders and files](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-project-files.gif)
 
 ### Create, delete, rename or move solution, solution folders and projects
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-solution-files.gif)
+![Create, delete, rename or move solution, solution folders and projects](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-solution-files.gif)
 
 ### Add or remove nuget packages
 
 Only available when the project is of kind CPS (dotnet core).
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-package-references.gif)
+![Add or remove nuget packages](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-package-references.gif)
 
 If you want to use custom nuget feeds it will look for a file called `nuget.config` in the root folder of the project and its parent folders. If it finds this file, it will read the configuration and use it. If it does not find it, it will use the default nuget feed.
 
@@ -160,13 +161,25 @@ If you are working with `/drive/path/to/project.csproj`, it will look for:
 
 Only available when the project is of kind CPS (dotnet core).
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-update-packages-versions.gif)
+![Update all nuget packages versions](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-update-packages-versions.gif)
 
 ### Add or remove project references
 
 Only available when the project is of kind CPS (dotnet core).
 
-![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-project-references.gif)
+![Add or remove project references](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-project-references.gif)
+
+### Create file templates
+
+This extensions has a custom template system to create new files. When you create a new file you can select a template from the dropdown list:
+
+![Open Solution Command](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-new-file.gif)
+
+You can customize the templates for your project. First of all click with the right mouse button on your solution file and select `Install File Creation Templates`. Then you have to move to `.vscode/solution-explorer` folder and you can find the file called `template-list.json`. This file contains the list of templates.
+
+We strongly recommend you to update your templates after updating this extension:
+
+![Install Or Update templates](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-install-templates.gif)
 
 ## Extension Settings
 

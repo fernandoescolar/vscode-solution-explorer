@@ -1,7 +1,9 @@
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
+import * as xml from "@extensions/xml";
 import { TreeItem, ContextValues } from "@tree";
 import { ITemplate } from "./ITemplate";
+import { Project } from "@core/Projects";
 
 export abstract class TemplateEngine {
     private templates: ITemplate[] | undefined;
@@ -53,11 +55,16 @@ export abstract class TemplateEngine {
     protected abstract formatContent(content: string, parameters: {[id: string]: string}): Promise<string>;
 
     private async getParameters(template: ITemplate, filename: string, item: TreeItem): Promise<{[id: string]: string}> {
+        if (!item || !item.project) { return {}; }
+
         const workingFolder = path.dirname(this.templateFile);
         const filepath = path.join(workingFolder, template.parameters).replace(/\\/g, '\\\\');
         const parametersGetter = eval(`require('${filepath}')`);
+        const content = await fs.readFile(item.project.fullPath);
+        const xmlContent =  await xml.parseToJson(content);
+        const projectXml = Project.getProjectElement(xmlContent) || { elements: [] };
         if (parametersGetter) {
-            let result = parametersGetter(filename, item.project ? item.project.fullPath : null, item.contextValue.startsWith(ContextValues.projectFolder) ? item.path : null);
+            let result = parametersGetter(filename, item.project.fullPath, item.contextValue.startsWith(ContextValues.projectFolder) ? item.path : undefined, projectXml);
             if (Promise.resolve(result) === result) {
                 result = await (<Promise<any>>result);
             }
