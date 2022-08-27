@@ -1,9 +1,6 @@
-import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
 import { Action, DeleteSolutionFile } from "@actions";
 import { ActionsCommand } from "@commands";
-import { getItemNesting } from "@extensions/config";
-
 
 export class DeleteFileFromSolutionFolderCommand extends ActionsCommand {
     constructor() {

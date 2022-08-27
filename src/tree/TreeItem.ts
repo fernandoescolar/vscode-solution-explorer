@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "@extensions/path";
-import * as SolutionExplorerConfiguration from "@extensions/config";
+import * as config from "@extensions/config";
 import { ProjectInSolution, SolutionFile } from "@core/Solutions";
 import { Project } from "@core/Projects";
 import * as TreeItemIconProvider from "./TreeItemIconProvider";
@@ -131,10 +131,10 @@ export abstract class TreeItem extends vscode.TreeItem {
 	}
 
 	protected async loadIcon(): Promise<void> {
-		let iconType = SolutionExplorerConfiguration.getSolutionExplorerIcons();
+		let iconType = config.getSolutionExplorerIcons();
 
-		if (iconType === SolutionExplorerConfiguration.ICONS_CUSTOM
-		   || (iconType === SolutionExplorerConfiguration.ICONS_MIXED && !this._allowIconTheme)) {
+		if (iconType === config.ICONS_CUSTOM
+		   || (iconType === config.ICONS_MIXED && !this._allowIconTheme)) {
 			this.iconPath = await TreeItemIconProvider.findIconPath(this.label, this.path || "", this.contextValue);
 		} else {
 			let fullpath = this.path;

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import * as SolutionExplorerConfiguration from "@extensions/config";
+import * as config from "@extensions/config";
 import * as sln from "@tree";
 
 import { IEventAggregator, EventTypes, IEvent, ISubscription, IFileEvent } from "@events";
@@ -37,13 +37,13 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		if (!this.solutionFinder) { return; }
 		this.solutionFinder.register();
 
-		let showMode = SolutionExplorerConfiguration.getShowMode();
-		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInActivityBar', showMode === SolutionExplorerConfiguration.SHOW_MODE_ACTIVITYBAR);
-		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInExplorer', showMode === SolutionExplorerConfiguration.SHOW_MODE_EXPLORER);
-		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === SolutionExplorerConfiguration.SHOW_MODE_NONE);
+		let showMode = config.getShowMode();
+		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInActivityBar', showMode === config.SHOW_MODE_ACTIVITYBAR);
+		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInExplorer', showMode === config.SHOW_MODE_EXPLORER);
+		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === config.SHOW_MODE_NONE);
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.loadedFlag', !false);
 
-		if (showMode !== SolutionExplorerConfiguration.SHOW_MODE_NONE) {
+		if (showMode !== config.SHOW_MODE_NONE) {
 			const options = {
 				treeDataProvider: this,
 				dragAndDropController: this.dragAndDropController,
@@ -52,9 +52,9 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 			};
 			this.solutionSubscription = this.eventAggregator.subscribe(EventTypes.solution, evt => this.onSolutionEvent(evt));
 			this.fileSubscription = this.eventAggregator.subscribe(EventTypes.file, evt => this.onFileEvent(evt));
-			if (showMode === SolutionExplorerConfiguration.SHOW_MODE_ACTIVITYBAR) {
+			if (showMode === config.SHOW_MODE_ACTIVITYBAR) {
 				this.treeView = vscode.window.createTreeView('slnbrw', options);
-			} else if (showMode === SolutionExplorerConfiguration.SHOW_MODE_EXPLORER) {
+			} else if (showMode === config.SHOW_MODE_EXPLORER) {
 				this.treeView = vscode.window.createTreeView('slnexpl', options);
 			}
 		}
@@ -175,7 +175,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	private onActiveEditorChanged(): void {
-		let shouldExecute = SolutionExplorerConfiguration.getTrackActiveItem();
+		let shouldExecute = config.getTrackActiveItem();
 		if (!shouldExecute) { return; }
 		if (!vscode.window.activeTextEditor) { return; }
 		if (vscode.window.activeTextEditor.document.uri.scheme !== 'file') { return; }

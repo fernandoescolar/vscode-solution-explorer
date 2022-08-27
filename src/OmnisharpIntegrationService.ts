@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import * as SolutionExplorerConfiguration from "@extensions/config";
+import * as config from "@extensions/config";
 import { IEventAggregator, SolutionSelected } from "@events";
 
 interface BaseEvent {
@@ -29,7 +29,7 @@ export class OmnisharpIntegrationService extends vscode.Disposable {
     }
 
     public register() {
-        this.active = SolutionExplorerConfiguration.getOpenSolutionsSelectedInOmnisharp();
+        this.active = config.getOpenSolutionsSelectedInOmnisharp();
         if (!this.active) { return; }
 
         const checker = setInterval(() => {

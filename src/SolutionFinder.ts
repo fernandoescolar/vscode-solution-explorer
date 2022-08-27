@@ -1,5 +1,5 @@
 import * as path from "@extensions/path";
-import * as SolutionExplorerConfiguration from "@extensions/config";
+import * as config from "@extensions/config";
 import * as Utilities from "@core/Utilities";
 import { EventTypes, IEvent, IEventAggregator, ISolutionSelected, ISubscription } from "@events";
 
@@ -33,15 +33,15 @@ export class SolutionFinder {
 			solutionPaths.push({ root: path.dirname(this.openCommandSolutionPath), sln: this.openCommandSolutionPath });
 		}
 
-		if (SolutionExplorerConfiguration.getOpenSolutionsInRootFolder()) {
+		if (config.getOpenSolutionsInRootFolder()) {
 			for (let i = 0; i < this.workspaceRoots.length; i++) {
 				const paths = await Utilities.searchFilesInDir(this.workspaceRoots[i], '.sln');
 				paths.forEach(p => solutionPaths.push({ root: this.workspaceRoots[i], sln: p }));
 			}
 		}
 
-		if (SolutionExplorerConfiguration.getOpenSolutionsInAltFolders()) {
-			let altFolders = SolutionExplorerConfiguration.getAlternativeSolutionFolders();
+		if (config.getOpenSolutionsInAltFolders()) {
+			let altFolders = config.getAlternativeSolutionFolders();
 			for (let i = 0; i < altFolders.length; i++) {
 				for (let j = 0; j < this.workspaceRoots.length; j++) {
 					const paths = await Utilities.searchFilesInDir(path.join(this.workspaceRoots[j], altFolders[i]), '.sln');
@@ -50,7 +50,7 @@ export class SolutionFinder {
 			}
 		}
 
-		if (SolutionExplorerConfiguration.getOpenSolutionsInFoldersAndSubfolders()) {
+		if (config.getOpenSolutionsInFoldersAndSubfolders()) {
 			for (let i = 0; i < this.workspaceRoots.length; i++) {
 				const paths = await Utilities.searchFilesInDir(this.workspaceRoots[i], '.sln', true);
 				paths.forEach(p => solutionPaths.push({ root: this.workspaceRoots[i], sln: p }));

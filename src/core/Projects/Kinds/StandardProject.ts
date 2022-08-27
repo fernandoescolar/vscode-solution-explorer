@@ -1,7 +1,7 @@
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import * as xml from "@extensions/xml";
-import * as SolutionExplorerConfiguration from "@extensions/config";
+import * as config from "@extensions/config";
 import { ProjectInSolution } from "../../Solutions";
 import { ProjectFile } from "../ProjectFile";
 import { ProjectFolder } from "../ProjectFolder";
@@ -135,7 +135,7 @@ export class StandardProject extends FileSystemBasedProject {
         let extension = (relativePath.split('.').pop() || "").toLocaleLowerCase();
 
         let type = 'None';
-        let itemTypes = SolutionExplorerConfiguration.getItemTypes();
+        let itemTypes = config.getItemTypes();
         if (itemTypes[extension]) {
             type = itemTypes[extension];
         } else {
@@ -623,7 +623,7 @@ export class StandardProject extends FileSystemBasedProject {
             "None",
             "Folder"
         ];
-        let itemTypes = SolutionExplorerConfiguration.getItemTypes();
+        let itemTypes = config.getItemTypes();
         Object.keys(itemTypes).forEach(key => {
             if (result.indexOf(itemTypes[key]) < 0) {
                 result.push(itemTypes[key]);
