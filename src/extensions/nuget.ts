@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import fetch, { RequestInit } from "node-fetch";
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import * as xml from "@extensions/xml";
@@ -32,23 +32,25 @@ export async function getNugetFeeds(projectPath: string): Promise<NugetFeed[]> {
                 const nugetConfig = await fs.readFile(nugetConfigPath);
                 const nugetConfigJson = await xml.parseToJson(nugetConfig);
                 if (nugetConfigJson) {
-                    const configuration = nugetConfigJson.elements.find((e: any) => e.name === "configuration");
+                    const configuration = nugetConfigJson.elements?.find((e: xml.XmlElement) => e.name === "configuration");
                     if (configuration) {
-                        const packageSources = configuration.elements.find((e: any) => e.name === "packageSources");
-                        const packageSourceCredentials = configuration.elements.find((e: any) => e.name === "packageSourceCredentials");
+                        const packageSources = configuration.elements?.find((e: xml.XmlElement) => e.name === "packageSources");
+                        const packageSourceCredentials = configuration.elements?.find((e: xml.XmlElement) => e.name === "packageSourceCredentials");
                         if (packageSources) {
-                            const feeds = packageSources.elements.filter( (e: any) => e.name === "add");
-                            if (feeds.length > 0) {
+                            const feeds = packageSources.elements?.filter( (e: xml.XmlElement) => e.name === "add");
+                            if (feeds && feeds.length > 0) {
                                 for (const f of feeds) {
-                                    const name = f.attributes.key;
-                                    const url = f.attributes.value;
+                                    const name = f.attributes?.key;
+                                    const url = f.attributes?.value;
+                                    if (!name || !url) { continue; }
+
                                     let userName: string | undefined;
                                     let password: string | undefined;
                                     if (packageSourceCredentials) {
-                                        const credentials = packageSourceCredentials.elements.find((e: any) => e.name === name);
+                                        const credentials = packageSourceCredentials.elements?.find((e: xml.XmlElement) => e.name === name);
                                         if (credentials) {
-                                            userName = credentials.elements.find((e: any) => e.name === "add" && e.attributes.key === "Username")?.attributes.value;
-                                            password = credentials.elements.find((e: any) => e.name === "add" && e.attributes.key === "ClearTextPassword")?.attributes.value;
+                                            userName = credentials.elements?.find((e: xml.XmlElement) => e.name === "add" && e.attributes.key === "Username")?.attributes?.value;
+                                            password = credentials.elements?.find((e: xml.XmlElement) => e.name === "add" && e.attributes.key === "ClearTextPassword")?.attributes?.value;
                                         }
                                     }
 
@@ -110,7 +112,7 @@ export async function searchNugetPackage(feed: NugetFeed, packageName: string): 
     return json.data;
 }
 
-async function fillFeedSearchUrl(feed: NugetFeed) {
+async function fillFeedSearchUrl(feed: NugetFeed): Promise<void> {
     const service = await getNugetApiServices(feed);
     const serviceKey = Object.keys(service).find((s: string) => s.startsWith("SearchQueryService"));
     if (serviceKey) {
@@ -118,8 +120,8 @@ async function fillFeedSearchUrl(feed: NugetFeed) {
     }
 }
 
-function getFetchOptions(feed: NugetFeed): any {
-    const options: any = { method: "GET" };
+function getFetchOptions(feed: NugetFeed): RequestInit {
+    const options: RequestInit = { method: "GET" };
     if (feed.userName || feed.password) {
         const token = btoa(`${feed.userName || ""}:${feed.password || ""}`);
         options.headers = { Authorization: `Basic ${token}` }

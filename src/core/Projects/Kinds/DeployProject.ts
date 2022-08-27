@@ -5,7 +5,7 @@ import { ProjectFolder } from "../ProjectFolder";
 
 export class DeployProject extends StandardProject {
     constructor(projectInSolution: ProjectInSolution) {
-        super(projectInSolution, null , 'deploy');
+        super(projectInSolution, undefined , 'deploy');
     }
 
     public async getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[]; folders: ProjectFolder[]; }> {

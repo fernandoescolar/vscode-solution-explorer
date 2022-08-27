@@ -22,12 +22,12 @@ const projectFileExtensions = {
 };
 
 export class ProjectFactory {
-    public static async parse(project: ProjectInSolution): Promise<Project | null> {
+    public static async parse(project: ProjectInSolution): Promise<Project | undefined> {
         if (!(await fs.exists(project.fullPath))) {
-            return null;
+            return undefined;
         }
 
-        let result: Project | null = null;
+        let result: Project | undefined = undefined;
         if (project.fullPath.toLocaleLowerCase().endsWith(".njsproj")) {
             result = await ProjectFactory.loadNoReferencesStandardProject(project);
 
@@ -62,12 +62,11 @@ export class ProjectFactory {
         return result;
     }
 
-    private static async determineStandardProject(project: ProjectInSolution): Promise<Project | null> {
-        let document =  await ProjectFactory.loadProjectDocument(project.fullPath);
-        let element: any = Project.getProjectElement(document);
-
+    private static async determineStandardProject(project: ProjectInSolution): Promise<Project | undefined> {
+        const document =  await ProjectFactory.loadProjectDocument(project.fullPath);
+        const element = Project.getProjectElement(document);
         if (!element) {
-            return null;
+            return undefined;
         }
 
         if (element.attributes.Sdk && element.attributes.Sdk.startsWith("Microsoft.NET.Sdk")) {
@@ -77,30 +76,30 @@ export class ProjectFactory {
         return new StandardProject(project, document);
     }
 
-    private static async loadProjectDocument(projectFullPath: string): Promise<any> {
+    private static async loadProjectDocument(projectFullPath: string): Promise<xml.XmlElement> {
         let content = await fs.readFile(projectFullPath);
-        return  await xml.parseToJson(content);
+        return await xml.parseToJson(content);
     }
 
-    private static async loadCpsProject(project: ProjectInSolution): Promise<any> {
+    private static async loadCpsProject(project: ProjectInSolution): Promise<Project> {
         let document =  await ProjectFactory.loadProjectDocument(project.fullPath);
         return new CpsProject(project, document);
     }
 
-    private static loadNoReferencesStandardProject(project: ProjectInSolution): Promise<any> {
+    private static loadNoReferencesStandardProject(project: ProjectInSolution): Promise<Project> {
         return Promise.resolve(new NoReferencesStandardProject(project));
     }
 
-    private static loadWebsiteProject(project: ProjectInSolution): Promise<any> {
+    private static loadWebsiteProject(project: ProjectInSolution): Promise<Project> {
         project.fullPath = project.fullPath + '.web-project';
         return Promise.resolve(new WebsiteProject(project));
     }
 
-    private static loadSharedProject(project: ProjectInSolution): Promise<any> {
+    private static loadSharedProject(project: ProjectInSolution): Promise<Project> {
         return Promise.resolve(new SharedProject(project));
     }
 
-    private static loadDeploydProject(project: ProjectInSolution): Promise<any> {
+    private static loadDeploydProject(project: ProjectInSolution): Promise<Project> {
         return Promise.resolve(new DeployProject(project));
     }
 }

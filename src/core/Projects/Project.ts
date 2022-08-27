@@ -3,6 +3,7 @@ import { ProjectFile } from "./ProjectFile";
 import { ProjectFolder } from "./ProjectFolder";
 import { PackageReference } from "./PackageReference";
 import { ProjectReference } from "./ProjectReference";
+import { XmlElement } from "@extensions/xml";
 
 export type ProjectFileStat = { exists: boolean, filename: string, fullpath: string };
 
@@ -62,17 +63,25 @@ export abstract class Project {
 
     public abstract refresh(): Promise<void>;
 
-    public static getProjectElement(document: any): any {
-        if (document.elements.length === 1) {
-            return document.elements[0];
-        } else {
-            for(let i = 0; i < document.elements.length; i++) {
-                if (document.elements[i].type !== 'comment') {
-                    return document.elements[i];
+    public static getProjectElement(document: XmlElement): XmlElement | undefined {
+        if (document && document.elements) {
+            if (document.elements.length === 1) {
+                return Project.ensureElements(document.elements[0]);
+            } else {
+                for(let i = 0; i < document.elements.length; i++) {
+                    if (document.elements[i].type !== 'comment') {
+                        return Project.ensureElements(document.elements[i]);
+                    }
                 }
             }
         }
+    }
 
-        return null;
+    public static ensureElements(element: XmlElement): XmlElement {
+        if (!element.elements || !Array.isArray(element.elements)) {
+            element.elements = [];
+        }
+
+        return element;
     }
 }

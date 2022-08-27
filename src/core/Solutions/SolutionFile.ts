@@ -112,7 +112,7 @@ export class SolutionFile {
         this.parseFileHeader();
 
         let str: string | null;
-        let rawProjectConfigurationsEntries: { [id: string]: any } | null = null;
+        let rawProjectConfigurationsEntries: { [id: string]: string } | undefined;
         while ((str = this.readLine()) !== null)
         {
             if (str.startsWith("Project("))
@@ -142,7 +142,7 @@ export class SolutionFile {
             }
         }
 
-        if (rawProjectConfigurationsEntries !== null)
+        if (rawProjectConfigurationsEntries)
         {
             this.processProjectConfigurationSection(rawProjectConfigurationsEntries);
         }
@@ -346,7 +346,7 @@ export class SolutionFile {
         } while (true);
     }
 
-    private parseProjectConfigurations(): { [id: string]: any } {
+    private parseProjectConfigurations(): { [id: string]: string } {
         let rawProjectConfigurationsEntries: { [id: string]: string } = {};
         let str : string | null;
         do
