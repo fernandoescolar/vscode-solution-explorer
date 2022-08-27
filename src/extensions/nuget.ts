@@ -54,8 +54,10 @@ export async function getNugetFeeds(projectPath: string): Promise<NugetFeed[]> {
                                         }
                                     }
 
-                                    const feed: NugetFeed = { name, url, searchApiUrl: '', userName, password };
-                                    result.push(feed);
+                                    if (result.findIndex(f => f.name === name) < 0) {
+                                        const feed: NugetFeed = { name, url, searchApiUrl: '', userName, password };
+                                        result.push(feed);
+                                    }
                                 }
                             }
                         }
