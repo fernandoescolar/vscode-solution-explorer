@@ -13,11 +13,10 @@ export class RemoveSolutionFolderCommand extends ActionsCommand {
     }
 
     public async getActions(item: TreeItem): Promise<Action[]> {
-        const projectInSolution: ProjectInSolution = (<any>item).projectInSolution;
-        if (!projectInSolution) {
+        if (!item.projectInSolution) {
             return [];
         }
 
-        return [ new DeleteSolutionFolder(item.solution, projectInSolution) ];
+        return [ new DeleteSolutionFolder(item.solution, item.projectInSolution) ];
     }
 }

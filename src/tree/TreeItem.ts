@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "@extensions/path";
 import * as SolutionExplorerConfiguration from "@extensions/config";
-import { SolutionFile } from "@core/Solutions";
+import { ProjectInSolution, SolutionFile } from "@core/Solutions";
 import { Project } from "@core/Projects";
 import * as TreeItemIconProvider from "./TreeItemIconProvider";
 import { TreeItemContext } from "./TreeItemContext";
@@ -18,12 +18,14 @@ export abstract class TreeItem extends vscode.TreeItem {
         public collapsibleState: vscode.TreeItemCollapsibleState,
 		public contextValue: string,
 		public path?: string,
-		public command?: vscode.Command,
+		public readonly projectInSolution?: ProjectInSolution
 	) {
 		super(label, collapsibleState);
 		this.createId();
 		this.loadIcon();
 	}
+
+	public command: vscode.Command | undefined;
 
 	public get workspaceRoot(): string {
 		return this.context.workspaceRoot;

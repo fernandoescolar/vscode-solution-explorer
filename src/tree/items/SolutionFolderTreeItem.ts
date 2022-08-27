@@ -17,8 +17,8 @@ async function getPath(context: TreeItemContext, projectInSolution: ProjectInSol
 }
 
 export class SolutionFolderTreeItem extends TreeItem {
-    private constructor(context: TreeItemContext, public readonly projectInSolution: ProjectInSolution, path: string | undefined) {
-        super(context, projectInSolution.projectName, TreeItemCollapsibleState.Expanded, ContextValues.solutionFolder, path);
+    private constructor(context: TreeItemContext, projectInSolution: ProjectInSolution, path: string | undefined) {
+        super(context, projectInSolution.projectName, TreeItemCollapsibleState.Expanded, ContextValues.solutionFolder, path, projectInSolution);
     }
 
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
