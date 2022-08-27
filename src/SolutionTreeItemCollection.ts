@@ -4,7 +4,7 @@ import { TreeItem, TreeItemFactory } from "@tree";
 
 
 export class SolutionTreeItemCollection {
-	private children: TreeItem[] | undefined = new Array<TreeItem>();
+	private children: TreeItem[] | undefined = undefined;
 
 	public get length(): number {
 		return this.children ? this.children.length : 0;
