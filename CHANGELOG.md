@@ -4,6 +4,14 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 ## 0.6.1
 
+Activity bar icon updated thanks to [LesanOuO](https://github.com/LesanOuO)
+
+Bugfix: Solution Explorer not loading automatically the first time thanks to [LesanOuO](https://github.com/LesanOuO)
+
+Bugfix: unable to add files without .cs suffix (like .json .xml ...) thanks to [LesanOuO](https://github.com/LesanOuO)
+
+New template system for new file creation
+
 Enhancement #57: now you can add or delete solution files
 
 Enhancement #94: add "Reveal In OS File Manager" command

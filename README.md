@@ -285,5 +285,5 @@ Branded icons are licensed under their copyright license.
 [Hongyang Du (hond)](https://github.com/Danieladu)
 [Callum Marshall](https://github.com/callummarshall9)
 [Philippe Desmarais](https://github.com/CephalonAhmes)
-
+[LesanOuO](https://github.com/LesanOuO)
 **Enjoy!**
