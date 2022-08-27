@@ -1,16 +1,16 @@
 import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
-import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, CreateProjectFile, OpenFile } from "@actions";
 import { ActionsCommand } from "@commands";
+import { TemplateEngineColletion } from "@templates";
 
 export class CreateFileCommand extends ActionsCommand {
     private workspaceRoot: string = '';
     private defaultExtension: string = '';
     private wizard: dialogs.Wizard | undefined;
 
-    constructor(private readonly provider: SolutionExplorerProvider) {
+    constructor(private readonly templaceEngineCollection: TemplateEngineColletion) {
         super('Create file');
     }
 
@@ -56,10 +56,10 @@ export class CreateFileCommand extends ActionsCommand {
 
     private async getTemplatesTypes(): Promise<string[]> {
         const extension = (path.extname(this.wizard?.context?.results[0] || "") || this.defaultExtension ).substring(1);
-        const templateEngine = this.provider.getTemplateEngine(this.workspaceRoot);
+        const templateEngine = this.templaceEngineCollection.getTemplateEngine(this.workspaceRoot);
         let result: string[] = [];
         if (templateEngine) {
-            result = await this.provider.getTemplateEngine(this.workspaceRoot).getTemplates(extension);
+            result = await this.templaceEngineCollection.getTemplateEngine(this.workspaceRoot).getTemplates(extension);
         }
 
         return result;
@@ -68,7 +68,7 @@ export class CreateFileCommand extends ActionsCommand {
     private async getContent(item: TreeItem, filename: string, templateName: string): Promise<string> {
         if (!templateName) { return ""; }
 
-        const templateEngine = this.provider.getTemplateEngine(this.workspaceRoot);
+        const templateEngine = this.templaceEngineCollection.getTemplateEngine(this.workspaceRoot);
         if (templateEngine) {
             filename = this.getFilename(filename);
             return await templateEngine.generate(filename, templateName, item) || "";

@@ -15,6 +15,7 @@ export * from "./CreateSolutionFolderCommand";
 export * from "./DeleteCommand";
 export * from "./DeleteFileFromSolutionFolderCommand";
 export * from "./DuplicateCommand";
+export * from "./InstallWorkspaceTemplateFilesCommand";
 export * from "./MoveCommand";
 export * from "./MoveToSolutionFolderCommand";
 export * from "./OpenFileCommand";

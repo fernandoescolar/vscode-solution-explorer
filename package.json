@@ -202,6 +202,11 @@
                 "category": "Solution Explorer"
             },
             {
+                "command": "solutionExplorer.installTemplates",
+                "title": "Install File Creation Templates",
+                "category": "Solution Explorer"
+            },
+            {
                 "command": "solutionExplorer.renameSolutionItem",
                 "title": "Rename",
                 "category": "Solution Explorer"
@@ -623,6 +628,16 @@
                 },
                 {
                     "command": "solutionExplorer.createSolutionFolder",
+                    "when": "view == slnexpl && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.installTemplates",
+                    "when": "view == slnexpl && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.installTemplates",
                     "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "2_workspace"
                 },
@@ -1078,6 +1093,16 @@
                 },
                 {
                     "command": "solutionExplorer.createSolutionFolder",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.installTemplates",
+                    "when": "view == slnbrw && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.installTemplates",
                     "when": "view == slnbrw && viewItem == solution-cps",
                     "group": "2_workspace"
                 },

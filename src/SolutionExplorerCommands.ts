@@ -2,13 +2,18 @@ import * as vscode from "vscode";
 import * as cmds from "@commands";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { IEventAggregator } from "@events";
-import { ActionsRunner } from "ActionsRunner";
+import { TemplateEngineColletion } from "@templates";
 import { TreeItem } from "@tree";
+import { ActionsRunner } from "./ActionsRunner";
 
 export class SolutionExplorerCommands {
     private commands: { [id:string]: cmds.ActionsCommand } = {};
 
-    constructor(private readonly context: vscode.ExtensionContext, private readonly provider: SolutionExplorerProvider, private readonly actionsRunner: ActionsRunner, private readonly eventAggregator: IEventAggregator) {
+    constructor(private readonly context: vscode.ExtensionContext,
+                private readonly provider: SolutionExplorerProvider,
+                private readonly actionsRunner: ActionsRunner,
+                private readonly templateEngineCollection: TemplateEngineColletion,
+                private readonly eventAggregator: IEventAggregator) {
         this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand();
         this.commands['addNewProject'] = new cmds.AddNewProjectCommand();
         this.commands['addPackage'] = new cmds.AddPackageCommand();
@@ -18,7 +23,7 @@ export class SolutionExplorerCommands {
         this.commands['clean'] = new cmds.CleanCommand();
         this.commands['collapseAll'] = new cmds.CollapseAllCommand(provider);
         this.commands['copy'] = new cmds.CopyCommand();
-        this.commands['createFile'] = new cmds.CreateFileCommand(provider);
+        this.commands['createFile'] = new cmds.CreateFileCommand(templateEngineCollection);
         this.commands['createFolder'] = new cmds.CreateFolderCommand();
         this.commands['createNewSolution'] = new cmds.CreateNewSolutionCommand();
         this.commands['createSolutionFolder'] = new cmds.CreateSolutionFolderCommand();
@@ -26,6 +31,7 @@ export class SolutionExplorerCommands {
         this.commands['deleteFolder'] = new cmds.DeleteCommand();
         this.commands['deleteSolutionFile'] = new cmds.DeleteFileFromSolutionFolderCommand();
         this.commands['duplicate'] = new cmds.DuplicateCommand();
+        this.commands['installTemplates'] = new cmds.InstallWorkspaceTemplateFilesCommand(templateEngineCollection);
         this.commands['moveFile'] = new cmds.MoveCommand(provider);
         this.commands['moveFolder'] = new cmds.MoveCommand(provider);
         this.commands['moveToSolutionFolder'] = new cmds.MoveToSolutionFolderCommand();

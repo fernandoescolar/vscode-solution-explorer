@@ -11,6 +11,7 @@ import { SolutionExplorerCommands } from "./SolutionExplorerCommands";
 import { SolutionExplorerFileWatcher } from "./SolutionExplorerFileWatcher";
 import { SolutionExplorerOutputChannel } from "./SolutionExplorerOutputChannel";
 import { OmnisharpIntegrationService } from "./OmnisharpIntegrationService";
+import { TemplateEngineColletion } from "@templates";
 
 export function activate(context: vscode.ExtensionContext) {
 	const paths = vscode.workspace.workspaceFolders?.map(w => w.uri.fsPath) || [];
@@ -20,8 +21,9 @@ export function activate(context: vscode.ExtensionContext) {
     const solutionTreeItemCollection = new SolutionTreeItemCollection();
     const solutionFinder = new SolutionFinder(paths, eventAggregator);
     const solutionExplorerDragAndDropController = new SolutionExplorerDragAndDropController(actionsRunner, solutionTreeItemCollection);
-    const solutionExplorerProvider = new SolutionExplorerProvider(solutionFinder, solutionTreeItemCollection, solutionExplorerDragAndDropController, eventAggregator, logger);
-    const solutionExplorerCommands = new SolutionExplorerCommands(context, solutionExplorerProvider, actionsRunner, eventAggregator);
+    const templateEngineCollection = new TemplateEngineColletion();
+    const solutionExplorerProvider = new SolutionExplorerProvider(solutionFinder, solutionTreeItemCollection, solutionExplorerDragAndDropController, templateEngineCollection, eventAggregator, logger);
+    const solutionExplorerCommands = new SolutionExplorerCommands(context, solutionExplorerProvider, actionsRunner, templateEngineCollection, eventAggregator);
     const solutionExplorerFileWatcher = new SolutionExplorerFileWatcher(eventAggregator);
     const solutionExplorerOutputChannel = new SolutionExplorerOutputChannel(eventAggregator);
     const omnisharpIntegrationService = new OmnisharpIntegrationService(eventAggregator);
@@ -33,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
     register(context, solutionTreeItemCollection);
     register(context, solutionFinder);
     register(context, solutionExplorerDragAndDropController);
+    register(context, templateEngineCollection);
     register(context, solutionExplorerProvider);
     register(context, solutionExplorerCommands);
     register(context, solutionExplorerFileWatcher);

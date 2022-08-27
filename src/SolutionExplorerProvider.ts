@@ -4,13 +4,12 @@ import * as sln from "@tree";
 
 import { IEventAggregator, EventTypes, IEvent, ISubscription, IFileEvent } from "@events";
 import { ILogger } from "@logs";
-import { ITemplateEngine, TemplateEngine } from "@templates";
+import { TemplateEngineColletion } from "@templates";
 import { SolutionFinder } from "./SolutionFinder";
 import { SolutionExplorerDragAndDropController } from "./SolutionExplorerDragAndDropController";
 import { SolutionTreeItemCollection } from "./SolutionTreeItemCollection";
 
 export class SolutionExplorerProvider extends vscode.Disposable implements vscode.TreeDataProvider<sln.TreeItem> {
-	private _templateEngines: { [id: string]: ITemplateEngine };
 	private fileSubscription: ISubscription | undefined;
 	private solutionSubscription: ISubscription | undefined;
 	private treeView: vscode.TreeView<sln.TreeItem> | undefined;
@@ -19,11 +18,11 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	constructor(private readonly solutionFinder: SolutionFinder,
 		        private readonly solutionTreeItemCollection: SolutionTreeItemCollection,
 				private readonly dragAndDropController: SolutionExplorerDragAndDropController,
+				private readonly templateEngineCollection: TemplateEngineColletion,
 				public readonly eventAggregator: IEventAggregator,
 				public readonly logger: ILogger) {
 
 		super(() => this.dispose());
-		this._templateEngines = {};
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		//vscode.window.onDidChangeVisibleTextEditors(data => this.onVisibleEditorsChanged(data));
     }
@@ -32,9 +31,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		return this._onDidChangeTreeData.event;
 	}
 
-	public getTemplateEngine(name: string): ITemplateEngine {
-		return this._templateEngines[name];
-	}
+
 
 	public register() {
 		if (!this.solutionFinder) { return; }
@@ -65,6 +62,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	public unregister() {
 		this.solutionTreeItemCollection.reset();
+		this.templateEngineCollection.reset();
 
 		if (this.solutionSubscription) {
 			this.solutionSubscription.dispose();
@@ -151,18 +149,12 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 			return [];
 		}
 
+		this.templateEngineCollection.reset();
 		for(let i = 0; i < solutionPaths.length; i++) {
 			let s = solutionPaths[i];
 
 			await this.solutionTreeItemCollection.addSolution(s.sln, s.root, this);
-
-			if (!this._templateEngines[s.root]) {
-				this._templateEngines[s.root] = new TemplateEngine(s.root);
-			}
-		}
-
-		if (this.solutionTreeItemCollection.hasChildren && this.solutionTreeItemCollection.length > 0) {
-			this.checkTemplatesToInstall();
+			this.templateEngineCollection.createTemplateEngine(s.root);
 		}
 
 		return this.solutionTreeItemCollection.items;
@@ -180,28 +172,6 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	private onSolutionEvent(event: IEvent): void {
 		this.solutionTreeItemCollection.reset();
 		this.refresh();
-	}
-
-	private async checkTemplatesToInstall(): Promise<void> {
-		if (!SolutionExplorerConfiguration.getCreateTemplateFolderQuestion()) { return; }
-		const templateEnginesToCreate: ITemplateEngine[] = [];
-		const keys = Object.keys(this._templateEngines);
-		for (let i = 0; i < keys.length; i++) {
-			const key = keys[i];
-			const exists = await this._templateEngines[key].existsTemplates();
-			if (!exists) {
-				templateEnginesToCreate.push(this._templateEngines[key]);
-			}
-		}
-
-		if (templateEnginesToCreate.length > 0) {
-			let option = await vscode.window.showWarningMessage("Would you like to create the vscode-solution-explorer templates folder?", 'Yes', 'No');
-			if (option !== null && option !== undefined && option === 'Yes') {
-				for (let i = 0; i < templateEnginesToCreate.length; i++) {
-					await templateEnginesToCreate[i].creteTemplates();
-				}
-			}
-		}
 	}
 
 	private onActiveEditorChanged(): void {
