@@ -36,7 +36,7 @@ export class AddProjectReferenceCommand extends ActionsCommand {
         return Promise.resolve(result);
     }
 
-    private getProjectName(project: ProjectInSolution, projects: ProjectInSolution[]): any {
+    private getProjectName(project: ProjectInSolution, projects: ProjectInSolution[]): string {
         if (!project.parentProjectGuid) { return project.projectName; }
 
         let index = projects.findIndex(p => p.projectGuid === project.parentProjectGuid);

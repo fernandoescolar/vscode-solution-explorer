@@ -5,7 +5,7 @@ import { ErrorTreeItem } from "./ErrorTreeItem";
 export class UnknownProjectTreeItem extends TreeItem {
 
     constructor(context: TreeItemContext, projectInSolution: ProjectInSolution) {
-        super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.project, projectInSolution.fullPath);
+        super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.project, projectInSolution.fullPath, projectInSolution);
         this.allowIconTheme = false;
     }
 

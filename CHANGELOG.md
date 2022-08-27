@@ -2,6 +2,16 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.6.1
+
+Enhancement #57: now you can add or delete solution files
+
+Enhancement #94: add "Reveal In OS File Manager" command
+
+Add nuget.config support for custom feed sources (only ClearTextPassword credencials are supported)
+
+Some refactoring tasks to avoid using `any` keyword
+
 ## 0.6.0
 
 Improving add nuget package command: now it searches in the nuget repository for the package and let you select the version

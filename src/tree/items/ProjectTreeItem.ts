@@ -3,8 +3,8 @@ import { TreeItem, TreeItemCollapsibleState, TreeItemFactory, TreeItemContext, C
 import { ProjectReferencesTreeItem } from "./ProjectReferencesTreeItem";
 
 export class ProjectTreeItem extends TreeItem {
-    constructor(context: TreeItemContext, public readonly projectInSolution: ProjectInSolution) {
-        super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.project, projectInSolution.fullPath);
+    constructor(context: TreeItemContext, projectInSolution: ProjectInSolution) {
+        super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.project, projectInSolution.fullPath, projectInSolution);
         this.allowIconTheme = false;
         this.addContextValueSuffix();
     }

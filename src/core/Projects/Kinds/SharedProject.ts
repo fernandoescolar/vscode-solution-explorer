@@ -2,12 +2,13 @@ import * as path from "@extensions/path";
 import { ProjectInSolution } from "../../Solutions";
 import { PackageReference } from "../PackageReference";
 import { ProjectReference } from "../ProjectReference";
-import { StandardProject } from "./StandardProject";
+import { StandardProject, TreePart } from "./StandardProject";
 import { ProjectFile } from "..";
+import { XmlElement } from "@extensions/xml";
 
 export class SharedProject extends StandardProject {
     constructor(projectInSolution: ProjectInSolution) {
-        super(projectInSolution, null , 'shared');
+        super(projectInSolution, undefined , 'shared');
         this.setHasReferences(false);
         this.includePrefix = "$(MSBuildThisFileDirectory)";
     }
@@ -24,7 +25,7 @@ export class SharedProject extends StandardProject {
         return Promise.resolve([]);
     }
 
-    protected addFileDependents(item: any, projectFile: ProjectFile) {
+    protected addFileDependents(item: TreePart, projectFile: ProjectFile): void {
         let key = path.basename(item.virtualpath);
         if (this.dependents[key]) {
             projectFile.hasDependents = true;
@@ -35,18 +36,18 @@ export class SharedProject extends StandardProject {
         }
     }
 
-    protected replaceDependsUponNode(ref: any, pattern: string, newPattern: string) {
-        ref.elements.forEach((e: any) => {
+    protected replaceDependsUponNode(ref: XmlElement, pattern: string, newPattern: string): void {
+        ref.elements.forEach((e: XmlElement) => {
             if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
                 e.elements[0].text = e.elements[0].text.replace(pattern, newPattern);
             }
         });
     }
 
-    protected deleteDependsUponNode(node: any, pattern: string) {
+    protected deleteDependsUponNode(node: XmlElement, pattern: string): void {
         if (!node.elements) { return; }
 
-        node.elements.forEach((e: any, eIndex: number) => {
+        node.elements.forEach((e: XmlElement, eIndex: number) => {
             if (e.name === 'DependentUpon' && e.elements[0].text.startsWith(pattern)) {
                 node.elements.splice(eIndex, 1);
             }

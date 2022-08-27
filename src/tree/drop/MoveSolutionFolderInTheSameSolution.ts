@@ -8,25 +8,27 @@ export class MoveSolutionFolderInTheSameSolution extends DropHandler {
     }
 
     public async handle(source: TreeItem, target: TreeItem): Promise<Action[]> {
+        if (!target.projectInSolution) { return []; }
+
         const targetpath = this.isSolution(target) ? 'root' :
-            this.isProject(target) ? (await (<any>target).projectInSolution.parentProjectGuid) || 'root' :
-                this.isSolutionFolder(target) ? (await (<any>target).projectInSolution.projectGuid) :
+            this.isProject(target) ? target.projectInSolution.parentProjectGuid || 'root' :
+                this.isSolutionFolder(target) ? target.projectInSolution.projectGuid :
                     undefined;
 
-        if (!target.solution || !(<any>source).projectInSolution || targetpath === undefined) { return []; }
-        return [new MoveProject(target.solution, (<any>source).projectInSolution, targetpath)];
+        if (!target.solution || !source.projectInSolution || targetpath === undefined) { return []; }
+        return [new MoveProject(target.solution, source.projectInSolution, targetpath)];
     }
 
     protected isProject(item: TreeItem): boolean {
-        return !!item.project && !!(<any>item).projectInSolution;
+        return !!item.project && !!item.projectInSolution;
     }
 
     protected isSolutionFolder(item: TreeItem): boolean {
-        return !item.project && !!(<any>item).projectInSolution;
+        return !item.project && !!item.projectInSolution;
     }
 
     protected isSolution(item: TreeItem): boolean {
-        return item.contextValue.startsWith(ContextValues.solution) && !(<any>item).projectInSolution;
+        return item.contextValue.startsWith(ContextValues.solution) && !item.projectInSolution;
     }
 
     protected isValidTarget(item: TreeItem): boolean {

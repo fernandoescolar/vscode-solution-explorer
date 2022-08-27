@@ -22,12 +22,11 @@ export class RenameSolutionItemCommand extends ActionsCommand {
             return [ new RenameSolution(item.solution.fullPath, newname) ];
         }
 
-        const projectInSolution: ProjectInSolution = (<any>item).projectInSolution;
-        if (projectInSolution && item.project) {
+        if (item.projectInSolution && item.project) {
             return [ new RenameProject(item.solution, item.project, item.label, newname) ];
         }
 
-        if (projectInSolution) {
+        if (item.projectInSolution) {
             return [ new RenameSolutionFolder(item.solution, item.label, newname) ];
         }
 

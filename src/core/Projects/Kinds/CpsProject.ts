@@ -13,10 +13,10 @@ import { FileSystemBasedProject } from "./FileSystemBasedProject";
 export class CpsProject extends FileSystemBasedProject {
     private references: ProjectReference[] = [];
     private packages: PackageReference[] = [];
-    private document: any = null;
+    private document: xml.XmlElement | undefined = undefined;
     private loaded: boolean = false;
 
-    constructor(projectInSolution: ProjectInSolution, document?: any) {
+    constructor(projectInSolution: ProjectInSolution, document?: xml.XmlElement) {
         super(projectInSolution, 'cps');
 
         if (document) {
@@ -83,31 +83,24 @@ export class CpsProject extends FileSystemBasedProject {
     }
 
     private async parseProject(projectPath: string): Promise<void> {
-        let content = await fs.readFile(projectPath);
-        let document = await xml.parseToJson(content);
+        const content = await fs.readFile(projectPath);
+        const document = await xml.parseToJson(content);
         this.parseDocument(document);
     }
 
-    private parseDocument(document: any): void {
+    private parseDocument(document: xml.XmlElement): void {
         this.document = document;
-        let project = CpsProject.getProjectElement(this.document);
+        const project = CpsProject.getProjectElement(this.document);
+        if (!project) { return; }
 
-        project = project || { elements: [] };
-        if (!project.elements || !Array.isArray(project.elements)) {
-            project.elements = [];
-        }
-
-        project.elements.forEach( (element: any) => {
+        project.elements.forEach((element: xml.XmlElement) => {
             if (element.name === 'ItemGroup') {
-                if (!element.elements || !Array.isArray(element.elements)) {
-                    element.elements = [];
-                }
-
-                element.elements.forEach((e: any) => {
-                    if (e.name === 'PackageReference') {
-                        this.packages.push(new PackageReference(e.attributes.Include, e.attributes.Version));
+                CpsProject.ensureElements(element);
+                element.elements.forEach((e: xml.XmlElement) => {
+                    if (e.name === 'PackageReference' && e.attributes?.Include) {
+                        this.packages.push(new PackageReference(e.attributes.Include, e.attributes?.Version));
                     }
-                    if (e.name === 'ProjectReference') {
+                    if (e.name === 'ProjectReference' && e.attributes?.Include) {
                         let ref = e.attributes.Include.replace(/\\/g, path.sep).trim();
                         ref = ref.split(path.sep).pop();
                         let extension = ref.split('.').pop();

@@ -31,14 +31,23 @@ export class DeleteSolutionFolder implements Action {
     }
 
     private deleteProject(p: ProjectInSolution, lines: string[]): void {
+        let projectLineIndexStart = -1, projectLineIndexEnd = -1;
         lines.some((line, index, arr) => {
-            if (line.trim().startsWith('Project(') && line.indexOf('"' + p.projectGuid + '"') > 0) {
-                lines.splice(index, 2);
+            if (projectLineIndexStart < 0 && line.trim().startsWith('Project(') && line.indexOf('"' + p.projectGuid + '"') > 0) {
+                projectLineIndexStart = index;
+            }
+
+            if (projectLineIndexStart >= 0 && projectLineIndexEnd < 0 && line.trim() === 'EndProject') {
+                projectLineIndexEnd = index;
                 return true;
             }
 
             return false;
         });
+
+        if (projectLineIndexStart >= 0 && projectLineIndexEnd >= 0) {
+            lines.splice(projectLineIndexStart, projectLineIndexEnd - projectLineIndexStart + 1);
+        }
 
         let index: number;
         do {

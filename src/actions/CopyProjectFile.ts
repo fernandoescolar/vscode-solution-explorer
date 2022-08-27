@@ -83,7 +83,8 @@ export class CopyProjectFile implements Action {
         if (option === 'Keep Both All') {
             context.keepBothAll = true;
             return 'Keep Both';
-        }4
+        }
+
         if (option === 'Skip All') {
             context.skipAll = true;
             return 'Skip';

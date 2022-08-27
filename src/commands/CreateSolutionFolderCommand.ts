@@ -19,6 +19,6 @@ export class CreateSolutionFolderCommand extends ActionsCommand {
             return [];
         }
 
-        return [ new CreateSolutionFolder(item.solution, folderName, (<any>item).projectInSolution) ];
+        return [ new CreateSolutionFolder(item.solution, folderName, item.projectInSolution) ];
     }
 }

@@ -11,14 +11,14 @@ export class MoveToSolutionFolderCommand extends ActionsCommand {
     }
 
     public  shouldRun(item: TreeItem): boolean {
-        return !!item && !!item.solution &&  !!(<any>item).projectInSolution;
+        return !!item && !!item.solution &&  !!item.projectInSolution;
     }
 
     public async getActions(item: TreeItem): Promise<Action[]> {
         const folder = await dialogs.selectOption('Select folder...', () => this.getFolders(item.solution));
         if (!folder) { return []; }
 
-        const projectInSolution = (<any>item).projectInSolution;
+        const projectInSolution = item.projectInSolution;
         if (!projectInSolution) { return []; }
 
         if (item.contextValue.startsWith(ContextValues.project)) {

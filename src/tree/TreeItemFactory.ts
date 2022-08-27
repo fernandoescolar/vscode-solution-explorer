@@ -68,7 +68,7 @@ export async function createItemsFromSolution(context: TreeItemContext, solution
     if (projectInSolution) {
         Object.keys(projectInSolution.solutionItems).forEach(k => {
             const fullpath = path.join(solution.folderPath, projectInSolution.solutionItems[k]);
-            result.push(new SolutionFileTreeItem(context, k, fullpath));
+            result.push(new SolutionFileTreeItem(context, k, fullpath, projectInSolution));
         });
     }
 
@@ -131,7 +131,7 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
 
     Object.keys(project.solutionItems).forEach(k => {
         const fullpath = path.join(context.solution.folderPath, project.solutionItems[k]);
-        result.push(new SolutionFileTreeItem(context, k, fullpath));
+        result.push(new SolutionFileTreeItem(context, k, fullpath, project.projectInSolution));
     });
 
     return result;

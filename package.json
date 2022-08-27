@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -98,6 +98,23 @@
                 "category": "Solution Explorer"
             },
             {
+                "command": "solutionExplorer.revealFileInOS",
+                "title": "Reveal in OS File Manager",
+                "category": "Solution Explorer"
+            },
+            {
+                "command": "solutionExplorer.addSolutionFile",
+                "title": "Add Solution File",
+                "category": "Solution Explorer",
+                "icon": "$(new-file)"
+            },
+            {
+                "command": "solutionExplorer.deleteSolutionFile",
+                "title": "Delete Solution File",
+                "category": "Solution Explorer",
+                "icon": "$(trash)"
+            },
+            {
                 "command": "solutionExplorer.deleteFile",
                 "title": "Delete",
                 "category": "Solution Explorer",
@@ -182,6 +199,11 @@
             {
                 "command": "solutionExplorer.createSolutionFolder",
                 "title": "Create folder",
+                "category": "Solution Explorer"
+            },
+            {
+                "command": "solutionExplorer.installTemplates",
+                "title": "Install File Creation Templates",
                 "category": "Solution Explorer"
             },
             {
@@ -356,6 +378,11 @@
                 },
                 {
                     "command": "solutionExplorer.deleteFile",
+                    "when": "view == slnexpl && viewItem == project-file",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.revealFileInOS",
                     "when": "view == slnexpl && viewItem == project-file",
                     "group": "2_workspace"
                 },
@@ -605,6 +632,16 @@
                     "group": "2_workspace"
                 },
                 {
+                    "command": "solutionExplorer.installTemplates",
+                    "when": "view == slnexpl && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.installTemplates",
+                    "when": "view == slnexpl && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
                     "command": "solutionExplorer.createSolutionFolder",
                     "when": "view == slnexpl && viewItem == solution-folder",
                     "group": "2_workspace"
@@ -612,6 +649,16 @@
                 {
                     "command": "solutionExplorer.removeSolutionFolder",
                     "when": "view == slnexpl && viewItem == solution-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addSolutionFile",
+                    "when": "view == slnexpl && viewItem == solution-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.deleteSolutionFile",
+                    "when": "view == slnexpl && viewItem == solution-file",
                     "group": "2_workspace"
                 },
                 {
@@ -796,6 +843,11 @@
                 },
                 {
                     "command": "solutionExplorer.deleteFile",
+                    "when": "view == slnbrw && viewItem == project-file",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.revealFileInOS",
                     "when": "view == slnbrw && viewItem == project-file",
                     "group": "2_workspace"
                 },
@@ -1045,6 +1097,16 @@
                     "group": "2_workspace"
                 },
                 {
+                    "command": "solutionExplorer.installTemplates",
+                    "when": "view == slnbrw && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.installTemplates",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
                     "command": "solutionExplorer.createSolutionFolder",
                     "when": "view == slnbrw && viewItem == solution-folder",
                     "group": "2_workspace"
@@ -1052,6 +1114,16 @@
                 {
                     "command": "solutionExplorer.removeSolutionFolder",
                     "when": "view == slnbrw && viewItem == solution-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addSolutionFile",
+                    "when": "view == slnbrw && viewItem == solution-folder",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.deleteSolutionFile",
+                    "when": "view == slnbrw && viewItem == solution-file",
                     "group": "2_workspace"
                 },
                 {
