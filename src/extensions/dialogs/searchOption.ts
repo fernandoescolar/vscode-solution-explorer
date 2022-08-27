@@ -59,6 +59,8 @@ export async function searchOption(placeholder: string, initialSearch: string, i
                     resolve(undefined);
                 }
             }
+
+            input.hide();
         });
 
         input.onDidAccept(() => {
@@ -70,13 +72,8 @@ export async function searchOption(placeholder: string, initialSearch: string, i
                 wizard?.cancel();
                 resolve(undefined);
             }
-        });
 
-        input.onDidHide(() => {
-            if (!accepted) {
-                wizard?.cancel();
-                resolve(undefined);
-            }
+            input.hide();
         });
 
         input.show();

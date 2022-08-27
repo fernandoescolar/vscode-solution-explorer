@@ -70,6 +70,8 @@ export async function selectOption(placeholder: string, items: ItemsOrItemsResol
                     resolve(undefined);
                 }
             }
+
+            input.hide();
         });
 
         input.onDidAccept(() => {
@@ -81,13 +83,8 @@ export async function selectOption(placeholder: string, items: ItemsOrItemsResol
                 wizard?.cancel();
                 resolve(undefined);
             }
-        });
 
-        input.onDidHide(() => {
-            if (!accepted) {
-                wizard?.cancel();
-                resolve(undefined);
-            }
+            input.hide();
         });
 
         input.show();
