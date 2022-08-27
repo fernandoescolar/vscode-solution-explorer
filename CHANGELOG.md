@@ -10,6 +10,8 @@ Bugfix: Solution Explorer not loading automatically the first time thanks to [Le
 
 Bugfix: unable to add files without .cs suffix (like .json .xml ...) thanks to [LesanOuO](https://github.com/LesanOuO)
 
+Bugfix: options panel hide after selection
+
 New template system for new file creation
 
 Enhancement #57: now you can add or delete solution files
