@@ -32,6 +32,14 @@ export class CreateFileCommand extends ActionsCommand {
 
         const parameters = await this.wizard.run();
         if (!parameters) {
+            if (this.wizard?.context?.results[0]) {
+                const folderpath = this.getFolderPath(item);
+                const filename = this.getFilename(this.wizard.context.results[0]);
+                return [
+                    new CreateProjectFile(item.project, folderpath, filename),
+                    new OpenFile(path.join(folderpath, filename))
+                ];
+            }
             return [];
         }
 
