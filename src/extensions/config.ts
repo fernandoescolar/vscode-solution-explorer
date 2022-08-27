@@ -11,7 +11,6 @@ const ALTERNATIVE_SOLUTION_FOLDERS_NAME = 'altSolutionFolders';
 const XML_SPACES_NAME = 'xmlspaces';
 const XML_CLOSING_TAG_SPACE_NAME = 'xmlClosingTagSpace';
 const WIN32_ENCODING_NAME = 'win32Encoding';
-const CREATE_TEMPLATE_FOLDER_QUESTION_NAME = 'createTemplateFolderQuestion';
 const LINE_ENDINGS_NAME = 'lineEndings';
 const ITEM_NESTING_NAME = 'itemNesting';
 const OPEN_SOLUTIONS_IN_ROOT_FOLDER_NAME = 'openSolutions.inRootFolder';
@@ -84,10 +83,6 @@ export function getWin32EncodingTable(): { [id: string]: string } {
         ["936"]: "GBK",
         ["950"]: "BIG5"
     });
-}
-
-export function getCreateTemplateFolderQuestion() : boolean {
-    return config.get<boolean>(CREATE_TEMPLATE_FOLDER_QUESTION_NAME, true);
 }
 
 export function getLineEndings() : LineEndingsType {
