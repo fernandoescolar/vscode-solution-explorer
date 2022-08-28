@@ -1,6 +1,7 @@
 import { ContextValues, TreeItem } from "@tree";
 import { Action, Publish } from "@actions";
 import { ActionsCommand } from "@commands";
+import {getText} from "@extensions/dialogs";
 
 export class PublishCommand extends ActionsCommand {
     constructor() {
@@ -14,6 +15,8 @@ export class PublishCommand extends ActionsCommand {
     public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
-        return [ new Publish(item.path) ];
+        const outputPath = await getText('Output Path','Enter the output path or just click enter','') || '';
+
+        return [ new Publish(item.path, outputPath) ];
     }
 }
