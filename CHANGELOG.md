@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.6.2
+
+Adding new terminal command system.
+
 ## 0.6.1
 
 Activity bar icon updated thanks to [LesanOuO](https://github.com/LesanOuO)

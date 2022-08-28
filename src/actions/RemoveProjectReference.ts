@@ -1,8 +1,12 @@
-import { DotnetAction } from "./base/DotnetAction";
+import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class RemoveProjectReference extends DotnetAction {
+export class RemoveProjectReference extends CustomTerminalAction {
     constructor(private readonly projectPath: string, private readonly referencedProjectPath: string) {
-        super(["remove", projectPath, "reference", referencedProjectPath], RemoveProjectReference.getWorkingPath(projectPath));
+        super({
+            name: "removeProjectReferenceFromProject",
+            parameters: { projectPath, referencedProjectPath },
+            workingFolder: RemoveProjectReference.getWorkingPath(projectPath)
+        });
     }
 
     public toString(): string {

@@ -1,9 +1,12 @@
-import { DotnetAction } from "./base/DotnetAction";
-import { AddProjectReference } from "./AddProjectReference";
+import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class Clean extends DotnetAction {
+export class Clean extends CustomTerminalAction {
     constructor(private readonly projectPath: string) {
-        super(["clean", projectPath], AddProjectReference.getWorkingPath(projectPath));
+        super({
+            name: "clean",
+            parameters: { projectPath  },
+            workingFolder: Clean.getWorkingPath(projectPath)
+        });
     }
 
     public toString(): string {

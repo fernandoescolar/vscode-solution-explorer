@@ -11,7 +11,7 @@ export abstract class TerminalAction implements Action {
             return Promise.resolve();
         }
 
-        terminal.execute([...this.args.map(a => `"${a}"`)], this.workingFolder);
+        terminal.execute(this.args, this.workingFolder);
         return Promise.resolve();
     }
 

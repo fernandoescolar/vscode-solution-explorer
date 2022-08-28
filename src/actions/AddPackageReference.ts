@@ -1,19 +1,24 @@
-import { DotnetAction } from "./base/DotnetAction";
+import { TerminalCommand } from "@extensions/defaultTerminalCommands";
+import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class AddPackageReference extends DotnetAction {
+export class AddPackageReference extends CustomTerminalAction {
     constructor(private readonly projectPath: string, private readonly packageId: string, packageVersion?: string) {
-        super(AddPackageReference.getArguments(projectPath, packageId, packageVersion), AddPackageReference.getWorkingPath(projectPath));
+        super({
+            name: AddPackageReference.getTerminalCommand(projectPath, packageId, packageVersion),
+            parameters: { projectPath, packageId, packageVersion: packageVersion || "" },
+            workingFolder: AddPackageReference.getWorkingPath(projectPath)
+        });
     }
 
     public toString(): string {
         return `Add package reference ${this.packageId} to project ${this.projectPath}`;
     }
 
-    private static getArguments(projectPath: string, packageId: string, packageVersion: string | undefined): string[] {
+    private static getTerminalCommand(projectPath: string, packageId: string, packageVersion: string | undefined): TerminalCommand {
         if (packageVersion) {
-            return ["add", projectPath, "package", packageId, "-v", packageVersion];
+            return "addPackageReferenceToProjectWithVersion";
         } else {
-            return ["add", projectPath, "package", packageId];
+            return "addPackageReferenceToProject";
         }
     }
 }

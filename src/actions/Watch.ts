@@ -1,9 +1,12 @@
-import { DotnetAction } from "./base/DotnetAction";
-import { AddProjectReference } from "./AddProjectReference";
+import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class Watch extends DotnetAction {
+export class Watch extends CustomTerminalAction {
     constructor(private readonly projectPath: string) {
-        super(["watch", "run", "--project", projectPath], AddProjectReference.getWorkingPath(projectPath));
+        super({
+            name: "watch",
+            parameters: { projectPath },
+            workingFolder: Watch.getWorkingPath(projectPath)
+        });
     }
 
     public toString(): string {
