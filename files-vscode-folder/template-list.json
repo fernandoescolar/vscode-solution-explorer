@@ -41,6 +41,12 @@
             "extension": "vb",
             "file": "./class.vb-template",
             "parameters": "./template-parameters.js"
+        },
+        {
+            "name": "ApiController",
+            "extension": "cs",
+            "file": "./apicontroller.cs-template",
+            "parameters": "./template-parameters.js"
         }
     ]
 }

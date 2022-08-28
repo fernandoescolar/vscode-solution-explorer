@@ -42,20 +42,24 @@ export async function findIconPath(name: string, path: string, contextValue: str
     }
 
     if (contextValue.startsWith(ContextValues.projectReferences)) {
-        return getIconPath('references.svg');
+        return getIconPath('ReferenceGroup.svg','ReferenceGroup-dark.svg');
     }
 
     if (contextValue.startsWith(ContextValues.projectReferencedProject)) {
-        return getIconPath('referenced-project.svg');
+        return getIconPath('Application.svg','Application-dark.svg');
     }
 
     if (contextValue.startsWith(ContextValues.projectReferencedPackage)) {
-        return getIconPath('packages.svg');
+        return getIconPath('PackageReference.svg','PackageReference-dark.svg');
     }
 
     if (contextValue === ContextValues.solutionFolder || contextValue.startsWith(ContextValues.projectFolder)) {
         if (path && path.endsWith("wwwroot")) {
-            return getIconPath('wwwroot.svg');
+            return getIconPath('WebFolderOpened.svg','WebFolderOpened-dark.svg');
+        }
+
+        if (path && path.endsWith("Properties")) {
+            return getIconPath('PropertiesFolderClosed.svg','PropertiesFolderClosed-dark.svg');
         }
 
         if (path && path.endsWith(".github")) {
@@ -66,7 +70,7 @@ export async function findIconPath(name: string, path: string, contextValue: str
     }
 
     if (contextValue.startsWith(ContextValues.project)) {
-        return getIconPathFromExtension(path, 'csproj.svg');
+        return await getIconPathFromExtension(path, 'csproj.svg');
     }
 
     return getIconPath('file.svg');
