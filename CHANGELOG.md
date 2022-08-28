@@ -4,7 +4,17 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 ## 0.6.2
 
-Adding new terminal command system.
+Adding new terminal command system
+
+Better display of nuget package version in tree
+
+Use more Visual Studio 2022 icons thanks to [LesanOuO](https://github.com/LesanOuO)
+
+Add api controller template file thanks to [LesanOuO](https://github.com/LesanOuO)
+
+Update: rename files while modifying class name thanks to [LesanOuO](https://github.com/LesanOuO)
+
+Bugfix: await icon loading thanks to [LesanOuO](https://github.com/LesanOuO)
 
 ## 0.6.1
 
