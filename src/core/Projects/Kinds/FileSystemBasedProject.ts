@@ -99,6 +99,12 @@ export abstract class FileSystemBasedProject extends Project {
         const folder = path.dirname(itemPath);
         const newItempath = path.join(folder, name);
         await fs.rename(itemPath, newItempath);
+
+        if (path.extname(newItempath) === '.cs') {
+            let data = await fs.readFile(newItempath);
+            await fs.writeFile(newItempath, data.replaceAll(path.basename(itemPath).split('.')[0], name.split('.')[0]));
+        }
+
         return newItempath;
     }
 
