@@ -70,7 +70,7 @@ export async function findIconPath(name: string, path: string, contextValue: str
     }
 
     if (contextValue.startsWith(ContextValues.project)) {
-        return getIconPathFromExtension(path, 'csproj.svg');
+        return await getIconPathFromExtension(path, 'csproj.svg');
     }
 
     return getIconPath('file.svg');
