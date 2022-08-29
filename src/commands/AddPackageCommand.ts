@@ -19,14 +19,9 @@ export class AddPackageCommand extends ActionsCommand {
     public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.project) { return []; }
 
-        this.nugetFeeds = await nuget.getNugetFeeds(item.project.fullPath);
-        if (this.nugetFeeds.length === 0) {
-            const defaultNugetFeed = await nuget.getDefaultNugetFeed();
-            this.nugetFeeds = [ defaultNugetFeed ]
-        }
-
+        const projectFullPath = item.project.fullPath;
         this.wizard = new dialogs.Wizard('Add package')
-                                 .selectOption('Select a feed', this.nugetFeeds.map(f => f.name))
+                                 .selectOption('Select a feed', () => this.getNugetFeeds(projectFullPath) )
                                  .searchOption('Search a package', search => this.searchAndMapNugetPackages(search), '')
                                  .selectOption('Select a package', () => this.getCurrentPackageVersions(), () => this.getCurrentPackageDefaultVersion());
 
@@ -36,6 +31,16 @@ export class AddPackageCommand extends ActionsCommand {
         }
 
         return [ new AddPackageReference(item.project.fullPath, parameters[1], parameters[2]) ];
+    }
+
+    private async getNugetFeeds(projectFullPath: string): Promise<string[]> {
+        this.nugetFeeds = await nuget.getNugetFeeds(projectFullPath);
+        if (this.nugetFeeds.length === 0) {
+            const defaultNugetFeed = await nuget.getDefaultNugetFeed();
+            this.nugetFeeds = [ defaultNugetFeed ];
+        }
+
+        return this.nugetFeeds.map(f => f.name);
     }
 
     private async searchAndMapNugetPackages(packageName: string): Promise<string[]> {
