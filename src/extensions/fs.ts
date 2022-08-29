@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import {existsSync} from 'fs';
 
 export async function copy(sourcePath: string, targetPath: string): Promise<void> {
     const sourceUri = vscode.Uri.file(sourcePath);
@@ -7,13 +8,14 @@ export async function copy(sourcePath: string, targetPath: string): Promise<void
 }
 
 export async function exists(path: string): Promise<boolean> {
-    const uri = vscode.Uri.file(path);
-    try {
-        await vscode.workspace.fs.stat(uri);
-        return true;
-    } catch (e) {
-        return false;
-    }
+    // const uri = vscode.Uri.file(path);
+    // try {
+    //     await vscode.workspace.fs.stat(uri);
+    //     return true;
+    // } catch (e) {
+    //     return false;
+    // }
+    return existsSync(path)
 }
 
 export async function readFile(path: string): Promise<string> {
