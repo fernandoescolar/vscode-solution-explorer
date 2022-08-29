@@ -1708,7 +1708,8 @@
                         "bin",
                         "node_modules",
                         "obj",
-                        ".ds_store"
+                        ".ds_store",
+                        ".vs"
                     ],
                     "description": "Folder and filenames to ignore when get a dotnet core project content"
                 },
