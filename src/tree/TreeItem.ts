@@ -137,7 +137,7 @@ export abstract class TreeItem extends vscode.TreeItem {
 		if (iconType === config.ICONS_CUSTOM
 		   || (iconType === config.ICONS_MIXED && !this._allowIconTheme)) {
 			this.iconPath = await TreeItemIconProvider.findIconPath(this.label, this.path || "", this.contextValue);
-			if (this.contextValue.startsWith(ContextValues.projectFile)) {
+			if (this.contextValue.startsWith(ContextValues.projectFile)||this.contextValue.startsWith(ContextValues.projectFolder)) {
 				// can see the error message and git status in solution explorer
 				this.resourceUri = vscode.Uri.file(this.path?this.path:path.dirname(this.solution.fullPath));
 			}
