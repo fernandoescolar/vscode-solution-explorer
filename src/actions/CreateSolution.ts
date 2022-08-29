@@ -1,8 +1,12 @@
-import { DotnetAction } from "./base/DotnetAction";
+import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class CreateSolution extends DotnetAction {
+export class CreateSolution extends CustomTerminalAction {
     constructor(private readonly solutionName: string, workingFolder: string) {
-        super(["new", "sln", "-n", solutionName], workingFolder);
+        super({
+            name: "createSolution",
+            parameters: { solutionName },
+            workingFolder
+        })
     }
 
     public toString(): string {

@@ -1,7 +1,6 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { Action, ActionContext } from "./base/Action";
 
-
 export class SelectActiveDocumentInTree implements Action {
     constructor(private readonly provider: SolutionExplorerProvider) {
     }

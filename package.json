@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.6.1",
+    "version": "0.6.2",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -1791,6 +1791,11 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Sets whether solutions will be automatically loaded from the current selected solution in Omnisharp extension."
+                },
+                "vssolution.customCommands": {
+                    "type": "object",
+                    "default": {},
+                    "description": "Sets custom the terminal commands."
                 }
             }
         }

@@ -1,8 +1,12 @@
-import { DotnetAction } from "./base/DotnetAction";
+import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class CreateProject extends DotnetAction {
+export class CreateProject extends CustomTerminalAction {
     constructor(projectType: string, language: string, private readonly projectName: string, folderName: string, workingFolder: string) {
-        super(["new", projectType, "-lang", language, "-n", projectName, "-o", folderName], workingFolder);
+        super({
+            name: "createProject",
+            parameters: { projectType, language, projectName, folderName },
+            workingFolder
+        });
     }
 
     public toString(): string {

@@ -1,9 +1,12 @@
-import { DotnetAction } from "./base/DotnetAction";
-import { AddProjectReference } from "./AddProjectReference";
+import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class Publish extends DotnetAction {
-    constructor(private readonly projectPath: string, private readonly outputPath: string) {
-        super(["publish", projectPath, ...(outputPath!==''?["-o",outputPath]:[])], AddProjectReference.getWorkingPath(projectPath));
+export class Publish extends CustomTerminalAction {
+    constructor(private readonly projectPath: string) {
+        super({
+            name: "publish",
+            parameters: { projectPath },
+            workingFolder: Publish.getWorkingPath(projectPath)
+        });
     }
 
     public toString(): string {

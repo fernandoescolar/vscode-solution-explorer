@@ -111,6 +111,43 @@ Only available when the project is of kind CPS (dotnet core).
 
 ![Run dotnet commands in solutions and projects](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-dotnet-commands.gif)
 
+If you want to customize the terminal commands you can change them in the settings json file. These are the default commands configuration:
+
+```json
+{
+  "vssolution.customCommands": {
+    "addPackageReferenceToProject": [ "dotnet", "add", "\"$projectPath\"", "package", "\"$packageId\"" ],
+    "addPackageReferenceToProjectWithVersion": [ "dotnet", "add", "\"$projectPath\"", "package", "\"$packageId\"", "-v", "\"$packageVersion\"" ],
+    "addProjectReferenceToProject": [ "dotnet", "add", "\"$projectPath\"", "reference", "\"$referencedprojectPath\"" ],
+    "build": [ "dotnet", "build", "\"$projectPath\"" ],
+    "clean": [ "dotnet", "clean", "\"$projectPath\"" ],
+    "createProject": [ "dotnet", "new", "\"$projectType\"", "-lang", "\"$language\"", "-n", "\"$projectName\"", "-o", "\"$folderName\"" ],
+    "createSolution": [ "dotnet", "new", "sln", "-n", "\"$solutionName\"" ],
+    "pack": [ "dotnet", "pack", "\"$projectPath\"" ],
+    "publish": [ "dotnet", "publish", "\"$projectPath\"" ],
+    "removeProjectFromSolution": [ "dotnet", "sln", "\"$solutionPath\"", "remove", "\"$projectPath\"" ],
+    "removePackageReferenceFromProject": [ "dotnet", "remove", "\"$projectPath\"", "package", "\"$packageId\"" ],
+    "removeProjectReferenceFromProject": [ "dotnet", "remove", "\"$projectPath\"", "reference", "\"$referencedprojectPath\"" ],
+    "restore": [ "dotnet", "restore", "\"$projectPath\"" ],
+    "run": [ "dotnet", "run", "--project", "\"$projectPath\"" ],
+    "test": [ "dotnet", "test", "\"$projectPath\"" ],
+    "watch": [ "dotnet", "watch", "run", "--project", "\"$projectPath\"" ]
+  }
+}
+```
+
+It will replace keywords like `$solutionPath` or `$projectPath` with the actual values.
+
+As an example, if you want to compile in `Release` mode everytime you publish a project you can create somethink like:
+
+```json
+{
+  "vssolution.customCommands":  {
+    "publish": [ "dotnet", "publish", "\"$projectPath\"", "-c", "Release" ]
+  }
+}
+```
+
 ### Drag and drop files, folders and projects
 
 ![Drag and drop files, folders and projects](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-drag-and-drop.gif)
@@ -204,6 +241,8 @@ You can configure the extension in the Visual Studio Code settings panel:
 - `vssolution.altSolutionFolders` If there is no solution in the workplace root folder, it will search for solutions in any of these folders.
 
 - `vssolution.win32Encoding` Win32 "codepage" to "iconv.js" encoding equivalences.
+
+- `vssolution.customCommands` Sets custom the terminal commands.
 
 - `vssolution.openSolutions.inRootFolder` Sets whether solutions will be automatically loaded from the root folder.
 

@@ -3,7 +3,8 @@ import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } fr
 
 export class ProjectReferencedPackageTreeItem extends TreeItem {
     constructor(context: TreeItemContext, pkgRef: PackageReference) {
-        super(context, pkgRef.name + ' (' + pkgRef.version + ')', TreeItemCollapsibleState.None, ContextValues.projectReferencedPackage, pkgRef.name);
+        super(context, pkgRef.name, TreeItemCollapsibleState.None, ContextValues.projectReferencedPackage, pkgRef.name);
+        this.description = pkgRef.version;
         this.allowIconTheme = false;
         this.addContextValueSuffix();
     }

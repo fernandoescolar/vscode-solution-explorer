@@ -1,10 +1,12 @@
-import { DotnetAction } from "./base/DotnetAction";
-import { AddProjectReference } from "./AddProjectReference";
+import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-
-export class Restore extends DotnetAction {
+export class Restore extends CustomTerminalAction {
     constructor(private readonly projectPath: string) {
-        super(["restore", projectPath], AddProjectReference.getWorkingPath(projectPath));
+        super({
+            name: "restore",
+            parameters: { projectPath },
+            workingFolder: Restore.getWorkingPath(projectPath)
+        });
     }
 
     public toString(): string {

@@ -1,8 +1,12 @@
-import { DotnetAction } from "./base/DotnetAction";
+import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class RemoveExistingProject extends DotnetAction {
+export class RemoveExistingProject extends CustomTerminalAction {
     constructor(private readonly solutionPath: string, private readonly projectPath: string) {
-        super(["sln", solutionPath, "remove", projectPath], RemoveExistingProject.getWorkingPath(solutionPath));
+        super({
+            name: "removeProjectFromSolution",
+            parameters: { solutionPath, projectPath },
+            workingFolder: RemoveExistingProject.getWorkingPath(solutionPath)
+        });
     }
 
     public toString(): string {

@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { defaultTerminalCommands, TerminalCommand } from "./defaultTerminalCommands";
 
 const CONFIGURATION_NAME = 'vssolution';
 const ITEM_TYPE_NAME = 'xxprojItemTypes';
@@ -17,6 +18,7 @@ const OPEN_SOLUTIONS_IN_ROOT_FOLDER_NAME = 'openSolutions.inRootFolder';
 const OPEN_SOLUTIONS_IN_ALTERNATIVE_FOLDERS_NAME = 'openSolutions.inAltFolders';
 const OPEN_SOLUTIONS_IN_FOLDER_AND_SUBFOLDERS_NAME = 'openSolutions.inFoldersAndSubfolders';
 const OPEN_SOLUTION_SELECTED_IN_OMNISHARP_NAME = 'openSolutions.selectedInOmnisharp';
+const CUSTOM_COMMANDS_NAME = 'customCommands';
 
 let config: vscode.WorkspaceConfiguration;
 
@@ -107,6 +109,16 @@ export function getOpenSolutionsInFoldersAndSubfolders(): boolean {
 
 export function getOpenSolutionsSelectedInOmnisharp(): boolean {
     return config.get<boolean>(OPEN_SOLUTION_SELECTED_IN_OMNISHARP_NAME, false);
+}
+
+export function getCustomCommands(key: TerminalCommand): string[] {
+    const commands = config.get<{ [id: string]: string[] }>(CUSTOM_COMMANDS_NAME, {});
+    let result = commands[key];
+    if (!result || !Array.isArray(result) || result.length === 0) {
+        result = defaultTerminalCommands[key];
+    }
+
+    return result;
 }
 
 export type LineEndingsType = "lf" | "crlf";
