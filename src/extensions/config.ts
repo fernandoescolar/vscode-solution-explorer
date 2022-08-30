@@ -26,6 +26,10 @@ export function register() {
     config = vscode.workspace.getConfiguration(CONFIGURATION_NAME);
 }
 
+export function getNuGetSources(): any {
+    return config.sources
+}
+
 export function getItemTypes(): { [id: string]: string } {
     return config.get<{ [id: string]: string }>(ITEM_TYPE_NAME, {
         ["*"   ]: "Content",
