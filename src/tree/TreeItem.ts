@@ -5,6 +5,7 @@ import { ProjectInSolution, SolutionFile } from "@core/Solutions";
 import { Project } from "@core/Projects";
 import * as TreeItemIconProvider from "./TreeItemIconProvider";
 import { TreeItemContext } from "./TreeItemContext";
+import { ContextValues } from "./ContextValues";
 
 export { TreeItemCollapsibleState, Command } from "vscode";
 
@@ -136,6 +137,10 @@ export abstract class TreeItem extends vscode.TreeItem {
 		if (iconType === config.ICONS_CUSTOM
 		   || (iconType === config.ICONS_MIXED && !this._allowIconTheme)) {
 			this.iconPath = await TreeItemIconProvider.findIconPath(this.label, this.path || "", this.contextValue);
+			if (this.contextValue.startsWith(ContextValues.projectFile)||this.contextValue.startsWith(ContextValues.projectFolder)) {
+				// can see the error message and git status in solution explorer
+				this.resourceUri = vscode.Uri.file(this.path?this.path:path.dirname(this.solution.fullPath));
+			}
 		} else {
 			let fullpath = this.path;
 			if (!fullpath) { fullpath = path.dirname(this.solution.fullPath); }
