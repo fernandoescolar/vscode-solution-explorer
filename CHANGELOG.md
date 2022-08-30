@@ -2,6 +2,20 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.6.3
+
+Bugfix #215 copy the commands array to avoid modifying the original config
+
+Bugfix #214 fixing icon size
+
+Sort .NET Core default folders ("Properties" and "wwwroot") thanks to [LesanOuO](https://github.com/LesanOuO)
+
+Let solution explorer can see code error and git status thanks to [LesanOuO](https://github.com/LesanOuO)
+
+Add netcoreIgnore: .vs thanks to [LesanOuO](https://github.com/LesanOuO)
+
+Async nuget feeds loading
+
 ## 0.6.2
 
 Adding new terminal command system
