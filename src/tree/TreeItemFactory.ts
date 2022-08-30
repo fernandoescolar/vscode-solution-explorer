@@ -102,13 +102,16 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
     let items = await project.getProjectFilesAndFolders(virtualPath);
     const head = ['properties','wwwroot']
     items.folders.sort((a, b) => {
-        let x : string = a.name.toLowerCase();
-        let y : string = b.name.toLowerCase();
-
-        if (head.includes(x)) {
-            return -1
-        } else if (head.includes(y)) {
-            return 1
+        const x : string = a.name.toLowerCase();
+        const y : string = b.name.toLowerCase();
+        const hx = head.indexOf(x);
+        const hy = head.indexOf(y);
+        if (hx >= 0 && hy >= 0) {
+            return hx - hy;
+        } else if (hx >= 0) {
+            return -1;
+        } else if (hy >= 0) {
+            return 1;
         } else {
             return  x < y ? -1 : x > y ? 1 : 0;
         }
