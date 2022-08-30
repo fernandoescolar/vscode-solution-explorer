@@ -118,7 +118,7 @@ export function getCustomCommands(key: TerminalCommand): string[] {
         result = defaultTerminalCommands[key];
     }
 
-    return result;
+    return result.slice();
 }
 
 export type LineEndingsType = "lf" | "crlf";
