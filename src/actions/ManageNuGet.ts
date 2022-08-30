@@ -35,7 +35,7 @@ export class ManageNuGet implements Action {
       return
     }
 
-    const vscexpress = new VSCExpress(this.context, 'out/nuget-management')
+    const vscexpress = new VSCExpress(this.context, 'webview/nuget-management/dist')
     let panel = vscexpress.open('index.html', 'NuGet Management', vscode.ViewColumn.One)
 
     let taskManager = new TaskManager(vscode.tasks.executeTask, (e: any) => {
