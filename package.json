@@ -70,6 +70,10 @@
         ],
         "commands": [
             {
+                "command": "solutionExplorer.manageNuget",
+                "title": "Open NuGet Management"
+            },
+            {
                 "command": "solutionExplorer.openSolution",
                 "title": "Open Solution",
                 "category": "Solution Explorer",
@@ -510,6 +514,11 @@
                     "command": "solutionExplorer.addPackage",
                     "when": "view == slnexpl && viewItem == project-referenced-packages-cps",
                     "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.manageNuget",
+                    "when": "view == slnexpl && viewItem == project-referenced-packages-cps",
+                    "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removePackage",
@@ -975,6 +984,11 @@
                     "command": "solutionExplorer.addPackage",
                     "when": "view == slnbrw && viewItem == project-referenced-packages-cps",
                     "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.manageNuget",
+                    "when": "view == slnbrw && viewItem == project-referenced-packages-cps",
+                    "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removePackage",
@@ -1669,6 +1683,18 @@
             "type": "object",
             "title": "vscode-solution-explorer",
             "properties": {
+                "vssolution.sources": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "uniqueItems": true,
+                    "minItems": 1,
+                    "default": [
+                      "{\"name\": \"nuget.org\",\"url\": \"https://api.nuget.org/v3/index.json\"}"
+                    ],
+                    "description": "NuGet sources"
+                },
                 "vssolution.showMode": {
                     "type": "string",
                     "enum": [
@@ -1708,7 +1734,8 @@
                         "bin",
                         "node_modules",
                         "obj",
-                        ".ds_store"
+                        ".ds_store",
+                        ".vs"
                     ],
                     "description": "Folder and filenames to ignore when get a dotnet core project content"
                 },
@@ -1824,6 +1851,7 @@
         "handlebars": "^4.7.7",
         "node-fetch": "^3.2.10",
         "uuid": "^8.3.2",
+        "vscode-express": "^1.0.1",
         "xml-js": "^1.6.11"
     }
 }

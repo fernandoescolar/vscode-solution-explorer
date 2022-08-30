@@ -100,6 +100,19 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
     let result: TreeItem[] = [];
 
     let items = await project.getProjectFilesAndFolders(virtualPath);
+    let head = ['properties','wwwroot']
+    items.folders.sort((a, b) => {
+        let x : string = a.name.toLowerCase();
+        let y : string = b.name.toLowerCase();
+
+        if (head.includes(x)) {
+            return -1
+        } else if (head.includes(y)) {
+            return 1
+        } else {
+            return  x < y ? -1 : x > y ? 1 : 0;
+        }
+    })
     items.folders.forEach(folder => {
         result.push(new ProjectFolderTreeItem(context, folder));
     });
