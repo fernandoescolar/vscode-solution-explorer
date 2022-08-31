@@ -1,10 +1,13 @@
 import * as path from "@extensions/path";
 import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues, TreeItemFactory } from "@tree";
-import { ProjectFolder } from "@core/Projects";
+import { ProjectItemEntry } from "@core/Projects";
 
 export class ProjectFolderTreeItem extends TreeItem {
-    constructor(context: TreeItemContext, private readonly projectFolder: ProjectFolder) {
+    constructor(context: TreeItemContext, private readonly projectFolder: ProjectItemEntry) {
         super(context, projectFolder.name, TreeItemCollapsibleState.Collapsed, ContextValues.projectFolder, projectFolder.fullPath);
+        if (projectFolder.isLink) {
+            this.description = "link";
+        }
     }
 
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
@@ -12,7 +15,7 @@ export class ProjectFolderTreeItem extends TreeItem {
             return [];
         }
 
-        let virtualPath = this.projectFolder.fullPath.replace(path.dirname(this.project.fullPath), '');
+        let virtualPath = this.projectFolder.relativePath;
         if (virtualPath.startsWith(path.sep)) {
             virtualPath = virtualPath.substring(1);
         }

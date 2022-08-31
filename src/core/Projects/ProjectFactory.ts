@@ -1,13 +1,7 @@
 import * as fs from "@extensions/fs";
-import * as xml from "@extensions/xml";
 import { ProjectInSolution, SolutionProjectType, ProjectTypeIds } from "../Solutions";
-import { CpsProject } from "./Kinds/CpsProject";
-import { StandardProject } from "./Kinds/StandardProject";
-import { WebsiteProject } from "./Kinds/WebsiteProject";
+import { MsBuildProject } from "./MsBuildProject";
 import { Project } from "./Project";
-import { SharedProject } from "./Kinds/SharedProject";
-import { DeployProject } from "./Kinds/DeployProject";
-import { NoReferencesStandardProject } from "./Kinds/NoReferencesStandardProject";
 
 const cpsProjectTypes = [ ProjectTypeIds.cpsCsProjectGuid, ProjectTypeIds.cpsVbProjectGuid, ProjectTypeIds.cpsProjectGuid ];
 const standardProjectTypes = [ ProjectTypeIds.csProjectGuid, ProjectTypeIds.fsProjectGuid, ProjectTypeIds.vbProjectGuid, ProjectTypeIds.vcProjectGuid, ProjectTypeIds.cpsFsProjectGuid ];
@@ -29,29 +23,29 @@ export class ProjectFactory {
 
         let result: Project | undefined = undefined;
         if (project.fullPath.toLocaleLowerCase().endsWith(".njsproj")) {
-            result = await ProjectFactory.loadNoReferencesStandardProject(project);
+            result = ProjectFactory.loadNoReferencesStandardProject(project);
 
         }
         if (project.projectType === SolutionProjectType.knownToBeMSBuildFormat
             && cpsProjectTypes.indexOf(project.projectTypeId) >= 0) {
-            result = await ProjectFactory.loadCpsProject(project);
+            result = ProjectFactory.loadCpsProject(project);
         }
 
         if (project.projectType === SolutionProjectType.knownToBeMSBuildFormat
             && standardProjectTypes.indexOf(project.projectTypeId) >= 0) {
-            result = await ProjectFactory.determineStandardProject(project);
+            result = ProjectFactory.determineStandardProject(project);
         }
 
         if (project.projectType === SolutionProjectType.webProject) {
-            result = await ProjectFactory.loadWebsiteProject(project);
+            result = ProjectFactory.loadWebsiteProject(project);
         }
 
         if (project.projectTypeId === ProjectTypeIds.shProjectGuid) {
-            result = await ProjectFactory.loadSharedProject(project);
+            result = ProjectFactory.loadSharedProject(project);
         }
 
         if (project.projectTypeId === ProjectTypeIds.deployProjectGuid) {
-            result = await ProjectFactory.loadDeploydProject(project);
+            result = ProjectFactory.loadDeploydProject(project);
         }
 
         const fileExtension = projectFileExtensions[project.projectTypeId];
@@ -62,44 +56,27 @@ export class ProjectFactory {
         return result;
     }
 
-    private static async determineStandardProject(project: ProjectInSolution): Promise<Project | undefined> {
-        const document =  await ProjectFactory.loadProjectDocument(project.fullPath);
-        const element = Project.getProjectElement(document);
-        if (!element) {
-            return undefined;
-        }
-
-        if (element.attributes.Sdk && element.attributes.Sdk.startsWith("Microsoft.NET.Sdk")) {
-            return new CpsProject(project, document);
-        }
-
-        return new StandardProject(project, document);
+    private static determineStandardProject(project: ProjectInSolution): Project {
+        return new MsBuildProject(project.fullPath);
     }
 
-    private static async loadProjectDocument(projectFullPath: string): Promise<xml.XmlElement> {
-        let content = await fs.readFile(projectFullPath);
-        return await xml.parseToJson(content);
+    private static loadCpsProject(project: ProjectInSolution): Project {
+        return new MsBuildProject(project.fullPath);
     }
 
-    private static async loadCpsProject(project: ProjectInSolution): Promise<Project> {
-        let document =  await ProjectFactory.loadProjectDocument(project.fullPath);
-        return new CpsProject(project, document);
+    private static loadNoReferencesStandardProject(project: ProjectInSolution): Project {
+        return new MsBuildProject(project.fullPath, false);
     }
 
-    private static loadNoReferencesStandardProject(project: ProjectInSolution): Promise<Project> {
-        return Promise.resolve(new NoReferencesStandardProject(project));
+    private static loadWebsiteProject(project: ProjectInSolution): Project {
+        return new MsBuildProject(project.fullPath);
     }
 
-    private static loadWebsiteProject(project: ProjectInSolution): Promise<Project> {
-        project.fullPath = project.fullPath + '.web-project';
-        return Promise.resolve(new WebsiteProject(project));
+    private static loadSharedProject(project: ProjectInSolution): Project {
+        return new MsBuildProject(project.fullPath, false, "$(MSBuildThisFileDirectory)");
     }
 
-    private static loadSharedProject(project: ProjectInSolution): Promise<Project> {
-        return Promise.resolve(new SharedProject(project));
-    }
-
-    private static loadDeploydProject(project: ProjectInSolution): Promise<Project> {
-        return Promise.resolve(new DeployProject(project));
+    private static loadDeploydProject(project: ProjectInSolution): Project {
+        return new MsBuildProject(project.fullPath, false);
     }
 }

@@ -1,7 +1,7 @@
 import * as path from "@extensions/path";
 import { getItemNesting } from "@extensions/config";
-import { ProjectInSolution, SolutionProjectType, SolutionFile, ProjectTypeIds } from "@core/Solutions";
-import { Project, ProjectFactory, ProjectFile } from "@core/Projects";
+import { ProjectInSolution, SolutionProjectType, SolutionFile } from "@core/Solutions";
+import { Project, ProjectFactory, ProjectItemEntry } from "@core/Projects";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree/TreeItem";
 import { TreeItemContext } from "@tree/TreeItemContext";
@@ -17,11 +17,6 @@ import { WebSiteProjectTreeItem } from "@tree/items/website/WebSiteProjectTreeIt
 import { SharedProjectTreeItem } from "@tree/items/standard/SharedProjectTreeItem";
 import { DeployProjectTreeItem } from "@tree/items/standard/DeployProjectTreeItem";
 import { SolutionFileTreeItem } from "@tree/items/SolutionFileTreeItem";
-
-// export function CreateNoSolution(provider: SolutionExplorerProvider, rootPath: string): Promise<TreeItem> {
-//     let context = new TreeItemContext(provider, undefined, rootPath);
-//     return Promise.resolve(new NoSolutionTreeItem(context, rootPath));
-// }
 
 export async function createFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile, workspaceRoot: string): Promise<TreeItem> {
     let context = new TreeItemContext(provider, solution, workspaceRoot);
@@ -77,13 +72,13 @@ export async function createItemsFromSolution(context: TreeItemContext, solution
 
 async function createFromProject(context: TreeItemContext, project: ProjectInSolution): Promise<TreeItem> {
     if (project.projectType === SolutionProjectType.solutionFolder) {
-        let treeItem = await SolutionFolderTreeItem.create(context, project);
+        const treeItem = await SolutionFolderTreeItem.create(context, project);
         await treeItem.getChildren();
         return treeItem;
     }
 
-    let p = await ProjectFactory.parse(project);
-    let projectContext = context.copy(p ?? undefined);
+    const p = await ProjectFactory.parse(project);
+    const projectContext = context.copy(p);
     if (p) {
         if (p.type === 'cps') { return new CpsProjectTreeItem(projectContext, project); }
         if (p.type === 'standard') { return new StandardProjectTreeItem(projectContext, project); }
@@ -97,11 +92,15 @@ async function createFromProject(context: TreeItemContext, project: ProjectInSol
 }
 
 export async function createItemsFromProject(context: TreeItemContext, project: Project, virtualPath?: string): Promise<TreeItem[]> {
-    let result: TreeItem[] = [];
+    if (!virtualPath) { virtualPath = "."; }
 
-    let items = await project.getProjectFilesAndFolders(virtualPath);
+    const result: TreeItem[] = [];
+    const items = await project.getProjectItemEntries();
+    const folders = items.filter(i => i.isDirectory && path.dirname(i.relativePath) === virtualPath);
+    const files = items.filter(i => !i.isDirectory && path.dirname(i.relativePath) === virtualPath);
+
     const head = ['properties','wwwroot']
-    items.folders.sort((a, b) => {
+    folders.sort((a, b) => {
         const x : string = a.name.toLowerCase();
         const y : string = b.name.toLowerCase();
         const hx = head.indexOf(x);
@@ -116,39 +115,30 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
             return  x < y ? -1 : x > y ? 1 : 0;
         }
     })
-    items.folders.forEach(folder => {
+    folders.forEach(folder => {
         result.push(new ProjectFolderTreeItem(context, folder));
     });
 
     const useNesting = getItemNesting();
-    if (useNesting) {
-        let threePointFiles : ProjectFile[] = items.files.filter(f => f.name.split('.').length > 2);
-        let handledthreePointFiles: ProjectFile[] = [];
-        items.files.forEach(file => {
-            if (threePointFiles.indexOf(file) >= 0) { return; }
-            if (threePointFiles.length > 0) {
-                const name = file.name.split('.')[0];
-                const extension = path.extname(file.name).substring(1);
-                const related = threePointFiles.filter(f => f.name.startsWith(name) && f.name.endsWith(extension) && handledthreePointFiles.indexOf(f) < 0);
-                handledthreePointFiles.push(...related);
-                result.push(new ProjectFileTreeItem(context, file, related));
-            } else {
-                result.push(new ProjectFileTreeItem(context, file));
-            }
-        });
-        threePointFiles.filter(f => handledthreePointFiles.indexOf(f) < 0).forEach(file => {
-            result.push(new ProjectFileTreeItem(context, file));
-        });
-    } else {
-        items.files.forEach(file => {
-            result.push(new ProjectFileTreeItem(context, file));
-        });
-    }
+    files.forEach(file => {
+        const related: ProjectItemEntry[] = getDependants(items, path.dirname(project.fullPath), file.fullPath);
+        if (useNesting) {
+            related.push(...getNestedFiles(files, file.relativePath));
+        }
 
-    Object.keys(project.solutionItems).forEach(k => {
-        const fullpath = path.join(context.solution.folderPath, project.solutionItems[k]);
-        result.push(new SolutionFileTreeItem(context, k, fullpath, project.projectInSolution));
+        result.push(new ProjectFileTreeItem(context, file, related));
     });
 
     return result;
+}
+
+function getNestedFiles(files: ProjectItemEntry[], relativeFilePath: string): ProjectItemEntry[] {
+    const filename = path.basename(relativeFilePath);
+    const extension = path.extname(filename);
+    const name = path.basename(filename, extension) + ".";
+    return files.filter(f => f.name !== filename && f.name.startsWith(name) && f.name.endsWith(extension));
+}
+
+function getDependants(files: ProjectItemEntry[], projectFolderPath: string, fullFilePath: string): ProjectItemEntry[] {
+    return files.filter(f => f.dependentUpon && path.join(projectFolderPath, f.dependentUpon) === fullFilePath);
 }

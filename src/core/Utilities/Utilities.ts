@@ -27,6 +27,22 @@ export async function searchFilesInDir(startPath:string, extension: string, recu
     return result;
 }
 
+export async function listFilesAndDirectoriesRecursive(searchPath: string) : Promise<string[]> {
+    const result: string[] = [];
+    const files = await fs.readdir(searchPath);
+    for (let i = 0; i < files.length; i++) {
+        const filename = path.join(searchPath, files[i]);
+        result.push(filename);
+        const isDirectory = await fs.isDirectory(filename);
+        if (isDirectory) {
+            const subresult = await listFilesAndDirectoriesRecursive(filename);
+            result.push(...subresult);
+        }
+    }
+
+    return result;
+}
+
 export async function getDirectoryItems (dirPath: string): Promise<DirectorySearchResult> {
     if (!(await fs.exists(dirPath))) {
         throw new Error("Directory doesn't exist");

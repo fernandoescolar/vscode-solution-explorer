@@ -1,45 +1,40 @@
-import { ProjectInSolution } from "../Solutions";
-import { ProjectFile } from "./ProjectFile";
-import { ProjectFolder } from "./ProjectFolder";
-import { PackageReference } from "./PackageReference";
-import { ProjectReference } from "./ProjectReference";
-import { XmlElement } from "@extensions/xml";
-
-export type ProjectFileStat = { exists: boolean, filename: string, fullpath: string };
+import * as path from "@extensions/path";
+import { PackageReference, ProjectItemEntry, ProjectReference, Reference } from "./Items";
+import { ProjectFileStat } from "./ProjectFileStat";
 
 export abstract class Project {
-    private _hasReferences: boolean = true;
-
-    constructor(public readonly projectInSolution: ProjectInSolution, public readonly type: string) {
+    constructor(public readonly projectFullPath: string, private readonly withReferences?: boolean) {
     }
 
     public fileExtension: string = '';
 
     public get name(): string {
-        return this.projectInSolution.projectName;
+        return path.basename(this.fullPath, path.extname(this.fullPath));
+    }
+
+    public get extension(): string {
+        return path.extname(this.fullPath).substring(1);
     }
 
     public get fullPath(): string {
-        return this.projectInSolution.fullPath;
+        return this.projectFullPath;
+    }
+
+    public get type(): string {
+        return "";
     }
 
     public get hasReferences(): boolean {
-        return this._hasReferences;
+        return this.withReferences === undefined || this.withReferences;
     }
 
-    protected setHasReferences(value: boolean) {
-        this._hasReferences = value;
-    }
+    public abstract getReferences(): Promise<Reference[]>;
 
-    public get solutionItems(): { [id: string]: string } {
-        return this.projectInSolution.solutionItems;
-    }
+    public abstract getProjectReferences(): Promise<ProjectReference[]>;
 
-    public abstract getProjectReferences() : Promise<ProjectReference[]>;
+    public abstract getPackageReferences(): Promise<PackageReference[]>;
 
-    public abstract getPackageReferences() : Promise<PackageReference[]>;
-
-    public abstract getProjectFilesAndFolders(virtualPath?: string): Promise<{ files: ProjectFile[], folders: ProjectFolder[] }>;
+    public abstract getProjectItemEntries(): Promise<ProjectItemEntry[]>;
 
     public abstract renameFile(filepath: string, name: string): Promise<string>;
 
@@ -62,26 +57,4 @@ export abstract class Project {
     public abstract moveFolder(folderpath: string, newfolderPath: string): Promise<string>;
 
     public abstract refresh(): Promise<void>;
-
-    public static getProjectElement(document: XmlElement): XmlElement | undefined {
-        if (document && document.elements) {
-            if (document.elements.length === 1) {
-                return Project.ensureElements(document.elements[0]);
-            } else {
-                for(let i = 0; i < document.elements.length; i++) {
-                    if (document.elements[i].type !== 'comment') {
-                        return Project.ensureElements(document.elements[i]);
-                    }
-                }
-            }
-        }
-    }
-
-    public static ensureElements(element: XmlElement): XmlElement {
-        if (!element.elements || !Array.isArray(element.elements)) {
-            element.elements = [];
-        }
-
-        return element;
-    }
 }

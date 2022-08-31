@@ -4,6 +4,7 @@ import * as xml from "@extensions/xml";
 import { TreeItem, ContextValues } from "@tree";
 import { ITemplate } from "./ITemplate";
 import { Project } from "@core/Projects";
+import { XmlManager } from "@core/Projects/Managers";
 
 export abstract class TemplateEngine {
     private templates: ITemplate[] | undefined;
@@ -62,7 +63,7 @@ export abstract class TemplateEngine {
         const parametersGetter = eval(`require('${filepath}')`);
         const content = await fs.readFile(item.project.fullPath);
         const xmlContent =  await xml.parseToJson(content);
-        const projectXml = Project.getProjectElement(xmlContent) || { elements: [] };
+        const projectXml = XmlManager.getProjectElement(xmlContent) || { elements: [] };
         if (parametersGetter) {
             let result = parametersGetter(filename, item.project.fullPath, item.contextValue.startsWith(ContextValues.projectFolder) ? item.path : undefined, projectXml);
             if (Promise.resolve(result) === result) {

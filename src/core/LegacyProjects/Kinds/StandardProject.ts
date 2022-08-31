@@ -308,7 +308,7 @@ export class StandardProject extends FileSystemBasedProject {
                     element.elements.forEach((e: xml.XmlElement) => {
                         if (e.name === 'Reference' || e.name === 'ProjectReference') {
                             let include = this.cleanIncludePath(e.attributes.Include);
-                            this.references.push(new ProjectReference(include, include));
+                            this.references.push(new ProjectReference(include));
                             return false;
                         }
 
