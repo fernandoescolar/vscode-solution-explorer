@@ -137,9 +137,13 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
 
         if (related.length > 0) {
             related.forEach(r => {
-                const index = items.findIndex(i => i.fullPath === r.fullPath);
-                if (index >= 0) {
-                    items.splice(index, 1);
+                const iIndex = items.findIndex(i => i.fullPath === r.fullPath);
+                if (iIndex >= 0) {
+                    items.splice(iIndex, 1);
+                }
+                const rIndex = result.findIndex(i => i.path === r.fullPath);
+                if (rIndex >= 0) {
+                    result.splice(rIndex, 1);
                 }
             });
             allRelatedFiles.push(...related);
