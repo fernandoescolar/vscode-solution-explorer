@@ -74,7 +74,7 @@ export class XmlManager implements Manager {
         }
 
         const fullPath = path.join(this.projectFolderPath, folderRelativePath);
-        if (!this.isCurrentlyIncluded(fullPath)) {
+        if (!this.isCurrentlyIncluded(fullPath) && folderRelativePath) {
             this.currentItemGroupAdd('Folder', folderRelativePath, true);
         }
 
@@ -410,6 +410,10 @@ export class XmlManager implements Manager {
 
         if (this.includePrefix) {
             include = this.includePrefix + include;
+        }
+
+        if (type === 'Folder' && include === '\\') {
+            return;
         }
 
         itemGroup.elements.push({
