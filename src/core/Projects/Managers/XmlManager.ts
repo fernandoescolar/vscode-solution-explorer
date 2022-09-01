@@ -12,14 +12,23 @@ export class XmlManager implements Manager {
     private document: XmlElement | undefined;
     private projectItems: ProjectItem[] = [];
     private currentItemGroup: xml.XmlElement | undefined = undefined;
-    private sdk: string | undefined;
+    private _sdk: string | undefined;
+    private _toolsVersion: string | undefined;
 
     constructor(private readonly fullPath: string, private readonly includePrefix?: string) {
         this.projectFolderPath = path.dirname(fullPath);
     }
 
     public get isCps(): boolean {
-        return !!this.sdk;
+        return !!this._sdk;
+    }
+
+    public get sdk(): string | undefined {
+        return this._sdk;
+    }
+
+    public get toolsVersion(): string | undefined {
+        return this._toolsVersion;
     }
 
     public async createFile(folderpath: string, filename: string, content?: string): Promise<string> {
@@ -364,11 +373,13 @@ export class XmlManager implements Manager {
         if (!project) { return []; }
 
         const result: ProjectItem[] = [];
-        if ((this.sdk = project.attributes && project.attributes.Sdk)) {
+        if ((this._sdk = project.attributes && project.attributes.Sdk)) {
             const exclude = [...config.getNetCoreIgnore(), this.fullPath].join(";");
             const allFolders = new Include("Compile", "**/*", undefined, undefined, exclude);
             result.push(allFolders);
         }
+
+        this._toolsVersion = project.attributes && project.attributes.ToolsVersion;
 
         project.elements.forEach((element: XmlElement) => {
             if (element.name === 'ItemGroup') {
