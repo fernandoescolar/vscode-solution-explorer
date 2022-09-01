@@ -69,6 +69,17 @@ export class MsBuildProject extends ProjectWithManagers {
         return result;
     }
 
+    public async renameFolder(folderpath: string, oldname: string, newname: string): Promise<string> {
+        const relativeFolder = path.relative(path.dirname(this.fullPath), folderpath);
+        if (relativeFolder.startsWith('..' + path.sep)) { // link folder
+            if (await this.xml.tryReplaceLinkFolderName(relativeFolder, oldname, newname)) {
+                return newname;
+            }
+        }
+
+        return await super.renameFolder(folderpath, oldname, newname);
+    }
+
     private async checkProjectLoaded(): Promise<void> {
         const projectItems = await this.xml.getProjectItems();
         if (this.references.length <= 0) {

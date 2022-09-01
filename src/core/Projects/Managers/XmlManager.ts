@@ -158,6 +158,76 @@ export class XmlManager implements Manager {
         return this.projectItems;
     }
 
+    public async tryReplaceLinkFolderName(relativePath: string, oldName: string, newName: string): Promise<boolean> {
+        await this.ensureIsLoaded();
+        if (!this.document) { return false; }
+
+        let result = false;
+        const nodeNames = this.getXmlNodeNames();
+        const project = XmlManager.getProjectElement(this.document);
+        if (!project) { return false; }
+
+        const replaceAttribute = (node: xml.XmlElement, attributeName: string, oldValue: string, newValue: string): boolean => {
+            if (node.attributes && node.attributes[attributeName]) {
+                const values = node.attributes[attributeName].split("\\");
+                const index = values.indexOf(oldValue);
+                if (index >= 0) {
+                    values[index] = newValue;
+                    node.attributes[attributeName] = values.join("\\");
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        const replaceElementText = (node: xml.XmlElement, nodeName: string, oldValue: string, newValue: string): boolean => {
+            const linkElement = node.elements?.find((e: XmlElement) => e.name === nodeName);
+            if (linkElement) {
+                const value = linkElement.elements[0].text;
+                if (value) {
+                    const values = value.split("\\");
+                    const index = values.indexOf(oldValue);
+                    if (index >= 0) {
+                        values[index] = newValue;
+                        linkElement.elements[0].text = values.join("\\");
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        };
+
+        project.elements.forEach((element: xml.XmlElement) => {
+            if (element.name === 'ItemGroup') {
+                if (!element.elements || !Array.isArray(element.elements)) {
+                    element.elements = [];
+                }
+
+                element.elements.forEach((e: xml.XmlElement) => {
+                    nodeNames.forEach(nodeName => {
+                        if (e.name === nodeName) {
+                            if (  replaceAttribute(e, 'LinkBase', oldName, newName)
+                               || replaceElementText(e, 'LinkBase', oldName, newName)
+                               || replaceAttribute(e, 'Link', oldName, newName)
+                               || replaceElementText(e, 'Link', oldName, newName) )
+                            {
+                                result = true;
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+        if (result) {
+            await this.saveProject();
+        }
+
+        return result;
+    }
+
     private countInNodes(pattern: string, isFolder: boolean = false): number {
         if (!this.document) { return 0; }
 
@@ -208,7 +278,7 @@ export class XmlManager implements Manager {
         let findPattern = (ref: xml.XmlElement) => {
             this.replaceDependsUponNode(ref, pattern, newPattern);
 
-            if (ref.attributes.Include.startsWith(pattern)) {
+            if (ref.attributes.Include && ref.attributes.Include.startsWith(pattern)) {
                 ref.attributes.Include = ref.attributes.Include.replace(pattern, newPattern);
             }
         };

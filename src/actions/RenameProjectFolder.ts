@@ -5,11 +5,11 @@ import { Project } from "@core/Projects";
 import { Action, ActionContext } from "./base/Action";
 
 export class RenameProjectFolder implements Action {
-    constructor(private readonly project: Project, private readonly folderPath: string, private readonly foldername: string) {
+    constructor(private readonly project: Project, private readonly folderPath: string,  private readonly oldfoldername: string, private readonly newfoldername: string) {
     }
 
     public toString(): string {
-        return `Rename folder ${this.folderPath} to ${this.foldername} in project ${this.project.name}`;
+        return `Rename folder ${this.folderPath} to ${this.newfoldername} in project ${this.project.name}`;
     }
 
     public async execute(context: ActionContext): Promise<void> {
@@ -18,16 +18,17 @@ export class RenameProjectFolder implements Action {
         }
 
         const parentFolderPath = path.dirname(this.folderPath);
-        const newfolderPath = path.join(parentFolderPath, this.foldername);
-        if (newfolderPath === this.folderPath) {
+        const newfolderPath = path.join(parentFolderPath, this.newfoldername);
+        const isTheSameFolderThanProject = this.folderPath.startsWith(path.dirname(this.project.fullPath));
+        if (newfolderPath === this.folderPath && isTheSameFolderThanProject) {
             return;
         }
 
-        if (await fs.exists(newfolderPath)) {
+        if (await fs.exists(newfolderPath) && isTheSameFolderThanProject) {
             await dialogs.showError("Folder already exists");
             return;
         }
 
-        await this.project.renameFolder(this.folderPath, this.foldername);
+        await this.project.renameFolder(this.folderPath, this.oldfoldername, this.newfoldername);
     }
 }

@@ -42,7 +42,7 @@ export abstract class Project {
 
     public abstract createFile(folderpath: string, filename: string, content?: string): Promise<string>;
 
-    public abstract renameFolder(folderpath: string, name: string): Promise<string>;
+    public abstract renameFolder(folderpath: string, oldname: string, newname: string): Promise<string>;
 
     public abstract deleteFolder(folderpath: string): Promise<void>;
 

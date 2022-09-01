@@ -15,6 +15,7 @@ export class RenameCommand extends ActionsCommand {
     public async getActions(item: TreeItem): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
+        const oldname = item.label;
         const newname = await dialogs.getText('New name', 'New name', item.label);
         if (!newname) { return []; }
 
@@ -22,7 +23,7 @@ export class RenameCommand extends ActionsCommand {
             return [ new RenameProjectFile(item.project, item.path, newname) ];
 
         } else if (item.contextValue.startsWith(ContextValues.projectFolder)) {
-            return [ new RenameProjectFolder(item.project, item.path, newname) ];
+            return [ new RenameProjectFolder(item.project, item.path, oldname, newname) ];
         }
 
         return [];

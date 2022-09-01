@@ -52,8 +52,8 @@ export abstract class ProjectWithManagers extends Project {
         return this.callInManagers(m => m.renameFile(filepath, name));
     }
 
-    public renameFolder(folderpath: string, name: string): Promise<string> {
-        return this.callInManagers(m => m.renameFolder(folderpath, name));
+    public renameFolder(folderpath: string, oldname: string, newname: string): Promise<string> {
+        return this.callInManagers(m => m.renameFolder(folderpath, newname));
     }
 
     public statFile(filepath: string, folderPath: string): Promise<ProjectFileStat> {
