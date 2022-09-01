@@ -9,6 +9,12 @@ export class ProjectTreeItem extends TreeItem {
         this.addContextValueSuffix();
     }
 
+    public refresh(): void {
+        this.project?.refresh().then(() => {
+            super.refresh()
+        });
+	}
+
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
         let result: TreeItem[] = [];
         if (!this.project) {
