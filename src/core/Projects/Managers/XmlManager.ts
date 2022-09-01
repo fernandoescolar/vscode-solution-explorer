@@ -108,8 +108,23 @@ export class XmlManager implements Manager {
 
         const filename = path.basename(filepath);
         const relativePath = this.getRelativePath(filepath);
+        const relativeFolderPath = path.dirname(relativePath);
+        const countInNodes = this.countInNodes(relativeFolderPath);
+
         const newRelativePath = path.join(newfolderPath, filename);
+        const newRelativeFolderPath = path.dirname(newRelativePath);
+
         this.renameInNodes(relativePath, newRelativePath);
+
+        if (newRelativeFolderPath && newRelativeFolderPath !== '.') {
+            this.removeInNodes(newRelativeFolderPath, true, ['Folder']);
+        }
+
+        const newCountInNodes = this.countInNodes(relativeFolderPath);
+        if (countInNodes === 1 && newCountInNodes === 0) {
+            this.currentItemGroupAdd('Folder', relativeFolderPath, true);
+        }
+
         await this.saveProject();
         return newRelativePath;
     }
@@ -120,6 +135,12 @@ export class XmlManager implements Manager {
         const foldername = path.basename(folderpath);
         const relativePath = this.getRelativePath(folderpath);
         const newRelativePath = path.join(newfolderPath, foldername);
+        const newRelativeFolderPath = path.dirname(newRelativePath);
+
+        if (newRelativeFolderPath && newRelativeFolderPath !== '.') {
+            this.removeInNodes(newRelativeFolderPath, true, ['Folder']);
+        }
+
         this.renameInNodes(relativePath, newRelativePath, true);
         await this.saveProject();
         return newRelativePath;

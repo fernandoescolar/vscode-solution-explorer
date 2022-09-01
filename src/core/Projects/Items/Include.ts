@@ -48,12 +48,13 @@ export class Include extends IncludeBase {
     private createFoldersIfNotExists( entries: ProjectItemEntry[], relativePath: string, filepath: string, isLink: boolean): ProjectItemEntry[] {
         const folderEntries: ProjectItemEntry[] = [];
         let relativeFolder = path.dirname(relativePath);
+        filepath = path.dirname(filepath);
         while (relativeFolder && relativeFolder !== ".") {
             const folder = entries.find(e => e.relativePath === relativeFolder);
             if (!folder) {
                 folderEntries.push({
                     name: path.basename(relativeFolder),
-                    fullPath: path.dirname(filepath),
+                    fullPath: filepath,
                     relativePath: relativeFolder,
                     isDirectory: true,
                     isLink: isLink,
@@ -62,6 +63,7 @@ export class Include extends IncludeBase {
             }
 
             relativeFolder = path.dirname(relativeFolder);
+            filepath = path.dirname(filepath);
         }
 
         return folderEntries.reverse();

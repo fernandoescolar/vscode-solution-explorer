@@ -9,6 +9,8 @@ export class Folder extends ProjectItem {
 
     public getEntries(projectBasePath: string, entries: ProjectItemEntry[]): Promise<ProjectItemEntry[]> {
         const folderpath = path.resolve(projectBasePath, this.folderpath);
+        entries.push(...this.createFoldersIfNotExists(entries, this.folderpath, path.dirname(this.folderpath), false));
+
         const name = path.basename(folderpath);
         entries.push({
             name: name,
@@ -20,5 +22,29 @@ export class Folder extends ProjectItem {
         });
 
         return Promise.resolve(entries);
+    }
+
+    private createFoldersIfNotExists( entries: ProjectItemEntry[], relativePath: string, filepath: string, isLink: boolean): ProjectItemEntry[] {
+        const folderEntries: ProjectItemEntry[] = [];
+        let relativeFolder = path.dirname(relativePath);
+        filepath = path.dirname(filepath);
+        while (relativeFolder && relativeFolder !== ".") {
+            const folder = entries.find(e => e.relativePath === relativeFolder);
+            if (!folder) {
+                folderEntries.push({
+                    name: path.basename(relativeFolder),
+                    fullPath: filepath,
+                    relativePath: relativeFolder,
+                    isDirectory: true,
+                    isLink: isLink,
+                    dependentUpon: undefined
+                });
+            }
+
+            relativeFolder = path.dirname(relativeFolder);
+            filepath = path.dirname(filepath);
+        }
+
+        return folderEntries.reverse();
     }
 }
