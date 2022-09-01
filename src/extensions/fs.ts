@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import { platform } from 'os';
+import {existsSync} from 'fs';
 
 export async function copy(sourcePath: string, targetPath: string): Promise<void> {
     const sourceUri = vscode.Uri.file(sourcePath);
@@ -7,6 +9,9 @@ export async function copy(sourcePath: string, targetPath: string): Promise<void
 }
 
 export async function exists(path: string): Promise<boolean> {
+    if (platform()==='win32') {
+        return existsSync(path)
+    }
     const uri = vscode.Uri.file(path);
     try {
         await vscode.workspace.fs.stat(uri);
