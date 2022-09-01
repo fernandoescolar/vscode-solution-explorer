@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.X.X
+
+New project load engine based in the MsBuild documentation: https://docs.microsoft.com/en-us/visualstudio/msbuild/how-to-use-project-sdk?view=vs-2022
+
 ## 0.6.3
 
 Bugfix #215 copy the commands array to avoid modifying the original config
