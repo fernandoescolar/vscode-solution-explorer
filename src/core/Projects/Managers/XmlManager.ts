@@ -259,7 +259,15 @@ export class XmlManager implements Manager {
                     types.forEach(nodeName => {
                         if (e.name === nodeName) {
                             this.deleteDependsUponNode(e, pattern);
-                            if (e.attributes.Include.startsWith(pattern)) {
+                            if (e.attributes.Include && e.attributes.Include.startsWith(pattern)) {
+                                toDelete.push(e);
+                            }
+
+                            if (e.attributes.Remove && e.attributes.Remove.startsWith(pattern)) {
+                                toDelete.push(e);
+                            }
+
+                            if (e.attributes.Update && e.attributes.Update.startsWith(pattern)) {
                                 toDelete.push(e);
                             }
                         }
