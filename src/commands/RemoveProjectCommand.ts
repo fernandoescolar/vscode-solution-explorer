@@ -8,12 +8,12 @@ export class RemoveProjectCommand extends ActionsCommand {
     }
 
     public  shouldRun(item: TreeItem): boolean {
-        return !!item && !!item.project && !!item.path && item.contextValue .startsWith(ContextValues.project);
+        return !!item && !!item.solution && !!item.project && !!item.path && item.contextValue .startsWith(ContextValues.project);
     }
 
     public async getActions(item: TreeItem): Promise<Action[]> {
-        if (!item || !item.project || !item.path) { return []; }
+        if (!item || !item.solution || !item.project) { return []; }
 
-        return [ new RemoveExistingProject(item.project.fullPath, item.path) ];
+        return [ new RemoveExistingProject(item.solution.fullPath, item.project.fullPath) ];
     }
 }
