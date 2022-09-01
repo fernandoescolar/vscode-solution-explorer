@@ -53,6 +53,14 @@ export class ProjectFactory {
             result.fileExtension = fileExtension;
         }
 
+        if (result) {
+            try {
+            await result.refresh();
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
         return result;
     }
 
