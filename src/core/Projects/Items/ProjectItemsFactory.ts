@@ -9,7 +9,7 @@ import { Include } from "./Include";
 import { Remove } from "./Remove";
 import { Update } from "./Update";
 
-const ignoreItems = [ "AssemblyMetadata", "BaseApplicationManifest", "CodeAnalysisImport", "COMReference", "COMFileReference", "Import", "InternalsVisibleTo", "NativeReference", "TrimmerRootAssembly", "Using" ];
+const ignoreItems = [ "AssemblyMetadata", "BaseApplicationManifest", "CodeAnalysisImport", "COMReference", "COMFileReference", "Import", "InternalsVisibleTo", "NativeReference", "TrimmerRootAssembly", "Using", "Protobuf" ];
 const knownTypes = [ "Reference", "PackageReference", "ProjectReference", "Folder", "Content", "Compile", "None", "EmbeddedResource" ];
 
 export function createProjectElement(xml: XmlElement, includePrefix?: string): ProjectItem | undefined {
