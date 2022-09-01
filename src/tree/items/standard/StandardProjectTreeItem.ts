@@ -21,7 +21,7 @@ export class StandardProjectTreeItem extends ProjectTreeItem {
     }
 
     protected shouldHandleFileEvent(fileEvent: FileEvent): boolean {
-        return fileEvent.path === this.path;
+        return fileEvent.path === this.project?.fullPath;
     }
 
     private onFileEvent(event: IEvent): void {

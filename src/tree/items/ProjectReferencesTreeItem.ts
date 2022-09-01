@@ -1,5 +1,6 @@
 import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } from "@tree";
 import { ProjectReferencedProjectsTreeItem } from "./ProjectReferencedProjectsTreeItem";
+import { ProjectReferencedAssembliesTreeItem } from "./ProjectReferencedAssembliesTreeItem";
 import { ProjectReferencedPackagesTreeItem } from "./ProjectReferencedPackagesTreeItem";
 
 export class ProjectReferencesTreeItem extends TreeItem {
@@ -9,8 +10,12 @@ export class ProjectReferencesTreeItem extends TreeItem {
     }
 
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
-        let result: TreeItem[] = [];
-        result.push(new ProjectReferencedProjectsTreeItem(childContext));
+        const result: TreeItem[] = [];
+        if (this.project?.type === "cps") {
+            result.push(new ProjectReferencedProjectsTreeItem(childContext));
+        } else {
+            result.push(new ProjectReferencedAssembliesTreeItem(childContext));
+        }
         result.push(new ProjectReferencedPackagesTreeItem(childContext));
 
         return Promise.resolve(result);

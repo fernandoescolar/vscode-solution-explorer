@@ -25,7 +25,7 @@ export abstract class DropHandler {
             return "";
         }
 
-        if (item.contextValue === ContextValues.project) {
+        if (item.contextValue === ContextValues.project + '-standard') {
             return "";
         }
 

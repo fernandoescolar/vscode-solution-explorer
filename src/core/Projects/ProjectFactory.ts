@@ -24,8 +24,8 @@ export class ProjectFactory {
         let result: Project | undefined = undefined;
         if (project.fullPath.toLocaleLowerCase().endsWith(".njsproj")) {
             result = ProjectFactory.loadNoReferencesStandardProject(project);
-
         }
+
         if (project.projectType === SolutionProjectType.knownToBeMSBuildFormat
             && cpsProjectTypes.indexOf(project.projectTypeId) >= 0) {
             result = ProjectFactory.loadCpsProject(project);
@@ -81,7 +81,7 @@ export class ProjectFactory {
     }
 
     private static loadSharedProject(project: ProjectInSolution): Project {
-        return new MsBuildProject(project.fullPath, false, "$(MSBuildThisFileDirectory)");
+        return new MsBuildProject(project.fullPath.replace(".shproj", ".projitems"), false, "$(MSBuildThisFileDirectory)");
     }
 
     private static loadDeploydProject(project: ProjectInSolution): Project {

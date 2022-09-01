@@ -54,7 +54,7 @@ export async function globFileSearch(workingFolder: string, pattern: string, exl
     return result;
 }
 
-function isGlobPattern(pattern: string): boolean {
+export function isGlobPattern(pattern: string): boolean {
     return pattern.indexOf("*") >= 0
         || pattern.indexOf("?") >= 0
         || pattern.indexOf("[") >= 0

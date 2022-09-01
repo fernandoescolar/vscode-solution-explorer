@@ -153,6 +153,10 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
             return;
         }
 
+        if (result.find(i => i.path === file.fullPath)) {
+            return;
+        }
+
         result.push(new ProjectFileTreeItem(context, file, related));
     });
 

@@ -106,8 +106,9 @@ export class XmlManager implements Manager {
     public async moveFile(filepath: string, newfolderPath: string): Promise<string> {
         await this.ensureIsLoaded();
 
+        const filename = path.basename(filepath);
         const relativePath = this.getRelativePath(filepath);
-        const newRelativePath = this.getRelativePath(newfolderPath);
+        const newRelativePath = path.join(newfolderPath, filename);
         this.renameInNodes(relativePath, newRelativePath);
         await this.saveProject();
         return newRelativePath;
@@ -116,8 +117,9 @@ export class XmlManager implements Manager {
     public async moveFolder(folderpath: string, newfolderPath: string): Promise<string> {
         await this.ensureIsLoaded();
 
+        const foldername = path.basename(folderpath);
         const relativePath = this.getRelativePath(folderpath);
-        const newRelativePath = this.getRelativePath(newfolderPath);
+        const newRelativePath = path.join(newfolderPath, foldername);
         this.renameInNodes(relativePath, newRelativePath, true);
         await this.saveProject();
         return newRelativePath;

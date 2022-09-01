@@ -5,16 +5,15 @@ import { ProjectItemEntry } from "./ProjectItemEntry";
 import { IncludeBase } from "./IncludeBase";
 
 export class Include extends IncludeBase {
-    private readonly internalPath: string;
 
     constructor(type: string, value: string, link?: string, linkBase?: string, public readonly exclude?: string, public readonly dependentUpon?: string) {
         super(type, value, link, linkBase);
-        this.internalPath = this.getInternalPath();
     }
 
     public async getEntries(projectBasePath: string, entries: ProjectItemEntry[]): Promise<ProjectItemEntry[]> {
-        const searchPath = path.join(projectBasePath, this.internalPath);
         for (const pattern of this.value.split(';')) {
+            const internalPath = this.getInternalPath(pattern);
+            const searchPath = glob.isGlobPattern(pattern) ? path.join(projectBasePath, internalPath) : projectBasePath;
             const result = await glob.globFileSearch(searchPath, this.cleanPathDownAtStart(pattern), this.exclude ? this.exclude?.split(';') : undefined);
             for (const filepath of result) {
                 const recursiveDir = this.getRecursiveDir(filepath, searchPath);
@@ -25,7 +24,13 @@ export class Include extends IncludeBase {
                     entries.push(...folderEntries);
                 }
                 const filename = path.basename(relativePath);
-                const isDirectory = await fs.isDirectory(filepath);
+                let isDirectory: boolean;
+                try {
+                    isDirectory = await fs.isDirectory(filepath);
+                } catch (e) {
+                    isDirectory = path.extname(filepath) === "";
+                }
+
                 entries.push({
                     name: filename,
                     fullPath: filepath,
@@ -88,11 +93,11 @@ export class Include extends IncludeBase {
         return result;
     }
 
-    private getInternalPath(): string {
+    private getInternalPath(value: string): string {
         const search = (c: string) => {
-            const index = this.value.indexOf('*');
+            const index = value.indexOf('*');
             if (index < 0) {
-                return this.value.length;
+                return value.length;
             }
 
             return index;
@@ -103,7 +108,7 @@ export class Include extends IncludeBase {
                         search('['),
                         search('{'));
 
-        return path.dirname(this.value.substring(0, index + 1));
+        return path.dirname(value.substring(0, index + 1));
     }
 
     private cleanPathDownAtStart(filepath: string): string {
