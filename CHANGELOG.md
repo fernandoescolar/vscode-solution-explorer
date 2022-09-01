@@ -2,9 +2,11 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
-## 0.X.X
+## 0.7.0
 
-New project load engine based in the MsBuild documentation: https://docs.microsoft.com/en-us/visualstudio/msbuild/how-to-use-project-sdk?view=vs-2022
+Improving compatibility: New core engine to load projects based on MsBuild documentation: https://docs.microsoft.com/en-us/visualstudio/msbuild/how-to-use-project-sdk?view=vs-2022 related to #11, #129, #142 and #174
+
+Bugfix: now getText is closed after pressing enter
 
 ## 0.6.3
 
