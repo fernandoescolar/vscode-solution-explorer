@@ -1,3 +1,4 @@
+import * as fs from "@extensions/fs";
 import * as path from "@extensions/path";
 import * as config from "@extensions/config";
 import { ProjectItemEntry, PackageReference, ProjectReference, Reference } from "./Items";
@@ -79,11 +80,15 @@ export class MsBuildProject extends ProjectWithManagers {
         }
 
         if (this.packagesReferenges.length <= 0) {
-            projectItems.forEach(item => {
-                if (item.type === "PackageReference") {
-                    this.packagesReferenges.push(item as PackageReference);
-                }
-            });
+            if (!this.xml.isCps) {
+                this.packagesReferenges = await this.parsePackagesConfig();
+            } else {
+                projectItems.forEach(item => {
+                    if (item.type === "PackageReference") {
+                        this.packagesReferenges.push(item as PackageReference);
+                    }
+                });
+            }
         }
 
         if (this.projectReferences.length <= 0) {
@@ -108,5 +113,20 @@ export class MsBuildProject extends ProjectWithManagers {
         }
 
         return entries;
+    }
+
+    private async parsePackagesConfig(): Promise<PackageReference[]> {
+        const result: PackageReference[] = [];
+        let packagesPath = path.join(path.dirname(this.fullPath), 'packages.config');
+        if (!(await fs.exists(packagesPath))) { return []; }
+
+        let content = await fs.readFile(packagesPath);
+        let packageRegEx = /<package\s+id=\"(.*)\"\s+version=\"(.*)\"\s+targetFramework=\"(.*)\"/g;
+        let m: RegExpExecArray | null;
+        while ((m = packageRegEx.exec(content)) !== null) {
+            result.push(new PackageReference(m[1].trim(), m[2].trim()));
+        }
+
+        return result;
     }
 }

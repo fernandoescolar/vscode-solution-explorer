@@ -12,14 +12,14 @@ export class XmlManager implements Manager {
     private document: XmlElement | undefined;
     private projectItems: ProjectItem[] = [];
     private currentItemGroup: xml.XmlElement | undefined = undefined;
-    private isCpsProject: boolean = false;
+    private sdk: string | undefined;
 
     constructor(private readonly fullPath: string, private readonly includePrefix?: string) {
         this.projectFolderPath = path.dirname(fullPath);
     }
 
     public get isCps(): boolean {
-        return this.isCpsProject;
+        return !!this.sdk;
     }
 
     public async createFile(folderpath: string, filename: string, content?: string): Promise<string> {
@@ -364,7 +364,7 @@ export class XmlManager implements Manager {
         if (!project) { return []; }
 
         const result: ProjectItem[] = [];
-        if ((this.isCpsProject = project.attributes && project.attributes.Sdk)) {
+        if ((this.sdk = project.attributes && project.attributes.Sdk)) {
             const exclude = [...config.getNetCoreIgnore(), this.fullPath].join(";");
             const allFolders = new Include("Compile", "**/*", undefined, undefined, exclude);
             result.push(allFolders);

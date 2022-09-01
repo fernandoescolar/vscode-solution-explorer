@@ -13,7 +13,7 @@ export abstract class ProjectWithManagers extends Project {
     }
 
     public get type(): string {
-        return this.xml.isCps ? "cps" : "old";
+        return this.xml.isCps ? "cps" : "standard";
     }
 
     private get managers(): Manager[] {
