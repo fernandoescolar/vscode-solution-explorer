@@ -28,9 +28,7 @@ export class CpsProjectTreeItem extends ProjectTreeItem {
             let dirname = path.dirname(fileEvent.path);
 
             if (fileEvent.path === this.path && this.project) {
-                this.project.refresh().then(res => {
-                    this.refresh();
-                });
+                this.refresh();
             }
             else if (dirname.startsWith(workingdir)) {
                 this.refresh();

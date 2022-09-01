@@ -17,6 +17,7 @@ export class MsBuildProject extends ProjectWithManagers {
         this.references = [];
         this.packagesReferenges = [];
         this.projectReferences = [];
+        this.projectItemEntries = [];
         await super.refresh();
         await this.checkProjectLoaded();
     }
