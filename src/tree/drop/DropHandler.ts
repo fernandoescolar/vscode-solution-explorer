@@ -14,7 +14,7 @@ export abstract class DropHandler {
             if (isDirectory) {
                 if (item.project) {
                     const basepath = path.dirname(item.project.fullPath);
-                    return item.path.substring(basepath.length);
+                    return path.relative(basepath, item.path);
                 } else {
                     return item.path;
                 }
