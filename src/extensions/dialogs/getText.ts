@@ -43,6 +43,8 @@ export async function getText(description: string, placeholder?: string, initial
                     resolve(undefined);
                 }
             }
+
+            input.hide();
         });
 
         input.onDidAccept(() => {
@@ -54,6 +56,8 @@ export async function getText(description: string, placeholder?: string, initial
                 wizard?.cancel();
                 resolve(undefined);
             }
+
+            input.hide();
         }),
 
         input.onDidHide(() => {
