@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -16,7 +16,10 @@ jobs:
     - name: npm install
       run: |
         npm install
-    - name: publish
+    - name: publish vsce
+      id: publisher
       uses: sigma/vsce-publish-action@v0.0.2
       with:
         vsce_token: ${{ secrets.VSCE_TOKEN }}
+    - name:  publish ovsx
+      run: npx ovsx publish ${{ steps.publisher.ouputs.vsix_path }}  -p ${{ secrets.OVSX_TOKEN }}
