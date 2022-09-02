@@ -24,6 +24,7 @@ export abstract class TreeItem extends vscode.TreeItem {
 		super(label, collapsibleState);
 		this.createId();
 		this.loadIcon();
+		this.loadResourceUri();
 	}
 
 	public command: vscode.Command | undefined;
@@ -131,16 +132,15 @@ export abstract class TreeItem extends vscode.TreeItem {
 		this.id = id;
 	}
 
-	protected async loadIcon(): Promise<void> {
+	protected loadIcon(): void {
 		let iconType = config.getSolutionExplorerIcons();
 
 		if (iconType === config.ICONS_CUSTOM
 		   || (iconType === config.ICONS_MIXED && !this._allowIconTheme)) {
-			this.iconPath = await TreeItemIconProvider.findIconPath(this.label, this.path || "", this.contextValue);
-			if (this.contextValue.startsWith(ContextValues.projectFile)||this.contextValue.startsWith(ContextValues.projectFolder)) {
-				// can see the error message and git status in solution explorer
-				this.resourceUri = vscode.Uri.file(this.path?this.path:path.dirname(this.solution.fullPath));
-			}
+			TreeItemIconProvider.findIconPath(this.label, this.path || "", this.contextValue)
+			                    .then( iconPath => {
+									this.iconPath = iconPath;
+								});
 		} else {
 			let fullpath = this.path;
 			if (!fullpath) { fullpath = path.dirname(this.solution.fullPath); }
@@ -150,7 +150,31 @@ export abstract class TreeItem extends vscode.TreeItem {
 
 	protected loadThemeIcon(fullpath: string): void {
 		this.iconPath = this.contextValue.indexOf('folder') >= 0 ? vscode.ThemeIcon.Folder : vscode.ThemeIcon.File;
-		this.resourceUri = vscode.Uri.file(fullpath);
+	}
+
+	protected loadResourceUri(): void {
+		const ignoreTypes = [
+			ContextValues.projectReferencedPackage,
+			ContextValues.projectReferencedPackages,
+			ContextValues.projectReferencedProject,
+			ContextValues.projectReferencedProjects,
+			ContextValues.projectReferences,
+			ContextValues.solutionFolder
+		];
+
+		if (ignoreTypes.indexOf(this.contextValue) >= 0) {
+			return;
+		}
+
+		if (this.path) {
+			this.resourceUri = vscode.Uri.file(this.path);
+			return;
+		}
+
+		if (this.solution && this.solution.fullPath) {
+			this.resourceUri = vscode.Uri.file(path.dirname(this.solution.fullPath));
+			return;
+		}
 	}
 
 	protected containsContextValueChildren(contextValue: string, item?: TreeItem): boolean {
