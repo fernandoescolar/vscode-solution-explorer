@@ -13,9 +13,6 @@ import { ProjectFolderTreeItem } from "@tree/items/ProjectFolderTreeItem";
 import { ProjectFileTreeItem } from "@tree/items/ProjectFileTreeItem";
 import { CpsProjectTreeItem } from "@tree/items/cps/CpsProjectTreeItem";
 import { StandardProjectTreeItem } from "@tree/items/standard/StandardProjectTreeItem";
-import { WebSiteProjectTreeItem } from "@tree/items/website/WebSiteProjectTreeItem";
-import { SharedProjectTreeItem } from "@tree/items/standard/SharedProjectTreeItem";
-import { DeployProjectTreeItem } from "@tree/items/standard/DeployProjectTreeItem";
 import { SolutionFileTreeItem } from "@tree/items/SolutionFileTreeItem";
 
 export async function createFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile, workspaceRoot: string): Promise<TreeItem> {
@@ -82,9 +79,6 @@ async function createFromProject(context: TreeItemContext, project: ProjectInSol
     if (p) {
         if (p.type === 'cps') { return new CpsProjectTreeItem(projectContext, project); }
         if (p.type === 'standard') { return new StandardProjectTreeItem(projectContext, project); }
-        if (p.type === 'shared') { return new SharedProjectTreeItem(projectContext, project); }
-        if (p.type === 'website') { return new WebSiteProjectTreeItem(projectContext, project); }
-        if (p.type === 'deploy') { return new DeployProjectTreeItem(projectContext, project); }
         return new ProjectTreeItem(projectContext, project);
     }
 

@@ -332,11 +332,6 @@
                     "group": "inline"
                 },
                 {
-                    "command": "solutionExplorer.refresh",
-                    "when": "view == slnexpl && viewItem == project-website",
-                    "group": "inline"
-                },
-                {
                     "command": "solutionExplorer.copy",
                     "when": "view == slnexpl && viewItem == project-folder",
                     "group": "5_cutcopypaste"
@@ -367,11 +362,6 @@
                     "group": "5_cutcopypaste"
                 },
                 {
-                    "command": "solutionExplorer.paste",
-                    "when": "view == slnexpl && viewItem == project-website",
-                    "group": "5_cutcopypaste"
-                },
-                {
                     "command": "solutionExplorer.renameFile",
                     "when": "view == slnexpl && viewItem == project-file",
                     "group": "7_modification"
@@ -398,11 +388,6 @@
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == slnexpl && viewItem == project-website",
-                    "group": "2_workspace"
-                },
-                {
-                    "command": "solutionExplorer.createFile",
                     "when": "view == slnexpl && viewItem == project-file",
                     "group": "2_workspace"
                 },
@@ -419,11 +404,6 @@
                 {
                     "command": "solutionExplorer.createFile",
                     "when": "view == slnexpl && viewItem == project-standard",
-                    "group": "inline"
-                },
-                {
-                    "command": "solutionExplorer.createFile",
-                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "inline"
                 },
                 {
@@ -453,11 +433,6 @@
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == slnexpl && viewItem == project-website",
-                    "group": "2_workspace"
-                },
-                {
-                    "command": "solutionExplorer.createFolder",
                     "when": "view == slnexpl && viewItem == project-file",
                     "group": "2_workspace"
                 },
@@ -474,11 +449,6 @@
                 {
                     "command": "solutionExplorer.createFolder",
                     "when": "view == slnexpl && viewItem == project-standard",
-                    "group": "inline"
-                },
-                {
-                    "command": "solutionExplorer.createFolder",
-                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "inline"
                 },
                 {
@@ -577,11 +547,6 @@
                     "group": "7_modification"
                 },
                 {
-                    "command": "solutionExplorer.openFile",
-                    "when": "view == slnexpl && viewItem == project-website",
-                    "group": "7_modification"
-                },
-                {
                     "command": "solutionExplorer.createNewSolution",
                     "when": "view == slnexpl && viewItem == no-solution",
                     "group": "2_workspace"
@@ -614,11 +579,6 @@
                 {
                     "command": "solutionExplorer.removeProject",
                     "when": "view == slnexpl && viewItem == project-standard",
-                    "group": "2_workspace"
-                },
-                {
-                    "command": "solutionExplorer.removeProject",
-                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "2_workspace"
                 },
                 {
@@ -677,11 +637,6 @@
                     "group": "2_workspace"
                 },
                 {
-                    "command": "solutionExplorer.moveToSolutionFolder",
-                    "when": "view == slnexpl && viewItem == project-website",
-                    "group": "2_workspace"
-                },
-                {
                     "command": "solutionExplorer.renameSolutionItem",
                     "when": "view == slnexpl && viewItem == solution",
                     "group": "7_modification"
@@ -704,11 +659,6 @@
                 {
                     "command": "solutionExplorer.renameSolutionItem",
                     "when": "view == slnexpl && viewItem == project-standard",
-                    "group": "7_modification"
-                },
-                {
-                    "command": "solutionExplorer.renameSolutionItem",
-                    "when": "view == slnexpl && viewItem == project-website",
                     "group": "7_modification"
                 },
                 {
@@ -797,11 +747,6 @@
                     "group": "inline"
                 },
                 {
-                    "command": "solutionExplorer.refresh",
-                    "when": "view == slnbrw && viewItem == project-website",
-                    "group": "inline"
-                },
-                {
                     "command": "solutionExplorer.copy",
                     "when": "view == slnbrw && viewItem == project-folder",
                     "group": "5_cutcopypaste"
@@ -832,11 +777,6 @@
                     "group": "5_cutcopypaste"
                 },
                 {
-                    "command": "solutionExplorer.paste",
-                    "when": "view == slnbrw && viewItem == project-website",
-                    "group": "5_cutcopypaste"
-                },
-                {
                     "command": "solutionExplorer.renameFile",
                     "when": "view == slnbrw && viewItem == project-file",
                     "group": "7_modification"
@@ -863,11 +803,6 @@
                 },
                 {
                     "command": "solutionExplorer.createFile",
-                    "when": "view == slnbrw && viewItem == project-website",
-                    "group": "2_workspace"
-                },
-                {
-                    "command": "solutionExplorer.createFile",
                     "when": "view == slnbrw && viewItem == project-file",
                     "group": "2_workspace"
                 },
@@ -884,11 +819,6 @@
                 {
                     "command": "solutionExplorer.createFile",
                     "when": "view == slnbrw && viewItem == project-standard",
-                    "group": "inline"
-                },
-                {
-                    "command": "solutionExplorer.createFile",
-                    "when": "view == slnbrw && viewItem == project-website",
                     "group": "inline"
                 },
                 {
@@ -918,11 +848,6 @@
                 },
                 {
                     "command": "solutionExplorer.createFolder",
-                    "when": "view == slnbrw && viewItem == project-website",
-                    "group": "2_workspace"
-                },
-                {
-                    "command": "solutionExplorer.createFolder",
                     "when": "view == slnbrw && viewItem == project-file",
                     "group": "2_workspace"
                 },
@@ -939,11 +864,6 @@
                 {
                     "command": "solutionExplorer.createFolder",
                     "when": "view == slnbrw && viewItem == project-standard",
-                    "group": "inline"
-                },
-                {
-                    "command": "solutionExplorer.createFolder",
-                    "when": "view == slnbrw && viewItem == project-website",
                     "group": "inline"
                 },
                 {
@@ -1042,11 +962,6 @@
                     "group": "7_modification"
                 },
                 {
-                    "command": "solutionExplorer.openFile",
-                    "when": "view == slnbrw && viewItem == project-website",
-                    "group": "7_modification"
-                },
-                {
                     "command": "solutionExplorer.createNewSolution",
                     "when": "view == slnbrw && viewItem == no-solution",
                     "group": "2_workspace"
@@ -1079,11 +994,6 @@
                 {
                     "command": "solutionExplorer.removeProject",
                     "when": "view == slnbrw && viewItem == project-standard",
-                    "group": "2_workspace"
-                },
-                {
-                    "command": "solutionExplorer.removeProject",
-                    "when": "view == slnbrw && viewItem == project-website",
                     "group": "2_workspace"
                 },
                 {
@@ -1142,11 +1052,6 @@
                     "group": "2_workspace"
                 },
                 {
-                    "command": "solutionExplorer.moveToSolutionFolder",
-                    "when": "view == slnbrw && viewItem == project-website",
-                    "group": "2_workspace"
-                },
-                {
                     "command": "solutionExplorer.renameSolutionItem",
                     "when": "view == slnbrw && viewItem == solution",
                     "group": "7_modification"
@@ -1169,11 +1074,6 @@
                 {
                     "command": "solutionExplorer.renameSolutionItem",
                     "when": "view == slnbrw && viewItem == project-standard",
-                    "group": "7_modification"
-                },
-                {
-                    "command": "solutionExplorer.renameSolutionItem",
-                    "when": "view == slnbrw && viewItem == project-website",
                     "group": "7_modification"
                 },
                 {
@@ -1275,12 +1175,6 @@
                 "mac": "cmd+v"
             },
             {
-                "command": "solutionExplorer.paste",
-                "when": "view == slnexpl && viewItem == project-website",
-                "key": "ctrl+v",
-                "mac": "cmd+v"
-            },
-            {
                 "command": "solutionExplorer.renameFile",
                 "when": "view == slnexpl && viewItem == project-file",
                 "key": "f2",
@@ -1318,12 +1212,6 @@
             },
             {
                 "command": "solutionExplorer.createFile",
-                "when": "view == slnexpl && viewItem == project-website",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
-            },
-            {
-                "command": "solutionExplorer.createFile",
                 "when": "view == slnexpl && viewItem == project-file",
                 "key": "ctrl+shift+a",
                 "mac": "cmd+shift+a"
@@ -1343,12 +1231,6 @@
             {
                 "command": "solutionExplorer.createFolder",
                 "when": "view == slnexpl && viewItem == project-standard",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnexpl && viewItem == project-website",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
@@ -1413,12 +1295,6 @@
                 "mac": "delete"
             },
             {
-                "command": "solutionExplorer.removeProject",
-                "when": "view == slnexpl && viewItem == project-website",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
                 "command": "solutionExplorer.renameSolutionItem",
                 "when": "view == slnexpl && viewItem == solution",
                 "key": "f2",
@@ -1449,12 +1325,6 @@
                 "mac": "f2"
             },
             {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnexpl && viewItem == project-website",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
                 "command": "solutionExplorer.copy",
                 "when": "view == slnbrw && viewItem == project-folder",
                 "key": "ctrl+c",
@@ -1481,12 +1351,6 @@
             {
                 "command": "solutionExplorer.paste",
                 "when": "view == slnbrw && viewItem == project-standard",
-                "key": "ctrl+v",
-                "mac": "cmd+v"
-            },
-            {
-                "command": "solutionExplorer.paste",
-                "when": "view == slnbrw && viewItem == project-website",
                 "key": "ctrl+v",
                 "mac": "cmd+v"
             },
@@ -1528,12 +1392,6 @@
             },
             {
                 "command": "solutionExplorer.createFile",
-                "when": "view == slnbrw && viewItem == project-website",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
-            },
-            {
-                "command": "solutionExplorer.createFile",
                 "when": "view == slnbrw && viewItem == project-file",
                 "key": "ctrl+shift+a",
                 "mac": "cmd+shift+a"
@@ -1553,12 +1411,6 @@
             {
                 "command": "solutionExplorer.createFolder",
                 "when": "view == slnbrw && viewItem == project-standard",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnbrw && viewItem == project-website",
                 "key": "ctrl+shift+f",
                 "mac": "cmd+shift+f"
             },
@@ -1623,12 +1475,6 @@
                 "mac": "delete"
             },
             {
-                "command": "solutionExplorer.removeProject",
-                "when": "view == slnbrw && viewItem == project-website",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
                 "command": "solutionExplorer.renameSolutionItem",
                 "when": "view == slnbrw && viewItem == solution",
                 "key": "f2",
@@ -1655,12 +1501,6 @@
             {
                 "command": "solutionExplorer.renameSolutionItem",
                 "when": "view == slnbrw && viewItem == project-standard",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnbrw && viewItem == project-website",
                 "key": "f2",
                 "mac": "f2"
             }
