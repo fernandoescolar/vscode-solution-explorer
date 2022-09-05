@@ -31,6 +31,10 @@ export class XmlManager implements Manager {
         return this._toolsVersion;
     }
 
+    public get isFSharp(): boolean {
+        return this.fullPath.toLocaleLowerCase().endsWith(".fsproj");
+    }
+
     public async createFile(folderpath: string, filename: string, content?: string): Promise<string> {
         await this.ensureIsLoaded();
 
@@ -89,7 +93,10 @@ export class XmlManager implements Manager {
         const folderRelativePath = path.dirname(relativePath);
         this.removeInNodes(relativePath);
         if (folderRelativePath !== '.' && this.countInNodes(folderRelativePath, true) === 0) {
-            this.currentItemGroupAdd('Folder', folderRelativePath, true);
+            const folderFullPath = path.dirname(filepath);
+            if (!this.isCurrentlyIncluded(folderFullPath)) {
+                this.currentItemGroupAdd('Folder', folderRelativePath, true);
+            }
         }
 
         await this.saveProject();
@@ -259,7 +266,7 @@ export class XmlManager implements Manager {
 
         let counter = 0;
         const findPattern = (ref: xml.XmlElement) => {
-            if (ref.attributes.Include.startsWith(pattern)) {
+            if (ref.attributes && ref.attributes.Include && ref.attributes.Include.startsWith(pattern)) {
                 counter++;
             }
         };
@@ -470,7 +477,7 @@ export class XmlManager implements Manager {
         if (!project) { return []; }
 
         const result: ProjectItem[] = [];
-        if ((this._sdk = project.attributes && project.attributes.Sdk)) {
+        if ((this._sdk = project.attributes && project.attributes.Sdk) && !this.isFSharp) {
             const exclude = [...config.getNetCoreIgnore(), this.fullPath].join(";");
             const allFolders = new Include("Compile", "**/*", undefined, undefined, exclude);
             result.push(allFolders);
