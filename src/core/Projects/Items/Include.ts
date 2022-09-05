@@ -31,14 +31,17 @@ export class Include extends IncludeBase {
                     isDirectory = path.extname(filepath) === "";
                 }
 
-                entries.push({
-                    name: filename,
-                    fullPath: filepath,
-                    relativePath: relativePath,
-                    isDirectory: isDirectory,
-                    isLink: isLink,
-                    dependentUpon: this.dependentUpon
-                });
+                const exists = entries.find(e => e.relativePath === relativePath);
+                if (!exists) {
+                    entries.push({
+                        name: filename,
+                        fullPath: filepath,
+                        relativePath: relativePath,
+                        isDirectory: isDirectory,
+                        isLink: isLink,
+                        dependentUpon: this.dependentUpon
+                    });
+                }
             }
         }
 

@@ -12,15 +12,17 @@ export class Folder extends ProjectItem {
         entries.push(...this.createFoldersIfNotExists(entries, this.folderpath, path.dirname(this.folderpath), false));
 
         const name = path.basename(folderpath);
-        entries.push({
-            name: name,
-            fullPath: folderpath,
-            relativePath: this.folderpath,
-            isDirectory: true,
-            isLink: false,
-            dependentUpon: undefined
-        });
-
+        const exists = entries.find(e => e.relativePath === this.folderpath);
+        if (!exists) {
+            entries.push({
+                name: name,
+                fullPath: folderpath,
+                relativePath: this.folderpath,
+                isDirectory: true,
+                isLink: false,
+                dependentUpon: undefined
+            });
+        }
         return Promise.resolve(entries);
     }
 
