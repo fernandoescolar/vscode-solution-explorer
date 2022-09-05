@@ -2,6 +2,22 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.7.1
+
+Bugfix #216: icons now are loaded right
+
+Enhancement #132: added github action tasks to publish the extension in Open VSX Registry too
+
+Enhancement #191: adding vcxproj as a known extension in open project dialog
+
+Simplifying the project loading and the different tree project item kinds
+
+Bugfix: add and remove project reference actions now work
+
+Bugfix: avoid create Folder tag when it is not needed
+
+Enhancement: duplicated items error tolerance
+
 ## 0.7.0
 
 Improving compatibility: New core engine to load projects based on MsBuild documentation: https://docs.microsoft.com/en-us/visualstudio/msbuild/how-to-use-project-sdk?view=vs-2022 related to #11, #129, #142 and #174
