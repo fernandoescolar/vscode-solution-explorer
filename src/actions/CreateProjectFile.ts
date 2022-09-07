@@ -10,7 +10,7 @@ export class CreateProjectFile implements Action {
             return;
         }
 
-        this.project.createFile(this.folderPath, this.filename, this.content);
+        await this.project.createFile(this.folderPath, this.filename, this.content);
     }
 
     public toString(): string {
