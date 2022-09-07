@@ -55,6 +55,7 @@ export class SolutionExplorerCommands {
         this.commands['updatePackagesVersion'] = new cmds.UpdatePackagesVersionCommand();
         this.commands['watchRun'] = new cmds.WatchRunCommand();
         this.commands['openSolution'] = new cmds.OpenSolutionCommand(eventAggregator);
+        this.commands['createNewProject'] = new cmds.CreateNewProjectCommand(context);
     }
 
     public register() {
