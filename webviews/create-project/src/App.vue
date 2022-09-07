@@ -33,6 +33,8 @@ import { darkTheme } from 'naive-ui'
 import _ from 'lodash'
 import { PROJECT_TYPES } from '@/libs/ProjectType'
 
+const vscode = acquireVsCodeApi()
+
 const projectTypes = ref(PROJECT_TYPES)
 const selectedProject = ref(null)
 
@@ -59,7 +61,10 @@ const handleProjectClick = item => {
   selectedProject.value = item
 }
 const createProject = val => {
-  console.log(val)
+  vscode.postMessage({
+    command: 'createProject',
+    value: val
+  })
 }
 </script>
 

@@ -80,6 +80,7 @@ const handleCreateProject = () => {
     })
   } else {
     emit('createProject', {
+      projectType: props.selectedProject.value,
       projectLanguage: projectLanguage.value,
       projectName: projectName.value,
       folderName: folderName.value,

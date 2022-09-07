@@ -24,6 +24,6 @@ export class CreateNewProjectCommand extends ActionsCommand {
       return []
     }
 
-    return Promise.resolve([new CreateNewProject(this.context)])
+    return Promise.resolve([new CreateNewProject(this.context, item.path)])
   }
 }
