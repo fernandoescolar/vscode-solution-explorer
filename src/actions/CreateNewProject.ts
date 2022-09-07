@@ -18,15 +18,29 @@ export class CreateNewProject implements Action {
       { enableScripts: true }
     )
 
-    let html = fs.readFileSync(
-      path.join(
-        this.context.extensionPath,
-        'webviews/create-project/dist',
-        'index.html'
-      ),
-      'utf8'
+    panel.webview.html = this.getWebViewContent(
+      this.context,
+      'webviews/create-project/dist/index.html'
     )
-    panel.webview.html = html
+  }
+
+  getWebViewContent(context: vscode.ExtensionContext, templatePath: string) {
+    const resourcePath = path.join(context.extensionPath, templatePath)
+    const dirPath = path.dirname(resourcePath)
+    let html = fs.readFileSync(resourcePath, 'utf-8')
+    html = html.replace(
+      /(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g,
+      (m, $1, $2) => {
+        return (
+          $1 +
+          vscode.Uri.file(path.resolve(dirPath, $2))
+            .with({ scheme: 'vscode-resource' })
+            .toString() +
+          '"'
+        )
+      }
+    )
+    return html
   }
 
   public toString(): string {
