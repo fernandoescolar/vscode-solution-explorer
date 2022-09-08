@@ -10,7 +10,7 @@ export class CreateProjectFolder implements Action {
             return;
         }
 
-        this.project.createFolder(this.folderPath);
+        await this.project.createFolder(this.folderPath);
     }
 
     public toString(): string {
