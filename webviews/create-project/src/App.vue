@@ -31,9 +31,24 @@
 <script setup>
 import { darkTheme } from 'naive-ui'
 import _ from 'lodash'
-import { PROJECT_TYPES } from '@/libs/ProjectType'
+import { PROJECT_INFO } from '@/libs/ProjectType'
 
+let PROJECT_TYPES = null
 const vscode = acquireVsCodeApi()
+window.addEventListener('message', event => {
+  switch (event.data.command) {
+    case 'setProjectTemplates':
+      PROJECT_TYPES = event.data.payload
+      PROJECT_INFO.forEach(element => {
+        let temp = PROJECT_TYPES.findIndex(item => item.value == element.value)
+        if (temp != -1) {
+          PROJECT_TYPES[temp]['description'] = element.description
+        }
+      })
+      projectTypes.value = PROJECT_TYPES
+      break
+  }
+})
 
 const projectTypes = ref(PROJECT_TYPES)
 const selectedProject = ref(null)
