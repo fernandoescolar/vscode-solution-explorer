@@ -31,7 +31,7 @@ export class ProjectFactory {
 
         if (result) {
             try {
-            await result.refresh();
+                await result.preload();
             } catch (e) {
                 console.log(e);
             }

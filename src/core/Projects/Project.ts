@@ -57,4 +57,6 @@ export abstract class Project {
     public abstract moveFolder(folderpath: string, newfolderPath: string): Promise<string>;
 
     public abstract refresh(): Promise<void>;
+
+    public abstract preload(): Promise<void>;
 }

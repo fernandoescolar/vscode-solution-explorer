@@ -14,6 +14,14 @@ export class MsBuildProject extends ProjectWithManagers {
         super(projectFullPath, withReferences, includePrefix);
     }
 
+    public async preload(): Promise<void> {
+        this.references = [];
+        this.packagesReferenges = [];
+        this.projectReferences = [];
+        this.projectItemEntries = [];
+        await super.refresh();
+    }
+
     public async refresh(): Promise<void> {
         this.references = [];
         this.packagesReferenges = [];
