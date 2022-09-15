@@ -113,7 +113,7 @@ export class AddSolutionFile implements Action {
         const lineToAdd = '\t\t' + filePath + ' = ' + filePath + '\r';
         const content = includeSection ?
         [
-            '\tProjectSection(SolutionItems)\r',
+            '\tProjectSection(SolutionItems) = preProject\r',
             lineToAdd,
             '\tEndProjectSection\r'
         ] : [ lineToAdd ];
