@@ -2,6 +2,16 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.7.2
+
+Bugfix #218: Create a file via context menu generates error
+
+Bugfix #220: Very slow initial load time
+
+Bugfix: Add a solution file to an empty folder generates wrong .sln file format
+
+Fixing #132: added github action tasks to publish the extension in Open VSX Registry too
+
 ## 0.7.1
 
 Bugfix #216: icons now are loaded right
