@@ -84,20 +84,6 @@ export class Include extends IncludeBase {
         return glob.globTest((this.exclude ? this.exclude.split(';') : []).map(s => path.join(projectBasePath, s)), text);
     }
 
-    private getRecursiveDir(filepath: string, searchPath: string): string {
-        let result = path.dirname(filepath).substring(searchPath.length + 1);
-        if (result) {
-            if (result.startsWith(path.sep)) {
-                result = result.substring(1);
-            }
-            if (!result.endsWith(path.sep)) {
-                result += path.sep;
-            }
-        }
-
-        return result;
-    }
-
     private getInternalPath(value: string): string {
         const search = (c: string) => {
             const index = value.indexOf('*');

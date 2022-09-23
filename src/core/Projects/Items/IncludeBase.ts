@@ -16,7 +16,6 @@ export abstract class IncludeBase extends ProjectItem {
     protected getRelativePath(filepath: string, recursiveDir: string): string {
         const extension = path.extname(filepath);
         const filename = path.basename(filepath, extension);
-
         const result = this.link
                             .replace("%(Extension)", extension)
                             .replace("%(Filename)", filename)
@@ -25,6 +24,20 @@ export abstract class IncludeBase extends ProjectItem {
 
         if (result.startsWith(path.sep)) {
             return result.substring(1);
+        }
+
+        return result;
+    }
+
+    protected getRecursiveDir(filepath: string, searchPath: string): string {
+        let result = path.dirname(filepath).substring(searchPath.length + 1);
+        if (result) {
+            if (result.startsWith(path.sep)) {
+                result = result.substring(1);
+            }
+            if (!result.endsWith(path.sep)) {
+                result += path.sep;
+            }
         }
 
         return result;

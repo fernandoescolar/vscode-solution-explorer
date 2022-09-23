@@ -12,7 +12,8 @@ export class Update extends IncludeBase {
         for (let index = 0; index < entries.length; index++) {
             const entry = entries[index];
             if (glob.globTest(this.value.split(";").map(s => path.join(projectBasePath, s)), entry.fullPath)) {
-                const relativePath = this.getRelativePath(entry.fullPath, "");
+                const recursiveDir = this.getRecursiveDir(path.sep + entry.relativePath, "");
+                const relativePath = this.getRelativePath(entry.fullPath, recursiveDir);
                 const filename = path.basename(relativePath);
                 entry.name = filename;
                 entry.relativePath = relativePath;
