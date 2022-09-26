@@ -89,9 +89,17 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
     if (!virtualPath) { virtualPath = "."; }
 
     const result: TreeItem[] = [];
-    const items = await project.getProjectItemEntries();
+    
+    const unFilteredItems = await project.getProjectItemEntries();
+    let items: ProjectItemEntry[] = []
+    unFilteredItems.forEach(x => {
+        if (items.findIndex(y => y.fullPath == x.fullPath) == -1)
+            items.push(x);
+    });
+
     const folders = items.filter(i => i.isDirectory && path.dirname(i.relativePath) === virtualPath);
     const files = items.filter(i => !i.isDirectory && path.dirname(i.relativePath) === virtualPath && !i.dependentUpon);
+
 
     if (!project.fullPath.endsWith('.fsproj')) {
         const head = ['properties','wwwroot']
@@ -110,6 +118,7 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
                 return  x < y ? -1 : x > y ? 1 : 0;
             }
         });
+
         files.sort((a, b) => {
             const x : string = a.name.toLowerCase();
             const y : string = b.name.toLowerCase();
