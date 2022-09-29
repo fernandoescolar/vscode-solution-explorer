@@ -4,7 +4,12 @@ import { IEventAggregator, SolutionSelected } from "@events";
 
 interface BaseEvent {
     type: number;
-    solutionPath?: string;
+}
+
+interface OmnisharpInitialisationEvent extends BaseEvent {
+    dotNetCliPaths: string[];
+    timeStamp: Date;
+    solutionPath: string;
 }
 
 interface Subscription {
@@ -30,22 +35,18 @@ export class OmnisharpIntegrationService extends vscode.Disposable {
 
     public register() {
         this.active = config.getOpenSolutionsSelectedInOmnisharp();
-        if (!this.active) { return; }
+        if (!this.active) {
+          return;
+        }
 
-        const checker = setInterval(() => {
-            const extension = vscode.extensions.getExtension(CSHARP_EXTENSION_ID) as any;
-            if (!extension) {
-                clearInterval(checker);
-            }
-
-            if (extension.exports) {
+        const extension = vscode.extensions.getExtension(CSHARP_EXTENSION_ID);
+        if (extension) {
+            if (extension.isActive && extension.exports) {
                 this.start(extension);
-                clearInterval(checker);
             } else {
                 extension.activate().then(() => this.start(extension));
-                clearInterval(checker);
             }
-        }, 0);
+        }
     }
 
     public unregister(): void {
@@ -66,8 +67,9 @@ export class OmnisharpIntegrationService extends vscode.Disposable {
 
     private handleEvent(event: BaseEvent): void {
         if (event.type === SELECT_SOLUTION_EVENT_TYPE) {
-            if (event.solutionPath && event.solutionPath.toLocaleLowerCase().endsWith(SOLUTION_EXTENSION)) {
-                const e = new SolutionSelected(event.solutionPath);
+            const solutionPath = (event as OmnisharpInitialisationEvent).solutionPath;
+            if (solutionPath.toLocaleLowerCase().endsWith(SOLUTION_EXTENSION)) {
+                const e = new SolutionSelected(solutionPath);
                 this.eventAggregator.publish(e);
             }
         }
