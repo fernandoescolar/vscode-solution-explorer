@@ -14,8 +14,8 @@ export class SolutionExplorerCommands {
                 private readonly actionsRunner: ActionsRunner,
                 private readonly templateEngineCollection: TemplateEngineColletion,
                 private readonly eventAggregator: IEventAggregator) {
-        this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand();
-        this.commands['addNewProject'] = new cmds.AddNewProjectCommand();
+        this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand(provider);
+        this.commands['addNewProject'] = new cmds.AddNewProjectCommand(provider);
         this.commands['addPackage'] = new cmds.AddPackageCommand();
         this.commands['addProjectReference'] = new cmds.AddProjectReferenceCommand();
         this.commands['addSolutionFile'] = new cmds.AddExistingFileToSolutionFolderCommand();

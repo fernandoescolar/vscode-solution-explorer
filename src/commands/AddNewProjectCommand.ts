@@ -4,6 +4,7 @@ import * as dialogs from '@extensions/dialogs';
 import { ContextValues, TreeItem } from "@tree";
 import { Action, AddExistingProject, CreateProject } from '@actions';
 import { ActionsCommand } from "@commands";
+import { SolutionExplorerProvider } from '@SolutionExplorerProvider';
 
 type ProjectType = { name: string, value: string, languages: string[] };
 
@@ -36,37 +37,64 @@ const PROJECT_TYPES: ProjectType[] = [
 export class AddNewProjectCommand extends ActionsCommand {
     private wizard: dialogs.Wizard | undefined;
 
-    constructor() {
+    constructor(private readonly provider: SolutionExplorerProvider) {
         super('Add new project');
     }
 
     public  shouldRun(item: TreeItem): boolean {
-        return item && !!item.path && (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps');
+        return !item || (item && !!item.path && (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps'));
     }
 
     public async getActions(item: TreeItem): Promise<Action[]> {
-        if (!item || ! item.path) { return []; }
-
         this.loadProjectTemplates();
         this.wizard = dialogs.wizard('Add new project')
+                             .selectOption('Select solution', this.getSolutions(item))
                              .selectOption('Select project type', this.getProjectTypes())
                              .selectOption('Select language', () => this.getLanguages())
                              .getText('Project name')
                              .getText('Folder name', '', () => this.getCurrentProjectName());
 
         const parameters = await this.wizard .run();
-        if (!parameters) { return []; }
+        if (!parameters || parameters.length < 5) { return []; }
 
-        const workingpath = path.dirname(item.path);
-        let projectPath = path.join(workingpath, parameters[3], parameters[2]);
-        if (parameters[1] === 'C#') { projectPath += '.csproj'; }
-        if (parameters[1] === 'F#') { projectPath += '.fsproj'; }
-        if (parameters[1] === 'VB') { projectPath += '.vbproj'; }
+        const solution = parameters[0];
+        const projectType = parameters[1];
+        const language = parameters[2];
+        const projectName = parameters[3];
+        const folderName = parameters[4];
+        const workingpath = path.dirname(solution);
+
+        let projectPath = path.join(workingpath, folderName, projectName);
+        if (language === 'C#') { projectPath += '.csproj'; }
+        if (language === 'F#') { projectPath += '.fsproj'; }
+        if (language === 'VB') { projectPath += '.vbproj'; }
 
         return [
-            new CreateProject(parameters[0], parameters[1], parameters[2], parameters[3], workingpath),
-            new AddExistingProject(item.path, projectPath)
+            new CreateProject(projectType, language, projectName, folderName, workingpath),
+            new AddExistingProject(solution, projectPath)
         ];
+    }
+
+    private getSolutions(item: TreeItem): dialogs.ItemsOrItemsResolver {
+        if (item && item.path) {
+            const result: { [id: string]: string } = {};
+            result[item.label] = item.path;
+            return result;
+        }
+
+        return async () => {
+            const result: { [id: string]: string } = {};
+            var children = await this.provider.getChildren();
+            if (!children) { return result; }
+
+            children.forEach(child => {
+                if (child && child.path) {
+                    result[child.label] = child.path;
+                }
+            });
+
+            return result;
+        };
     }
 
     private loadProjectTemplates(): void {
@@ -106,8 +134,8 @@ export class AddNewProjectCommand extends ActionsCommand {
 
     private getLanguages(): Promise<string[]> {
         let result: string[] =  [ 'C#' ];
-        if (this.wizard && this.wizard.context && this.wizard.context.results[0]) {
-            let selectedProject = this.wizard.context.results[0];
+        if (this.wizard && this.wizard.context && this.wizard.context.results[1]) {
+            let selectedProject = this.wizard.context.results[1];
             let index = PROJECT_TYPES.findIndex(pt => pt.value === selectedProject);
             if (index >= 0) {
                 result = PROJECT_TYPES[index].languages;
@@ -118,8 +146,8 @@ export class AddNewProjectCommand extends ActionsCommand {
     }
 
     private getCurrentProjectName(): Promise<string> {
-        if (this.wizard && this.wizard.context && this.wizard.context.results[2]) {
-            return Promise.resolve(this.wizard.context.results[2]);
+        if (this.wizard && this.wizard.context && this.wizard.context.results[3]) {
+            return Promise.resolve(this.wizard.context.results[3]);
         }
 
         return Promise.resolve("");
