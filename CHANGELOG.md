@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.7.3
+
+Enhancement #223: Allow add new or existing project to solution without selecting a solution file in the tree view
+
+Enhancement #224: better omnisharp integration thanks to [prettyv](https://github.com/prettyv)
+
+Fixing "Update" section relativepath (related to #222)
+
 ## 0.7.2
 
 Bugfix #218: Create a file via context menu generates error
@@ -18,7 +26,7 @@ Bugfix #216: icons now are loaded right
 
 Enhancement #132: added github action tasks to publish the extension in Open VSX Registry too
 
-Enhancement #191: adding vcxproj as a known extension in open project dialog
+#224 #191: adding vcxproj as a known extension in open project dialog
 
 Simplifying the project loading and the different tree project item kinds
 
