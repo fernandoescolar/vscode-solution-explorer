@@ -7,7 +7,7 @@ This extension adds a Visual Studio Solution File explorer panel in Visual Studi
 ![Visual Studio Code Solution Explorer Showcase](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-show-case.gif)
 
 If you want to enjoy the full experience, you should install:
-- [.Net Core SDK](https://dotnet.microsoft.com/en-us/download) (dotnet command line is required)
+- [.Net SDK](https://dotnet.microsoft.com/en-us/download) (dotnet command line is required)
 - [Microsoft C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) (aka Omnisharp)
 
 Table of Content:
