@@ -67,7 +67,7 @@ export async function getNugetFeeds(projectPath: string): Promise<NugetFeed[]> {
                 break;
             }
         }
-    } while (projectPath);
+    } while (projectPath && projectPath !== path.dirname(projectPath));
 
     return result;
 }
