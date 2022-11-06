@@ -338,4 +338,6 @@ Branded icons are licensed under their copyright license.
 [Callum Marshall](https://github.com/callummarshall9)
 [Philippe Desmarais](https://github.com/CephalonAhmes)
 [LesanOuO](https://github.com/LesanOuO)
+[ShalokShalom](https://github.com/ShalokShalom)
+[nev-21](https://github.com/nev-21)
 **Enjoy!**

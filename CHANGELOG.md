@@ -1,6 +1,11 @@
 # Change Log
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
+## 0.7.4
+
+Enhancement #230: dotnet core is no more thanks to [ShalokShalom](https://github.com/ShalokShalom)
+
+Bugfix #227 NuGet packages manager in Windows thanks to [nev-21](https://github.com/nev-21)
 
 ## 0.7.3
 
