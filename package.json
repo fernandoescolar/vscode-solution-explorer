@@ -192,6 +192,11 @@
                 "category": "Solution Explorer"
             },
             {
+                "command": "solutionExplorer.createNewProject",
+                "title": "Add new project by GUI",
+                "category": "Solution Explorer"
+            },
+            {
                 "command": "solutionExplorer.addExistingProject",
                 "title": "Add existing project",
                 "category": "Solution Explorer"
@@ -557,12 +562,22 @@
                     "group": "2_workspace"
                 },
                 {
+                    "command": "solutionExplorer.createNewProject",
+                    "when": "view == slnexpl && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
                     "command": "solutionExplorer.addExistingProject",
                     "when": "view == slnexpl && viewItem == solution",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addNewProject",
+                    "when": "view == slnexpl && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createNewProject",
                     "when": "view == slnexpl && viewItem == solution-cps",
                     "group": "2_workspace"
                 },
@@ -972,12 +987,22 @@
                     "group": "2_workspace"
                 },
                 {
+                    "command": "solutionExplorer.createNewProject",
+                    "when": "view == slnbrw && viewItem == solution",
+                    "group": "2_workspace"
+                },
+                {
                     "command": "solutionExplorer.addExistingProject",
                     "when": "view == slnbrw && viewItem == solution",
                     "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.addNewProject",
+                    "when": "view == slnbrw && viewItem == solution-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.createNewProject",
                     "when": "view == slnbrw && viewItem == solution-cps",
                     "group": "2_workspace"
                 },
