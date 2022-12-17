@@ -1,9 +1,9 @@
 import * as dialogs from "@extensions/dialogs";
-import { TemplateEngineColletion } from "@templates";
+import { TemplateEngineCollection } from "@templates";
 import { Action, ActionContext } from "./base/Action";
 
 export class InstallWorkspaceTemplateFiles implements Action {
-    constructor(private readonly templateEngineCollection: TemplateEngineColletion, private readonly workspace: string) {
+    constructor(private readonly templateEngineCollection: TemplateEngineCollection, private readonly workspace: string) {
     }
 
     public async execute(context: ActionContext): Promise<void> {

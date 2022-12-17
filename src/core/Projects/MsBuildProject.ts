@@ -7,7 +7,7 @@ import { ProjectWithManagers } from "./ProjectWithManagers";
 export class MsBuildProject extends ProjectWithManagers {
     private references: Reference[] = [];
     private projectReferences: ProjectReference[] = [];
-    private packagesReferenges: PackageReference[] = [];
+    private packagesReferences: PackageReference[] = [];
     private projectItemEntries: ProjectItemEntry[] = [];
 
     constructor(projectFullPath: string, withReferences?: boolean, includePrefix?: string) {
@@ -16,7 +16,7 @@ export class MsBuildProject extends ProjectWithManagers {
 
     public async preload(): Promise<void> {
         this.references = [];
-        this.packagesReferenges = [];
+        this.packagesReferences = [];
         this.projectReferences = [];
         this.projectItemEntries = [];
         await super.refresh();
@@ -24,7 +24,7 @@ export class MsBuildProject extends ProjectWithManagers {
 
     public async refresh(): Promise<void> {
         this.references = [];
-        this.packagesReferenges = [];
+        this.packagesReferences = [];
         this.projectReferences = [];
         this.projectItemEntries = [];
         await super.refresh();
@@ -43,7 +43,7 @@ export class MsBuildProject extends ProjectWithManagers {
 
     public async getPackageReferences(): Promise<PackageReference[]> {
         await this.checkProjectLoaded();
-        return this.packagesReferenges;
+        return this.packagesReferences;
     }
 
     public async getProjectItemEntries(): Promise<ProjectItemEntry[]> {
@@ -98,13 +98,13 @@ export class MsBuildProject extends ProjectWithManagers {
             });
         }
 
-        if (this.packagesReferenges.length <= 0) {
+        if (this.packagesReferences.length <= 0) {
             if (!this.xml.isCps) {
-                this.packagesReferenges = await this.parsePackagesConfig();
+                this.packagesReferences = await this.parsePackagesConfig();
             } else {
                 projectItems.forEach(item => {
                     if (item.type === "PackageReference") {
-                        this.packagesReferenges.push(item as PackageReference);
+                        this.packagesReferences.push(item as PackageReference);
                     }
                 });
             }

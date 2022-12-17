@@ -11,7 +11,7 @@ import { SolutionExplorerCommands } from "./SolutionExplorerCommands";
 import { SolutionExplorerFileWatcher } from "./SolutionExplorerFileWatcher";
 import { SolutionExplorerOutputChannel } from "./SolutionExplorerOutputChannel";
 import { OmnisharpIntegrationService } from "./OmnisharpIntegrationService";
-import { TemplateEngineColletion } from "@templates";
+import { TemplateEngineCollection } from "@templates";
 
 export function activate(context: vscode.ExtensionContext) {
 	const paths = vscode.workspace.workspaceFolders?.map(w => w.uri.fsPath) || [];
@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
     const solutionTreeItemCollection = new SolutionTreeItemCollection();
     const solutionFinder = new SolutionFinder(paths, eventAggregator);
     const solutionExplorerDragAndDropController = new SolutionExplorerDragAndDropController(actionsRunner, solutionTreeItemCollection);
-    const templateEngineCollection = new TemplateEngineColletion();
+    const templateEngineCollection = new TemplateEngineCollection();
     const solutionExplorerProvider = new SolutionExplorerProvider(solutionFinder, solutionTreeItemCollection, solutionExplorerDragAndDropController, templateEngineCollection, eventAggregator, logger);
     const solutionExplorerCommands = new SolutionExplorerCommands(context, solutionExplorerProvider, actionsRunner, templateEngineCollection, eventAggregator);
     const solutionExplorerFileWatcher = new SolutionExplorerFileWatcher(eventAggregator);

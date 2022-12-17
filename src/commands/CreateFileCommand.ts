@@ -3,14 +3,14 @@ import * as dialogs from "@extensions/dialogs";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, CreateProjectFile, OpenFile } from "@actions";
 import { ActionsCommand } from "@commands";
-import { TemplateEngineColletion } from "@templates";
+import { TemplateEngineCollection } from "@templates";
 
 export class CreateFileCommand extends ActionsCommand {
     private workspaceRoot: string = '';
     private defaultExtension: string = '';
     private wizard: dialogs.Wizard | undefined;
 
-    constructor(private readonly templaceEngineCollection: TemplateEngineColletion) {
+    constructor(private readonly templaceEngineCollection: TemplateEngineCollection) {
         super('Create file');
     }
 
