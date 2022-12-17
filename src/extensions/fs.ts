@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { trueCasePath } from 'true-case-path';
 
 export async function copy(sourcePath: string, targetPath: string): Promise<void> {
     const sourceUri = vscode.Uri.file(sourcePath);
@@ -7,10 +8,9 @@ export async function copy(sourcePath: string, targetPath: string): Promise<void
 }
 
 export async function exists(path: string): Promise<boolean> {
-    const uri = vscode.Uri.file(path);
     try {
-        await vscode.workspace.fs.stat(uri);
-        return true;
+        const caseCorrectPath = await trueCasePath(path);
+        return caseCorrectPath === path;
     } catch (e) {
         return false;
     }
