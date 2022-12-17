@@ -1,7 +1,7 @@
-var path = require("path");
+const path = require("path");
 
 module.exports = function(filename, projectPath, folderPath, xml) {
-    var namespace;
+    let namespace;
     xml.elements.some(e => {
         if (e.name === 'PropertyGroup') {
             const rootNamespace = e.elements.find(p => p.name === 'RootNamespace');

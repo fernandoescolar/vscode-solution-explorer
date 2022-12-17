@@ -10,7 +10,7 @@ export class ProjectReferencedAssembliesTreeItem extends TreeItem {
     }
 
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
-        var refs = await this.getReferences();
+        const refs = await this.getReferences();
 
         let result: TreeItem[] = [];
         refs.forEach(ref => {
@@ -25,10 +25,10 @@ export class ProjectReferencedAssembliesTreeItem extends TreeItem {
             return [];
         }
 
-        var refs = await this.project.getReferences();
+        const refs = await this.project.getReferences();
         refs.sort((a, b) => {
-            var x = a.name.toLowerCase();
-            var y = b.name.toLowerCase();
+            const x = a.name.toLowerCase();
+            const y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
 

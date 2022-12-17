@@ -51,8 +51,8 @@ export class TemplateEngineColletion {
     }
 
     private async copyFolder(src: string, dest: string): Promise<void> {
-        var exists = await fs.exists(src);
-        var isDirectory = exists && await fs.isDirectory(src);
+        const exists = await fs.exists(src);
+        const isDirectory = exists && await fs.isDirectory(src);
         if (exists && isDirectory) {
             if (!(await fs.exists(dest))) {
                 await fs.mkdir(dest);

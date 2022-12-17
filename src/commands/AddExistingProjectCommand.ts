@@ -32,7 +32,7 @@ export class AddExistingProjectCommand extends ActionsCommand {
 
         return async () => {
             const result: { [id: string]: string } = {};
-            var children = await this.provider.getChildren();
+            const children = await this.provider.getChildren();
             if (!children) { return result; }
 
             children.forEach(child => {
