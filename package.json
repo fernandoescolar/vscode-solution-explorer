@@ -159,6 +159,11 @@
                 "icon": "$(add)"
             },
             {
+                "command": "solutionExplorer.updatePackageVersion",
+                "title": "Update package version",
+                "category": "Solution Explorer"
+            },
+            {
                 "command": "solutionExplorer.removePackage",
                 "title": "Remove package",
                 "category": "Solution Explorer",
@@ -480,6 +485,11 @@
                     "command": "solutionExplorer.addPackage",
                     "when": "view == slnexpl && viewItem == project-referenced-packages-cps",
                     "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.updatePackageVersion",
+                    "when": "view == slnexpl && viewItem == project-referenced-package-cps",
+                    "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removePackage",
@@ -895,6 +905,11 @@
                     "command": "solutionExplorer.addPackage",
                     "when": "view == slnbrw && viewItem == project-referenced-packages-cps",
                     "group": "inline"
+                },
+                {
+                    "command": "solutionExplorer.updatePackageVersion",
+                    "when": "view == slnbrw && viewItem == project-referenced-package-cps",
+                    "group": "2_workspace"
                 },
                 {
                     "command": "solutionExplorer.removePackage",
