@@ -1,3 +1,4 @@
+import { Project as NugetProject } from 'nuget-deps-tree/dist/src/Structure/OutputStructure';
 import * as fs from "@extensions/fs";
 import * as path from "@extensions/path";
 import * as config from "@extensions/config";
@@ -10,7 +11,7 @@ export class MsBuildProject extends ProjectWithManagers {
     private packagesReferenges: PackageReference[] = [];
     private projectItemEntries: ProjectItemEntry[] = [];
 
-    constructor(projectFullPath: string, withReferences?: boolean, includePrefix?: string) {
+    constructor(projectFullPath: string, withReferences?: boolean, includePrefix?: string, private nugetPackagesDependencyTree?: NugetProject) {
         super(projectFullPath, withReferences, includePrefix);
     }
 
@@ -29,6 +30,10 @@ export class MsBuildProject extends ProjectWithManagers {
         this.projectItemEntries = [];
         await super.refresh();
         await this.checkProjectLoaded();
+    }
+
+    public getNugetPackagesDependencyTree(): NugetProject | undefined {
+        return this.nugetPackagesDependencyTree;
     }
 
     public async getReferences(): Promise<Reference[]> {

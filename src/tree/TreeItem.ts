@@ -155,6 +155,7 @@ export abstract class TreeItem extends vscode.TreeItem {
 	protected loadResourceUri(): void {
 		const ignoreTypes = [
 			ContextValues.projectReferencedPackage,
+			ContextValues.projectReferencedPackageTransitive,
 			ContextValues.projectReferencedPackages,
 			ContextValues.projectReferencedProject,
 			ContextValues.projectReferencedProjects,

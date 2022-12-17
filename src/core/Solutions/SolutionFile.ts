@@ -3,6 +3,8 @@
  * https://github.com/Microsoft/msbuild/blob/master/src/Build/Construction/Solution/SolutionFile.cs
  */
 
+import { NugetDepsTree } from 'nuget-deps-tree';
+import { Tree as NugetPackageTree } from 'nuget-deps-tree/dist/src/Structure/OutputStructure';
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import { ProjectInSolution } from "./ProjectInSolution";
@@ -146,6 +148,23 @@ export class SolutionFile {
         {
             this.processProjectConfigurationSection(rawProjectConfigurationsEntries);
         }
+
+        this.tryParseProjectsNugetPackagesDepTree();
+    }
+
+    private tryParseProjectsNugetPackagesDepTree() {
+        try {
+            const nugetPackagesDepsTree = NugetDepsTree.generate(this.fullPath) as NugetPackageTree;
+
+            Object.keys(this._projects).forEach(key => {
+                let project = this._projects[key];
+                const projectPackagesTree = nugetPackagesDepsTree.projects
+                    .find((packageProject) => packageProject.name === project.projectName);
+                if (projectPackagesTree) {
+                    project.addNugetPackagesDependencyTree(projectPackagesTree);
+                }
+            });
+        } catch {}
     }
 
     private parseFileHeader(): void {
