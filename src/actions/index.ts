@@ -43,3 +43,6 @@ export * from "./Run";
 export * from "./SelectActiveDocumentInTree";
 export * from "./Test";
 export * from "./Watch";
+export * from './AddLocalToolReference'
+export * from './RemoveLocalToolReference'
+export * from './UpdateLocalToolReference'

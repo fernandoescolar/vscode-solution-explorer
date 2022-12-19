@@ -73,5 +73,9 @@ export async function findIconPath(name: string, path: string, contextValue: str
         return await getIconPathFromExtension(path, 'csproj.svg');
     }
 
+    if (contextValue.startsWith(ContextValues.localTool)) {
+        return getIconPath('PackageReference.svg','PackageReference-dark.svg');
+    }
+
     return getIconPath('file.svg');
 }

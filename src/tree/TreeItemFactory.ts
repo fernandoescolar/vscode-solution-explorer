@@ -14,6 +14,8 @@ import { ProjectFileTreeItem } from "@tree/items/ProjectFileTreeItem";
 import { CpsProjectTreeItem } from "@tree/items/cps/CpsProjectTreeItem";
 import { StandardProjectTreeItem } from "@tree/items/standard/StandardProjectTreeItem";
 import { SolutionFileTreeItem } from "@tree/items/SolutionFileTreeItem";
+import { LocalToolsTreeItem } from "./items/LocalToolsTreeItem";
+import { LocalTool } from "@core/Utilities/LocalTools";
 
 export async function createFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile, workspaceRoot: string): Promise<TreeItem> {
     let context = new TreeItemContext(provider, solution, workspaceRoot);
@@ -21,6 +23,12 @@ export async function createFromSolution(provider: SolutionExplorerProvider, sol
     await treeItem.getChildren();
     await treeItem.refreshContextValue();
     return treeItem;
+}
+
+export async function createFromLocalTools(provider: SolutionExplorerProvider, solution: SolutionFile, workspaceRoot: string, localTools: LocalTool[]) {
+    const context = new TreeItemContext(provider, solution, workspaceRoot);
+    const localToolsItem = new LocalToolsTreeItem(context, localTools);
+    return localToolsItem;
 }
 
 export async function createItemsFromSolution(context: TreeItemContext, solution: SolutionFile, projectInSolution?: ProjectInSolution): Promise<TreeItem[]> {

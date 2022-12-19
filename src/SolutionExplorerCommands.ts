@@ -17,6 +17,7 @@ export class SolutionExplorerCommands {
         this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand(provider);
         this.commands['addNewProject'] = new cmds.AddNewProjectCommand(provider);
         this.commands['addPackage'] = new cmds.AddPackageCommand();
+        this.commands['addLocalTool'] = new cmds.AddLocalToolCommand();
         this.commands['addProjectReference'] = new cmds.AddProjectReferenceCommand();
         this.commands['addSolutionFile'] = new cmds.AddExistingFileToSolutionFolderCommand();
         this.commands['build'] = new cmds.BuildCommand();
@@ -41,6 +42,7 @@ export class SolutionExplorerCommands {
         this.commands['publish'] = new cmds.PublishCommand();
         this.commands['refresh'] = new cmds.RefreshCommand(provider);
         this.commands['removePackage'] = new cmds.RemovePackageCommand();
+        this.commands['removeLocalTool'] = new cmds.RemoveLocalToolCommand();
         this.commands['removeProject'] = new cmds.RemoveProjectCommand();
         this.commands['removeProjectReference'] = new cmds.RemoveProjectReferenceCommand();
         this.commands['removeSolutionFolder'] = new cmds.RemoveSolutionFolderCommand();
@@ -53,6 +55,7 @@ export class SolutionExplorerCommands {
         this.commands['showActiveFileInExplorer'] = new cmds.SelectActiveDocumentCommand(provider);
         this.commands['test'] = new cmds.TestCommand();
         this.commands['updatePackagesVersion'] = new cmds.UpdatePackagesVersionCommand();
+        this.commands['updateLocalToolsVersion'] = new cmds.UpdateLocalToolsVersionCommand();
         this.commands['watchRun'] = new cmds.WatchRunCommand();
         this.commands['openSolution'] = new cmds.OpenSolutionCommand(eventAggregator);
     }

@@ -91,7 +91,7 @@ export async function getNugetApiServices(feed: NugetFeed): Promise<{[id: string
     }
 }
 
-export async function searchNugetPackage(feed: NugetFeed, packageName: string): Promise<NugetPackage[]> {
+export async function searchNugetPackage(feed: NugetFeed, packageName: string, packageType: string): Promise<NugetPackage[]> {
     if (!feed) {
         return [];
     }
@@ -104,7 +104,7 @@ export async function searchNugetPackage(feed: NugetFeed, packageName: string): 
         throw new Error(`Nuget search API URL is not found for feed ${feed.name}`);
     }
 
-    const searchUrl = `${feed.searchApiUrl}?q=${packageName}&skip=0&take=50`;
+    const searchUrl = `${feed.searchApiUrl}?q=${packageName}&skip=0&take=50&packageType=${packageType}`;
     const response = await fetch(searchUrl, getFetchOptions(feed));
     const json = await response.json() as any;
     if (!json.data || json.data.length === 0) {

@@ -17,5 +17,9 @@ export const defaultTerminalCommands = {
     restore: [ "dotnet", "restore", "\"$projectPath\"" ],
     run: [ "dotnet", "run", "--project", "\"$projectPath\"" ],
     test: [ "dotnet", "test", "\"$projectPath\"" ],
-    watch: [ "dotnet", "watch", "run", "--project", "\"$projectPath\"" ]
+    watch: [ "dotnet", "watch", "run", "--project", "\"$projectPath\"" ],
+    addLocalToolReference: [ "dotnet", "tool", "install", "--local", "\"$packageId\"" ],
+    addLocalToolReferenceWithVersion: [ "dotnet", "tool", "install", "--local", "\"$packageId\"", "--version", "\"$packageVersion\"" ],
+    removeLocalToolReference: [ "dotnet", "tool", "uninstall", "--local", "\"$packageId\"" ],
+    updateLocalToolReference: [ "dotnet", "tool", "update", "--local", "\"$packageId\"" ],
 };

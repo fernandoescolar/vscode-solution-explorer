@@ -37,3 +37,6 @@ export * from "./SelectActiveDocumentCommand";
 export * from "./TestCommand";
 export * from "./UpdatePackagesVersionCommand";
 export * from "./WatchRunCommand";
+export * from "./AddLocalToolCommand";
+export * from "./RemoveLocalToolCommand";
+export * from "./UpdateLocalToolsVersionCommand";

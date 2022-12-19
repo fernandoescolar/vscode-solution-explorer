@@ -159,14 +159,31 @@
                 "icon": "$(add)"
             },
             {
+                "command": "solutionExplorer.addLocalTool",
+                "title": "Add local tool",
+                "category": "Solution Explorer",
+                "icon": "$(add)"
+            },
+            {
                 "command": "solutionExplorer.removePackage",
                 "title": "Remove package",
                 "category": "Solution Explorer",
                 "icon": "$(trash)"
             },
             {
+                "command": "solutionExplorer.removeLocalTool",
+                "title": "Remove local tool",
+                "category": "Solution Explorer",
+                "icon": "$(trash)"
+            },
+            {
                 "command": "solutionExplorer.updatePackagesVersion",
                 "title": "Update packages version",
+                "category": "Solution Explorer"
+            },
+            {
+                "command": "solutionExplorer.updateLocalToolsVersion",
+                "title": "Update local tools version",
                 "category": "Solution Explorer"
             },
             {
@@ -492,6 +509,16 @@
                     "group": "inline"
                 },
                 {
+                    "command": "solutionExplorer.removeLocalTool",
+                    "when": "view == slnexpl && viewItem == local-tool",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.removeLocalTool",
+                    "when": "view == slnexpl && viewItem == local-tool",
+                    "group": "inline"
+                },
+                {
                     "command": "solutionExplorer.updatePackagesVersion",
                     "when": "view == slnexpl && viewItem == project-cps",
                     "group": "2_workspace"
@@ -499,6 +526,11 @@
                 {
                     "command": "solutionExplorer.updatePackagesVersion",
                     "when": "view == slnexpl && viewItem == project-referenced-packages-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.updateLocalToolsVersion",
+                    "when": "view == slnexpl && viewItem == local-tools",
                     "group": "2_workspace"
                 },
                 {
@@ -897,6 +929,16 @@
                     "group": "inline"
                 },
                 {
+                    "command": "solutionExplorer.addLocalTool",
+                    "when": "view == slnbrw && viewItem == local-tools",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.addLocalTool",
+                    "when": "view == slnbrw && viewItem == local-tools",
+                    "group": "inline"
+                },
+                {
                     "command": "solutionExplorer.removePackage",
                     "when": "view == slnbrw && viewItem == project-referenced-package-cps",
                     "group": "2_workspace"
@@ -907,6 +949,16 @@
                     "group": "inline"
                 },
                 {
+                    "command": "solutionExplorer.removeLocalTool",
+                    "when": "view == slnbrw && viewItem == local-tool",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.removeLocalTool",
+                    "when": "view == slnbrw && viewItem == local-tool",
+                    "group": "inline"
+                },
+                {
                     "command": "solutionExplorer.updatePackagesVersion",
                     "when": "view == slnbrw && viewItem == project-cps",
                     "group": "2_workspace"
@@ -914,6 +966,11 @@
                 {
                     "command": "solutionExplorer.updatePackagesVersion",
                     "when": "view == slnbrw && viewItem == project-referenced-packages-cps",
+                    "group": "2_workspace"
+                },
+                {
+                    "command": "solutionExplorer.updateLocalToolsVersion",
+                    "when": "view == slnbrw && viewItem == local-tools",
                     "group": "2_workspace"
                 },
                 {
@@ -1253,6 +1310,12 @@
                 "mac": "delete"
             },
             {
+                "command": "solutionExplorer.removeLocalTool",
+                "when": "view == slnexpl && viewItem == local-tool",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
                 "command": "solutionExplorer.removeProjectReference",
                 "when": "view == slnexpl && viewItem == project-referenced-project-cps",
                 "key": "delete",
@@ -1429,6 +1492,12 @@
             {
                 "command": "solutionExplorer.removePackage",
                 "when": "view == slnbrw && viewItem == project-referenced-package-cps",
+                "key": "delete",
+                "mac": "delete"
+            },
+            {
+                "command": "solutionExplorer.removeLocalTool",
+                "when": "view == slnbrw && viewItem == local-tool",
                 "key": "delete",
                 "mac": "delete"
             },

@@ -5,11 +5,11 @@ import { Action, AddPackageReference } from "@actions";
 import { ActionsCommand } from "@commands";
 
 export class AddPackageCommand extends ActionsCommand {
-    private nugetFeeds: nuget.NugetFeed[] = [];
-    private lastNugetPackages: nuget.NugetPackage[] = [];
-    private wizard: dialogs.Wizard | undefined;
-    constructor() {
-        super('Add package');
+    protected nugetFeeds: nuget.NugetFeed[] = [];
+    protected lastNugetPackages: nuget.NugetPackage[] = [];
+    protected wizard: dialogs.Wizard | undefined;
+    constructor(title: string = 'Add package') {
+        super(title);
     }
 
     public  shouldRun(item: TreeItem): boolean {
@@ -33,7 +33,7 @@ export class AddPackageCommand extends ActionsCommand {
         return [ new AddPackageReference(item.project.fullPath, parameters[1], parameters[2]) ];
     }
 
-    private async getNugetFeeds(projectFullPath: string): Promise<string[]> {
+    protected async getNugetFeeds(projectFullPath: string): Promise<string[]> {
         this.nugetFeeds = await nuget.getNugetFeeds(projectFullPath);
         if (this.nugetFeeds.length === 0) {
             const defaultNugetFeed = await nuget.getDefaultNugetFeed();
@@ -43,7 +43,7 @@ export class AddPackageCommand extends ActionsCommand {
         return this.nugetFeeds.map(f => f.name);
     }
 
-    private async searchAndMapNugetPackages(packageName: string): Promise<string[]> {
+    protected async searchAndMapNugetPackages(packageName: string, packageType: string = ''): Promise<string[]> {
         if (!this.wizard || !this.wizard.context || !this.wizard.context.results) {
             return [];
         }
@@ -52,11 +52,11 @@ export class AddPackageCommand extends ActionsCommand {
         const feed = this.nugetFeeds.find(f => f.name === feedName);
         if (!feed) { return []; }
 
-        this.lastNugetPackages = await nuget.searchNugetPackage(feed, packageName);
+        this.lastNugetPackages = await nuget.searchNugetPackage(feed, packageName, packageType);
         return this.lastNugetPackages.map(p => p.id);
     }
 
-    private getCurrentPackageVersions(): Promise<string[]> {
+    protected getCurrentPackageVersions(): Promise<string[]> {
         if (!this.wizard || !this.wizard.context || !this.wizard.context.results) {
             return Promise.resolve([]);
         }
@@ -69,7 +69,7 @@ export class AddPackageCommand extends ActionsCommand {
         return Promise.resolve(nugetPackage.versions.map(v => v.version).reverse());
     }
 
-    private getCurrentPackageDefaultVersion(): Promise<string> {
+    protected getCurrentPackageDefaultVersion(): Promise<string> {
         if (!this.wizard || !this.wizard.context || !this.wizard.context.results) { return Promise.resolve(""); }
 
         const nugetPackage = this.lastNugetPackages.find(p => p.id === this.wizard?.context?.results[1]);

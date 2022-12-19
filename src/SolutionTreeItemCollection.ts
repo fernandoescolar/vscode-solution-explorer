@@ -1,7 +1,7 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { SolutionFile } from "@core/Solutions";
 import { TreeItem, TreeItemFactory } from "@tree";
-
+import { LocalTools } from "@core/Utilities/LocalTools";
 
 export class SolutionTreeItemCollection {
 	private children: TreeItem[] | undefined = undefined;
@@ -28,13 +28,17 @@ export class SolutionTreeItemCollection {
 	}
 
 	public async addSolution(solutionPath: string, rootPath: string, solutionProvider: SolutionExplorerProvider): Promise<void> {
-		const solution = await SolutionFile.parse(solutionPath);
-		const item = await TreeItemFactory.createFromSolution(solutionProvider, solution, rootPath);
 		if (!this.children) {
 			this.children = [];
 		}
+		const solution = await SolutionFile.parse(solutionPath);
 
-		this.children.push(item);
+		const localTools = LocalTools.getInstalledLocalTools(rootPath);
+		const localToolsItem = await TreeItemFactory.createFromLocalTools(solutionProvider, solution, rootPath, localTools);
+		this.children.push(localToolsItem);
+
+		const solutionItem = await TreeItemFactory.createFromSolution(solutionProvider, solution, rootPath);
+		this.children.push(solutionItem);
 	}
 
 	public getLoadedChildTreeItemById(id: string): TreeItem | undefined {
