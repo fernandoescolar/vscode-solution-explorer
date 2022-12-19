@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as config from "@extensions/config";
 import * as sln from "@tree";
+import { execSync } from 'child_process';
 
 import { IEventAggregator, EventTypes, IEvent, ISubscription, IFileEvent } from "@events";
 import { ILogger } from "@logs";
@@ -13,6 +14,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	private fileSubscription: ISubscription | undefined;
 	private solutionSubscription: ISubscription | undefined;
 	private treeView: vscode.TreeView<sln.TreeItem> | undefined;
+	public hasCoreSDK = false;
 	private _onDidChangeTreeData: vscode.EventEmitter<sln.TreeItem | undefined> = new vscode.EventEmitter<sln.TreeItem | undefined>();
 
 	constructor(private readonly solutionFinder: SolutionFinder,
@@ -57,6 +59,12 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 			} else if (showMode === config.SHOW_MODE_EXPLORER) {
 				this.treeView = vscode.window.createTreeView('slnexpl', options);
 			}
+
+			try {
+				const buffer = execSync('dotnet --version');
+				const [majorVersion] = buffer.toString().split('.');
+				this.hasCoreSDK = Number(majorVersion) >= 3;
+			} catch {}
 		}
 	}
 

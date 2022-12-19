@@ -31,13 +31,16 @@ export class SolutionTreeItemCollection {
 		if (!this.children) {
 			this.children = [];
 		}
+
 		const solution = await SolutionFile.parse(solutionPath);
-
-		const localTools = LocalTools.getInstalledLocalTools(rootPath);
-		const localToolsItem = await TreeItemFactory.createFromLocalTools(solutionProvider, solution, rootPath, localTools);
-		this.children.push(localToolsItem);
-
 		const solutionItem = await TreeItemFactory.createFromSolution(solutionProvider, solution, rootPath);
+
+		if (solutionProvider.hasCoreSDK) {
+			const localTools = LocalTools.getInstalledLocalTools(rootPath);
+			const localToolsItem = await TreeItemFactory.createFromLocalTools(solutionProvider, solution, rootPath, localTools);
+			this.children.push(localToolsItem);
+		}
+
 		this.children.push(solutionItem);
 	}
 
