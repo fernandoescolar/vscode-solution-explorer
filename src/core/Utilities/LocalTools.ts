@@ -8,9 +8,15 @@ export type LocalTool = {
 
 export class LocalTools {
     public static getInstalledLocalTools(rootPath: string): LocalTool[] {
-        let buffer = execSync('dotnet tool list --local', {
-            cwd: rootPath
-        });
+        let buffer: Buffer;
+        try {
+            buffer = execSync('dotnet tool list --local', {
+                cwd: rootPath
+            });
+        } catch {
+            return [];
+        }
+
         if (!buffer) {
             return [];
         }
