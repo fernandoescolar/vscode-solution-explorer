@@ -1,11 +1,11 @@
 import { TreeItem } from "@tree";
 import { Action, InstallWorkspaceTemplateFiles } from "@actions";
 import { ActionsCommand } from "@commands";
-import { TemplateEngineColletion } from "@templates";
+import { TemplateEngineCollection } from "@templates";
 
 export class InstallWorkspaceTemplateFilesCommand extends ActionsCommand {
-    constructor(private readonly templateEngineCollection: TemplateEngineColletion) {
-        super('Intall Workspace Template Files');
+    constructor(private readonly templateEngineCollection: TemplateEngineCollection) {
+        super('Install Workspace Template Files');
     }
 
     public  shouldRun(item: TreeItem): boolean {

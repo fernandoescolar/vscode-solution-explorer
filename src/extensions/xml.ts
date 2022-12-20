@@ -36,7 +36,7 @@ export function parseToXml(content: XmlElement): Promise<string> {
         result = eol.crlf(result);
     }
 
-    // #118 look inside quoted strings and replaze '&' by '&amp;'
+    // #118 look inside quoted strings and replace '&' by '&amp;'
     const m = result.match(/"([^"]*)"/g);
     if (m) {
         m.forEach(match => {

@@ -27,7 +27,7 @@ export function globTest(pattern: string | string[], input: string): boolean {
    return false;
 }
 
-export async function globFileSearch(workingFolder: string, pattern: string, exlude?:string | string[]): Promise<string[]> {
+export async function globFileSearch(workingFolder: string, pattern: string, exclude?:string | string[]): Promise<string[]> {
     const result: string[] = [];
     if (!isGlobPattern(pattern)) {
         return [ path.join(workingFolder, pattern) ];
@@ -36,7 +36,7 @@ export async function globFileSearch(workingFolder: string, pattern: string, exl
     const files = await fs.readdir(workingFolder);
     for (let i = 0; i < files.length; i++) {
         const filename = path.join(workingFolder, files[i]);
-        if (exlude && globTest(exlude, filename)) {
+        if (exclude && globTest(exclude, filename)) {
             continue;
         }
 
@@ -46,7 +46,7 @@ export async function globFileSearch(workingFolder: string, pattern: string, exl
 
         const isDirectory = await fs.isDirectory(filename);
         if (isDirectory) {
-            const subresult = await globFileSearch(filename, pattern, exlude);
+            const subresult = await globFileSearch(filename, pattern, exclude);
             result.push(...subresult);
         }
     }

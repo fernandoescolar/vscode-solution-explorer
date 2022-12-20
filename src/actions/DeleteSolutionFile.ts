@@ -18,10 +18,10 @@ export class DeleteSolutionFile implements Action {
 
         const solutionFolderPath = path.dirname(this.solution.fullPath);
         const relativePath = path.relative(solutionFolderPath, this.filePath).replace(/\//g, '\\');
-        await this.deleteFileToSolutiomFolder(relativePath);
+        await this.deleteFileToSolutionFolder(relativePath);
     }
 
-    private async deleteFileToSolutiomFolder(relativePath: string) {
+    private async deleteFileToSolutionFolder(relativePath: string) {
         let data: string = await fs.readFile(this.solution.fullPath);
         let lines: string[] = data.split('\n');
         let lineIndex = -1, projectLineIndexStart = -1, projectLineIndexEnd = -1, hasSection = false;

@@ -9,7 +9,7 @@ const TEMPLATE_FILE_NAME: string = "template-list.json";
 const SOURCE_FOLDER: string = path.join(__dirname, "..", "files-vscode-folder");
 const DEFAULT_TEMPLATE_FILE: string = path.join(SOURCE_FOLDER, TEMPLATE_FILE_NAME);
 
-export class TemplateEngineColletion {
+export class TemplateEngineCollection {
     private static readonly defaultTemplateEngine: TemplateEngine = new HandlebarsTemplateEngine(DEFAULT_TEMPLATE_FILE);
     private templateEngines: { [id: string]: TemplateEngine } = {};
 
@@ -46,7 +46,7 @@ export class TemplateEngineColletion {
         if (await fs.exists(templateFile)) {
             return new HandlebarsTemplateEngine(templateFile);
         } else {
-            return TemplateEngineColletion.defaultTemplateEngine;
+            return TemplateEngineCollection.defaultTemplateEngine;
         }
     }
 

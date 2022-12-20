@@ -4,7 +4,7 @@ import * as sln from "@tree";
 
 import { IEventAggregator, EventTypes, IEvent, ISubscription, IFileEvent } from "@events";
 import { ILogger } from "@logs";
-import { TemplateEngineColletion } from "@templates";
+import { TemplateEngineCollection } from "@templates";
 import { SolutionFinder } from "./SolutionFinder";
 import { SolutionExplorerDragAndDropController } from "./SolutionExplorerDragAndDropController";
 import { SolutionTreeItemCollection } from "./SolutionTreeItemCollection";
@@ -18,7 +18,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	constructor(private readonly solutionFinder: SolutionFinder,
 		        private readonly solutionTreeItemCollection: SolutionTreeItemCollection,
 				private readonly dragAndDropController: SolutionExplorerDragAndDropController,
-				private readonly templateEngineCollection: TemplateEngineColletion,
+				private readonly templateEngineCollection: TemplateEngineCollection,
 				public readonly eventAggregator: IEventAggregator,
 				public readonly logger: ILogger) {
 

@@ -24,7 +24,7 @@ export class AddSolutionFile implements Action {
             return;
         }
 
-        await this.appFileToSolutiomFolder(relativeFilePath);
+        await this.appFileToSolutionFolder(relativeFilePath);
     }
 
     private async getRelativeFilePath(context: ActionContext, fileFullPath: string): Promise<string | undefined> {
@@ -77,7 +77,7 @@ export class AddSolutionFile implements Action {
         return option as CopyFileOptions;
     }
 
-    private async appFileToSolutiomFolder(relativeFilePath: string) {
+    private async appFileToSolutionFolder(relativeFilePath: string) {
         const data: string = await fs.readFile(this.solution.fullPath);
         const lines: string[] = data.split('\n');
         let projectLineIndexStart = -1, lineIndex = -1, hasSection = false;

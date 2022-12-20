@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as cmds from "@commands";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { IEventAggregator } from "@events";
-import { TemplateEngineColletion } from "@templates";
+import { TemplateEngineCollection } from "@templates";
 import { TreeItem } from "@tree";
 import { ActionsRunner } from "./ActionsRunner";
 
@@ -12,7 +12,7 @@ export class SolutionExplorerCommands {
     constructor(private readonly context: vscode.ExtensionContext,
                 private readonly provider: SolutionExplorerProvider,
                 private readonly actionsRunner: ActionsRunner,
-                private readonly templateEngineCollection: TemplateEngineColletion,
+                private readonly templateEngineCollection: TemplateEngineCollection,
                 private readonly eventAggregator: IEventAggregator) {
         this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand(provider);
         this.commands['addNewProject'] = new cmds.AddNewProjectCommand(provider);
