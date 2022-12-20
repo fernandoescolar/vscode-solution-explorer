@@ -17,6 +17,7 @@ export class SolutionExplorerCommands {
         this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand(provider);
         this.commands['addNewProject'] = new cmds.AddNewProjectCommand(provider);
         this.commands['addPackage'] = new cmds.AddPackageCommand();
+        this.commands['updatePackageVersion'] = new cmds.UpdatePackageVersionCommand();
         this.commands['addProjectReference'] = new cmds.AddProjectReferenceCommand();
         this.commands['addSolutionFile'] = new cmds.AddExistingFileToSolutionFolderCommand();
         this.commands['build'] = new cmds.BuildCommand();
