@@ -10,7 +10,7 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem {
     }
 
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
-        var refs = await this.getReferences();
+        const refs = await this.getReferences();
         let result: TreeItem[] = [];
         refs.forEach(ref => {
             result.push(this.createReferencePackageItem(childContext, ref));
@@ -24,10 +24,10 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem {
             return [];
         }
 
-        var refs = await this.project.getPackageReferences();
+        const refs = await this.project.getPackageReferences();
         refs.sort((a, b) => {
-            var x = a.name.toLowerCase();
-            var y = b.name.toLowerCase();
+            const x = a.name.toLowerCase();
+            const y = b.name.toLowerCase();
             return x < y ? -1 : x > y ? 1 : 0;
         });
 
