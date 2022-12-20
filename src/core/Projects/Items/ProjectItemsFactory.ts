@@ -106,7 +106,10 @@ function toOSPath(input: string): string {
     if (!input) {
         return input;
     }
-    return input.replace(/\\/g, path.sep).trim();
+    return input
+        .replace(/\\/g, path.sep)
+        .trim()
+        .replace(new RegExp(`${path.sep}$`), '');
 }
 
 function isGlobExpression(input: string): boolean {
