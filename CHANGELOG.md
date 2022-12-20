@@ -4,9 +4,15 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 ## 0.7.5
 
-Bugfix ##239: Fix project expansion thanks to [Richard Willis](https://github.com/badsyntax)
+Bugfix ##239: Fix project expansion, thanks to [Richard Willis](https://github.com/badsyntax)
 
 Bugfix #238: Not able to change casing when renaming file
+
+Enhancement #242: Update single package, thanks to [Richard Willis](https://github.com/badsyntax)
+
+PR #246 Fix spelling, thanks to [Richard Willis](https://github.com/badsyntax)
+
+PR #247 Use modern ecmascript variable declarations, thanks to [Richard Willis](https://github.com/badsyntax)
 
 ## 0.7.4
 
