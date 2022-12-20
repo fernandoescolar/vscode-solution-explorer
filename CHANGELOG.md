@@ -1,6 +1,13 @@
 # Change Log
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
+
+## 0.7.5
+
+Bugfix ##239: Fix project expansion thanks to [Richard Willis](https://github.com/badsyntax)
+
+Bugfix #238: Not able to change casing when renaming file
+
 ## 0.7.4
 
 Enhancement #230: dotnet core is no more thanks to [ShalokShalom](https://github.com/ShalokShalom)

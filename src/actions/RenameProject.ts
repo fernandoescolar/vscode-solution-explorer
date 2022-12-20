@@ -27,7 +27,8 @@ export class RenameProject extends RenameSolutionFolder {
             return;
         }
 
-        if (await fs.exists(newProjectPath)) {
+        const caseChanged = this.project.fullPath.toLowerCase() === newProjectPath.toLowerCase();
+        if (await fs.exists(newProjectPath) && !caseChanged) {
             await dialogs.showError("Project already exists");
             return;
         }

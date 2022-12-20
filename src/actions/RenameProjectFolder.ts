@@ -24,7 +24,8 @@ export class RenameProjectFolder implements Action {
             return;
         }
 
-        if (await fs.exists(newfolderPath) && isTheSameFolderThanProject) {
+        const caseChanged = this.folderPath.toLowerCase() === newfolderPath.toLowerCase();
+        if (await fs.exists(newfolderPath) && isTheSameFolderThanProject && !caseChanged) {
             await dialogs.showError("Folder already exists");
             return;
         }

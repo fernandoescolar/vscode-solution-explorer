@@ -22,7 +22,8 @@ export class RenameSolution implements Action {
             return;
         }
 
-        if (await fs.exists(newSolutionPath)) {
+        const caseChanged = this.solutionPath.toLowerCase() === newSolutionPath.toLowerCase();
+        if (await fs.exists(newSolutionPath) && !caseChanged) {
             await dialogs.showError("Solution already exists");
             return;
         }

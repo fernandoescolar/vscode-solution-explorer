@@ -23,7 +23,8 @@ export class RenameProjectFile implements Action {
             return;
         }
 
-        if (await fs.exists(newfilePath)) {
+        const caseChanged = this.filePath.toLowerCase() === newfilePath.toLowerCase();
+        if (await fs.exists(newfilePath) && !caseChanged) {
             await dialogs.showError("File already exists");
             return;
         }
