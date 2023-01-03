@@ -1,7 +1,7 @@
 import * as path from "@extensions/path";
 import { getItemNesting } from "@extensions/config";
 import { ProjectInSolution, SolutionProjectType, SolutionFile } from "@core/Solutions";
-import { Project, ProjectFactory, ProjectItemEntry } from "@core/Projects";
+import { PackageReference, Project, ProjectFactory, ProjectItemEntry } from "@core/Projects";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree/TreeItem";
 import { TreeItemContext } from "@tree/TreeItemContext";
@@ -14,6 +14,7 @@ import { ProjectFileTreeItem } from "@tree/items/ProjectFileTreeItem";
 import { CpsProjectTreeItem } from "@tree/items/cps/CpsProjectTreeItem";
 import { StandardProjectTreeItem } from "@tree/items/standard/StandardProjectTreeItem";
 import { SolutionFileTreeItem } from "@tree/items/SolutionFileTreeItem";
+import { ProjectReferencedPackageTreeItem } from "./items/ProjectReferencedPackageTreeItem";
 
 export async function createFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile, workspaceRoot: string): Promise<TreeItem> {
     let context = new TreeItemContext(provider, solution, workspaceRoot);
@@ -152,6 +153,33 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
         }
 
         result.push(new ProjectFileTreeItem(context, file, related));
+    });
+
+    return result;
+}
+
+export async function createItemsFromPackages(childContext: TreeItemContext, packages: PackageReference[], contextValue: string): Promise<TreeItem[]> {
+    const result: TreeItem[] = [];
+    if (!childContext.project) { return result; }
+
+    const projectDependencies = await childContext.project.getNugetPackageDependencies();
+    packages.forEach((pkg) => {
+        const pkgDependencies: PackageReference[] = [];
+        const key = Object.keys(projectDependencies).find((d) => d.toLocaleLowerCase() === pkg.name.toLocaleLowerCase());
+        if (key && projectDependencies[key] && projectDependencies[key].dependencies) {
+            Object.keys(projectDependencies[key].dependencies).forEach((d) => {
+                pkgDependencies.push(new PackageReference(d, projectDependencies[key].dependencies[d]));
+            });
+        }
+
+        result.push(
+            new ProjectReferencedPackageTreeItem(
+                childContext,
+                pkg,
+                pkgDependencies,
+                contextValue
+            )
+        );
     });
 
     return result;

@@ -1,4 +1,3 @@
-import { Project as NugetProject } from 'nuget-deps-tree/dist/src/Structure/OutputStructure';
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import { ProjectInSolution, SolutionProjectType, ProjectTypeIds } from "../Solutions";
@@ -59,19 +58,19 @@ export class ProjectFactory {
 
     private static loadProjectByType(project: ProjectInSolution): Project | undefined {
         if (project.projectType === SolutionProjectType.knownToBeMSBuildFormat) {
-            return ProjectFactory.loadDefaultProject(project.fullPath, project.nugetPackagesDependencyTree);
+            return ProjectFactory.loadDefaultProject(project.fullPath);
         }
 
         if (project.projectType === SolutionProjectType.webProject) {
-            return ProjectFactory.loadDefaultProject(project.fullPath, project.nugetPackagesDependencyTree);
+            return ProjectFactory.loadDefaultProject(project.fullPath);
         }
 
         if (project.projectTypeId === ProjectTypeIds.shProjectGuid) {
-            return ProjectFactory.loadSharedProject(project.fullPath, project.nugetPackagesDependencyTree);
+            return ProjectFactory.loadSharedProject(project.fullPath);
         }
 
         if (project.projectTypeId === ProjectTypeIds.deployProjectGuid) {
-            return ProjectFactory.loadNoReferencesProject(project.fullPath, project.nugetPackagesDependencyTree);
+            return ProjectFactory.loadNoReferencesProject(project.fullPath);
         }
     }
 
@@ -86,15 +85,15 @@ export class ProjectFactory {
         }
     }
 
-    private static loadDefaultProject(fullPath: string, nugetPackagesDependencyTree?: NugetProject): Project {
-        return new MsBuildProject(fullPath, undefined, undefined, nugetPackagesDependencyTree);
+    private static loadDefaultProject(fullPath: string): Project {
+        return new MsBuildProject(fullPath, undefined, undefined);
     }
 
-    private static loadNoReferencesProject(fullPath: string, nugetPackagesDependencyTree?: NugetProject): Project {
-        return new MsBuildProject(fullPath, false, undefined, nugetPackagesDependencyTree);
+    private static loadNoReferencesProject(fullPath: string): Project {
+        return new MsBuildProject(fullPath, false, undefined);
     }
 
-    private static loadSharedProject(fullPath: string, nugetPackagesDependencyTree?: NugetProject): Project {
-        return new MsBuildProject(fullPath.replace(".shproj", ".projitems"), false, "$(MSBuildThisFileDirectory)", nugetPackagesDependencyTree);
+    private static loadSharedProject(fullPath: string): Project {
+        return new MsBuildProject(fullPath.replace(".shproj", ".projitems"), false, "$(MSBuildThisFileDirectory)");
     }
 }

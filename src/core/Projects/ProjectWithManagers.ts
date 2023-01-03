@@ -1,8 +1,8 @@
 import { ProjectFileStat } from "./ProjectFileStat";
-import { Project } from "./Project";
+import { ProjectWithNugetDependencies } from "./ProjectWithNugetDependencies";
 import { Manager, XmlManager, FileManager } from "./Managers";
 
-export abstract class ProjectWithManagers extends Project {
+export abstract class ProjectWithManagers extends ProjectWithNugetDependencies {
     protected readonly xml: XmlManager;
     protected readonly files: FileManager;
 
@@ -20,8 +20,9 @@ export abstract class ProjectWithManagers extends Project {
         return [this.files, this.xml];
     }
 
-    public refresh(): Promise<void> {
-        return this.xml.refresh();
+    public async refresh(): Promise<void> {
+        await super.refresh();
+        await this.xml.refresh();
     }
 
     public createFile(folderpath: string, filename: string, content?: string | undefined): Promise<string> {

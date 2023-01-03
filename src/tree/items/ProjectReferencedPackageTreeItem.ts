@@ -1,14 +1,12 @@
-import { DependencyTree } from 'nuget-deps-tree/dist/src/DependencyTree/Tree';
-
 import { PackageReference } from "@core/Projects";
-import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } from "@tree";
+import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues, TreeItemFactory } from "@tree";
 
 export class ProjectReferencedPackageTreeItem extends TreeItem {
-    constructor(context: TreeItemContext, private pkgRef: PackageReference, private projectNugetDeps: DependencyTree[], contextValue: string = ContextValues.projectReferencedPackage) {
+    constructor(context: TreeItemContext, private pkgRef: PackageReference, private dependencies: PackageReference[], contextValue: string = ContextValues.projectReferencedPackage) {
         super(
             context,
             pkgRef.name,
-            projectNugetDeps.length > 0 ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None,
+            dependencies.length > 0 ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None,
             contextValue,
             pkgRef.name
         );
@@ -17,23 +15,8 @@ export class ProjectReferencedPackageTreeItem extends TreeItem {
         this.addContextValueSuffix();
     }
 
-    protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
-        let result: TreeItem[] = [];
-        const newContext = this.context.copy(this.context.project, this);
-        if (newContext.parent) {
-            newContext.parent.id = newContext.parent.id + this.pkgRef.name;
-        }
-        this.projectNugetDeps.forEach((p) => {
-            result.push(
-                new ProjectReferencedPackageTreeItem(
-                    newContext,
-                    new PackageReference(p.id, p.version),
-                    p.dependencies,
-                    ContextValues.projectReferencedPackageTransitive
-                )
-            );
-        });
-        return result;
+    protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
+        return TreeItemFactory.createItemsFromPackages(childContext, this.dependencies, ContextValues.projectReferencedPackageDependency);
     }
 
     protected loadThemeIcon(fullpath: string): void {

@@ -1,6 +1,5 @@
 import { PackageReference } from "@core/Projects";
-import { TreeItem, TreeItemContext, TreeItemCollapsibleState, ContextValues } from "@tree";
-import { ProjectReferencedPackageTreeItem } from "./ProjectReferencedPackageTreeItem";
+import { TreeItem, TreeItemContext, TreeItemCollapsibleState, ContextValues, TreeItemFactory } from "@tree";
 
 export class ProjectReferencedPackagesTreeItem extends TreeItem {
     constructor(context: TreeItemContext) {
@@ -11,10 +10,7 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem {
 
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
         const refs = await this.getReferences();
-        let result: TreeItem[] = [];
-        refs.forEach(ref => {
-            result.push(this.createReferencePackageItem(childContext, ref));
-        });
+        const result = await TreeItemFactory.createItemsFromPackages(childContext, refs, ContextValues.projectReferencedPackage);
 
         return result;
     }
@@ -32,13 +28,6 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem {
         });
 
         return refs;
-    }
-
-    protected createReferencePackageItem(childContext: TreeItemContext, ref: PackageReference) {
-        const deps = (this.context.project?.getNugetPackagesDependencyTree()?.dependencies || [])
-            .find(d => d.id === ref.name)
-            ?.dependencies || []
-        return new ProjectReferencedPackageTreeItem(childContext, ref, deps);
     }
 
     protected loadThemeIcon(fullpath: string): void {

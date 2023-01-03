@@ -1,5 +1,5 @@
-import { Project as NugetProject } from 'nuget-deps-tree/dist/src/Structure/OutputStructure';
 import * as path from "@extensions/path";
+import { NugetDependencies } from "@extensions/nuget-dependencies";
 import { PackageReference, ProjectItemEntry, ProjectReference, Reference } from "./Items";
 import { ProjectFileStat } from "./ProjectFileStat";
 
@@ -35,9 +35,9 @@ export abstract class Project {
 
     public abstract getPackageReferences(): Promise<PackageReference[]>;
 
-    public abstract getNugetPackagesDependencyTree(): NugetProject | undefined;
-
     public abstract getProjectItemEntries(): Promise<ProjectItemEntry[]>;
+
+    public abstract getNugetPackageDependencies(): Promise<NugetDependencies>;
 
     public abstract renameFile(filepath: string, name: string): Promise<string>;
 
