@@ -35,8 +35,11 @@ export class SolutionExplorerOutputChannel {
         }
 
         if (logEvent.logEventType === LogEventType.append) {
-            this.outputChannel.appendLine(logEvent.text);
-            if (config.getShowOutputChannel()) {
+            if (config.getOutputChannelMode() !== "none") {
+                this.outputChannel.appendLine(logEvent.text);
+            }
+
+            if (config.getOutputChannelMode() === "show") {
                 this.outputChannel.show();
             }
         }

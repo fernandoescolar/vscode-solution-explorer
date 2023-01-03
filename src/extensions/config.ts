@@ -6,7 +6,7 @@ const ITEM_TYPE_NAME = 'xxprojItemTypes';
 const SHOW_MODE_NAME = 'showMode';
 const TRACK_ACTIVE_ITEM_NAME = 'trackActiveItem';
 const SOLUTION_EXPLORER_ICONS_NAME = 'solutionExplorerIcons';
-const SHOW_OUTPUT_CHANNEL_NAME = 'showOutputChannel';
+const OUTPUT_CHANNEL_MODE_NAME = 'outputChannelMode';
 const NETCORE_IGNORE_NAME = 'netcoreIgnore';
 const ALTERNATIVE_SOLUTION_FOLDERS_NAME = 'altSolutionFolders';
 const XML_SPACES_NAME = 'xmlspaces';
@@ -21,6 +21,11 @@ const OPEN_SOLUTION_SELECTED_IN_OMNISHARP_NAME = 'openSolutions.selectedInOmnish
 const CUSTOM_COMMANDS_NAME = 'customCommands';
 
 let config: vscode.WorkspaceConfiguration;
+
+export type LineEndingsType = "lf" | "crlf";
+export type ShowMode = "activityBar" | "explorer" | "none";
+export type IconsMode = "current-theme" | "mix" | "solution-explorer";
+export type OutputChannelMode = "show" | "append" | "none";
 
 export function register() {
     config = vscode.workspace.getConfiguration(CONFIGURATION_NAME);
@@ -42,20 +47,20 @@ export function getItemTypes(): { [id: string]: string } {
     });
 }
 
-export function getShowMode(): string {
-    return config.get<string>(SHOW_MODE_NAME, SHOW_MODE_ACTIVITYBAR);
+export function getShowMode(): ShowMode {
+    return config.get<ShowMode>(SHOW_MODE_NAME, "activityBar");
 }
 
-export function getSolutionExplorerIcons(): string {
-    return config.get<string>(SOLUTION_EXPLORER_ICONS_NAME, ICONS_CUSTOM);
+export function getSolutionExplorerIcons(): IconsMode {
+    return config.get<IconsMode>(SOLUTION_EXPLORER_ICONS_NAME, "solution-explorer");
 }
 
 export function getTrackActiveItem(): boolean {
     return config.get<boolean>(TRACK_ACTIVE_ITEM_NAME, false);
 }
 
-export function getShowOutputChannel(): boolean {
-    return config.get<boolean>(SHOW_OUTPUT_CHANNEL_NAME, true);
+export function getOutputChannelMode(): OutputChannelMode {
+    return config.get<OutputChannelMode>(OUTPUT_CHANNEL_MODE_NAME, "append");
 }
 
 export function getNetCoreIgnore(): string[] {
@@ -120,13 +125,3 @@ export function getCustomCommands(key: TerminalCommand): string[] {
 
     return result.slice();
 }
-
-export type LineEndingsType = "lf" | "crlf";
-
-export const ICONS_THEME = "current-theme";
-export const ICONS_MIXED = "mix";
-export const ICONS_CUSTOM = "solution-explorer";
-
-export const SHOW_MODE_ACTIVITYBAR = "activityBar";
-export const SHOW_MODE_EXPLORER = "explorer";
-export const SHOW_MODE_NONE = "none";

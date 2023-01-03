@@ -135,8 +135,8 @@ export abstract class TreeItem extends vscode.TreeItem {
 	protected loadIcon(): void {
 		let iconType = config.getSolutionExplorerIcons();
 
-		if (iconType === config.ICONS_CUSTOM
-		   || (iconType === config.ICONS_MIXED && !this._allowIconTheme)) {
+		if (iconType === "solution-explorer"
+		   || (iconType === "mix" && !this._allowIconTheme)) {
 			TreeItemIconProvider.findIconPath(this.label, this.path || "", this.contextValue)
 			                    .then( iconPath => {
 									this.iconPath = iconPath;

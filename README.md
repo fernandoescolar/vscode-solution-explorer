@@ -11,6 +11,7 @@ If you want to enjoy the full experience, you should install:
 - [Microsoft C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) (aka Omnisharp)
 
 Table of Content:
+- [vscode-solution-explorer](#vscode-solution-explorer)
   - [Getting Started](#getting-started)
   - [Open Solutions](#open-solutions)
     - [Open Solution command](#open-solution-command)
@@ -26,8 +27,8 @@ Table of Content:
     - [Add or remove project references](#add-or-remove-project-references)
     - [Create file templates](#create-file-templates)
   - [Extension Settings](#extension-settings)
+          - [Example](#example)
   - [Known Issues](#known-issues)
-  - [Release Notes](#release-notes)
   - [License](#license)
   - [Thanks to contributors](#thanks-to-contributors)
 
@@ -226,7 +227,7 @@ You can configure the extension in the Visual Studio Code settings panel:
 
 - `vssolution.solutionExplorerIcons` "solution-explorer": custom items from vscode-solution-explorer extension. "mix": file and folder icons from the installed icons theme. "current-theme": all the icons are from the installed icons theme.
 
-- `vssolution.showOutputChannel` Show the solution explorer output channel.
+- `vssolution.outputChannelMode` The solution explorer output channel mode: `show` on every single log, `append` but not show the pane or `none`.
 
 - `vssolution.trackActiveItem` Select the active editor file in the solution explorer (not recomended).
 
@@ -260,7 +261,7 @@ You can configure the extension in the Visual Studio Code settings panel:
 
     "vssolution.solutionExplorerIcons": "current-theme",
 
-    "vssolution.showOutputChannel": true,
+    "vssolution.outputChannelMode": "show",
 
     "vssolution.trackActiveItem": false,
 

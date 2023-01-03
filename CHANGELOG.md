@@ -14,6 +14,8 @@ PR #246 Fix spelling, thanks to [Richard Willis](https://github.com/badsyntax)
 
 PR #247 Use modern ecmascript variable declarations, thanks to [Richard Willis](https://github.com/badsyntax)
 
+Bugfix #250 new output panel configuration option to select desired behavior `outputChannelMode`: `show`, `append` or `none`.
+
 ## 0.7.4
 
 Enhancement #230: dotnet core is no more thanks to [ShalokShalom](https://github.com/ShalokShalom)
