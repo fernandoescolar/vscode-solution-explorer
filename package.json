@@ -1684,6 +1684,7 @@
         "eol": "^0.9.1",
         "handlebars": "^4.7.7",
         "node-fetch": "^3.2.10",
+        "nuget-deps-tree": "0.2.2",
         "uuid": "^8.3.2",
         "xml-js": "^1.6.11"
     }

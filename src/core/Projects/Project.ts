@@ -1,3 +1,4 @@
+import { Project as NugetProject } from 'nuget-deps-tree/dist/src/Structure/OutputStructure';
 import * as path from "@extensions/path";
 import { PackageReference, ProjectItemEntry, ProjectReference, Reference } from "./Items";
 import { ProjectFileStat } from "./ProjectFileStat";
@@ -33,6 +34,8 @@ export abstract class Project {
     public abstract getProjectReferences(): Promise<ProjectReference[]>;
 
     public abstract getPackageReferences(): Promise<PackageReference[]>;
+
+    public abstract getNugetPackagesDependencyTree(): NugetProject | undefined;
 
     public abstract getProjectItemEntries(): Promise<ProjectItemEntry[]>;
 

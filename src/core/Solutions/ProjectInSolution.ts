@@ -6,6 +6,7 @@
 import { SolutionFile } from "./SolutionFile";
 import { SolutionProjectType } from "./SolutionProjectType";
 import { ProjectConfigurationInSolution } from "./ProjectConfigurationInSolution";
+import { Project as NugetProject } from 'nuget-deps-tree/dist/src/Structure/OutputStructure';
 
 export class ProjectInSolution {
     constructor(public readonly solution: SolutionFile) {
@@ -22,9 +23,14 @@ export class ProjectInSolution {
     public webProperties: { [id: string] : string } = {};
     public configuration: { [id: string] : ProjectConfigurationInSolution } = {};
     public solutionItems: { [id: string] : string } = {};
+    public nugetPackagesDependencyTree: NugetProject | undefined;
 
     public addDependency(parentGuid: string): void {
         this.dependencies.push(parentGuid);
+    }
+
+    public addNugetPackagesDependencyTree(nugetPackagesDependencyTree: NugetProject): void {
+        this.nugetPackagesDependencyTree = nugetPackagesDependencyTree;
     }
 
     public addWebProperty(name: string, value: string): void {

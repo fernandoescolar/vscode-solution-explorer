@@ -8,6 +8,7 @@ export class ContextValues {
     public static readonly projectReferencedProject: string = 'project-referenced-project';
     public static readonly projectReferencedPackages: string = 'project-referenced-packages';
     public static readonly projectReferencedPackage: string = 'project-referenced-package';
+    public static readonly projectReferencedPackageTransitive: string = 'project-referenced-package-transitive';
     public static readonly projectFolder: string = 'project-folder';
     public static readonly projectFile: string = 'project-file';
     public static readonly error: string = 'error';

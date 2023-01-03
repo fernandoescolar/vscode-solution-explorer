@@ -35,7 +35,10 @@ export class ProjectReferencedPackagesTreeItem extends TreeItem {
     }
 
     protected createReferencePackageItem(childContext: TreeItemContext, ref: PackageReference) {
-        return new ProjectReferencedPackageTreeItem(childContext, ref);
+        const deps = (this.context.project?.getNugetPackagesDependencyTree()?.dependencies || [])
+            .find(d => d.id === ref.name)
+            ?.dependencies || []
+        return new ProjectReferencedPackageTreeItem(childContext, ref, deps);
     }
 
     protected loadThemeIcon(fullpath: string): void {
