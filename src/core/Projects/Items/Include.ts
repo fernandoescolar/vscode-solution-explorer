@@ -16,7 +16,7 @@ export class Include extends IncludeBase {
             const searchPath = glob.isGlobPattern(pattern) ? path.join(projectBasePath, internalPath) : projectBasePath;
             const result = await glob.globFileSearch(searchPath, this.cleanPathDownAtStart(pattern), this.exclude ? this.exclude?.split(';') : undefined);
             for (const filepath of result) {
-                const recursiveDir = this.getRecursiveDir(filepath, searchPath);
+                const recursiveDir = this.getRecursiveDir(filepath, projectBasePath);
                 const relativePath = this.getRelativePath(filepath, recursiveDir);
                 const isLink = !filepath.startsWith(projectBasePath);
                 const folderEntries: ProjectItemEntry[] = this.createFoldersIfNotExists(entries, relativePath, filepath, isLink);
