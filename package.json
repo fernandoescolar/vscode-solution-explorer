@@ -290,6 +290,11 @@
                 "command": "solutionExplorer.showActiveFileInExplorer",
                 "title": "Select Active Document",
                 "category": "Solution Explorer"
+            },
+            {
+                "command": "solutionExplorer.executeMultipleCommands",
+                "title": "Combines multiple commands into one (meant for use with keybindings)",
+                "category": "Solution Explorer"
             }
         ],
         "menus": {
@@ -1160,364 +1165,239 @@
         },
         "keybindings": [
             {
-                "command": "solutionExplorer.copy",
-                "when": "view == slnexpl && viewItem == project-folder",
+                "command": "solutionExplorer.executeMultipleCommands",
                 "key": "ctrl+c",
-                "mac": "cmd+c"
+                "mac": "cmd+c",
+                "when": "focusedView == slnexpl || focusedView == slnbrw",
+                "args": [
+                    [
+                        "solutionExplorer.copy",
+                        {
+                            "requiredViewItem": "project-folder"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.copy",
+                        {
+                            "requiredViewItem": "project-file"
+                        }
+                    ]
+                ]
             },
             {
-                "command": "solutionExplorer.copy",
-                "when": "view == slnexpl && viewItem == project-file",
-                "key": "ctrl+c",
-                "mac": "cmd+c"
-            },
-            {
-                "command": "solutionExplorer.paste",
-                "when": "view == slnexpl && viewItem == project-folder",
+                "command": "solutionExplorer.executeMultipleCommands",
                 "key": "ctrl+v",
-                "mac": "cmd+v"
+                "mac": "cmd+v",
+                "when": "focusedView == slnexpl || focusedView == slnbrw",
+                "args": [
+                    [
+                        "solutionExplorer.paste",
+                        {
+                            "requiredViewItem": "project-folder"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.paste",
+                        {
+                            "requiredViewItem": "project-cps"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.paste",
+                        {
+                            "requiredViewItem": "project-standard"
+                        }
+                    ]
+                ]
             },
             {
-                "command": "solutionExplorer.paste",
-                "when": "view == slnexpl && viewItem == project-cps",
-                "key": "ctrl+v",
-                "mac": "cmd+v"
-            },
-            {
-                "command": "solutionExplorer.paste",
-                "when": "view == slnexpl && viewItem == project-standard",
-                "key": "ctrl+v",
-                "mac": "cmd+v"
-            },
-            {
-                "command": "solutionExplorer.renameFile",
-                "when": "view == slnexpl && viewItem == project-file",
+                "command": "solutionExplorer.executeMultipleCommands",
                 "key": "f2",
-                "mac": "f2"
+                "mac": "f2",
+                "when": "focusedView == slnexpl || focusedView == slnbrw",
+                "args": [
+                    [
+                        "solutionExplorer.renameFile",
+                        {
+                            "requiredViewItem": "project-file"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.renameFolder",
+                        {
+                            "requiredViewItem": "project-folder"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.renameSolutionItem",
+                        {
+                            "requiredViewItem": "solution"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.renameSolutionItem",
+                        {
+                            "requiredViewItem": "solution-cps"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.renameSolutionItem",
+                        {
+                            "requiredViewItem": "solution-folder"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.renameSolutionItem",
+                        {
+                            "requiredViewItem": "project-cps"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.renameSolutionItem",
+                        {
+                            "requiredViewItem": "project-standard"
+                        }
+                    ]
+                ]
             },
             {
-                "command": "solutionExplorer.deleteFile",
-                "when": "view == slnexpl && viewItem == project-file",
+                "command": "solutionExplorer.executeMultipleCommands",
                 "key": "delete",
-                "mac": "delete"
+                "mac": "delete",
+                "when": "focusedView == slnexpl || focusedView == slnbrw",
+                "args": [
+                    [
+                        "solutionExplorer.deleteFile",
+                        {
+                            "requiredViewItem": "project-file",
+							"useMultipleSelection": true
+                        }
+                    ],
+                    [
+                        "solutionExplorer.deleteFolder",
+                        {
+                            "requiredViewItem": "project-folder",
+							"useMultipleSelection": true
+                        }
+                    ],
+                    [
+                        "solutionExplorer.removePackage",
+                        {
+                            "requiredViewItem": "project-referenced-package-cps",
+							"useMultipleSelection": true
+                        }
+                    ],
+                    [
+                        "solutionExplorer.removeProjectReference",
+                        {
+                            "requiredViewItem": "project-referenced-project-cps",
+							"useMultipleSelection": true
+                        }
+                    ],
+                    [
+                        "solutionExplorer.removeSolutionFolder",
+                        {
+                            "requiredViewItem": "solution-folder",
+							"useMultipleSelection": true
+                        }
+                    ],
+                    [
+                        "solutionExplorer.removeProject",
+                        {
+                            "requiredViewItem": "project-cps",
+							"useMultipleSelection": true
+                        }
+                    ],
+                    [
+                        "solutionExplorer.removeProject",
+                        {
+                            "requiredViewItem": "project-standard",
+							"useMultipleSelection": true
+                        }
+                    ]
+                ]
             },
             {
-                "command": "solutionExplorer.renameFolder",
-                "when": "view == slnexpl && viewItem == project-folder",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.deleteFolder",
-                "when": "view == slnexpl && viewItem == project-folder",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.createFile",
-                "when": "view == slnexpl && viewItem == project-cps",
+                "command": "solutionExplorer.executeMultipleCommands",
                 "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
+                "mac": "cmd+shift+a",
+                "when": "focusedView == slnexpl || focusedView == slnbrw",
+                "args": [
+                    [
+                        "solutionExplorer.createFile",
+                        {
+                            "requiredViewItem": "project-cps"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.createFile",
+                        {
+                            "requiredViewItem": "project-standard"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.createFile",
+                        {
+                            "requiredViewItem": "project-file"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.createFile",
+                        {
+                            "requiredViewItem": "project-folder"
+                        }
+                    ]
+                ]
             },
             {
-                "command": "solutionExplorer.createFile",
-                "when": "view == slnexpl && viewItem == project-standard",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
-            },
-            {
-                "command": "solutionExplorer.createFile",
-                "when": "view == slnexpl && viewItem == project-file",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
-            },
-            {
-                "command": "solutionExplorer.createFile",
-                "when": "view == slnexpl && viewItem == project-folder",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnexpl && viewItem == project-cps",
+                "command": "solutionExplorer.executeMultipleCommands",
                 "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnexpl && viewItem == project-standard",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnexpl && viewItem == project-file",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnexpl && viewItem == project-folder",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.removePackage",
-                "when": "view == slnexpl && viewItem == project-referenced-package-cps",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.removeProjectReference",
-                "when": "view == slnexpl && viewItem == project-referenced-project-cps",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.createSolutionFolder",
-                "when": "view == slnexpl && viewItem == solution",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createSolutionFolder",
-                "when": "view == slnexpl && viewItem == solution-cps",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createSolutionFolder",
-                "when": "view == slnexpl && viewItem == solution-folder",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.removeSolutionFolder",
-                "when": "view == slnexpl && viewItem == solution-folder",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.removeProject",
-                "when": "view == slnexpl && viewItem == project-cps",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.removeProject",
-                "when": "view == slnexpl && viewItem == project-standard",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnexpl && viewItem == solution",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnexpl && viewItem == solution-cps",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnexpl && viewItem == solution-folder",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnexpl && viewItem == project-cps",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnexpl && viewItem == project-standard",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.copy",
-                "when": "view == slnbrw && viewItem == project-folder",
-                "key": "ctrl+c",
-                "mac": "cmd+c"
-            },
-            {
-                "command": "solutionExplorer.copy",
-                "when": "view == slnbrw && viewItem == project-file",
-                "key": "ctrl+c",
-                "mac": "cmd+c"
-            },
-            {
-                "command": "solutionExplorer.paste",
-                "when": "view == slnbrw && viewItem == project-folder",
-                "key": "ctrl+v",
-                "mac": "cmd+v"
-            },
-            {
-                "command": "solutionExplorer.paste",
-                "when": "view == slnbrw && viewItem == project-cps",
-                "key": "ctrl+v",
-                "mac": "cmd+v"
-            },
-            {
-                "command": "solutionExplorer.paste",
-                "when": "view == slnbrw && viewItem == project-standard",
-                "key": "ctrl+v",
-                "mac": "cmd+v"
-            },
-            {
-                "command": "solutionExplorer.renameFile",
-                "when": "view == slnbrw && viewItem == project-file",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.deleteFile",
-                "when": "view == slnbrw && viewItem == project-file",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.renameFolder",
-                "when": "view == slnbrw && viewItem == project-folder",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.deleteFolder",
-                "when": "view == slnbrw && viewItem == project-folder",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.createFile",
-                "when": "view == slnbrw && viewItem == project-cps",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
-            },
-            {
-                "command": "solutionExplorer.createFile",
-                "when": "view == slnbrw && viewItem == project-standard",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
-            },
-            {
-                "command": "solutionExplorer.createFile",
-                "when": "view == slnbrw && viewItem == project-file",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
-            },
-            {
-                "command": "solutionExplorer.createFile",
-                "when": "view == slnbrw && viewItem == project-folder",
-                "key": "ctrl+shift+a",
-                "mac": "cmd+shift+a"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnbrw && viewItem == project-cps",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnbrw && viewItem == project-standard",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnbrw && viewItem == project-file",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "when": "view == slnbrw && viewItem == project-folder",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.removePackage",
-                "when": "view == slnbrw && viewItem == project-referenced-package-cps",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.removeProjectReference",
-                "when": "view == slnbrw && viewItem == project-referenced-project-cps",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.createSolutionFolder",
-                "when": "view == slnbrw && viewItem == solution",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createSolutionFolder",
-                "when": "view == slnbrw && viewItem == solution-cps",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.createSolutionFolder",
-                "when": "view == slnbrw && viewItem == solution-folder",
-                "key": "ctrl+shift+f",
-                "mac": "cmd+shift+f"
-            },
-            {
-                "command": "solutionExplorer.removeSolutionFolder",
-                "when": "view == slnbrw && viewItem == solution-folder",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.removeProject",
-                "when": "view == slnbrw && viewItem == project-cps",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.removeProject",
-                "when": "view == slnbrw && viewItem == project-standard",
-                "key": "delete",
-                "mac": "delete"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnbrw && viewItem == solution",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnbrw && viewItem == solution-cps",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnbrw && viewItem == solution-folder",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnbrw && viewItem == project-cps",
-                "key": "f2",
-                "mac": "f2"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view == slnbrw && viewItem == project-standard",
-                "key": "f2",
-                "mac": "f2"
+                "mac": "cmd+shift+f",
+                "when": "focusedView == slnexpl || focusedView == slnbrw",
+                "args": [
+                    [
+                        "solutionExplorer.createFolder",
+                        {
+                            "requiredViewItem": "project-cps"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.createFolder",
+                        {
+                            "requiredViewItem": "project-standard"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.createFolder",
+                        {
+                            "requiredViewItem": "project-file"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.createFolder",
+                        {
+                            "requiredViewItem": "project-folder"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.createSolutionFolder",
+                        {
+                            "requiredViewItem": "solution"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.createSolutionFolder",
+                        {
+                            "requiredViewItem": "solution-cps"
+                        }
+                    ],
+                    [
+                        "solutionExplorer.createSolutionFolder",
+                        {
+                            "requiredViewItem": "solution-folder"
+                        }
+                    ]
+                ]
             }
         ],
         "configuration": {

@@ -59,6 +59,8 @@ export class SolutionExplorerCommands {
     }
 
     public register() {
+        this.registerCommandExecuteMultipleCommands();
+
         Object.keys(this.commands).forEach(key => {
             this.registerCommand('solutionExplorer.' + key, this.commands[key]);
         });
@@ -66,11 +68,34 @@ export class SolutionExplorerCommands {
 
     private registerCommand(name: string, command: cmds.ActionsCommand) {
         this.context.subscriptions.push(
-            vscode.commands.registerCommand(name, async (item) => {
-                if (command.shouldRun(item as TreeItem)) {
-                    const actions = await command.getActions(item);
-                    if (actions.length > 0) {
-                        await this.actionsRunner.run(actions, { isCancellationRequested: false  });
+            vscode.commands.registerCommand(name, async (arg: { requiredViewItem: string, useMultipleSelection: boolean } | TreeItem) => {
+                const argIsTreeItem = arg instanceof TreeItem;
+                const { requiredViewItem, useMultipleSelection } = argIsTreeItem
+                    ? { requiredViewItem: null, useMultipleSelection: false }
+                    : arg;
+                const selectedItems = this.provider.getSelectedTreeItems();
+                if (!selectedItems?.length) return;
+                const selectedItem = selectedItems[selectedItems.length - 1];
+                if (argIsTreeItem && arg !== selectedItem) return;
+                const items = useMultipleSelection ? selectedItems : [selectedItem];
+                for (const item of items) {
+                    if ((requiredViewItem == null || requiredViewItem == item.contextValue) && command.shouldRun(item)) {
+                        const actions = await command.getActions(item);
+                        if (actions.length > 0) {
+                            await this.actionsRunner.run(actions, { isCancellationRequested: false  });
+                        }
+                    }
+                }
+            })
+        );
+    }
+
+    private registerCommandExecuteMultipleCommands() {
+        this.context.subscriptions.push(
+            vscode.commands.registerCommand('solutionExplorer.executeMultipleCommands', async (commands: any[][]) => {
+                for (const command of commands) {
+                    if (command[0]) {
+                        await vscode.commands.executeCommand(command[0], ...command.slice(1));
                     }
                 }
             })

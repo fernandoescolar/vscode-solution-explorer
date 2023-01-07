@@ -115,6 +115,11 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		return element.parent;
 	}
 
+	public getSelectedTreeItems(): readonly sln.TreeItem[] | undefined {
+
+		return this.treeView?.selection;
+	}
+
 	public async selectFile(filepath: string): Promise<void> {
 		if (!this.solutionTreeItemCollection.hasChildren) { return; }
 		for(let i = 0; i < this.solutionTreeItemCollection.length; i++) {
