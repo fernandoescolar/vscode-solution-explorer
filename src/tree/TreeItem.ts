@@ -140,6 +140,7 @@ export abstract class TreeItem extends vscode.TreeItem {
 			TreeItemIconProvider.findIconPath(this.label, this.path || "", this.contextValue)
 			                    .then( iconPath => {
 									this.iconPath = iconPath;
+									this.context.provider.refresh(this);
 								});
 		} else {
 			let fullpath = this.path;
