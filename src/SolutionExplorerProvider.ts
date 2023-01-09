@@ -42,6 +42,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInExplorer', showMode === "explorer");
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === "none");
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.loadedFlag', !false);
+		vscode.commands.executeCommand('setContext', 'solutionexplorer.viewTypes', ["slnexpl", "slnbrw"]);
 
 		if (showMode !== "none") {
 			const options = {
