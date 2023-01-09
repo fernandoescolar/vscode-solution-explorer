@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.7.6
+
+Bugfix #254: Refresh tree view item icons properly, thanks to [panoskj](https://github.com/panoskj)
+
+Bugfix #252: Fixed a bug when using "Inlcude" project items, thanks to [panoskj](https://github.com/panoskj)
+
 ## 0.7.5
 
 Bugfix ##239: Fix project expansion, thanks to [Richard Willis](https://github.com/badsyntax)

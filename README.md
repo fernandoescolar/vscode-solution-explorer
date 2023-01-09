@@ -341,4 +341,7 @@ Branded icons are licensed under their copyright license.
 [LesanOuO](https://github.com/LesanOuO)
 [ShalokShalom](https://github.com/ShalokShalom)
 [nev-21](https://github.com/nev-21)
+[Richard Willis](https://github.com/badsyntax)
+[panoskj](https://github.com/panoskj)
+
 **Enjoy!**
