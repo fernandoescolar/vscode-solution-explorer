@@ -13,4 +13,5 @@ export class ContextValues {
     public static readonly projectFile: string = 'project-file';
     public static readonly error: string = 'error';
     public static readonly noSolution: string = 'no-solution';
+    public static readonly multipleSelection: string = 'multiple-selection';
 }
