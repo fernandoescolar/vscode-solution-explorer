@@ -6,7 +6,9 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Bugfix #254: Refresh tree view item icons properly, thanks to [panoskj](https://github.com/panoskj)
 
-Bugfix #252: Fixed a bug when using "Inlcude" project items, thanks to [panoskj](https://github.com/panoskj)
+Bugfix #252: Fixed a bug when using "Include" project items, thanks to [panoskj](https://github.com/panoskj)
+
+Bugfix #255: Doesn't open solutions if you don't have open a folder first
 
 ## 0.7.5
 
