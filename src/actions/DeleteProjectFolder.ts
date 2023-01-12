@@ -6,7 +6,7 @@ import { Action, ActionContext } from "./base/Action";
 type  DeleteProjectFolderOptions = 'Yes' | 'Skip' | 'Cancel';
 
 export class DeleteProjectFolder implements Action {
-    constructor(private readonly project: Project, private readonly folderPath: string) {
+    constructor(private readonly project: Project, private readonly folderPath: string, private readonly showDialog?: boolean) {
     }
 
     public toString(): string {
@@ -25,6 +25,9 @@ export class DeleteProjectFolder implements Action {
     }
 
     private async showOptions(context: ActionContext): Promise<DeleteProjectFolderOptions> {
+        if (this.showDialog === false) {
+            return 'Yes';
+        }
         const filename = path.basename(this.folderPath);
         const options = ['Yes', 'Skip'];
         if (context.yesAll) {

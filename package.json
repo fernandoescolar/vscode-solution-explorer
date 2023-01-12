@@ -290,6 +290,11 @@
                 "command": "solutionExplorer.showActiveFileInExplorer",
                 "title": "Select Active Document",
                 "category": "Solution Explorer"
+            },
+            {
+                "command": "solutionExplorer.deleteMultiple",
+                "title": "Delete Multiple Items",
+                "category": "Solution Explorer"
             }
         ],
         "menus": {
@@ -637,6 +642,12 @@
               "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.renameSolutionItem",
               "key": "f2",
               "mac": "f2"
+            },
+            {
+              "command": "solutionExplorer.deleteMultiple",
+              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.deleteMultiple",
+              "key": "delete",
+              "mac": "delete"
             }
           ],
         "configuration": {

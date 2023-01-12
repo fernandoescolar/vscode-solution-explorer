@@ -7,7 +7,7 @@ import { ContextValues, TreeItem } from "@tree";
 import { ActionsRunner } from "./ActionsRunner";
 
 export class SolutionExplorerCommands {
-    private commands: { [id: string]: [command: cmds.ActionsCommand, allowedContexts: string[] | undefined] } = {};
+    private commands: { [id: string]: [command: cmds.ActionsBaseCommand, allowedContexts: string[] | undefined] } = {};
 
     constructor(private readonly context: vscode.ExtensionContext,
                 private readonly provider: SolutionExplorerProvider,
@@ -63,13 +63,13 @@ export class SolutionExplorerCommands {
         this.commands['createSolutionFolder'] = [new cmds.CreateSolutionFolderCommand(), 
             [ContextValues.solutionFolder, ...both(ContextValues.solution)]];
         
-        this.commands['deleteFile'] = [new cmds.DeleteCommand(), 
+        this.commands['deleteFile'] = [new cmds.DeleteUnifiedCommand(), 
             [ContextValues.projectFile]];
         
-        this.commands['deleteFolder'] = [new cmds.DeleteCommand(), 
+        this.commands['deleteFolder'] = [new cmds.DeleteUnifiedCommand(), 
             [ContextValues.projectFolder]];
         
-        this.commands['deleteSolutionFile'] = [new cmds.DeleteFileFromSolutionFolderCommand(), 
+        this.commands['deleteSolutionFile'] = [new cmds.DeleteUnifiedCommand(), 
             [ContextValues.solutionFile]];
         
         this.commands['duplicate'] = [new cmds.DuplicateCommand(), 
@@ -102,16 +102,16 @@ export class SolutionExplorerCommands {
         this.commands['refresh'] = [new cmds.RefreshCommand(provider), 
             [ContextValues.projectFolder, ContextValues.solutionFolder, ...both(ContextValues.project)]];
         
-        this.commands['removePackage'] = [new cmds.RemovePackageCommand(), 
+        this.commands['removePackage'] = [new cmds.DeleteUnifiedCommand(), 
             cps(ContextValues.projectReferencedPackage)];
         
-        this.commands['removeProject'] = [new cmds.RemoveProjectCommand(), 
+        this.commands['removeProject'] = [new cmds.DeleteUnifiedCommand(), 
             both(ContextValues.project)];
         
-        this.commands['removeProjectReference'] = [new cmds.RemoveProjectReferenceCommand(), 
+        this.commands['removeProjectReference'] = [new cmds.DeleteUnifiedCommand(), 
             cps(ContextValues.projectReferencedProject)];
         
-        this.commands['removeSolutionFolder'] = [new cmds.RemoveSolutionFolderCommand(), 
+        this.commands['removeSolutionFolder'] = [new cmds.DeleteUnifiedCommand(), 
             [ContextValues.solutionFolder]];
         
         this.commands['renameFile'] = [new cmds.RenameCommand(), 
@@ -146,6 +146,9 @@ export class SolutionExplorerCommands {
         
         this.commands['openSolution'] = [new cmds.OpenSolutionCommand(eventAggregator), 
             undefined];
+        
+        this.commands['deleteMultiple'] = [new cmds.DeleteUnifiedCommand(),
+            [ContextValues.multipleSelection]];
     }
 
     public register() {
@@ -157,16 +160,14 @@ export class SolutionExplorerCommands {
         });
     }
 
-    private registerCommand(name: string, command: cmds.ActionsCommand) {
+    private registerCommand(name: string, command: cmds.ActionsBaseCommand) {
         this.context.subscriptions.push(
             vscode.commands.registerCommand(name, async (arg) => {
-                const items = arg instanceof TreeItem ? [arg] : this.provider.getSelectedItems();
-                const item = items?.length ? items[items?.length - 1] : undefined;
-                if (item && command.shouldRun(item)) {
-                    const actions = await command.getActions(item);
-                    if (actions.length > 0) {
-                        await this.actionsRunner.run(actions, { isCancellationRequested: false  });
-                    }
+                const clickedItem = arg instanceof TreeItem ? arg : undefined;
+                const selectedItems = this.provider.getSelectedItems();
+                const actions = await command.getActionsBase(clickedItem, selectedItems);
+                if (actions.length > 0) {
+                    await this.actionsRunner.run(actions, { isCancellationRequested: false  });
                 }
             })
         );

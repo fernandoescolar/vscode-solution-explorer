@@ -1,16 +1,14 @@
-import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
-import { Project } from "@core/Projects";
 import { Action, ActionContext } from "./base/Action";
 
-type  DeleteProjectFileOptions = 'Yes' | 'Skip' | 'Cancel';
+type  DeleteMultipleItemsOptions = 'Yes' | 'Skip' | 'Cancel';
 
-export class DeleteProjectFile implements Action {
-    constructor(private readonly project: Project, private readonly filePath: string, private readonly showDialog?: boolean) {
+export class DeleteMultipleItems implements Action {
+    constructor(private readonly deleteActions: Action[], private operationDescription: string) {
     }
 
     public toString(): string {
-        return `Delete file ${this.filePath} from project ${this.project.name}`;
+        return this.operationDescription[0].toUpperCase() + this.operationDescription.substring(1);
     }
 
     public async execute(context: ActionContext): Promise<void> {
@@ -20,15 +18,13 @@ export class DeleteProjectFile implements Action {
 
         const option = await this.showOptions(context);
         if (option === 'Yes') {
-            await this.project.deleteFile(this.filePath);
+            for (const deleteAction of this.deleteActions) {
+                deleteAction.execute(context);
+            }
         }
     }
 
-    private async showOptions(context: ActionContext): Promise<DeleteProjectFileOptions> {
-        if (this.showDialog === false) {
-            return 'Yes';
-        }
-        const filename = path.basename(this.filePath);
+    private async showOptions(context: ActionContext): Promise<DeleteMultipleItemsOptions> {
         const options = ['Yes', 'Skip'];
         if (context.yesAll) {
             return 'Yes';
@@ -42,7 +38,7 @@ export class DeleteProjectFile implements Action {
             options.push('Yes All', 'Skip All');
         }
 
-        const option = await dialogs.confirm(`Are you sure you want to delete '${filename}'?`, ...options);
+        const option = await dialogs.confirm(`Are you sure you want to ${this.operationDescription}?`, ...options);
 
         if (option === 'Yes All') {
             context.yesAll = true;
@@ -58,6 +54,6 @@ export class DeleteProjectFile implements Action {
             return 'Cancel';
         }
 
-        return option as DeleteProjectFileOptions;
+        return option as DeleteMultipleItemsOptions;
     }
 }
