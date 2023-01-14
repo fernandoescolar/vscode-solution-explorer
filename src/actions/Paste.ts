@@ -19,7 +19,7 @@ export class Paste implements Action {
 
         if (!(await fs.exists(data))) { return; }
 
-        const isDirectory = await fs.isDirectory(this.targetPath);
+        const isDirectory = await fs.isDirectory(data);
         if (isDirectory) {
             this.copyDirectory(data, this.targetPath);
         } else {
