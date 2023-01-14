@@ -2,13 +2,17 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
-## 0.7.6
+## 0.8.0
 
 Bugfix #254: Refresh tree view item icons properly, thanks to [panoskj](https://github.com/panoskj)
 
 Bugfix #252: Fixed a bug when using "Include" project items, thanks to [panoskj](https://github.com/panoskj)
 
 Bugfix #255: Doesn't open solutions if you don't have open a folder first
+
+Enhancement #257: Added support for "PropertyGroup" properties within include/exclude paths, thanks to [panoskj](https://github.com/panoskj)
+
+Enhancement #258: Fixed bug that prevented pasting files, thanks to [panoskj](https://github.com/panoskj)
 
 ## 0.7.5
 
