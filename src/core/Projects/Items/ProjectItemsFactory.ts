@@ -12,13 +12,13 @@ import { Update } from "./Update";
 const ignoreItems = [ "AssemblyMetadata", "BaseApplicationManifest", "CodeAnalysisImport", "COMReference", "COMFileReference", "Import", "InternalsVisibleTo", "NativeReference", "TrimmerRootAssembly", "Using", "Protobuf" ];
 const knownTypes = [ "Reference", "PackageReference", "ProjectReference", "Folder", "Content", "Compile", "None", "EmbeddedResource" ];
 
-export function createProjectElement(xml: XmlElement, includePrefix?: string): ProjectItem | undefined {
+export function createProjectElement(xml: XmlElement, properties: Record<string, string>): ProjectItem | undefined {
     if (ignoreItems.indexOf(xml.name) >= 0) {
         return undefined;
     }
 
     if (xml.name === "Reference" && xml.attributes && xml.attributes.Include) {
-        const include = cleanIncludePath(xml.attributes.Include, includePrefix);
+        const include = replacePropertiesInPath(xml.attributes.Include, properties, false);
         const props = getNameAndVersion(include);
         return new Reference(props.name, props.version);
     }
@@ -28,40 +28,38 @@ export function createProjectElement(xml: XmlElement, includePrefix?: string): P
     }
 
     if (xml.name === "ProjectReference" && xml.attributes && xml.attributes.Include) {
-        const include = cleanIncludePath(xml.attributes.Include, includePrefix);
-        const fullpath = toOSPath(include);
+        const fullpath = replacePropertiesInPath(xml.attributes.Include, properties);
         const extension = path.extname(fullpath);
         const name = path.basename(fullpath, extension);
         return new ProjectReference(name, fullpath);
     }
 
     if (xml.name === "Folder" && xml.attributes && xml.attributes.Include) {
-        const include = cleanIncludePath(xml.attributes.Include, includePrefix);
-        return new Folder(toOSPath(include));
+        const include = replacePropertiesInPath(xml.attributes.Include, properties);
+        return new Folder(include);
     }
 
     if (xml.attributes && xml.attributes.Include) {
-        const include = cleanIncludePath(xml.attributes.Include, includePrefix);
-        const value = toOSPath(include);
+        const include = replacePropertiesInPath(xml.attributes.Include, properties);
         const link = getLink(xml);
         const linkBase = getLinkBase(xml);
         const dependentUpon = getDependentUpon(xml);
-        const excludes = xml.attributes.Exclude ? toOSPath(xml.attributes.Exclude) : undefined;
-        return new Include(xml.name, value, link, linkBase, excludes, dependentUpon);
+        const excludes = xml.attributes.Exclude
+          ? replacePropertiesInPath(xml.attributes.Exclude, properties)
+          : undefined;
+        return new Include(xml.name, include, link, linkBase, excludes, dependentUpon);
     }
 
     if (xml.attributes && xml.attributes.Remove) {
-        const remove = cleanIncludePath(xml.attributes.Remove, includePrefix);
-        const value = toOSPath(remove);
-        return new Remove(xml.name, value);
+        const remove = replacePropertiesInPath(xml.attributes.Remove, properties);
+        return new Remove(xml.name, remove);
     }
 
     if (xml.attributes && xml.attributes.Update) {
-        const update = cleanIncludePath(xml.attributes.Update, includePrefix);
-        const value = toOSPath(update);
+        const update = replacePropertiesInPath(xml.attributes.Update, properties);
         const link = getLink(xml);
         const linkBase = getLinkBase(xml);
-        return new Update(xml.name, value, link, linkBase);
+        return new Update(xml.name, update, link, linkBase);
     }
 
 
@@ -91,17 +89,6 @@ function getNameAndVersion(fullyQualifiedName: string): { name: string; version:
     };
 }
 
-function cleanIncludePath(include: string, includePrefix?: string): string {
-    if (includePrefix) {
-        return include
-                    .split(";")
-                    .map(s => s.replace(includePrefix, ""))
-                    .join(";");
-    }
-
-    return include;
-}
-
 function toOSPath(input: string): string {
     if (!input) {
         return input;
@@ -117,4 +104,14 @@ function isGlobExpression(input: string): boolean {
         || input.indexOf('?') >= 0
         || input.indexOf('[') >= 0
         || input.indexOf('{') >= 0;
+}
+
+function replacePropertiesInPath(path: string, properties: Record<string, string>, osPath?: boolean): string {
+    if (!path || !properties) return path;
+
+    Object.entries(properties).forEach(([key, value]) =>
+        path = path.replaceAll(`$(${key})`, value)
+    );
+
+    return osPath !== false ? toOSPath(path) : path;
 }
