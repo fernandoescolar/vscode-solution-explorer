@@ -486,7 +486,10 @@ export class XmlManager implements Manager {
         this._toolsVersion = project.attributes && project.attributes.ToolsVersion;
 
         const properties: Record<string, string> = {};
-        if (this.includePrefix) properties[this.includePrefix] = "";
+        if (this.includePrefix?.startsWith("$(") && this.includePrefix?.endsWith(")")) {
+            const propertyName = this.includePrefix.substring(2, this.includePrefix.length - 1);
+            properties[propertyName] = "";
+        }
 
         project.elements.forEach((element: XmlElement) => {
             if (element.name === 'PropertyGroup') {
