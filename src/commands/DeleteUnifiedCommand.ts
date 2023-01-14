@@ -61,13 +61,19 @@ export class DeleteUnifiedCommand extends ActionsBaseCommand {
         return selectedItemsNotClicked ? [clickedItem] : selectedItems;
     }
 
+    private getTreeItemParentsRecursive(item: TreeItem): TreeItem[] {
+
+        const result: TreeItem[] = [];
+        for (let current = item.parent; current; current = current.parent) {
+            result.push(current);
+        }
+        return result;
+    }
+
     private includedInFolder(clickedItems: readonly TreeItem[], item: TreeItem) {
 
-        const path = item.id;
-        if (!path) return false;        
-        return clickedItems.some(item => item.id
-            && path.startsWith(item.id)
-            && path !== item.id);
+        const parents = this.getTreeItemParentsRecursive(item);
+        return parents.some(parent => clickedItems.includes(parent));
     }
 
 
