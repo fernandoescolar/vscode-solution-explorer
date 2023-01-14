@@ -485,11 +485,22 @@ export class XmlManager implements Manager {
 
         this._toolsVersion = project.attributes && project.attributes.ToolsVersion;
 
+        const properties: Record<string, string> = {};
+        if (this.includePrefix) properties[this.includePrefix] = "";
+
         project.elements.forEach((element: XmlElement) => {
-            if (element.name === 'ItemGroup') {
+            if (element.name === 'PropertyGroup') {
                 XmlManager.ensureElements(element);
                 element.elements.forEach((e: XmlElement) => {
-                    const projectItem = ProjectItemsFactory.createProjectElement(e, this.includePrefix);
+                    let value = e.elements?.find((el: XmlElement) => el.type == "text")?.text ?? "";
+                    Object.entries(properties).forEach(([k, v]) => value = value.replaceAll(`$(${k})`, v));
+                    properties[e.name] = value;
+                });
+            }
+            else if (element.name === 'ItemGroup') {
+                XmlManager.ensureElements(element);
+                element.elements.forEach((e: XmlElement) => {
+                    const projectItem = ProjectItemsFactory.createProjectElement(e, properties);
                     if (!projectItem) {
                         return;
                     }
