@@ -7,7 +7,7 @@ import { ContextValues, TreeItem } from "@tree";
 import { ActionsRunner } from "./ActionsRunner";
 
 export class SolutionExplorerCommands {
-    private commands: { [id: string]: [command: cmds.ActionsBaseCommand, allowedContexts: string[] | undefined] } = {};
+    private commands: { [id: string]: [command: cmds.ActionsCommand, allowedContexts: string[] | undefined] } = {};
 
     constructor(private readonly context: vscode.ExtensionContext,
                 private readonly provider: SolutionExplorerProvider,
@@ -156,7 +156,7 @@ export class SolutionExplorerCommands {
         });
     }
 
-    private registerCommand(name: string, command: cmds.ActionsBaseCommand) {
+    private registerCommand(name: string, command: cmds.ActionsCommand) {
         this.context.subscriptions.push(
             vscode.commands.registerCommand(name, async (arg) => {
                 const clickedItem = arg instanceof TreeItem ? arg : undefined;

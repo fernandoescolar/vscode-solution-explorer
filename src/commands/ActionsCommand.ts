@@ -1,7 +1,7 @@
 import { TreeItem } from "@tree";
 import { Action } from "@actions";
 
-export abstract class ActionsBaseCommand {
+export abstract class ActionsCommand {
     constructor(protected title: string) {
     }
 

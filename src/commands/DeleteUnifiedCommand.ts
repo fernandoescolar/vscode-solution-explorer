@@ -1,5 +1,5 @@
 import { TreeItem, ContextValues } from "@tree";
-import { ActionsBaseCommand, prepareContextActionGetters } from "@commands";
+import { ActionsCommand, prepareContextActionGetters } from "@commands";
 import {
     Action,
     DeleteProjectFile,
@@ -12,7 +12,7 @@ import {
     DeleteMultipleItems
 } from "@actions";
 
-export class DeleteUnifiedCommand extends ActionsBaseCommand {
+export class DeleteUnifiedCommand extends ActionsCommand {
     constructor() {
         super('Delete');
     }
