@@ -14,12 +14,8 @@ export class SolutionExplorerCommands {
                 private readonly actionsRunner: ActionsRunner,
                 private readonly templateEngineCollection: TemplateEngineCollection,
                 private readonly eventAggregator: IEventAggregator) {
-        function cps(...contexts: string[]) {
-            return contexts.map(ctx => ctx + '-cps');
-        }
-        function both(...contexts: string[]) {
-            return contexts.flatMap(ctx => [ctx !== ContextValues.solution ? ctx + '-standard' : ctx, ctx + '-cps']);
-        }
+                    
+        const { cps, both } = ContextValues;
 
         this.commands['addExistingProject'] = [new cmds.AddExistingProjectCommand(provider), 
             both(ContextValues.solution)];

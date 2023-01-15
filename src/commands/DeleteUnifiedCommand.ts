@@ -30,25 +30,27 @@ export class DeleteUnifiedCommand extends ActionsBaseCommand {
         }
         else if (topClickedItems.length > 1) {
 
-            const actions: [context: string, action: Action[]][] = topClickedItems.map(item => [item.contextValue, this.getItemDeleteActions(item, false)]);
-
+            const { both, cps } = ContextValues;
             const allowedContextGroups = [
                 [ContextValues.projectFile, ContextValues.projectFolder],
-                [ContextValues.projectReferencedPackage, ContextValues.projectReferencedProject],
-                [ContextValues.project],
+                cps(ContextValues.projectReferencedPackage, ContextValues.projectReferencedProject),
+                both(ContextValues.project),
                 [ContextValues.solutionFile, ContextValues.solutionFolder],
             ];
-
-            const clickedContexts = [...new Set(actions.map(([context]) => context))];
+            const clickedContexts = [...new Set(topClickedItems.map((item) => item.contextValue))];
             const clickedGroups = [...new Set(clickedContexts
-                .map(context => context.replace('-cps', '').replace('-standard', ''))
-                .map(context => allowedContextGroups.findIndex(group => group.indexOf(context) >= 0)))];
+                .map(context => allowedContextGroups.findIndex(group => group.includes(context))))];
             
-            if (clickedGroups.length > 1) return [];
+            if (clickedGroups.length !== 1 || clickedGroups[0] < 0) return [];
 
-            const question = clickedGroups[0] !== 2 ? 'delete the selected items' : 'remove the selected projects';
-            
-            return [new DeleteMultipleItems(actions.flatMap(([, actions]) => actions), question)];
+            const actions = topClickedItems.flatMap(item => this.getItemDeleteActions(item, false));
+            const groupDescriptions = [
+                'delete the selected items',
+                'remove the selected references',
+                'remove the selected projects',
+                'delete the selected items'
+            ];
+            return [new DeleteMultipleItems(actions, groupDescriptions[clickedGroups[0]])];
         }
 
         return [];
