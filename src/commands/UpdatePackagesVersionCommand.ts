@@ -1,8 +1,8 @@
 import { TreeItem } from "@tree";
 import { Action, AddPackageReference } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class UpdatePackagesVersionCommand extends ActionsCommand {
+export class UpdatePackagesVersionCommand extends SingleItemActionsCommand {
     constructor() {
         super('UpdatePackagesVersion');
     }

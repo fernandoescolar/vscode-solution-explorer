@@ -1,11 +1,11 @@
 import * as path from "@extensions/path";
 import { TreeItem } from "@tree";
 import { SolutionProjectType, ProjectInSolution } from "@core/Solutions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 import { Action, AddProjectReference } from "@actions";
 import * as dialogs from '@extensions/dialogs';
 
-export class AddProjectReferenceCommand extends ActionsCommand {
+export class AddProjectReferenceCommand extends SingleItemActionsCommand {
 
     constructor() {
         super('Add project reference');

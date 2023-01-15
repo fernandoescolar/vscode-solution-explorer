@@ -1,8 +1,8 @@
 import { TreeItem } from "@tree";
 import { Action, Copy } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class CopyCommand extends ActionsCommand {
+export class CopyCommand extends SingleItemActionsCommand {
     constructor() {
         super('Copy');
     }

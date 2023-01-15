@@ -3,9 +3,9 @@ import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
 import { IEventAggregator } from "@events";
 import { Action, OpenSolution } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class OpenSolutionCommand extends ActionsCommand {
+export class OpenSolutionCommand extends SingleItemActionsCommand {
     constructor(private readonly eventAggregator: IEventAggregator) {
         super('Open Solution');
     }

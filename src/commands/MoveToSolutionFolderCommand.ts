@@ -3,9 +3,9 @@ import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
 import { SolutionProjectType, ProjectInSolution, SolutionFile } from "@core/Solutions";
 import { Action, MoveProject, MoveSolutionFolder } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class MoveToSolutionFolderCommand extends ActionsCommand {
+export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
     constructor() {
         super('Move to solution folder');
     }

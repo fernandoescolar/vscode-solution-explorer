@@ -1,6 +1,6 @@
 
 export * from './ActionsBaseCommand';
-export * from "./ActionsCommand";
+export * from "./SingleItemActionsCommand";
 export * from "./AddExistingFileToSolutionFolderCommand";
 export * from "./AddExistingProjectCommand";
 export * from "./AddNewProjectCommand";

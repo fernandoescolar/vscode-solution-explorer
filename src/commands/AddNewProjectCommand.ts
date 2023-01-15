@@ -3,7 +3,7 @@ import * as path from "@extensions/path";
 import * as dialogs from '@extensions/dialogs';
 import { ContextValues, TreeItem } from "@tree";
 import { Action, AddExistingProject, CreateProject } from '@actions';
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 import { SolutionExplorerProvider } from '@SolutionExplorerProvider';
 
 type ProjectType = { name: string, value: string, languages: string[] };
@@ -34,7 +34,7 @@ const PROJECT_TYPES: ProjectType[] = [
     // { name: 'Razor Class Library', value: 'razorclasslib', languages: ['C#'] },
 ];
 
-export class AddNewProjectCommand extends ActionsCommand {
+export class AddNewProjectCommand extends SingleItemActionsCommand {
     private wizard: dialogs.Wizard | undefined;
 
     constructor(private readonly provider: SolutionExplorerProvider) {

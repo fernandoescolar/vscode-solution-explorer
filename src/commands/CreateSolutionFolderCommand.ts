@@ -1,9 +1,9 @@
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
 import { Action, CreateSolutionFolder } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class CreateSolutionFolderCommand extends ActionsCommand {
+export class CreateSolutionFolderCommand extends SingleItemActionsCommand {
     constructor() {
         super('Create solution folder');
     }

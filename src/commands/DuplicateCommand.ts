@@ -3,9 +3,9 @@ import * as fs from "@extensions/fs";
 import { createCopyName } from "@core/Utilities";
 import { ContextValues, TreeItem } from "@tree";
 import { Action, CreateProjectFile, OpenFile } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class DuplicateCommand extends ActionsCommand {
+export class DuplicateCommand extends SingleItemActionsCommand {
     constructor() {
         super('Duplicate');
     }

@@ -2,7 +2,7 @@ import { TreeItem } from "@tree";
 import { Action } from "@actions";
 import { ActionsBaseCommand } from "./ActionsBaseCommand";
 
-export abstract class ActionsCommand extends ActionsBaseCommand {
+export abstract class SingleItemActionsCommand extends ActionsBaseCommand {
     constructor(title: string) {
         super(title);
     }

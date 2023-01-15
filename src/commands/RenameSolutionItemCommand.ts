@@ -3,9 +3,9 @@ import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { ContextValues, TreeItem } from "@tree";
 import { ProjectInSolution } from "@core/Solutions";
 import { Action, RenameProject, RenameSolution, RenameSolutionFolder } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class RenameSolutionItemCommand extends ActionsCommand {
+export class RenameSolutionItemCommand extends SingleItemActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Rename');
     }

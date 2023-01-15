@@ -1,9 +1,9 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 import { Action, RefreshTree, RefreshTreeItem } from "@actions";
 
-export class RefreshCommand extends ActionsCommand {
+export class RefreshCommand extends SingleItemActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Refresh');
     }

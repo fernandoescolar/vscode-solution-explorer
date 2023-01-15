@@ -2,9 +2,9 @@ import * as dialogs from "@extensions/dialogs";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, MoveProjectFile, MoveProjectFolder } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class MoveCommand extends ActionsCommand {
+export class MoveCommand extends SingleItemActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Move');
     }

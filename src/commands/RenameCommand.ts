@@ -1,9 +1,9 @@
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, RenameProjectFile, RenameProjectFolder } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class RenameCommand extends ActionsCommand {
+export class RenameCommand extends SingleItemActionsCommand {
     constructor() {
         super('Rename');
     }
