@@ -7,7 +7,7 @@ export class CopyCommand extends SingleItemActionsCommand {
         super('Copy');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !!item && !!item.path;
     }
 

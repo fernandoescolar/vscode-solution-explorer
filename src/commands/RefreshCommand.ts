@@ -8,7 +8,7 @@ export class RefreshCommand extends SingleItemActionsCommand {
         super('Refresh');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return true;
     }
 

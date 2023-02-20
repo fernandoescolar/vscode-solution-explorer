@@ -9,7 +9,7 @@ export class MoveCommand extends SingleItemActionsCommand {
         super('Move');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
        return !!item && !!item.project && !!item.path && ( item.contextValue.startsWith(ContextValues.projectFile) || item.contextValue.startsWith(ContextValues.projectFolder) );
     }
 

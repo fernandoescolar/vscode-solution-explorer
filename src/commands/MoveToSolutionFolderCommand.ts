@@ -10,7 +10,7 @@ export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
         super('Move to solution folder');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !!item && !!item.solution &&  !!item.projectInSolution;
     }
 

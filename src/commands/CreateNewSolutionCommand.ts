@@ -9,7 +9,7 @@ export class CreateNewSolutionCommand extends SingleItemActionsCommand {
         super('Create solution');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return true;
     }
 

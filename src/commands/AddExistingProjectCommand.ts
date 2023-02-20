@@ -9,7 +9,7 @@ export class AddExistingProjectCommand extends SingleItemActionsCommand {
         super('Add existing project');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !item || (item && !!item.path && (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps'));
     }
 

@@ -16,14 +16,15 @@ export class Paste implements Action {
     public async execute(context: ActionContext): Promise<void> {
         const data = await clipboard.readText();
         if (!data) { return; }
-
         if (!(await fs.exists(data))) { return; }
+        if (!(await fs.exists(this.targetPath))) { return; }
 
+        const target = await fs.isDirectory(this.targetPath) ? this.targetPath : path.dirname(this.targetPath);
         const isDirectory = await fs.isDirectory(data);
         if (isDirectory) {
-            this.copyDirectory(data, this.targetPath);
+            this.copyDirectory(data, target);
         } else {
-            this.copyFile(data, this.targetPath);
+            this.copyFile(data, target);
         }
     }
 

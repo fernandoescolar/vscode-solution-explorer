@@ -10,7 +10,7 @@ export class DuplicateCommand extends SingleItemActionsCommand {
         super('Duplicate');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
        return item && !!item.path && item.contextValue.startsWith(ContextValues.projectFile);
     }
 

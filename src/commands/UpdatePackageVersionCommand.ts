@@ -12,7 +12,7 @@ export class UpdatePackageVersionCommand extends SingleItemActionsCommand {
         super('Update Package Version');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !!item && !!item.project && !!item.path && item.contextValue === ContextValues.projectReferencedPackage + '-cps';
     }
 
@@ -23,7 +23,7 @@ export class UpdatePackageVersionCommand extends SingleItemActionsCommand {
         const packageId = item.path;
         this.wizard = new dialogs.Wizard('Update package version')
                                  .selectOption('Select a feed', () => this.getNugetFeeds(projectFullPath) )
-                                 .selectOption('Select a version', 
+                                 .selectOption('Select a version',
                                     () => this.getCurrentPackageVersions(packageId),
                                     () => this.getCurrentPackageDefaultVersion(packageId)
                                 );

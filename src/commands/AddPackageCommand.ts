@@ -12,7 +12,7 @@ export class AddPackageCommand extends SingleItemActionsCommand {
         super('Add package');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return item && !!item.project && item.project.type === 'cps';
     }
 

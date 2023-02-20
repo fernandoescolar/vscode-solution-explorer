@@ -8,7 +8,7 @@ export class CollapseAllCommand extends SingleItemActionsCommand {
         super('Collapse All');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return true;
     }
 

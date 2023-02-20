@@ -10,7 +10,7 @@ export class RenameSolutionItemCommand extends SingleItemActionsCommand {
         super('Rename');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !!item.solution;
     }
 

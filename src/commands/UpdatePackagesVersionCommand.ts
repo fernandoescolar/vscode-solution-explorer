@@ -7,7 +7,7 @@ export class UpdatePackagesVersionCommand extends SingleItemActionsCommand {
         super('UpdatePackagesVersion');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !!item && !!item.project;
     }
 

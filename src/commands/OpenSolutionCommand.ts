@@ -10,7 +10,7 @@ export class OpenSolutionCommand extends SingleItemActionsCommand {
         super('Open Solution');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return true;
     }
 

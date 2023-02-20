@@ -7,7 +7,7 @@ export class PublishCommand extends SingleItemActionsCommand {
         super('Publish');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
     }
 

@@ -7,7 +7,7 @@ export class RevealInOSCommand extends SingleItemActionsCommand {
         super('Restore');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return item && item.contextValue === ContextValues.projectFile;
     }
 

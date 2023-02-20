@@ -41,7 +41,7 @@ export class AddNewProjectCommand extends SingleItemActionsCommand {
         super('Add new project');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !item || (item && !!item.path && (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps'));
     }
 

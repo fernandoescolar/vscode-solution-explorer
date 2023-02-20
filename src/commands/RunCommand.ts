@@ -7,7 +7,7 @@ export class RunCommand extends SingleItemActionsCommand {
         super('Run');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
     }
 

@@ -8,7 +8,7 @@ export class InstallWorkspaceTemplateFilesCommand extends SingleItemActionsComma
         super('Install Workspace Template Files');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
        return item && !!item.workspaceRoot;
     }
 

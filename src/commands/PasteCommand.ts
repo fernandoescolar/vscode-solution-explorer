@@ -8,7 +8,7 @@ export class PasteCommand extends SingleItemActionsCommand {
         super('Paste');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         if (item && item.path) { return true; }
         return !!item && !!item.path && !!item.project;
     }

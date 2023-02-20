@@ -11,7 +11,7 @@ export class AddProjectReferenceCommand extends SingleItemActionsCommand {
         super('Add project reference');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return item && !!item.project && item.project.type === 'cps';
     }
 

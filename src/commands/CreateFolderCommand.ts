@@ -9,7 +9,7 @@ export class CreateFolderCommand extends SingleItemActionsCommand {
         super('Create folder');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !!item.project;
     }
 

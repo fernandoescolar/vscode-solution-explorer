@@ -8,7 +8,7 @@ export class SelectActiveDocumentCommand extends SingleItemActionsCommand {
         super('Select Active Document')
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return true;
     }
 

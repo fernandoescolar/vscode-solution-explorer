@@ -7,7 +7,7 @@ export class WatchRunCommand extends SingleItemActionsCommand {
         super('Watch');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
     }
 

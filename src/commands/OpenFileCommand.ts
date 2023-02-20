@@ -11,7 +11,7 @@ export class OpenFileCommand extends SingleItemActionsCommand {
         super('Open file');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !!item && !!item.path;
     }
 

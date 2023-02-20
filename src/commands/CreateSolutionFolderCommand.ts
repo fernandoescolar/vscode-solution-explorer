@@ -8,7 +8,7 @@ export class CreateSolutionFolderCommand extends SingleItemActionsCommand {
         super('Create solution folder');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return !!item && !!item.solution;
     }
 

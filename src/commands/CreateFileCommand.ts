@@ -14,7 +14,7 @@ export class CreateFileCommand extends SingleItemActionsCommand {
         super('Create file');
     }
 
-    public  shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem): boolean {
         return item && !!item.project;
     }
 
