@@ -14,6 +14,12 @@ Enhancement #257: Added support for "PropertyGroup" properties within include/ex
 
 Enhancement #258: Fixed bug that prevented pasting files, thanks to [panoskj](https://github.com/panoskj)
 
+Bugfix #261: Fix Project dependent files display, thanks to [lhz](https://github.com/lhzcm)
+
+Bugfix #5: Keyboard shortcuts not working, thanks to [panoskj](https://github.com/panoskj)
+
+Bugfix #169: Now "paste" is shown in context menu
+
 ## 0.7.5
 
 Bugfix ##239: Fix project expansion, thanks to [Richard Willis](https://github.com/badsyntax)

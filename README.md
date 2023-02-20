@@ -343,5 +343,6 @@ Branded icons are licensed under their copyright license.
 [nev-21](https://github.com/nev-21)
 [Richard Willis](https://github.com/badsyntax)
 [panoskj](https://github.com/panoskj)
+[lhz](https://github.com/lhzcm)
 
 **Enjoy!**
