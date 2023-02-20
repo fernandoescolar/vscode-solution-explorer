@@ -1,9 +1,9 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
 import { Action, CollapseAll } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class CollapseAllCommand extends ActionsCommand {
+export class CollapseAllCommand extends SingleItemActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Collapse All');
     }

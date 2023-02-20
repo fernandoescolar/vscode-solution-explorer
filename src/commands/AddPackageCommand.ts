@@ -2,9 +2,9 @@ import * as dialogs from '@extensions/dialogs';
 import * as nuget from '@extensions/nuget';
 import { TreeItem } from "@tree";
 import { Action, AddPackageReference } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class AddPackageCommand extends ActionsCommand {
+export class AddPackageCommand extends SingleItemActionsCommand {
     private nugetFeeds: nuget.NugetFeed[] = [];
     private lastNugetPackages: nuget.NugetPackage[] = [];
     private wizard: dialogs.Wizard | undefined;

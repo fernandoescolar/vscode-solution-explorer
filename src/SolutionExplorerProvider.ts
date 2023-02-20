@@ -42,6 +42,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInExplorer', showMode === "explorer");
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === "none");
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.loadedFlag', !false);
+		vscode.commands.executeCommand('setContext', 'solutionexplorer.viewTypes', ["slnexpl", "slnbrw"]);
 
 		if (showMode !== "none") {
 			const options = {
@@ -57,6 +58,16 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 			} else if (showMode === "explorer") {
 				this.treeView = vscode.window.createTreeView('slnexpl', options);
 			}
+			this.treeView?.onDidChangeSelection(ev => {
+				let selectionContext = undefined;
+				if (ev.selection.length === 1) {
+					selectionContext = ev.selection[0].contextValue;
+				}
+				else if (ev.selection.length > 1) {
+					selectionContext = sln.ContextValues.multipleSelection;
+				}
+				vscode.commands.executeCommand('setContext', 'solutionExplorer.selectionContext', selectionContext);
+			})
 		}
 	}
 
@@ -90,6 +101,10 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	public getTreeItem(element: sln.TreeItem): vscode.TreeItem {
 		return element;
+	}
+
+	public getSelectedItems(): readonly sln.TreeItem[] | undefined {
+		return this.treeView?.selection;
 	}
 
 	public getChildren(element?: sln.TreeItem): Thenable<sln.TreeItem[]> | undefined {

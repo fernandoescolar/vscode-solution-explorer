@@ -1,4 +1,6 @@
-export * from "./ActionsCommand";
+
+export * from './ActionsCommand';
+export * from "./SingleItemActionsCommand";
 export * from "./AddExistingFileToSolutionFolderCommand";
 export * from "./AddExistingProjectCommand";
 export * from "./AddNewProjectCommand";
@@ -12,8 +14,7 @@ export * from "./CreateFileCommand";
 export * from "./CreateFolderCommand";
 export * from "./CreateNewSolutionCommand";
 export * from "./CreateSolutionFolderCommand";
-export * from "./DeleteCommand";
-export * from "./DeleteFileFromSolutionFolderCommand";
+export * from "./DeleteUnifiedCommand";
 export * from "./DuplicateCommand";
 export * from "./InstallWorkspaceTemplateFilesCommand";
 export * from "./MoveCommand";
@@ -24,10 +25,6 @@ export * from "./PackCommand";
 export * from "./PasteCommand";
 export * from "./PublishCommand";
 export * from "./RefreshCommand";
-export * from "./RemovePackageCommand";
-export * from "./RemoveProjectCommand";
-export * from "./RemoveProjectReferenceCommand";
-export * from "./RemoveSolutionFolderCommand";
 export * from "./RenameCommand";
 export * from "./RenameSolutionItemCommand";
 export * from "./RestoreCommand";

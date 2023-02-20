@@ -1,16 +1,32 @@
 export class ContextValues {
-    public static readonly solution: string = 'solution';
-    public static readonly solutionFolder: string = 'solution-folder';
-    public static readonly solutionFile: string = 'solution-file';
-    public static readonly project: string = 'project';
-    public static readonly projectReferences: string = 'project-references';
-    public static readonly projectReferencedProjects: string = 'project-referenced-projects';
-    public static readonly projectReferencedProject: string = 'project-referenced-project';
-    public static readonly projectReferencedPackages: string = 'project-referenced-packages';
-    public static readonly projectReferencedPackage: string = 'project-referenced-package';
-    public static readonly projectReferencedPackageDependency: string = 'project-referenced-package-dependency';
-    public static readonly projectFolder: string = 'project-folder';
-    public static readonly projectFile: string = 'project-file';
-    public static readonly error: string = 'error';
-    public static readonly noSolution: string = 'no-solution';
+    public static readonly solution = 'solution';
+    public static readonly solutionFolder = 'solution-folder';
+    public static readonly solutionFile = 'solution-file';
+    public static readonly project = 'project';
+    public static readonly projectReferences = 'project-references';
+    public static readonly projectReferencedProjects = 'project-referenced-projects';
+    public static readonly projectReferencedProject = 'project-referenced-project';
+    public static readonly projectReferencedPackages = 'project-referenced-packages';
+    public static readonly projectReferencedPackage = 'project-referenced-package';
+    public static readonly projectReferencedPackageDependency = 'project-referenced-package-dependency';
+    public static readonly projectFolder = 'project-folder';
+    public static readonly projectFile = 'project-file';
+    public static readonly error = 'error';
+    public static readonly noSolution = 'no-solution';
+    public static readonly multipleSelection = 'multiple-selection';
+
+    public static cps(...contexts: SuffixedContextValue[]) {
+        return contexts.map(ctx => ctx + '-cps');
+    }
+    public static both(...contexts: SuffixedContextValue[]) {
+        return contexts.flatMap(ctx => [ctx !== ContextValues.solution ? ctx + '-standard' : ctx, ctx + '-cps']);
+    }
 }
+
+type SuffixedContextValue =
+    typeof ContextValues.solution |
+    typeof ContextValues.project |
+    typeof ContextValues.projectReferencedPackages |
+    typeof ContextValues.projectReferencedProjects |
+    typeof ContextValues.projectReferencedPackage |
+    typeof ContextValues.projectReferencedProject;

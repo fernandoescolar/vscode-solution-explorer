@@ -1,9 +1,9 @@
 import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
 import { Action, AddSolutionFile } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class AddExistingFileToSolutionFolderCommand extends ActionsCommand {
+export class AddExistingFileToSolutionFolderCommand extends SingleItemActionsCommand {
     constructor() {
         super('Add existing file to solution folder');
     }

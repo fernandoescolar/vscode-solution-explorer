@@ -1,9 +1,9 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
 import { Action, SelectActiveDocumentInTree } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class SelectActiveDocumentCommand extends ActionsCommand {
+export class SelectActiveDocumentCommand extends SingleItemActionsCommand {
     constructor(private provider: SolutionExplorerProvider) {
         super('Select Active Document')
     }

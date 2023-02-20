@@ -1,8 +1,8 @@
 import { ContextValues, TreeItem } from "@tree";
 import { Action, Build } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class BuildCommand extends ActionsCommand {
+export class BuildCommand extends SingleItemActionsCommand {
     constructor() {
         super('Build');
     }

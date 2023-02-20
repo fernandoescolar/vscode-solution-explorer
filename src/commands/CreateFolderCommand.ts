@@ -2,9 +2,9 @@ import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, CreateProjectFolder } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class CreateFolderCommand extends ActionsCommand {
+export class CreateFolderCommand extends SingleItemActionsCommand {
     constructor() {
         super('Create folder');
     }

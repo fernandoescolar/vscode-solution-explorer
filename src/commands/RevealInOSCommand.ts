@@ -1,8 +1,8 @@
 import { ContextValues, TreeItem } from "@tree";
 import { Action, RevealInOS } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class RevealInOSCommand extends ActionsCommand {
+export class RevealInOSCommand extends SingleItemActionsCommand {
     constructor() {
         super('Restore');
     }

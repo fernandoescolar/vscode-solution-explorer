@@ -2,10 +2,10 @@ import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, CreateProjectFile, OpenFile } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 import { TemplateEngineCollection } from "@templates";
 
-export class CreateFileCommand extends ActionsCommand {
+export class CreateFileCommand extends SingleItemActionsCommand {
     private workspaceRoot: string = '';
     private defaultExtension: string = '';
     private wizard: dialogs.Wizard | undefined;

@@ -1,9 +1,9 @@
 import { TreeItem } from "@tree";
 import { Action, InstallWorkspaceTemplateFiles } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 import { TemplateEngineCollection } from "@templates";
 
-export class InstallWorkspaceTemplateFilesCommand extends ActionsCommand {
+export class InstallWorkspaceTemplateFilesCommand extends SingleItemActionsCommand {
     constructor(private readonly templateEngineCollection: TemplateEngineCollection) {
         super('Install Workspace Template Files');
     }

@@ -1,9 +1,9 @@
 import * as fs from "@extensions/fs";
 import { TreeItem } from "@tree";
 import { Action, OpenFile } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class OpenFileCommand extends ActionsCommand {
+export class OpenFileCommand extends SingleItemActionsCommand {
     private lastOpenedFile: string | undefined;
     private lastOpenedDate: Date | undefined;
 

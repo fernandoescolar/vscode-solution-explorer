@@ -3,75 +3,167 @@ import * as cmds from "@commands";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { IEventAggregator } from "@events";
 import { TemplateEngineCollection } from "@templates";
-import { TreeItem } from "@tree";
+import { ContextValues, TreeItem } from "@tree";
 import { ActionsRunner } from "./ActionsRunner";
 
 export class SolutionExplorerCommands {
-    private commands: { [id:string]: cmds.ActionsCommand } = {};
+    private commands: { [id: string]: [command: cmds.ActionsCommand, allowedContexts: string[] | undefined] } = {};
 
     constructor(private readonly context: vscode.ExtensionContext,
                 private readonly provider: SolutionExplorerProvider,
                 private readonly actionsRunner: ActionsRunner,
                 private readonly templateEngineCollection: TemplateEngineCollection,
                 private readonly eventAggregator: IEventAggregator) {
-        this.commands['addExistingProject'] = new cmds.AddExistingProjectCommand(provider);
-        this.commands['addNewProject'] = new cmds.AddNewProjectCommand(provider);
-        this.commands['addPackage'] = new cmds.AddPackageCommand();
-        this.commands['updatePackageVersion'] = new cmds.UpdatePackageVersionCommand();
-        this.commands['addProjectReference'] = new cmds.AddProjectReferenceCommand();
-        this.commands['addSolutionFile'] = new cmds.AddExistingFileToSolutionFolderCommand();
-        this.commands['build'] = new cmds.BuildCommand();
-        this.commands['clean'] = new cmds.CleanCommand();
-        this.commands['collapseAll'] = new cmds.CollapseAllCommand(provider);
-        this.commands['copy'] = new cmds.CopyCommand();
-        this.commands['createFile'] = new cmds.CreateFileCommand(templateEngineCollection);
-        this.commands['createFolder'] = new cmds.CreateFolderCommand();
-        this.commands['createNewSolution'] = new cmds.CreateNewSolutionCommand();
-        this.commands['createSolutionFolder'] = new cmds.CreateSolutionFolderCommand();
-        this.commands['deleteFile'] = new cmds.DeleteCommand();
-        this.commands['deleteFolder'] = new cmds.DeleteCommand();
-        this.commands['deleteSolutionFile'] = new cmds.DeleteFileFromSolutionFolderCommand();
-        this.commands['duplicate'] = new cmds.DuplicateCommand();
-        this.commands['installTemplates'] = new cmds.InstallWorkspaceTemplateFilesCommand(templateEngineCollection);
-        this.commands['moveFile'] = new cmds.MoveCommand(provider);
-        this.commands['moveFolder'] = new cmds.MoveCommand(provider);
-        this.commands['moveToSolutionFolder'] = new cmds.MoveToSolutionFolderCommand();
-        this.commands['openFile'] = new cmds.OpenFileCommand();
-        this.commands['pack'] = new cmds.PackCommand();
-        this.commands['paste'] = new cmds.PasteCommand(provider);
-        this.commands['publish'] = new cmds.PublishCommand();
-        this.commands['refresh'] = new cmds.RefreshCommand(provider);
-        this.commands['removePackage'] = new cmds.RemovePackageCommand();
-        this.commands['removeProject'] = new cmds.RemoveProjectCommand();
-        this.commands['removeProjectReference'] = new cmds.RemoveProjectReferenceCommand();
-        this.commands['removeSolutionFolder'] = new cmds.RemoveSolutionFolderCommand();
-        this.commands['renameFile'] = new cmds.RenameCommand();
-        this.commands['renameFolder'] = new cmds.RenameCommand();
-        this.commands['renameSolutionItem'] = new cmds.RenameSolutionItemCommand(provider);
-        this.commands['restore'] = new cmds.RestoreCommand();
-        this.commands['revealFileInOS'] = new cmds.RevealInOSCommand();
-        this.commands['run'] = new cmds.RunCommand();
-        this.commands['showActiveFileInExplorer'] = new cmds.SelectActiveDocumentCommand(provider);
-        this.commands['test'] = new cmds.TestCommand();
-        this.commands['updatePackagesVersion'] = new cmds.UpdatePackagesVersionCommand();
-        this.commands['watchRun'] = new cmds.WatchRunCommand();
-        this.commands['openSolution'] = new cmds.OpenSolutionCommand(eventAggregator);
+                    
+        const { cps, both } = ContextValues;
+
+        this.commands['addExistingProject'] = [new cmds.AddExistingProjectCommand(provider), 
+            both(ContextValues.solution)];
+        
+        this.commands['addNewProject'] = [new cmds.AddNewProjectCommand(provider), 
+            both(ContextValues.solution)];
+        
+        this.commands['addPackage'] = [new cmds.AddPackageCommand(), 
+            cps(ContextValues.project, ContextValues.projectReferencedPackages)];
+        
+        this.commands['updatePackageVersion'] = [new cmds.UpdatePackageVersionCommand(), 
+            cps(ContextValues.projectReferencedPackage)];
+        
+        this.commands['addProjectReference'] = [new cmds.AddProjectReferenceCommand(), 
+            cps(ContextValues.project, ContextValues.projectReferencedProjects)];
+        
+        this.commands['addSolutionFile'] = [new cmds.AddExistingFileToSolutionFolderCommand(), 
+            [ContextValues.solutionFolder]];
+        
+        this.commands['build'] = [new cmds.BuildCommand(), 
+            cps(ContextValues.solution, ContextValues.project)];
+        
+        this.commands['clean'] = [new cmds.CleanCommand(), 
+            cps(ContextValues.solution, ContextValues.project)];
+        
+        this.commands['collapseAll'] = [new cmds.CollapseAllCommand(provider), 
+            undefined];
+        
+        this.commands['copy'] = [new cmds.CopyCommand(), 
+            [ContextValues.projectFolder, ContextValues.projectFile]];
+        
+        this.commands['createFile'] = [new cmds.CreateFileCommand(templateEngineCollection), 
+            [ContextValues.projectFile, ContextValues.projectFolder, ...both(ContextValues.project)]];
+        
+        this.commands['createFolder'] = [new cmds.CreateFolderCommand(), 
+            [ContextValues.projectFile, ContextValues.projectFolder, ...both(ContextValues.project)]];
+        
+        this.commands['createNewSolution'] = [new cmds.CreateNewSolutionCommand(), 
+            [ContextValues.noSolution]];
+        
+        this.commands['createSolutionFolder'] = [new cmds.CreateSolutionFolderCommand(), 
+            [ContextValues.solutionFolder, ...both(ContextValues.solution)]];
+        
+        this.commands['deleteFile'] = [new cmds.DeleteUnifiedCommand(), 
+            [ContextValues.projectFile]];
+        
+        this.commands['deleteFolder'] = [new cmds.DeleteUnifiedCommand(), 
+            [ContextValues.projectFolder]];
+        
+        this.commands['deleteSolutionFile'] = [new cmds.DeleteUnifiedCommand(), 
+            [ContextValues.solutionFile]];
+        
+        this.commands['duplicate'] = [new cmds.DuplicateCommand(), 
+            [ContextValues.projectFile]];
+        
+        this.commands['installTemplates'] = [new cmds.InstallWorkspaceTemplateFilesCommand(templateEngineCollection), 
+            both(ContextValues.solution)];
+        
+        this.commands['moveFile'] = [new cmds.MoveCommand(provider), 
+            [ContextValues.projectFile]];
+        
+        this.commands['moveFolder'] = [new cmds.MoveCommand(provider), 
+            [ContextValues.projectFolder]];
+        
+        this.commands['moveToSolutionFolder'] = [new cmds.MoveToSolutionFolderCommand(), 
+            [ContextValues.solutionFolder, ...both(ContextValues.project)]];
+        
+        this.commands['openFile'] = [new cmds.OpenFileCommand(), 
+            both(ContextValues.solution, ContextValues.project)];
+        
+        this.commands['pack'] = [new cmds.PackCommand(), 
+            cps(ContextValues.solution, ContextValues.project)];
+        
+        this.commands['paste'] = [new cmds.PasteCommand(provider), 
+            [ContextValues.projectFolder, ...both(ContextValues.project)]];
+        
+        this.commands['publish'] = [new cmds.PublishCommand(), 
+            cps(ContextValues.solution, ContextValues.project)];
+        
+        this.commands['refresh'] = [new cmds.RefreshCommand(provider), 
+            [ContextValues.projectFolder, ContextValues.solutionFolder, ...both(ContextValues.project)]];
+        
+        this.commands['removePackage'] = [new cmds.DeleteUnifiedCommand(), 
+            cps(ContextValues.projectReferencedPackage)];
+        
+        this.commands['removeProject'] = [new cmds.DeleteUnifiedCommand(), 
+            both(ContextValues.project)];
+        
+        this.commands['removeProjectReference'] = [new cmds.DeleteUnifiedCommand(), 
+            cps(ContextValues.projectReferencedProject)];
+        
+        this.commands['removeSolutionFolder'] = [new cmds.DeleteUnifiedCommand(), 
+            [ContextValues.solutionFolder]];
+        
+        this.commands['renameFile'] = [new cmds.RenameCommand(), 
+            [ContextValues.projectFile]];
+        
+        this.commands['renameFolder'] = [new cmds.RenameCommand(), 
+            [ContextValues.projectFolder]];
+        
+        this.commands['renameSolutionItem'] = [new cmds.RenameSolutionItemCommand(provider), 
+            [ContextValues.solutionFolder, ...both(ContextValues.solution, ContextValues.project)]];
+        
+        this.commands['restore'] = [new cmds.RestoreCommand(), 
+            cps(ContextValues.solution, ContextValues.project)];
+        
+        this.commands['revealFileInOS'] = [new cmds.RevealInOSCommand(), 
+            [ContextValues.projectFile]];
+        
+        this.commands['run'] = [new cmds.RunCommand(), 
+            cps(ContextValues.project)];
+        
+        this.commands['showActiveFileInExplorer'] = [new cmds.SelectActiveDocumentCommand(provider), 
+            undefined];
+        
+        this.commands['test'] = [new cmds.TestCommand(), 
+            cps(ContextValues.project)];
+        
+        this.commands['updatePackagesVersion'] = [new cmds.UpdatePackagesVersionCommand(), 
+            cps(ContextValues.project, ContextValues.projectReferencedPackages)];
+        
+        this.commands['watchRun'] = [new cmds.WatchRunCommand(), 
+            cps(ContextValues.project)];
+        
+        this.commands['openSolution'] = [new cmds.OpenSolutionCommand(eventAggregator), 
+            undefined];
+        
+        this.commands['deleteMultiple'] = [new cmds.DeleteUnifiedCommand(),
+            [ContextValues.multipleSelection]];
     }
 
     public register() {
-        Object.keys(this.commands).forEach(key => {
-            this.registerCommand('solutionExplorer.' + key, this.commands[key]);
+        Object.entries(this.commands).forEach(([key, [command, allowedContexts]]) => {
+            this.registerCommand('solutionExplorer.' + key, command);
+            if (allowedContexts) {
+                vscode.commands.executeCommand('setContext', 'solutionExplorer.cmdAllowedContexts.' + key, allowedContexts);
+            }
         });
     }
 
     private registerCommand(name: string, command: cmds.ActionsCommand) {
         this.context.subscriptions.push(
-            vscode.commands.registerCommand(name, async (item) => {
-                if (command.shouldRun(item as TreeItem)) {
-                    const actions = await command.getActions(item);
-                    if (actions.length > 0) {
-                        await this.actionsRunner.run(actions, { isCancellationRequested: false  });
-                    }
+            vscode.commands.registerCommand(name, async (arg) => {
+                const clickedItem = arg instanceof TreeItem ? arg : undefined;
+                const selectedItems = this.provider.getSelectedItems();
+                const actions = await command.getActionsBase(clickedItem, selectedItems);
+                if (actions.length > 0) {
+                    await this.actionsRunner.run(actions, { isCancellationRequested: false  });
                 }
             })
         );

@@ -1,9 +1,9 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree";
 import { Action, Paste } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 
-export class PasteCommand extends ActionsCommand {
+export class PasteCommand extends SingleItemActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Paste');
     }

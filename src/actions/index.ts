@@ -13,6 +13,7 @@ export * from "./CreateProjectFolder";
 export * from "./CreateProject";
 export * from "./CreateSolution";
 export * from "./CreateSolutionFolder";
+export * from "./DeleteMultipleItems"
 export * from "./DeleteProjectFile";
 export * from "./DeleteProjectFolder";
 export * from "./DeleteSolutionFolder";

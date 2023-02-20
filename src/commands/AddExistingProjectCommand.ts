@@ -1,10 +1,10 @@
 import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
 import { Action, AddExistingProject } from "@actions";
-import { ActionsCommand } from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 
-export class AddExistingProjectCommand extends ActionsCommand {
+export class AddExistingProjectCommand extends SingleItemActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('Add existing project');
     }
