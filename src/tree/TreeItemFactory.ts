@@ -125,7 +125,7 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
     const useNesting = getItemNesting();
     const allRelatedFiles: ProjectItemEntry[] = [];
     files.forEach(file => {
-        const related: ProjectItemEntry[] = getDependants(items, path.dirname(project.fullPath), file.fullPath);
+        const related: ProjectItemEntry[] = getDependants(items, file.fullPath);
         if (useNesting) {
             related.push(...getNestedFiles(files, file.relativePath));
         }
@@ -192,6 +192,7 @@ function getNestedFiles(files: ProjectItemEntry[], relativeFilePath: string): Pr
     return files.filter(f => f.name !== filename && f.name.startsWith(name) && f.name.endsWith(extension));
 }
 
-function getDependants(files: ProjectItemEntry[], projectFolderPath: string, fullFilePath: string): ProjectItemEntry[] {
-    return files.filter(f => f.dependentUpon && path.join(projectFolderPath, f.dependentUpon) === fullFilePath);
+function getDependants(files: ProjectItemEntry[], fullFilePath: string): ProjectItemEntry[] {
+    const folderPath = path.dirname(fullFilePath);
+    return files.filter(f => f.dependentUpon && path.join(folderPath, f.dependentUpon) === fullFilePath);
 }
