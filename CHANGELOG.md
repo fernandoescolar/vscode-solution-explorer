@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.8.1
+
+Bugfix #264: allow undefined selected item commands
+
 ## 0.8.0
 
 Bugfix #254: Refresh tree view item icons properly, thanks to [panoskj](https://github.com/panoskj)
