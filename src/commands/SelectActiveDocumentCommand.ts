@@ -8,11 +8,11 @@ export class SelectActiveDocumentCommand extends SingleItemActionsCommand {
         super('Select Active Document')
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return true;
     }
 
-    public getActions(item: TreeItem): Promise<Action[]> {
+    public getActions(item: TreeItem | undefined): Promise<Action[]> {
         return Promise.resolve([new SelectActiveDocumentInTree(this.provider)]);
     }
 }

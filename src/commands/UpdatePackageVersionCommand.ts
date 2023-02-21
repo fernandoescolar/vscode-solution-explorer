@@ -12,11 +12,11 @@ export class UpdatePackageVersionCommand extends SingleItemActionsCommand {
         super('Update Package Version');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return !!item && !!item.project && !!item.path && item.contextValue === ContextValues.projectReferencedPackage + '-cps';
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         const projectFullPath = item.project.fullPath;

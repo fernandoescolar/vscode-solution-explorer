@@ -7,11 +7,11 @@ export class UpdatePackagesVersionCommand extends SingleItemActionsCommand {
         super('UpdatePackagesVersion');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return !!item && !!item.project;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project || !item.project.fullPath) { return []; }
 
         const references = await item.project.getPackageReferences();

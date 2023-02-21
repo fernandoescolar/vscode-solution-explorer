@@ -10,11 +10,11 @@ export class DuplicateCommand extends SingleItemActionsCommand {
         super('Duplicate');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-       return item && !!item.path && item.contextValue.startsWith(ContextValues.projectFile);
+    public shouldRun(item: TreeItem | undefined): boolean {
+       return !!item && !!item.path && item.contextValue.startsWith(ContextValues.projectFile);
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         const filepath = await createCopyName(item.path);

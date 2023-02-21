@@ -9,11 +9,11 @@ export class MoveCommand extends SingleItemActionsCommand {
         super('Move');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
        return !!item && !!item.project && !!item.path && ( item.contextValue.startsWith(ContextValues.projectFile) || item.contextValue.startsWith(ContextValues.projectFolder) );
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         const folders = await item.project?.getFolderList() ?? [];

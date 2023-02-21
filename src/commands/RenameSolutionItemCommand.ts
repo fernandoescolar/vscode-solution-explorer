@@ -10,11 +10,13 @@ export class RenameSolutionItemCommand extends SingleItemActionsCommand {
         super('Rename');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-        return !!item.solution;
+    public shouldRun(item: TreeItem | undefined): boolean {
+        return !!item && !!item.solution;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
+        if (!item) { return []; }
+
         const newname = await dialogs.getText('New name', 'New name', item.label);
         if (!newname) { return []; }
 

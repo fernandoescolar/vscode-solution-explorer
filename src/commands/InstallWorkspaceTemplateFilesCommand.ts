@@ -8,11 +8,11 @@ export class InstallWorkspaceTemplateFilesCommand extends SingleItemActionsComma
         super('Install Workspace Template Files');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-       return item && !!item.workspaceRoot;
+    public shouldRun(item: TreeItem | undefined): boolean {
+       return !!item && !!item.workspaceRoot;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.workspaceRoot) { return []; }
 
         const workspace = item.workspaceRoot;

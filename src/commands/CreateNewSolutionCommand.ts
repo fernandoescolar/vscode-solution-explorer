@@ -9,11 +9,11 @@ export class CreateNewSolutionCommand extends SingleItemActionsCommand {
         super('Create solution');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return true;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         const solutionName = await dialogs.getText('Solution name');
         const workingFolder = vscode.workspace.rootPath;
         if (!solutionName || !workingFolder) {

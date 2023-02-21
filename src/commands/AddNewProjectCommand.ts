@@ -41,11 +41,11 @@ export class AddNewProjectCommand extends SingleItemActionsCommand {
         super('Add new project');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return !item || (item && !!item.path && (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps'));
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         this.loadProjectTemplates();
         this.wizard = dialogs.wizard('Add new project')
                              .selectOption('Select solution', this.getSolutions(item))
@@ -75,7 +75,7 @@ export class AddNewProjectCommand extends SingleItemActionsCommand {
         ];
     }
 
-    private getSolutions(item: TreeItem): dialogs.ItemsOrItemsResolver {
+    private getSolutions(item: TreeItem | undefined): dialogs.ItemsOrItemsResolver {
         if (item && item.path) {
             const result: { [id: string]: string } = {};
             result[item.label] = item.path;

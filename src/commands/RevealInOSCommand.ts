@@ -7,11 +7,11 @@ export class RevealInOSCommand extends SingleItemActionsCommand {
         super('Restore');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-        return item && item.contextValue === ContextValues.projectFile;
+    public shouldRun(item: TreeItem | undefined): boolean {
+        return !!item && item.contextValue === ContextValues.projectFile;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
         return [ new RevealInOS(item.path) ];

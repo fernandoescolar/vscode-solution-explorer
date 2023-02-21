@@ -8,12 +8,12 @@ export class PasteCommand extends SingleItemActionsCommand {
         super('Paste');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         if (item && item.path) { return true; }
         return !!item && !!item.path && !!item.project;
     }
 
-    public getActions(item: TreeItem): Promise<Action[]> {
+    public getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path || !item.project) { return Promise.resolve([]); }
 
         return Promise.resolve([new Paste(item.project, item.path)]);

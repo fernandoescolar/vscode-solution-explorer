@@ -7,12 +7,12 @@ export class CopyCommand extends SingleItemActionsCommand {
         super('Copy');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return !!item && !!item.path;
     }
 
-    public getActions(item: TreeItem): Promise<Action[]> {
-        if(!item.path) { return Promise.resolve([]); }
+    public getActions(item: TreeItem | undefined): Promise<Action[]> {
+        if(!item || !item.path) { return Promise.resolve([]); }
 
         return Promise.resolve([new Copy(item.path)]);
     }

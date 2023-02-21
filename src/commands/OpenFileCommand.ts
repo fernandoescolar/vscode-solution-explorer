@@ -11,11 +11,11 @@ export class OpenFileCommand extends SingleItemActionsCommand {
         super('Open file');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return !!item && !!item.path;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path) { return []; }
         if (!(await fs.exists(item.path))) {
             return [];

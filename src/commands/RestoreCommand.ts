@@ -7,11 +7,11 @@ export class RestoreCommand extends SingleItemActionsCommand {
         super('Restore');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-        return item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
+    public shouldRun(item: TreeItem | undefined): boolean {
+        return !!item && (item.contextValue === ContextValues.project + '-cps' || item.contextValue === ContextValues.solution + '-cps');
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
         return [ new Restore(item.path) ];

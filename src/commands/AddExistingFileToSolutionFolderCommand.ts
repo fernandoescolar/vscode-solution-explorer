@@ -8,13 +8,13 @@ export class AddExistingFileToSolutionFolderCommand extends SingleItemActionsCom
         super('Add existing file to solution folder');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-        return item && !!item.projectInSolution && (item.contextValue === ContextValues.solutionFolder);
+    public shouldRun(item: TreeItem | undefined): boolean {
+        return !!item && !!item.projectInSolution && (item.contextValue === ContextValues.solutionFolder);
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         const filePath = await dialogs.openFile('Select a file to add');
-        if (!item.solution || !item.projectInSolution || !filePath) {
+        if (!item || !item.solution || !item.projectInSolution || !filePath) {
             return [];
         }
 

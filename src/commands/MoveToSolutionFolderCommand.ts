@@ -10,11 +10,13 @@ export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
         super('Move to solution folder');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return !!item && !!item.solution &&  !!item.projectInSolution;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
+        if (!item || !item.solution) { return []; }
+
         const folder = await dialogs.selectOption('Select folder...', () => this.getFolders(item.solution));
         if (!folder) { return []; }
 

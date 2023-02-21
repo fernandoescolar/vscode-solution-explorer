@@ -12,11 +12,11 @@ export class AddPackageCommand extends SingleItemActionsCommand {
         super('Add package');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-        return item && !!item.project && item.project.type === 'cps';
+    public shouldRun(item: TreeItem | undefined): boolean {
+        return !!item && !!item.project && item.project.type === 'cps';
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project) { return []; }
 
         const projectFullPath = item.project.fullPath;

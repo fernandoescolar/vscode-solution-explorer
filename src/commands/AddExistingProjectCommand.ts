@@ -9,11 +9,13 @@ export class AddExistingProjectCommand extends SingleItemActionsCommand {
         super('Add existing project');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return !item || (item && !!item.path && (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps'));
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
+        if (!item) { return []; }
+
         const solution = await dialogs.selectOption('Select solution', this.getSolutions(item));
         const projectPath = await dialogs.openProjectFile('Select a project file to add');
         if (!solution || !projectPath) {

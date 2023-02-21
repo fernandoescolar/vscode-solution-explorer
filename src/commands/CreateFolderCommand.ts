@@ -9,11 +9,11 @@ export class CreateFolderCommand extends SingleItemActionsCommand {
         super('Create folder');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-        return !!item.project;
+    public shouldRun(item: TreeItem | undefined): boolean {
+        return !!item && !!item.project;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         const folderName = await dialogs.getText('New folder name');

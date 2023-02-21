@@ -11,11 +11,11 @@ export class AddProjectReferenceCommand extends SingleItemActionsCommand {
         super('Add project reference');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-        return item && !!item.project && item.project.type === 'cps';
+    public shouldRun(item: TreeItem | undefined): boolean {
+        return !!item && !!item.project && item.project.type === 'cps';
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project) { return []; }
 
         const projectPath = await dialogs.selectOption('Select project...', () => this.getCPSProjects(item));

@@ -8,11 +8,11 @@ export class RefreshCommand extends SingleItemActionsCommand {
         super('Refresh');
     }
 
-    public shouldRun(item: TreeItem): boolean {
+    public shouldRun(item: TreeItem | undefined): boolean {
         return true;
     }
 
-    public getActions(item: TreeItem): Promise<Action[]> {
+    public getActions(item: TreeItem | undefined): Promise<Action[]> {
         const result: Action[] = [];
         if (item) {
             result.push(new RefreshTreeItem(item));

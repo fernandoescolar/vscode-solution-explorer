@@ -14,11 +14,11 @@ export class CreateFileCommand extends SingleItemActionsCommand {
         super('Create file');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-        return item && !!item.project;
+    public shouldRun(item: TreeItem | undefined): boolean {
+        return !!item && !!item.project;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         this.workspaceRoot = item.workspaceRoot;

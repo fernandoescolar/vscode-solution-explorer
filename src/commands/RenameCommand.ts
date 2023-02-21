@@ -8,11 +8,11 @@ export class RenameCommand extends SingleItemActionsCommand {
         super('Rename');
     }
 
-    public shouldRun(item: TreeItem): boolean {
-        return !!item.project && !!item.path;
+    public shouldRun(item: TreeItem | undefined): boolean {
+        return !!item && !!item.project && !!item.path;
     }
 
-    public async getActions(item: TreeItem): Promise<Action[]> {
+    public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
         const oldname = item.label;
