@@ -2,7 +2,7 @@
     "name": "vscode-solution-explorer",
     "displayName": "vscode-solution-explorer",
     "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "license": "MIT",
     "publisher": "fernandoescolar",
     "icon": "images/icon.png",
@@ -683,6 +683,11 @@
                     ],
                     "default": "append",
                     "description": "The solution explorer output channel mode: show on every single log, append but not show the pane or none"
+                },
+                "vssolution.showTerminalOnCommand": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show the terminal when a command is executed."
                 },
                 "vssolution.trackActiveItem": {
                     "type": "boolean",

@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.8.2
+
+Enhancement #265: adding new parameter `vssolution.showTerminalOnCommand` to show the terminal when a command is executed, `true` by default
+
 ## 0.8.1
 
 Bugfix #264: allow undefined selected item commands

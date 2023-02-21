@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as config from "@extensions/config";
 
 const TERMINAL_NAME:string = "dotnet";
 
@@ -18,5 +19,8 @@ function ensureTerminal(path: string): vscode.Terminal {
 export function execute(args: string[], path: string): void {
     const terminal = ensureTerminal(path);
     terminal.sendText([ ...args ].join(' '), true);
-    terminal.show();
+
+    if (config.getShowTerminalOnCommand()) {
+        terminal.show();
+    }
 }

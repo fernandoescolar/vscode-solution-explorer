@@ -228,6 +228,8 @@ You can configure the extension in the Visual Studio Code settings panel:
 - `vssolution.solutionExplorerIcons` "solution-explorer": custom items from vscode-solution-explorer extension. "mix": file and folder icons from the installed icons theme. "current-theme": all the icons are from the installed icons theme.
 
 - `vssolution.outputChannelMode` The solution explorer output channel mode: `show` on every single log, `append` but not show the pane or `none`.
+-
+- `vssolution.showTerminalOnCommand` Show the terminal when a command is executed.
 
 - `vssolution.trackActiveItem` Select the active editor file in the solution explorer (not recomended).
 
@@ -262,6 +264,8 @@ You can configure the extension in the Visual Studio Code settings panel:
     "vssolution.solutionExplorerIcons": "current-theme",
 
     "vssolution.outputChannelMode": "show",
+
+    "vssolution.showTerminalOnCommand": true,
 
     "vssolution.trackActiveItem": false,
 

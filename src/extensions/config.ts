@@ -7,6 +7,7 @@ const SHOW_MODE_NAME = 'showMode';
 const TRACK_ACTIVE_ITEM_NAME = 'trackActiveItem';
 const SOLUTION_EXPLORER_ICONS_NAME = 'solutionExplorerIcons';
 const OUTPUT_CHANNEL_MODE_NAME = 'outputChannelMode';
+const SHOW_TERMINAL_ON_COMMAND_NAME = 'showTerminalOnCommand';
 const NETCORE_IGNORE_NAME = 'netcoreIgnore';
 const ALTERNATIVE_SOLUTION_FOLDERS_NAME = 'altSolutionFolders';
 const XML_SPACES_NAME = 'xmlspaces';
@@ -61,6 +62,10 @@ export function getTrackActiveItem(): boolean {
 
 export function getOutputChannelMode(): OutputChannelMode {
     return config.get<OutputChannelMode>(OUTPUT_CHANNEL_MODE_NAME, "append");
+}
+
+export function getShowTerminalOnCommand(): boolean {
+    return config.get<boolean>(SHOW_TERMINAL_ON_COMMAND_NAME, true);
 }
 
 export function getNetCoreIgnore(): string[] {
