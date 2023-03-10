@@ -15,6 +15,7 @@ const XML_CLOSING_TAG_SPACE_NAME = 'xmlClosingTagSpace';
 const WIN32_ENCODING_NAME = 'win32Encoding';
 const LINE_ENDINGS_NAME = 'lineEndings';
 const ITEM_NESTING_NAME = 'itemNesting';
+const OPEN_PROJECT_ON_CLICK = 'openProjectOnClick';
 const OPEN_SOLUTIONS_IN_ROOT_FOLDER_NAME = 'openSolutions.inRootFolder';
 const OPEN_SOLUTIONS_IN_ALTERNATIVE_FOLDERS_NAME = 'openSolutions.inAltFolders';
 const OPEN_SOLUTIONS_IN_FOLDER_AND_SUBFOLDERS_NAME = 'openSolutions.inFoldersAndSubfolders';
@@ -103,6 +104,10 @@ export function getLineEndings() : LineEndingsType {
 
 export function getItemNesting(): boolean {
     return config.get<boolean>(ITEM_NESTING_NAME, false);
+}
+
+export function getOpenProjectOnClick(): boolean {
+    return config.get<boolean>(OPEN_PROJECT_ON_CLICK, false);
 }
 
 export function getOpenSolutionsInRootFolder(): boolean {

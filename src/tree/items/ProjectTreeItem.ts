@@ -1,12 +1,21 @@
 import { ProjectInSolution } from "@core/Solutions";
 import { TreeItem, TreeItemCollapsibleState, TreeItemFactory, TreeItemContext, ContextValues } from "@tree";
 import { ProjectReferencesTreeItem } from "./ProjectReferencesTreeItem";
+import { getOpenProjectOnClick } from "@extensions/config"
 
 export class ProjectTreeItem extends TreeItem {
     constructor(context: TreeItemContext, projectInSolution: ProjectInSolution) {
         super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.project, projectInSolution.fullPath, projectInSolution);
         this.allowIconTheme = false;
         this.addContextValueSuffix();
+
+        if (getOpenProjectOnClick()){
+            this.command = {
+                command: 'solutionExplorer.openFile',
+                arguments: [this],
+                title: 'Open File'
+            };        
+        }
     }
 
     public refresh(): void {
@@ -14,7 +23,7 @@ export class ProjectTreeItem extends TreeItem {
             super.refresh()
         });
 	}
-
+    
     protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
         let result: TreeItem[] = [];
         if (!this.project) {
