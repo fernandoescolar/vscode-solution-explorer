@@ -245,6 +245,8 @@ You can configure the extension in the Visual Studio Code settings panel:
 
 - `vssolution.win32Encoding` Win32 "codepage" to "iconv.js" encoding equivalences.
 
+- `vssolution.openProjectOnClick`: Sets whether clicking a project in the explorer tree opens the underlying project file.
+
 - `vssolution.customCommands` Sets custom the terminal commands.
 
 - `vssolution.openSolutions.inRootFolder` Sets whether solutions will be automatically loaded from the root folder.
@@ -306,7 +308,9 @@ You can configure the extension in the Visual Studio Code settings panel:
     "vssolution.openSolutions.inRootFolder": false,
     "vssolution.openSolutions.inAltFolders": false,
     "vssolution.openSolutions.inFoldersAndSubfolders": false,
-    "vssolution.openSolutions.selectedInOmnisharp": true
+    "vssolution.openSolutions.selectedInOmnisharp": true,
+
+    "vssolution.openProjectOnClick": false
 }
 ```
 
@@ -348,5 +352,6 @@ Branded icons are licensed under their copyright license.
 [Richard Willis](https://github.com/badsyntax)
 [panoskj](https://github.com/panoskj)
 [lhz](https://github.com/lhzcm)
+[Spencer Farley](https://github.com/farlee2121)
 
 **Enjoy!**

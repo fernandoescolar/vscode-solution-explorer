@@ -6,6 +6,8 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Enhancement #265: adding new parameter `vssolution.showTerminalOnCommand` to show the terminal when a command is executed, `true` by default
 
+Enhancement #179 #269: Add option to open a project file on click, thanks to [Spencer Farley](https://github.com/farlee2121)
+
 ## 0.8.1
 
 Bugfix #264: allow undefined selected item commands
