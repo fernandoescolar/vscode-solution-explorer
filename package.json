@@ -767,6 +767,11 @@
                     "default": false,
                     "description": "Sets whether related items will be displayed nested"
                 },
+                "vssolution.openProjectOnClick": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Sets whether clicking a project in the explorer tree opens the underlying proj file (i.e. the csproj or fsproj)"
+              },
                 "vssolution.openSolutions.inRootFolder": {
                     "type": "boolean",
                     "default": true,
