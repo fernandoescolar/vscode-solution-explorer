@@ -90,7 +90,8 @@
             {
                 "command": "solutionExplorer.openFile",
                 "title": "Open File",
-                "category": "Solution Explorer"
+                "category": "Solution Explorer",
+                "icon": "$(edit)"
             },
             {
                 "command": "solutionExplorer.renameFile",
@@ -462,6 +463,11 @@
                 "group": "7_modification"
               },
               {
+                "command": "solutionExplorer.openFile",
+                "when": "config.vssolution.openProjectInlineButtonShown && view in solutionexplorer.viewTypes && viewItem == project-cps",
+                "group": "inline"
+              },
+              {
                 "command": "solutionExplorer.createNewSolution",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createNewSolution",
                 "group": "2_workspace"
@@ -771,7 +777,12 @@
                   "type": "boolean",
                   "default": false,
                   "description": "Sets whether clicking a project in the explorer tree opens the underlying proj file (i.e. the csproj or fsproj)"
-              },
+                },
+                "vssolution.openProjectInlineButtonShown": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Sets whether projects in the explorer tree include an inline button to open the underlying project file (i.e. the csproj or fsproj)"
+                },
                 "vssolution.openSolutions.inRootFolder": {
                     "type": "boolean",
                     "default": true,
