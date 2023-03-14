@@ -57,6 +57,10 @@ export abstract class Project {
 
     public abstract moveFile(filepath: string, newfolderPath: string): Promise<string>;
 
+    public abstract moveFileUp(filepath: string): Promise<string>;
+
+    public abstract moveFileDown(filepath: string): Promise<string>;
+
     public abstract moveFolder(folderpath: string, newfolderPath: string): Promise<string>;
 
     public abstract refresh(): Promise<void>;

@@ -15,7 +15,7 @@ export class SolutionExplorerCommands {
                 private readonly templateEngineCollection: TemplateEngineCollection,
                 private readonly eventAggregator: IEventAggregator) {
 
-        const { cps, both } = ContextValues;
+        const { cps, both, fsharp } = ContextValues;
 
         this.commands['addExistingProject'] = [new cmds.AddExistingProjectCommand(provider),
             both(ContextValues.solution)];
@@ -60,7 +60,7 @@ export class SolutionExplorerCommands {
             [ContextValues.solutionFolder, ...both(ContextValues.solution)]];
 
         this.commands['deleteFile'] = [new cmds.DeleteUnifiedCommand(),
-            [ContextValues.projectFile]];
+            [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['deleteFolder'] = [new cmds.DeleteUnifiedCommand(),
             [ContextValues.projectFolder]];
@@ -69,13 +69,19 @@ export class SolutionExplorerCommands {
             [ContextValues.solutionFile]];
 
         this.commands['duplicate'] = [new cmds.DuplicateCommand(),
-            [ContextValues.projectFile]];
+            [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['installTemplates'] = [new cmds.InstallWorkspaceTemplateFilesCommand(templateEngineCollection),
             both(ContextValues.solution)];
 
         this.commands['moveFile'] = [new cmds.MoveCommand(provider),
-            [ContextValues.projectFile]];
+            [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
+
+        this.commands['moveFileUp'] = [new cmds.MoveFileUpCommand(provider),
+            [...fsharp(ContextValues.projectFile)]];
+
+        this.commands['moveFileDown'] = [new cmds.MoveFileDownCommand(provider),
+            [...fsharp(ContextValues.projectFile)]];
 
         this.commands['moveFolder'] = [new cmds.MoveCommand(provider),
             [ContextValues.projectFolder]];
@@ -90,7 +96,7 @@ export class SolutionExplorerCommands {
             cps(ContextValues.solution, ContextValues.project)];
 
         this.commands['paste'] = [new cmds.PasteCommand(provider),
-            [ContextValues.projectFolder, ContextValues.projectFile, ...both(ContextValues.project)]];
+            [ContextValues.projectFolder, ContextValues.projectFile, ...fsharp(ContextValues.projectFile), ...both(ContextValues.project)]];
 
         this.commands['publish'] = [new cmds.PublishCommand(),
             cps(ContextValues.solution, ContextValues.project)];
@@ -111,7 +117,7 @@ export class SolutionExplorerCommands {
             [ContextValues.solutionFolder]];
 
         this.commands['renameFile'] = [new cmds.RenameCommand(),
-            [ContextValues.projectFile]];
+            [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['renameFolder'] = [new cmds.RenameCommand(),
             [ContextValues.projectFolder]];
@@ -123,7 +129,7 @@ export class SolutionExplorerCommands {
             cps(ContextValues.solution, ContextValues.project)];
 
         this.commands['revealFileInOS'] = [new cmds.RevealInOSCommand(),
-            [ContextValues.projectFile]];
+            [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['run'] = [new cmds.RunCommand(),
             cps(ContextValues.project)];

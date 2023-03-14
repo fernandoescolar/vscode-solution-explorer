@@ -7,6 +7,8 @@ export class ProjectFileTreeItem extends TreeItem {
         if (projectFile.isLink) {
             this.description = "link";
         }
+
+        this.addContextValueSuffix();
     }
 
     command = {
@@ -24,5 +26,11 @@ export class ProjectFileTreeItem extends TreeItem {
         }
 
         return Promise.resolve(result);
+	}
+
+    protected addContextValueSuffix(): void {
+        if (this.project?.extension.toLocaleLowerCase() === 'fsproj') {
+		    this.contextValue += '-fs';
+        }
 	}
 }

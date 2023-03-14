@@ -18,6 +18,8 @@ export * from "./DeleteUnifiedCommand";
 export * from "./DuplicateCommand";
 export * from "./InstallWorkspaceTemplateFilesCommand";
 export * from "./MoveCommand";
+export * from "./MoveFileUpCommand";
+export * from "./MoveFileDownCommand";
 export * from "./MoveToSolutionFolderCommand";
 export * from "./OpenFileCommand";
 export * from "./OpenSolutionCommand";

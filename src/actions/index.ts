@@ -21,6 +21,8 @@ export * from "./DeleteSolutionFile";
 export * from "./InstallWorkspaceTemplateFiles";
 export * from "./MoveProject";
 export * from "./MoveProjectFile";
+export * from "./MoveProjectFileUp";
+export * from "./MoveProjectFileDown";
 export * from "./MoveProjectFolder";
 export * from "./MoveSolutionFolder";
 export * from "./OpenFile";

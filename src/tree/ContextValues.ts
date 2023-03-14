@@ -18,6 +18,9 @@ export class ContextValues {
     public static cps(...contexts: SuffixedContextValue[]) {
         return contexts.map(ctx => ctx + '-cps');
     }
+    public static fsharp(...contexts: FSharpContextValue[]) {
+        return contexts.map(ctx => ctx + '-fs');
+    }
     public static both(...contexts: SuffixedContextValue[]) {
         return contexts.flatMap(ctx => [ctx !== ContextValues.solution ? ctx + '-standard' : ctx, ctx + '-cps']);
     }
@@ -30,3 +33,8 @@ type SuffixedContextValue =
     typeof ContextValues.projectReferencedProjects |
     typeof ContextValues.projectReferencedPackage |
     typeof ContextValues.projectReferencedProject;
+
+type FSharpContextValue =
+    //typeof ContextValues.project |
+    //typeof ContextValues.projectFolder |
+    typeof ContextValues.projectFile;

@@ -149,6 +149,18 @@
                 "category": "Solution Explorer"
             },
             {
+                "command": "solutionExplorer.moveFileUp",
+                "title": "Move Up",
+                "category": "Solution Explorer",
+                "icon": "$(arrow-up)"
+            },
+            {
+                "command": "solutionExplorer.moveFileDown",
+                "title": "Move Down",
+                "category": "Solution Explorer",
+                "icon": "$(arrow-down)"
+            },
+            {
                 "command": "solutionExplorer.moveFolder",
                 "title": "Move to folder",
                 "category": "Solution Explorer"
@@ -398,8 +410,28 @@
                 "group": "inline"
               },
               {
+                "command": "solutionExplorer.moveFileUp",
+                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileUp",
+                "group": "inline"
+              },
+              {
+                "command": "solutionExplorer.moveFileDown",
+                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileDown",
+                "group": "inline"
+              },
+              {
                 "command": "solutionExplorer.moveFile",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFile",
+                "group": "7_modification"
+              },
+              {
+                "command": "solutionExplorer.moveFileUp",
+                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileUp",
+                "group": "7_modification"
+              },
+              {
+                "command": "solutionExplorer.moveFileDown",
+                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileDown",
                 "group": "7_modification"
               },
               {

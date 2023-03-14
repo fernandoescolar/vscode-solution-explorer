@@ -16,23 +16,23 @@ export class DeleteUnifiedCommand extends ActionsCommand {
     constructor() {
         super('Delete');
     }
-    
+
     public async getActionsBase(clickedItem: TreeItem | undefined, selectedItems: readonly TreeItem[] | undefined):
         Promise<Action[]> {
-        
+
         const clickedItems = this.getClickedItems(clickedItem, selectedItems);
-        
+
         const topClickedItems = clickedItems.filter(item => !this.includedInFolder(clickedItems, item));
-    
+
         if (topClickedItems.length === 1) {
 
             return this.getItemDeleteActions(topClickedItems[0], true);
         }
         else if (topClickedItems.length > 1) {
 
-            const { both, cps } = ContextValues;
+            const { both, cps, fsharp } = ContextValues;
             const allowedContextGroups = [
-                [ContextValues.projectFile, ContextValues.projectFolder],
+                [ContextValues.projectFile, ...fsharp(ContextValues.projectFile), ContextValues.projectFolder],
                 cps(ContextValues.projectReferencedPackage, ContextValues.projectReferencedProject),
                 both(ContextValues.project),
                 [ContextValues.solutionFile, ContextValues.solutionFolder],
@@ -40,7 +40,7 @@ export class DeleteUnifiedCommand extends ActionsCommand {
             const clickedContexts = [...new Set(topClickedItems.map((item) => item.contextValue))];
             const clickedGroups = [...new Set(clickedContexts
                 .map(context => allowedContextGroups.findIndex(group => group.includes(context))))];
-            
+
             if (clickedGroups.length !== 1 || clickedGroups[0] < 0) return [];
 
             const actions = topClickedItems.flatMap(item => this.getItemDeleteActions(item, false));
@@ -57,7 +57,7 @@ export class DeleteUnifiedCommand extends ActionsCommand {
     }
 
     private getClickedItems(clickedItem: TreeItem | undefined, selectedItems: readonly TreeItem[] | undefined) {
-        
+
         selectedItems ??= [];
         const selectedItemsNotClicked = clickedItem && selectedItems.indexOf(clickedItem) < 0;
         return selectedItemsNotClicked ? [clickedItem] : selectedItems;
@@ -80,10 +80,10 @@ export class DeleteUnifiedCommand extends ActionsCommand {
 
 
     private getItemDeleteActions(item: TreeItem, showDialog: boolean): Action[] {
-        
+
         const deleteActionGetters = showDialog
             ? this.preparedDeleteActionGettersShowDialog
-            : this.preparedDeleteActionGettersHideDialog;        
+            : this.preparedDeleteActionGettersHideDialog;
         const actionGetter = deleteActionGetters[item.contextValue];
         return actionGetter ? actionGetter(item) : [];
     }
@@ -92,27 +92,30 @@ export class DeleteUnifiedCommand extends ActionsCommand {
     private preparedDeleteActionGettersHideDialog = this.prepareDeleteActionGetters(false);
 
     private prepareDeleteActionGetters(showDialog: boolean) {
-        
+
         return prepareContextActionGetters([
 
             [ContextValues.projectFile, item => item.project && item.path
                 ? [new DeleteProjectFile(item.project, item.path, showDialog)] : []],
-            
+
+            [ContextValues.projectFile, 'fs', item => item.project && item.path
+                ? [new DeleteProjectFile(item.project, item.path, showDialog)] : []],
+
             [ContextValues.projectFolder, item => item.project && item.path
                 ? [new DeleteProjectFolder(item.project, item.path, showDialog)] : []],
-            
+
             [ContextValues.projectReferencedPackage, 'cps', item => item.project && item.path
                 ? [new RemovePackageReference(item.project.fullPath, item.path)] : []],
-            
+
             [ContextValues.projectReferencedProject, 'cps', item => item.project && item.path
                 ? [new RemoveProjectReference(item.project.fullPath, item.path)] : []],
-            
+
             [ContextValues.project, item => item.project
                 ? [new RemoveExistingProject(item.solution.fullPath, item.project.fullPath)] : []],
-            
+
             [ContextValues.solutionFile, item => item.projectInSolution && item.path
                 ? [new DeleteSolutionFile(item.solution, item.projectInSolution, item.path)] : []],
-            
+
             [ContextValues.solutionFolder, item => item.projectInSolution
                 ? [new DeleteSolutionFolder(item.solution, item.projectInSolution)] : []],
         ]);

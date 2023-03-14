@@ -45,6 +45,14 @@ export abstract class ProjectWithManagers extends ProjectWithNugetDependencies {
         return this.callInManagers(m => m.moveFile(filepath, newfolderPath));
     }
 
+    public moveFileUp(filepath: string): Promise<string> {
+        return this.callInManagers(m => m.moveFileUp(filepath));
+    }
+
+    public moveFileDown(filepath: string): Promise<string> {
+        return this.callInManagers(m => m.moveFileDown(filepath));
+    }
+
     public moveFolder(folderpath: string, newfolderPath: string): Promise<string> {
         return this.callInManagers(m => m.moveFolder(folderpath, newfolderPath));
     }

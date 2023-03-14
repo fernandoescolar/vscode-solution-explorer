@@ -94,7 +94,7 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
     const folders = items.filter(i => i.isDirectory && path.dirname(i.relativePath) === virtualPath);
     const files = items.filter(i => !i.isDirectory && path.dirname(i.relativePath) === virtualPath && !i.dependentUpon);
 
-    if (!project.fullPath.endsWith('.fsproj')) {
+    if (project.extension.toLocaleLowerCase() !== 'fsproj') {
         const head = ['properties','wwwroot']
         folders.sort((a, b) => {
             const x : string = a.name.toLowerCase();
@@ -111,13 +111,12 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
                 return  x < y ? -1 : x > y ? 1 : 0;
             }
         });
-        if(!project.fullPath.endsWith('.fsproj')){
-            files.sort((a, b) => {
-                const x : string = a.name.toLowerCase();
-                const y : string = b.name.toLowerCase();
-                return  x < y ? -1 : x > y ? 1 : 0;
-            });
-        } 
+
+        files.sort((a, b) => {
+            const x : string = a.name.toLowerCase();
+            const y : string = b.name.toLowerCase();
+            return  x < y ? -1 : x > y ? 1 : 0;
+        });
     }
 
     folders.forEach(folder => {

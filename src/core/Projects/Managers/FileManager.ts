@@ -56,6 +56,14 @@ export class FileManager {
         return this.moveItem(filepath, newfolderPath);
     }
 
+    public moveFileUp(filepath: string): Promise<string> {
+        return Promise.resolve(filepath);
+    }
+
+    public moveFileDown(filepath: string): Promise<string> {
+        return Promise.resolve(filepath);
+    }
+
     public moveFolder(folderpath: string, newfolderPath: string): Promise<string> {
         return this.moveItem(folderpath, newfolderPath);
     }
