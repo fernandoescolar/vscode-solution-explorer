@@ -1,8 +1,8 @@
 import { ProjectFileStat } from "../ProjectFileStat";
-
+import { RelativeFilePosition } from "../RelativeFilePosition"; "../RelativeFilePosition";
 
 export interface Manager {
-    createFile(folderpath: string, filename: string, content?: string): Promise<string>;
+    createFile(folderpath: string, filename: string, content?: string, relativePosition?:RelativeFilePosition): Promise<string>;
     createFolder(folderpath: string): Promise<string>;
     deleteFile(filepath: string): Promise<void>;
     deleteFolder(folderpath: string): Promise<void>;

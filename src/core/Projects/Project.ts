@@ -2,6 +2,7 @@ import * as path from "@extensions/path";
 import { NugetDependencies } from "@extensions/nuget-dependencies";
 import { PackageReference, ProjectItemEntry, ProjectReference, Reference } from "./Items";
 import { ProjectFileStat } from "./ProjectFileStat";
+import { RelativeFilePosition } from "./RelativeFilePosition";
 
 export abstract class Project {
     constructor(public readonly projectFullPath: string, private readonly withReferences?: boolean) {
@@ -43,7 +44,7 @@ export abstract class Project {
 
     public abstract deleteFile(filepath: string): Promise<void>;
 
-    public abstract createFile(folderpath: string, filename: string, content?: string): Promise<string>;
+    public abstract createFile(folderpath: string, filename: string, content?: string, relativePosition?:RelativeFilePosition): Promise<string>;
 
     public abstract renameFolder(folderpath: string, oldname: string, newname: string): Promise<string>;
 

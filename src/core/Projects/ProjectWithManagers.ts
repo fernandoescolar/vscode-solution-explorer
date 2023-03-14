@@ -1,6 +1,7 @@
 import { ProjectFileStat } from "./ProjectFileStat";
 import { ProjectWithNugetDependencies } from "./ProjectWithNugetDependencies";
 import { Manager, XmlManager, FileManager } from "./Managers";
+import { RelativeFilePosition } from "./RelativeFilePosition";
 
 export abstract class ProjectWithManagers extends ProjectWithNugetDependencies {
     protected readonly xml: XmlManager;
@@ -25,8 +26,8 @@ export abstract class ProjectWithManagers extends ProjectWithNugetDependencies {
         await this.xml.refresh();
     }
 
-    public createFile(folderpath: string, filename: string, content?: string | undefined): Promise<string> {
-        return this.callInManagers(m => m.createFile(folderpath, filename, content));
+    public createFile(folderpath: string, filename: string, content?: string | undefined, relativePosition?:RelativeFilePosition): Promise<string> {
+        return this.callInManagers(m => m.createFile(folderpath, filename, content, relativePosition));
     }
 
     public createFolder(folderpath: string): Promise<string> {

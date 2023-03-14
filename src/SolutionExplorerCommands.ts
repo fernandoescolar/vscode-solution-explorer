@@ -5,6 +5,7 @@ import { IEventAggregator } from "@events";
 import { TemplateEngineCollection } from "@templates";
 import { ContextValues, TreeItem } from "@tree";
 import { ActionsRunner } from "./ActionsRunner";
+import { Direction } from "@core/Projects/RelativeFilePosition";
 
 export class SolutionExplorerCommands {
     private commands: { [id: string]: [command: cmds.ActionsCommand, allowedContexts: string[] | undefined] } = {};
@@ -49,6 +50,12 @@ export class SolutionExplorerCommands {
 
         this.commands['createFile'] = [new cmds.CreateFileCommand(templateEngineCollection),
             [ContextValues.projectFile, ContextValues.projectFolder, ...both(ContextValues.project)]];
+
+        this.commands['createFileAbove'] = [new cmds.CreateFileCommand(templateEngineCollection, Direction.Above),
+            [...fsharp(ContextValues.projectFile)]];
+
+        this.commands['createFileBelow'] = [new cmds.CreateFileCommand(templateEngineCollection, Direction.Below),
+            [...fsharp(ContextValues.projectFile)]];
 
         this.commands['createFolder'] = [new cmds.CreateFolderCommand(),
             [ContextValues.projectFile, ContextValues.projectFolder, ...both(ContextValues.project)]];
