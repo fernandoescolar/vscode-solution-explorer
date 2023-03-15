@@ -1,7 +1,6 @@
 import { Project } from "@core/Projects";
 import { Action, ActionContext } from "./base/Action";
 
-
 export class MoveProjectFileDown implements Action {
     constructor(private readonly project: Project, private readonly sourcePath: string) {
     }

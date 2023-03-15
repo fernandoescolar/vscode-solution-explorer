@@ -305,6 +305,11 @@
                 "category": "Solution Explorer"
             },
             {
+              "command": "solutionExplorer.focus",
+              "title": "Focus",
+              "category": "Solution Explorer"
+            },
+            {
                 "command": "solutionExplorer.deleteMultiple",
                 "title": "Delete Multiple Items",
                 "category": "Solution Explorer"
@@ -686,6 +691,11 @@
               "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.deleteMultiple",
               "key": "delete",
               "mac": "delete"
+            },
+            {
+              "command": "solutionExplorer.focus",
+              "key": "ctrl+alt+l",
+              "mac": "ctrl+cmd+l"
             }
           ],
         "configuration": {

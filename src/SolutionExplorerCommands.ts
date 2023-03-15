@@ -71,6 +71,9 @@ export class SolutionExplorerCommands {
         this.commands['duplicate'] = [new cmds.DuplicateCommand(),
             [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
+        this.commands['focus'] = [new cmds.FocusCommand(provider),
+            undefined];
+
         this.commands['installTemplates'] = [new cmds.InstallWorkspaceTemplateFilesCommand(templateEngineCollection),
             both(ContextValues.solution)];
 

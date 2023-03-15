@@ -4,7 +4,6 @@ import { Action } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 import { MoveProjectFileUp } from "@actions";
 
-
 export class MoveFileUpCommand extends SingleItemActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
         super('MoveFileUp');
