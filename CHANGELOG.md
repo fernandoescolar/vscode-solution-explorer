@@ -14,6 +14,8 @@ Enhancement #271: Add optional inline project edit button, thanks to [Spencer Fa
 
 Enhancement #272: Bump webpack from 5.74.0 to 5.76.0
 
+Improved grouping and sorting of context menu options.
+
 ## 0.8.1
 
 Bugfix #264: allow undefined selected item commands
