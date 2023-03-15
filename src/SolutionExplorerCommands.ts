@@ -45,7 +45,7 @@ export class SolutionExplorerCommands {
             undefined];
 
         this.commands['copy'] = [new cmds.CopyCommand(),
-            [ContextValues.projectFolder, ContextValues.projectFile]];
+            [ContextValues.projectFolder, ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['createFile'] = [new cmds.CreateFileCommand(templateEngineCollection),
             [ContextValues.projectFile, ContextValues.projectFolder, ...both(ContextValues.project)]];
