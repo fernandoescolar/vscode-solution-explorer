@@ -2,7 +2,7 @@
 
 This extension adds a Visual Studio Solution File explorer panel in Visual Studio Code. Now you can navigate into your solution following the original Visual Studio structure.
 
-> *It was originally intended to work with .Net Core solutions and projects. And that is why support for other types of projects (such as .Net Framework or C++) is not guaranteed.*
+> *It was originally intended to work with .Net Core solutions and projects. And that is why compatibility with other types of projects (such as .Net Framework or C++) is not guaranteed.*
 
 ![Visual Studio Code Solution Explorer Showcase](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-show-case.gif)
 
