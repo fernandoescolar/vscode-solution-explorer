@@ -332,32 +332,32 @@
               {
                 "command": "solutionExplorer.copy",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.copy",
-                "group": "5_cutcopypaste"
+                "group": "5_cutcopypaste@1"
               },
               {
                 "command": "solutionExplorer.duplicate",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.duplicate",
-                "group": "5_cutcopypaste"
+                "group": "6_copypath@1"
               },
               {
                 "command": "solutionExplorer.paste",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.paste",
-                "group": "5_cutcopypaste"
+                "group": "5_cutcopypaste@2"
               },
               {
                 "command": "solutionExplorer.renameFile",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.renameFile",
-                "group": "7_modification"
+                "group": "7_modification@1"
               },
               {
                 "command": "solutionExplorer.deleteFile",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.deleteFile",
-                "group": "2_workspace"
+                "group": "7_modification@9"
               },
               {
                 "command": "solutionExplorer.revealFileInOS",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.revealFileInOS",
-                "group": "2_workspace"
+                "group": "navigation"
               },
               {
                 "command": "solutionExplorer.createFile",
@@ -382,12 +382,12 @@
               {
                 "command": "solutionExplorer.renameFolder",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.renameFolder",
-                "group": "7_modification"
+                "group": "7_modification@1"
               },
               {
                 "command": "solutionExplorer.deleteFolder",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.deleteFolder",
-                "group": "2_workspace"
+                "group": "7_modification@9"
               },
               {
                 "command": "solutionExplorer.createFolder",
@@ -422,27 +422,27 @@
               {
                 "command": "solutionExplorer.moveFile",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFile",
-                "group": "7_modification"
+                "group": "6_copypath@3"
               },
               {
                 "command": "solutionExplorer.moveFileUp",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileUp",
-                "group": "7_modification"
+                "group": "6_copypath@1"
               },
               {
                 "command": "solutionExplorer.moveFileDown",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileDown",
-                "group": "7_modification"
+                "group": "6_copypath@2"
               },
               {
                 "command": "solutionExplorer.moveFolder",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFolder",
-                "group": "7_modification"
+                "group": "6_copypath@4"
               },
               {
                 "command": "solutionExplorer.addPackage",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addPackage",
-                "group": "2_workspace"
+                "group": "4_search@1"
               },
               {
                 "command": "solutionExplorer.addPackage",
@@ -452,12 +452,12 @@
               {
                 "command": "solutionExplorer.updatePackageVersion",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.updatePackageVersion",
-                "group": "2_workspace"
+                "group": "4_search@1"
               },
               {
                 "command": "solutionExplorer.removePackage",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removePackage",
-                "group": "2_workspace"
+                "group": "7_modification@9"
               },
               {
                 "command": "solutionExplorer.removePackage",
@@ -467,12 +467,12 @@
               {
                 "command": "solutionExplorer.updatePackagesVersion",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.updatePackagesVersion",
-                "group": "2_workspace"
+                "group": "4_search@2"
               },
               {
                 "command": "solutionExplorer.addProjectReference",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addProjectReference",
-                "group": "2_workspace"
+                "group": "4_search@1"
               },
               {
                 "command": "solutionExplorer.addProjectReference",
@@ -482,7 +482,7 @@
               {
                 "command": "solutionExplorer.removeProjectReference",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removeProjectReference",
-                "group": "2_workspace"
+                "group": "7_modification@9"
               },
               {
                 "command": "solutionExplorer.removeProjectReference",
@@ -492,7 +492,7 @@
               {
                 "command": "solutionExplorer.openFile",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.openFile",
-                "group": "7_modification"
+                "group": "navigation"
               },
               {
                 "command": "solutionExplorer.openFile",
@@ -517,7 +517,7 @@
               {
                 "command": "solutionExplorer.removeProject",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removeProject",
-                "group": "2_workspace"
+                "group": "7_modification@9"
               },
               {
                 "command": "solutionExplorer.createSolutionFolder",
@@ -532,7 +532,7 @@
               {
                 "command": "solutionExplorer.removeSolutionFolder",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removeSolutionFolder",
-                "group": "2_workspace"
+                "group": "7_modification@9"
               },
               {
                 "command": "solutionExplorer.addSolutionFile",
@@ -542,7 +542,7 @@
               {
                 "command": "solutionExplorer.deleteSolutionFile",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.deleteSolutionFile",
-                "group": "2_workspace"
+                "group": "7_modification@9"
               },
               {
                 "command": "solutionExplorer.moveToSolutionFolder",
@@ -552,7 +552,7 @@
               {
                 "command": "solutionExplorer.renameSolutionItem",
                 "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.renameSolutionItem",
-                "group": "7_modification"
+                "group": "7_modification@1"
               },
               {
                 "command": "solutionExplorer.build",

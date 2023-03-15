@@ -45,7 +45,7 @@ export class SolutionExplorerCommands {
             undefined];
 
         this.commands['copy'] = [new cmds.CopyCommand(),
-            [ContextValues.projectFolder, ContextValues.projectFile]];
+            [ContextValues.projectFolder, ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['createFile'] = [new cmds.CreateFileCommand(templateEngineCollection),
             [ContextValues.projectFile, ContextValues.projectFolder, ...both(ContextValues.project)]];
@@ -90,7 +90,7 @@ export class SolutionExplorerCommands {
             [ContextValues.solutionFolder, ...both(ContextValues.project)]];
 
         this.commands['openFile'] = [new cmds.OpenFileCommand(),
-            both(ContextValues.solution, ContextValues.project)];
+            [ ...both(ContextValues.solution, ContextValues.project), ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['pack'] = [new cmds.PackCommand(),
             cps(ContextValues.solution, ContextValues.project)];
