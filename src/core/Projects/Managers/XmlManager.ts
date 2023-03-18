@@ -146,31 +146,18 @@ export class XmlManager implements Manager {
         const project = XmlManager.getProjectElement(this.document);
         if (!project) { return filepath; }
 
-        for(let i = 0; i < project.elements.length; i++) {
-            const element = project.elements[i];
-            if (element.name === 'ItemGroup') {
-                if (!element.elements || !Array.isArray(element.elements)) {
-                    element.elements = [];
+        this.someProjectItem(project, (itemGroup, e) =>{
+            if (e.attributes && e.attributes.Include && e.attributes.Include.toLocaleLowerCase() === relativePath.toLocaleLowerCase()) {
+                const index = itemGroup.elements.indexOf(e);
+                if (index > 0) {
+                    itemGroup.elements.splice(index, 1);
+                    itemGroup.elements.splice(index - 1, 0, e);
                 }
 
-                const b = element.elements.some((e: xml.XmlElement) => {
-                    if (nodeNames.length === 0 || nodeNames.indexOf(e.name) > -1) {
-                        if (e.attributes && e.attributes.Include && e.attributes.Include.toLocaleLowerCase() === relativePath.toLocaleLowerCase()) {
-                            const index = element.elements.indexOf(e);
-                            if (index > 0) {
-                                element.elements.splice(index, 1);
-                                element.elements.splice(index - 1, 0, e);
-                            }
-
-                            return true;
-                        }
-                    }
-                });
-                if (b) {
-                    break;
-                }
+                return true;
             }
-        }
+            return false;
+        });
 
         await this.saveProject();
         return filepath;
@@ -185,31 +172,18 @@ export class XmlManager implements Manager {
         const project = XmlManager.getProjectElement(this.document);
         if (!project) { return filepath; }
 
-        for(let i = 0; i < project.elements.length; i++) {
-            const element = project.elements[i];
-            if (element.name === 'ItemGroup') {
-                if (!element.elements || !Array.isArray(element.elements)) {
-                    element.elements = [];
+        this.someProjectItem(project, (itemGroup, e) =>{
+            if (e.attributes && e.attributes.Include && e.attributes.Include.toLocaleLowerCase() === relativePath.toLocaleLowerCase()) {
+                const index = itemGroup.elements.indexOf(e);
+                if (index > -1 && index < itemGroup.elements.length - 1) {
+                    itemGroup.elements.splice(index, 1);
+                    itemGroup.elements.splice(index + 1, 0, e);
                 }
 
-                const b = element.elements.some((e: xml.XmlElement) => {
-                    if (nodeNames.length === 0 || nodeNames.indexOf(e.name) > -1) {
-                        if (e.attributes && e.attributes.Include && e.attributes.Include.toLocaleLowerCase() === relativePath.toLocaleLowerCase()) {
-                            const index = element.elements.indexOf(e);
-                            if (index > -1 && index < element.elements.length - 1) {
-                                element.elements.splice(index, 1);
-                                element.elements.splice(index + 1, 0, e);
-                            }
-
-                            return true;
-                        }
-                    }
-                });
-                if (b) {
-                    break;
-                }
+                return true;
             }
-        }
+            return false;
+        });
 
         await this.saveProject();
         return filepath;
