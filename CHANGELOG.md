@@ -6,15 +6,21 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 Enhancement #265: adding new parameter `vssolution.showTerminalOnCommand` to show the terminal when a command is executed, `true` by default
 
-Enhancement #179 #269: Add option to open a project file on click, thanks to [Spencer Farley](https://github.com/farlee2121)
-
-Enhancement #131 #268 Display files in proj order for F# projects, thanks to [Spencer Farley](https://github.com/farlee2121)
-
-Enhancement #271: Add optional inline project edit button, thanks to [Spencer Farley](https://github.com/farlee2121)
-
 Enhancement #272: Bump webpack from 5.74.0 to 5.76.0
 
 Improved grouping and sorting of context menu options.
+
+Better F# projects support:
+
+- Enhancement #179 #269: Add option to open a project file on click, thanks to [Spencer Farley](https://github.com/farlee2121)
+
+- Enhancement #131 #268 Display files in proj order for F# projects, thanks to [Spencer Farley](https://github.com/farlee2121)
+
+- Enhancement #271: Add optional inline project edit button, thanks to [Spencer Farley](https://github.com/farlee2121)
+
+- Enhancement #270 #275: Create File above/below, thanks to [Spencer Farley](https://github.com/farlee2121)
+
+
 
 ## 0.8.1
 
