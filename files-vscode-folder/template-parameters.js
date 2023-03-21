@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = function(filename, projectPath, folderPath, xml) {
     let namespace;
     xml.elements.some(e => {
-        if (e.name === 'PropertyGroup') {
+        if (e.name === 'PropertyGroup' && e.elements) {
             const rootNamespace = e.elements.find(p => p.name === 'RootNamespace');
             if (rootNamespace && rootNamespace.elements && rootNamespace.elements[0]) {
                 namespace = rootNamespace.elements[0].text;
