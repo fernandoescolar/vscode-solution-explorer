@@ -1,6 +1,7 @@
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import { ProjectFileStat } from "../ProjectFileStat";
+import { RelativeFilePosition } from "../RelativeFilePosition";
 
 export class FileManager {
     private readonly projectFolderPath: string;
@@ -19,7 +20,7 @@ export class FileManager {
         }
     }
 
-    public async createFile(folderpath: string, filename: string, content?: string): Promise<string> {
+    public async createFile(folderpath: string, filename: string, content?: string, relativePosition?:RelativeFilePosition): Promise<string> {
         let filepath = path.join(folderpath, filename);
         if (!(await fs.exists(filepath))) {
             await fs.writeFile(filepath, content || "");
