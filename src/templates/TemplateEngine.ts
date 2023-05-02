@@ -65,7 +65,7 @@ export abstract class TemplateEngine {
         const xmlContent =  await xml.parseToJson(content);
         const projectXml = XmlManager.getProjectElement(xmlContent) || { elements: [] };
         if (parametersGetter) {
-            let result = parametersGetter(filename, item.project.fullPath, item.contextValue.startsWith(ContextValues.projectFolder) ? item.path : undefined, projectXml);
+            let result = parametersGetter(filename, item.project.fullPath, ContextValues.matchAnyLanguage(ContextValues.projectFolder, item.contextValue) ? item.path : undefined, projectXml);
             if (Promise.resolve(result) === result) {
                 result = await (<Promise<any>>result);
             }

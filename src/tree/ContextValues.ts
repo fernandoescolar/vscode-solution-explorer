@@ -24,6 +24,10 @@ export class ContextValues {
     public static both(...contexts: SuffixedContextValue[]) {
         return contexts.flatMap(ctx => [ctx !== ContextValues.solution ? ctx + '-standard' : ctx, ctx + '-cps']);
     }
+
+    public static matchAnyLanguage(desiredValue:string, testedValue: string){
+        return testedValue.startsWith(desiredValue);
+    } 
 }
 
 type SuffixedContextValue =

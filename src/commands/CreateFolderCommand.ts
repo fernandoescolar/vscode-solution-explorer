@@ -22,7 +22,7 @@ export class CreateFolderCommand extends SingleItemActionsCommand {
         }
 
         let targetpath: string = item.path;
-        if (!item.contextValue.startsWith(ContextValues.projectFolder)) {
+        if (!ContextValues.matchAnyLanguage(ContextValues.projectFolder, item.contextValue)) {
             targetpath = path.dirname(targetpath);
         }
 

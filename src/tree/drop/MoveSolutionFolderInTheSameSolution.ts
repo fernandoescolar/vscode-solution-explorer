@@ -28,7 +28,7 @@ export class MoveSolutionFolderInTheSameSolution extends DropHandler {
     }
 
     protected isSolution(item: TreeItem): boolean {
-        return item.contextValue.startsWith(ContextValues.solution) && !item.projectInSolution;
+        return ContextValues.matchAnyLanguage(ContextValues.solution, item.contextValue) && !item.projectInSolution;
     }
 
     protected isValidTarget(item: TreeItem): boolean {
