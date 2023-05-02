@@ -8,7 +8,7 @@ import { Project } from "@core/Projects";
 
 export class CopyExternalFolderInProjects extends DropHandler {
     public async canHandle(source: TreeItem, target: TreeItem): Promise<boolean> {
-        return source.contextValue === ContextValues.projectFolder
+        return ContextValues.matchAnyLanguage(ContextValues.projectFolder, source.contextValue)
             && source.project !== target.project;
     }
 
