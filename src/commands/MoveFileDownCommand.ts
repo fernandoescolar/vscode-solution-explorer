@@ -10,7 +10,8 @@ export class MoveFileDownCommand extends SingleItemActionsCommand {
     }
 
     public shouldRun(item: TreeItem | undefined): boolean {
-        return !!item && !!item.project && item.project.extension.toLocaleLowerCase() === 'fsproj' && !!item.path && item.contextValue.startsWith(ContextValues.projectFile);
+        return !!item && !!item.project && item.project.extension.toLocaleLowerCase() === 'fsproj' && !!item.path 
+        && (item.contextValue.startsWith(ContextValues.projectFile) || item.contextValue.startsWith(ContextValues.projectFolder));
     }
 
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {

@@ -393,7 +393,7 @@
               },
               {
                 "command": "solutionExplorer.createFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-folder",
+                "when": "view in solutionexplorer.viewTypes && (viewItem == project-folder || viewItem == project-folder-fs)",
                 "group": "inline"
               },
               {
@@ -433,7 +433,7 @@
               },
               {
                 "command": "solutionExplorer.createFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-folder",
+                "when": "view in solutionexplorer.viewTypes && (viewItem == project-folder || viewItem == project-folder-fs)",
                 "group": "inline"
               },
               {
