@@ -37,23 +37,23 @@ export async function findIconPath(name: string, path: string, contextValue: str
         return getIconPath('sln.svg');
     }
 
-    if (contextValue.startsWith(ContextValues.projectFile)) {
+    if (ContextValues.matchAnyLanguage(ContextValues.projectFile, contextValue)) {
         return await getIconPathFromExtension(path, 'file.svg');
     }
 
-    if (contextValue.startsWith(ContextValues.projectReferences)) {
+    if (ContextValues.matchAnyLanguage(ContextValues.projectReferences, contextValue)) {
         return getIconPath('ReferenceGroup.svg','ReferenceGroup-dark.svg');
     }
 
-    if (contextValue.startsWith(ContextValues.projectReferencedProject)) {
+    if (ContextValues.matchAnyLanguage(ContextValues.projectReferencedProject, contextValue)) {
         return getIconPath('Application.svg','Application-dark.svg');
     }
 
-    if (contextValue.startsWith(ContextValues.projectReferencedPackage)) {
+    if (ContextValues.matchAnyLanguage(ContextValues.projectReferencedPackage, contextValue)) {
         return getIconPath('PackageReference.svg','PackageReference-dark.svg');
     }
 
-    if (contextValue === ContextValues.solutionFolder || contextValue.startsWith(ContextValues.projectFolder)) {
+    if (contextValue === ContextValues.solutionFolder || ContextValues.matchAnyLanguage(ContextValues.projectFolder, contextValue)) {
         if (path && path.endsWith("wwwroot")) {
             return getIconPath('WebFolderOpened.svg','WebFolderOpened-dark.svg');
         }
@@ -69,7 +69,7 @@ export async function findIconPath(name: string, path: string, contextValue: str
         return getIconPath('folder.svg');
     }
 
-    if (contextValue.startsWith(ContextValues.project)) {
+    if (ContextValues.matchAnyLanguage(ContextValues.project, contextValue)) {
         return await getIconPathFromExtension(path, 'csproj.svg');
     }
 

@@ -4,7 +4,7 @@ import { DropHandler } from "./DropHandler";
 
 export class MoveFolderInTheSameProject extends DropHandler {
     public async canHandle(source: TreeItem, target: TreeItem): Promise<boolean> {
-        return source.contextValue === ContextValues.projectFolder
+        return ContextValues.matchAnyLanguage(ContextValues.projectFolder, source.contextValue)
             && source.project === target.project;
     }
 

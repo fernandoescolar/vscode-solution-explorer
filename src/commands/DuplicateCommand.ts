@@ -11,7 +11,7 @@ export class DuplicateCommand extends SingleItemActionsCommand {
     }
 
     public shouldRun(item: TreeItem | undefined): boolean {
-       return !!item && !!item.path && item.contextValue.startsWith(ContextValues.projectFile);
+       return !!item && !!item.path && ContextValues.matchAnyLanguage(ContextValues.projectFile, item.contextValue);
     }
 
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {

@@ -8,7 +8,7 @@ export class RevealInOSCommand extends SingleItemActionsCommand {
     }
 
     public shouldRun(item: TreeItem | undefined): boolean {
-        return !!item && item.contextValue.startsWith(ContextValues.projectFile);
+        return !!item && ContextValues.matchAnyLanguage(ContextValues.projectFile, item.contextValue);
     }
 
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {

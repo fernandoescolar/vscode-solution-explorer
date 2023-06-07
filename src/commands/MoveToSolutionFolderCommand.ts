@@ -23,11 +23,11 @@ export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
         const projectInSolution = item.projectInSolution;
         if (!projectInSolution) { return []; }
 
-        if (item.contextValue.startsWith(ContextValues.project)) {
+        if (ContextValues.matchAnyLanguage(ContextValues.project, item.contextValue)) {
             return [ new MoveProject(item.solution, projectInSolution, folder) ];
         }
 
-        if (item.contextValue.startsWith(ContextValues.solutionFolder)) {
+        if (ContextValues.matchAnyLanguage(ContextValues.solutionFolder, item.contextValue)) {
             return [ new MoveSolutionFolder(item.solution, projectInSolution, folder) ];
         }
 

@@ -19,10 +19,10 @@ export class RenameCommand extends SingleItemActionsCommand {
         const newname = await dialogs.getText('New name', 'New name', item.label);
         if (!newname) { return []; }
 
-        if (item.contextValue.startsWith(ContextValues.projectFile)) {
+        if (ContextValues.matchAnyLanguage(ContextValues.projectFile, item.contextValue)) {
             return [ new RenameProjectFile(item.project, item.path, newname) ];
 
-        } else if (item.contextValue.startsWith(ContextValues.projectFolder)) {
+        } else if (ContextValues.matchAnyLanguage(ContextValues.projectFolder, item.contextValue)) {
             return [ new RenameProjectFolder(item.project, item.path, oldname, newname) ];
         }
 

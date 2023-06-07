@@ -10,7 +10,9 @@ export class MoveCommand extends SingleItemActionsCommand {
     }
 
     public shouldRun(item: TreeItem | undefined): boolean {
-       return !!item && !!item.project && !!item.path && ( item.contextValue.startsWith(ContextValues.projectFile) || item.contextValue.startsWith(ContextValues.projectFolder) );
+        return !!item && !!item.project && !!item.path
+            && (ContextValues.matchAnyLanguage(ContextValues.projectFile, item.contextValue)
+                || ContextValues.matchAnyLanguage(ContextValues.projectFolder, item.contextValue));
     }
 
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
@@ -20,10 +22,10 @@ export class MoveCommand extends SingleItemActionsCommand {
         const folder = await dialogs.selectOption('Select folder...', folders);
         if (!folder) { return []; }
 
-        if (item.contextValue.startsWith(ContextValues.projectFile)) {
-            return [ new MoveProjectFile(item.project, item.path, folder) ];
-        } else if (item.contextValue.startsWith(ContextValues.projectFolder)) {
-            return [ new MoveProjectFolder(item.project, item.path, folder) ];
+        if (ContextValues.matchAnyLanguage(ContextValues.projectFile, item.contextValue)) {
+            return [new MoveProjectFile(item.project, item.path, folder)];
+        } else if (ContextValues.matchAnyLanguage(ContextValues.projectFolder, item.contextValue)) {
+            return [new MoveProjectFolder(item.project, item.path, folder)];
         } else {
             return [];
         }
