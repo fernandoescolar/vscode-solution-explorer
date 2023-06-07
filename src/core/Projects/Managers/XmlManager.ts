@@ -8,6 +8,12 @@ import { ProjectFileStat } from "../ProjectFileStat";
 import { Manager } from "./Manager";
 import { Direction, RelativeFilePosition } from "../RelativeFilePosition";
 
+interface NamedHierarchy<T>{
+    groupName: string;
+    item:T|undefined;
+    children: NamedHierarchy<T>[]
+}
+
 export class XmlManager implements Manager {
     private readonly projectFolderPath: string;
     private document: XmlElement | undefined;
@@ -137,27 +143,166 @@ export class XmlManager implements Manager {
         return newRelativePath;
     }
 
+    
+    private collectProjectItems<T>(project: xml.XmlElement,map:(group:xml.XmlElement, item:xml.XmlElement, itemIndex:number, groupIndex: number) => T|undefined): T[] {
+        const collected: T[] = [];
+        this.someProjectItem(project, (itemGroup, item, itemIndex, groupIndex) => {
+            const mapped = map(itemGroup, item, itemIndex, groupIndex)
+            if(mapped){
+                collected.push(mapped)
+            }
+            return false;
+        });
+        return collected;
+    }
+
+    private groupBy<T>(array: T[], groupf: (item:T)=>string): Record<string,T[]> {
+        const dict: Record<string, T[]> = {}
+        array.forEach(item =>{
+            const key = groupf(item)
+            if(!dict[key]){
+                dict[key] = [];
+            }
+            dict[key].push(item);
+        })
+        return dict;
+    }
+
+    private partition<T>(array: T[], testf: (item:T) =>boolean):  [passed:T[], failed:T[]]{
+        const passed: T[] = [];
+        const failed: T[] = []
+  
+        array.forEach(x => {
+            if(testf(x)){
+                passed.push(x);
+            }
+            else failed.push(x);
+        });
+  
+        return [passed, failed];
+    }
+
+    private pathSegments (_path: string): string[] {
+        return _path.split(path.sep);
+    }
+    private buildHierarchyFromName<T>(items: T[], nameSegmentsf: (item: T) => string[]): NamedHierarchy<T>[]{
+        const withRelativePath = items.map(x => ({
+            relativeSegments: nameSegmentsf(x),
+            item: x
+        }))
+        .filter(x => x.relativeSegments && x.relativeSegments.length > 0);
+
+        const recurse = (withRelativePaths: {relativeSegments:string[]; item:T}[]): NamedHierarchy<T>[] => {
+            const groups = this.groupBy(withRelativePaths, (x) => x.relativeSegments[0]);
+            
+            return Object.keys(groups)
+            .map((group:string) =>{
+                const groupItems = groups[group];
+                const [pathIsExactlyGroup, children] = this.partition(groupItems,(x) => x.relativeSegments.length === 1);
+
+                const popTopSegment = (x: {relativeSegments:string[]; item:T}) =>{
+                    x.relativeSegments = x.relativeSegments.slice(1)
+                    return x;
+                }
+                
+                const groupNode:NamedHierarchy<T> = {
+                    groupName: group,
+                    item: undefined,
+                    children: children.length > 0 ? recurse(children.map(popTopSegment)) : []
+                }
+
+                if(pathIsExactlyGroup.length > 0){
+                    groupNode.item = pathIsExactlyGroup[0].item;
+                }
+                return groupNode;
+            });
+        }
+        return recurse(withRelativePath);
+    }
+
+    private buildProjectItemHierarchy(project: xml.XmlElement){
+        
+        const qualifingProjectItems = 
+            this.collectProjectItems(project, (itemGroup, element, index, groupIndex)=>{
+                if (element.attributes && element.attributes.Include){
+
+                    return {
+                        itemGroup: itemGroup,
+                        groupIndex: groupIndex,
+                        itemIndexInGroup: index,
+                        path: element.attributes.Include.toLocaleLowerCase(),
+                        element: element
+                    };
+                }
+                else {
+                    return undefined;
+                }
+            });
+        return this.buildHierarchyFromName(qualifingProjectItems, x => this.pathSegments(x.path));
+    }
+
+    private getPeerCollection<T>(path:string, hierarchy: NamedHierarchy<T>[]){
+        const recurse = (relativeSegments: string[], toSearch: NamedHierarchy<T>[]): NamedHierarchy<T>[] =>{
+            if(relativeSegments.length > 1){
+                const found = toSearch.find((x) => x.groupName === relativeSegments[0]);
+                if(!found) return [];
+                else return recurse(relativeSegments.slice(1), found.children);
+            }
+            else{
+                return toSearch;
+            }   
+        }
+        return recurse(this.pathSegments(path), hierarchy);
+    }
+
+    private getHierarchyLeafs<T>(hierarchy: NamedHierarchy<T>): T[]{
+        const recurse = (hierarchy: NamedHierarchy<T>) : T[] =>{
+            const leafs = hierarchy.item ? [hierarchy.item] : []
+            const childLeafs = hierarchy.children.flatMap(x => recurse(x))
+
+            return [...leafs, ...childLeafs];
+        }
+        return recurse(hierarchy);
+    }
+
+    private orderProjectItems(projectItems: {groupIndex: number, itemIndexInGroup:number, itemGroup:XmlElement, element: XmlElement}[]){
+        return projectItems.sort((left, right) =>{
+            if(left.groupIndex != right.groupIndex) return left.groupIndex < right.groupIndex ? -1 : 1;
+            else if (left.itemIndexInGroup != right.itemIndexInGroup) return left.groupIndex < right.groupIndex ? -1 : 1;
+            else return 0;
+        })
+    }
+
     public async moveFileUp(filepath: string): Promise<string> {
         await this.ensureIsLoaded();
         const relativePath = this.getRelativePath(filepath);
-        const nodeNames = this.getXmlNodeNames();
         if (!this.document) { return filepath; }
 
         const project = XmlManager.getProjectElement(this.document);
         if (!project) { return filepath; }
 
-        this.someProjectItem(project, (itemGroup, e) =>{
-            if (e.attributes && e.attributes.Include && e.attributes.Include.toLocaleLowerCase() === relativePath.toLocaleLowerCase()) {
-                const index = itemGroup.elements.indexOf(e);
-                if (index > 0) {
-                    itemGroup.elements.splice(index, 1);
-                    itemGroup.elements.splice(index - 1, 0, e);
-                }
+        const peers = this.getPeerCollection(relativePath, this.buildProjectItemHierarchy(project));
+        const groupToMove_IndexInPeers = peers.findIndex(pi => pi.groupName === path.basename(relativePath).toLocaleLowerCase());
+        const groupToMove = groupToMove_IndexInPeers !== -1 ? peers[groupToMove_IndexInPeers] : undefined;
 
-                return true;
-            }
-            return false;
-        });
+        if(groupToMove && groupToMove_IndexInPeers > 0){
+            const groupAbove = peers[groupToMove_IndexInPeers - 1];
+            const topItemInGroupAbove = this.orderProjectItems(this.getHierarchyLeafs(groupAbove))[0]
+            const itemsToMove = this.orderProjectItems(this.getHierarchyLeafs(groupToMove));
+
+            const elementFinder = (toFind: XmlElement) => ((other: XmlElement) => toFind.attributes.Include === other.attributes.Include);
+            // remove items from their previous positions
+            itemsToMove.forEach((toMove) =>{
+                // IMPORTANT: we can't use the index on the leaf item because the indexes change as we update the project file
+                let deleteIndex = toMove.itemGroup.elements.findIndex(elementFinder(toMove.element));
+                toMove.itemGroup.elements.splice(deleteIndex, 1);
+            });
+            // insert to new location
+            let insertBaseIndex = topItemInGroupAbove.itemGroup.elements.findIndex(elementFinder(topItemInGroupAbove.element));
+            itemsToMove.forEach((toMove, i) =>{
+                topItemInGroupAbove.itemGroup.elements.splice(insertBaseIndex + i, 0, toMove.element);
+            })
+        }
 
         await this.saveProject();
         return filepath;
@@ -172,18 +317,34 @@ export class XmlManager implements Manager {
         const project = XmlManager.getProjectElement(this.document);
         if (!project) { return filepath; }
 
-        this.someProjectItem(project, (itemGroup, e) =>{
-            if (e.attributes && e.attributes.Include && e.attributes.Include.toLocaleLowerCase() === relativePath.toLocaleLowerCase()) {
-                const index = itemGroup.elements.indexOf(e);
-                if (index > -1 && index < itemGroup.elements.length - 1) {
-                    itemGroup.elements.splice(index, 1);
-                    itemGroup.elements.splice(index + 1, 0, e);
-                }
+        const peers = this.getPeerCollection(relativePath, this.buildProjectItemHierarchy(project));
+        const groupToMove_IndexInPeers = peers.findIndex(pi => pi.groupName === path.basename(relativePath).toLocaleLowerCase());
+        const groupToMove = groupToMove_IndexInPeers !== -1 ? peers[groupToMove_IndexInPeers] : undefined;
 
-                return true;
+        if(groupToMove && groupToMove_IndexInPeers < (peers.length - 1)){
+            const groupBelow = peers[groupToMove_IndexInPeers + 1];
+            const itemsInGroupBelow = this.orderProjectItems(this.getHierarchyLeafs(groupBelow));
+            const bottomItemInGroupBelow = itemsInGroupBelow[itemsInGroupBelow.length -1];
+            const itemsToMove = this.orderProjectItems(this.getHierarchyLeafs(groupToMove));
+
+            const elementFinder = (toFind: XmlElement) => ((other: XmlElement) => toFind.attributes.Include === other.attributes.Include);
+            // remove items from their previous positions
+            itemsToMove.forEach((toMove) =>{
+                // IMPORTANT: we can't use the index on the leaf item because the indexes change as we update the project file
+                let deleteIndex = toMove.itemGroup.elements.findIndex(elementFinder(toMove.element))
+                toMove.itemGroup.elements.splice(deleteIndex, 1);
+            });
+            // insert to new location
+            let insertBaseIndex = bottomItemInGroupBelow.itemGroup.elements.findIndex(elementFinder(bottomItemInGroupBelow.element));
+            if(insertBaseIndex === bottomItemInGroupBelow.itemGroup.elements.length){
+                itemsToMove.forEach(bottomItemInGroupBelow.itemGroup.elements.push);
             }
-            return false;
-        });
+            else{
+                itemsToMove.forEach((toMove,i) =>{
+                    bottomItemInGroupBelow.itemGroup.elements.splice(insertBaseIndex+i+1, 0, toMove.element);
+                });
+            }
+        }
 
         await this.saveProject();
         return filepath;
@@ -462,15 +623,14 @@ export class XmlManager implements Manager {
         }
     }
 
-    private someProjectItem(project: xml.XmlElement, test:(group:xml.XmlElement, item:xml.XmlElement) => Boolean): xml.XmlElement | undefined {
+    private someProjectItem(project: xml.XmlElement, test:(group:xml.XmlElement, item:xml.XmlElement, index:number, groupIndex: number) => Boolean): xml.XmlElement | undefined {
         const nodeNames = this.getXmlNodeNames();
         const isValidElement = (e: xml.XmlElement) => nodeNames.length === 0 || nodeNames.indexOf(e.name) > -1;
 
-        for(let i = 0; i < project.elements.length; i++) {
-            const maybeGroup = project.elements[i];
+        for(let groupIndex = 0; groupIndex < project.elements.length; groupIndex++) {
+            const maybeGroup = project.elements[groupIndex];
             if(maybeGroup.name === 'ItemGroup' && maybeGroup.elements && Array.isArray(maybeGroup.elements)){
-                const curried = (item: xml.XmlElement) : Boolean => isValidElement(item) ? test(maybeGroup, item) : false
-                
+                const curried = (item: xml.XmlElement, itemIndex:number) : Boolean => isValidElement(item) ? test(maybeGroup, item, itemIndex, groupIndex) : false
                 const item = maybeGroup.elements.some(curried);
                 if(item){
                     return item;
@@ -508,11 +668,9 @@ export class XmlManager implements Manager {
             
             const lowercaseTargetFilePath = this.getRelativePath(relativePosition.fullpath).toLocaleLowerCase();
             
-            this.someProjectItem(project, (itemGroup, e) =>{
+            this.someProjectItem(project, (itemGroup, e, index) =>{
                 if (e.attributes && e.attributes.Include && e.attributes.Include.toLocaleLowerCase() === lowercaseTargetFilePath) {
-
-                    const index = itemGroup.elements.indexOf(e);
-                    if (index > 0) {
+                    if (index >= 0) {
                         const indexOffset = relativePosition.direction === Direction.Above ? 0 : 1;
                         itemGroup.elements.splice(index + indexOffset, 0, newItemElement);
                     }

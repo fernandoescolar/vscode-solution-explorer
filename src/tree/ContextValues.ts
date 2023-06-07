@@ -21,6 +21,9 @@ export class ContextValues {
     public static fsharp(...contexts: FSharpContextValue[]) {
         return contexts.map(ctx => ctx + '-fs');
     }
+    public static anyLang(...contexts: FSharpContextValue[]) {
+        return contexts.map(ctx => ctx + '-fs').concat(contexts);
+    }
     public static both(...contexts: SuffixedContextValue[]) {
         return contexts.flatMap(ctx => [ctx !== ContextValues.solution ? ctx + '-standard' : ctx, ctx + '-cps']);
     }
@@ -36,5 +39,5 @@ type SuffixedContextValue =
 
 type FSharpContextValue =
     //typeof ContextValues.project |
-    //typeof ContextValues.projectFolder |
+    typeof ContextValues.projectFolder |
     typeof ContextValues.projectFile;

@@ -16,7 +16,7 @@ export class SolutionExplorerCommands {
                 private readonly templateEngineCollection: TemplateEngineCollection,
                 private readonly eventAggregator: IEventAggregator) {
 
-        const { cps, both, fsharp } = ContextValues;
+        const { cps, both, fsharp, anyLang } = ContextValues;
 
         this.commands['addExistingProject'] = [new cmds.AddExistingProjectCommand(provider),
             both(ContextValues.solution)];
@@ -46,10 +46,10 @@ export class SolutionExplorerCommands {
             undefined];
 
         this.commands['copy'] = [new cmds.CopyCommand(),
-            [ContextValues.projectFolder, ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
+            anyLang(ContextValues.projectFolder, ContextValues.projectFile)];
 
         this.commands['createFile'] = [new cmds.CreateFileCommand(templateEngineCollection),
-            [ContextValues.projectFile, ContextValues.projectFolder, ...both(ContextValues.project)]];
+            [ContextValues.projectFile, ...anyLang(ContextValues.projectFolder), ...both(ContextValues.project)]];
 
         this.commands['createFileAbove'] = [new cmds.CreateFileCommand(templateEngineCollection, Direction.Above),
             [...fsharp(ContextValues.projectFile)]];
@@ -58,7 +58,7 @@ export class SolutionExplorerCommands {
             [...fsharp(ContextValues.projectFile)]];
 
         this.commands['createFolder'] = [new cmds.CreateFolderCommand(),
-            [ContextValues.projectFile, ContextValues.projectFolder, ...both(ContextValues.project)]];
+            [ContextValues.projectFile, ...anyLang(ContextValues.projectFolder), ...both(ContextValues.project)]];
 
         this.commands['createNewSolution'] = [new cmds.CreateNewSolutionCommand(),
             [ContextValues.noSolution]];
@@ -70,7 +70,7 @@ export class SolutionExplorerCommands {
             [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['deleteFolder'] = [new cmds.DeleteUnifiedCommand(),
-            [ContextValues.projectFolder]];
+            anyLang(ContextValues.projectFolder)];
 
         this.commands['deleteSolutionFile'] = [new cmds.DeleteUnifiedCommand(),
             [ContextValues.solutionFile]];
@@ -88,13 +88,13 @@ export class SolutionExplorerCommands {
             [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['moveFileUp'] = [new cmds.MoveFileUpCommand(provider),
-            [...fsharp(ContextValues.projectFile)]];
+            fsharp(ContextValues.projectFile, ContextValues.projectFolder)];
 
         this.commands['moveFileDown'] = [new cmds.MoveFileDownCommand(provider),
-            [...fsharp(ContextValues.projectFile)]];
+            fsharp(ContextValues.projectFile, ContextValues.projectFolder)];
 
         this.commands['moveFolder'] = [new cmds.MoveCommand(provider),
-            [ContextValues.projectFolder]];
+            anyLang(ContextValues.projectFolder)];
 
         this.commands['moveToSolutionFolder'] = [new cmds.MoveToSolutionFolderCommand(),
             [ContextValues.solutionFolder, ...both(ContextValues.project)]];
@@ -106,13 +106,13 @@ export class SolutionExplorerCommands {
             cps(ContextValues.solution, ContextValues.project)];
 
         this.commands['paste'] = [new cmds.PasteCommand(provider),
-            [ContextValues.projectFolder, ContextValues.projectFile, ...fsharp(ContextValues.projectFile), ...both(ContextValues.project)]];
+            [...anyLang(ContextValues.projectFolder, ContextValues.projectFile), ...both(ContextValues.project)]];
 
         this.commands['publish'] = [new cmds.PublishCommand(),
             cps(ContextValues.solution, ContextValues.project)];
 
         this.commands['refresh'] = [new cmds.RefreshCommand(provider),
-            [ContextValues.projectFolder, ContextValues.solutionFolder, ...both(ContextValues.project)]];
+            [...anyLang(ContextValues.projectFolder), ContextValues.solutionFolder, ...both(ContextValues.project)]];
 
         this.commands['removePackage'] = [new cmds.DeleteUnifiedCommand(),
             cps(ContextValues.projectReferencedPackage)];
@@ -130,7 +130,7 @@ export class SolutionExplorerCommands {
             [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
         this.commands['renameFolder'] = [new cmds.RenameCommand(),
-            [ContextValues.projectFolder]];
+            anyLang(ContextValues.projectFolder)];
 
         this.commands['renameSolutionItem'] = [new cmds.RenameSolutionItemCommand(provider),
             [ContextValues.solutionFolder, ...both(ContextValues.solution, ContextValues.project)]];

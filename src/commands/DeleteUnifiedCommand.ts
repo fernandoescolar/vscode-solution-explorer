@@ -30,9 +30,9 @@ export class DeleteUnifiedCommand extends ActionsCommand {
         }
         else if (topClickedItems.length > 1) {
 
-            const { both, cps, fsharp } = ContextValues;
+            const { both, cps, anyLang } = ContextValues;
             const allowedContextGroups = [
-                [ContextValues.projectFile, ...fsharp(ContextValues.projectFile), ContextValues.projectFolder],
+                anyLang(ContextValues.projectFile, ContextValues.projectFolder),
                 cps(ContextValues.projectReferencedPackage, ContextValues.projectReferencedProject),
                 both(ContextValues.project),
                 [ContextValues.solutionFile, ContextValues.solutionFolder],
@@ -102,6 +102,9 @@ export class DeleteUnifiedCommand extends ActionsCommand {
                 ? [new DeleteProjectFile(item.project, item.path, showDialog)] : []],
 
             [ContextValues.projectFolder, item => item.project && item.path
+                ? [new DeleteProjectFolder(item.project, item.path, showDialog)] : []],
+
+            [ContextValues.projectFolder, 'fs', item => item.project && item.path
                 ? [new DeleteProjectFolder(item.project, item.path, showDialog)] : []],
 
             [ContextValues.projectReferencedPackage, 'cps', item => item.project && item.path

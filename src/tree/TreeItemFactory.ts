@@ -91,41 +91,14 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
 
     const result: TreeItem[] = [];
     const items = await project.getProjectItemEntries();
-    const folders = items.filter(i => i.isDirectory && path.dirname(i.relativePath) === virtualPath);
-    const files = items.filter(i => !i.isDirectory && path.dirname(i.relativePath) === virtualPath && !i.dependentUpon);
-
-    if (project.extension.toLocaleLowerCase() !== 'fsproj') {
-        const head = ['properties','wwwroot']
-        folders.sort((a, b) => {
-            const x : string = a.name.toLowerCase();
-            const y : string = b.name.toLowerCase();
-            const hx = head.indexOf(x);
-            const hy = head.indexOf(y);
-            if (hx >= 0 && hy >= 0) {
-                return hx - hy;
-            } else if (hx >= 0) {
-                return -1;
-            } else if (hy >= 0) {
-                return 1;
-            } else {
-                return  x < y ? -1 : x > y ? 1 : 0;
-            }
-        });
-
-        files.sort((a, b) => {
-            const x : string = a.name.toLowerCase();
-            const y : string = b.name.toLowerCase();
-            return  x < y ? -1 : x > y ? 1 : 0;
-        });
-    }
-
-    folders.forEach(folder => {
-        result.push(new ProjectFolderTreeItem(context, folder));
-    });
+    const isFolder = (item:ProjectItemEntry) => item.isDirectory && path.dirname(item.relativePath) === virtualPath;
+    const isFile = (item:ProjectItemEntry) => !item.isDirectory && path.dirname(item.relativePath) === virtualPath && !item.dependentUpon;
+    const folders = items.filter(isFolder);
+    const files = items.filter(isFile);
 
     const useNesting = getItemNesting();
     const allRelatedFiles: ProjectItemEntry[] = [];
-    files.forEach(file => {
+    const pushFileWithRelated = (file: ProjectItemEntry) =>{
         const related: ProjectItemEntry[] = getDependants(items, file.fullPath);
         if (useNesting) {
             related.push(...getNestedFiles(files, file.relativePath));
@@ -154,7 +127,50 @@ export async function createItemsFromProject(context: TreeItemContext, project: 
         }
 
         result.push(new ProjectFileTreeItem(context, file, related));
-    });
+    };
+
+    if (project.extension.toLocaleLowerCase() !== 'fsproj') {
+        const head = ['properties','wwwroot']
+        folders.sort((a, b) => {
+            const x : string = a.name.toLowerCase();
+            const y : string = b.name.toLowerCase();
+            const hx = head.indexOf(x);
+            const hy = head.indexOf(y);
+            if (hx >= 0 && hy >= 0) {
+                return hx - hy;
+            } else if (hx >= 0) {
+                return -1;
+            } else if (hy >= 0) {
+                return 1;
+            } else {
+                return  x < y ? -1 : x > y ? 1 : 0;
+            }
+        });
+
+        files.sort((a, b) => {
+            const x : string = a.name.toLowerCase();
+            const y : string = b.name.toLowerCase();
+            return  x < y ? -1 : x > y ? 1 : 0;
+        });
+
+        folders.forEach(folder => {
+            result.push(new ProjectFolderTreeItem(context, folder));
+        });
+        files.forEach(pushFileWithRelated);
+    }
+    else{
+        items.forEach(item => {
+            if(isFile(item)){
+                pushFileWithRelated(item)
+            }
+            else if(isFolder(item)){
+                result.push(new ProjectFolderTreeItem(context, item));
+            }
+            else{
+                // do nothing
+            }
+        })
+    }
 
     return result;
 }
