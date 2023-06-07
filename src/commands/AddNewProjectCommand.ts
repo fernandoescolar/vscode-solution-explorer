@@ -113,7 +113,7 @@ export class AddNewProjectCommand extends SingleItemActionsCommand {
                 if (parts.length > 2) {
                     const projectType = {
                         name: parts[0].trim(),
-                        value: parts[1].trim(),
+                        value: parts[1].trim().split(',')[0],
                         languages: parts[2].split(',').map(element => element.trim().replace('[', '').replace(']', ''))
                     };
                     if (projectType.languages.length > 0) {
