@@ -353,5 +353,6 @@ Branded icons are licensed under their copyright license.
 [panoskj](https://github.com/panoskj)
 [lhz](https://github.com/lhzcm)
 [Spencer Farley](https://github.com/farlee2121)
+[Fadi Hania](https://github.com/fadihania)
 
 **Enjoy!**

@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.8.3
+
+Enhancement #283: Display folders in project file order in F# projects, thanks to [Spencer Farley](https://github.com/farlee2121)
+
+Enhancement #284: Enable drag-drop for F# projects, thanks to [Spencer Farley](https://github.com/farlee2121)
+
+Enhancement #285: Update the add new project template value, thanks to [Fadi Hania](https://github.com/fadihania)
+
 ## 0.8.2
 
 Enhancement #265: adding new parameter `vssolution.showTerminalOnCommand` to show the terminal when a command is executed, `true` by default
