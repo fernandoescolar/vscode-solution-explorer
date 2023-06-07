@@ -12,6 +12,7 @@ export class ProjectFolderTreeItem extends TreeItem {
             this.description = "link";
             this.subscription = context.eventAggregator.subscribe(EventTypes.file, evt => this.onFileEvent(evt));
         }
+        this.addContextValueSuffix();
     }
 
     public dispose(): void {
@@ -50,4 +51,10 @@ export class ProjectFolderTreeItem extends TreeItem {
             }
         }
     }
+
+    protected addContextValueSuffix(): void {
+        if (this.project?.extension.toLocaleLowerCase() === 'fsproj') {
+		    this.contextValue += '-fs';
+        }
+	}
 }
