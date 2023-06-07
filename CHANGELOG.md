@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.8.4
+
+Bugfig #291: allow move folder up/down, thanks to [Spencer Farley](https://github.com/farlee2121)
+
 ## 0.8.3
 
 Enhancement #283: Display folders in project file order in F# projects, thanks to [Spencer Farley](https://github.com/farlee2121)
