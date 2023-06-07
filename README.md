@@ -1,3 +1,6 @@
+
+> **⚠️⚠️⚠️ Microsoft has created a new extension which provides an official solution explorer for Visual Studio Code. You can find more information [here](https://code.visualstudio.com/docs/csharp/project-management).**
+
 # vscode-solution-explorer
 
 This extension adds a Visual Studio Solution File explorer panel in Visual Studio Code. Now you can navigate into your solution following the original Visual Studio structure.
