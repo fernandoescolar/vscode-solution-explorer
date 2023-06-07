@@ -4,7 +4,7 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 ## 0.8.4
 
-Bugfig #291: allow move folder up/down, thanks to [Spencer Farley](https://github.com/farlee2121)
+Bugfix #291: allow move folder up/down, thanks to [Spencer Farley](https://github.com/farlee2121)
 
 ## 0.8.3
 
