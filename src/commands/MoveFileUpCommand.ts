@@ -10,7 +10,8 @@ export class MoveFileUpCommand extends SingleItemActionsCommand {
     }
 
     public shouldRun(item: TreeItem | undefined): boolean {
-        return !!item && !!item.project && item.project.extension.toLocaleLowerCase() === 'fsproj' && !!item.path && ContextValues.matchAnyLanguage(ContextValues.projectFile, item.contextValue);
+        return !!item && !!item.project && item.project.extension.toLocaleLowerCase() === 'fsproj' && !!item.path 
+        && (ContextValues.matchAnyLanguage(ContextValues.projectFile, item.contextValue) || ContextValues.matchAnyLanguage(ContextValues.projectFolder, item.contextValue));
     }
 
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
