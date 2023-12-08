@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "@extensions/path";
 import * as config from "@extensions/config";
+import { fasthash } from "@extensions/hash";
 import { ProjectInSolution, SolutionFile } from "@core/Solutions";
 import { Project } from "@core/Projects";
 import * as TreeItemIconProvider from "./TreeItemIconProvider";
@@ -120,13 +121,14 @@ export abstract class TreeItem extends vscode.TreeItem {
 	}
 
 	protected createId(): void {
-		let id: string;
+		let id: string = `${this.label}-${this.path ?? ''}-${this.contextValue}`;
+		if (!this.parent && this.solution) {
+			id = this.solution.fullPath + '-' + id;
+		}
+
+		id = fasthash(id);
 		if (this.parent) {
-			id = this.parent.id + '-' + this.label + '[' + this.contextValue + ']';
-		} else if (this.solution) {
-			id = this.solution.fullPath + '[' + this.contextValue + ']';
-		} else {
-			id = this.label + '[' + this.contextValue + ']';
+			id = this.parent.id + '-' + id;
 		}
 
 		this.id = id;
@@ -145,6 +147,7 @@ export abstract class TreeItem extends vscode.TreeItem {
 		} else {
 			let fullpath = this.path;
 			if (!fullpath) { fullpath = path.dirname(this.solution.fullPath); }
+			//this.resourceUri = vscode.Uri.file(fullpath);
 			this.loadThemeIcon(fullpath);
 		}
 	}

@@ -29,6 +29,14 @@ export function globTest(pattern: string | string[], input: string): boolean {
 
 export async function globFileSearch(workingFolder: string, pattern: string, exclude?:string | string[]): Promise<string[]> {
     const result: string[] = [];
+    if (! await fs.exists(workingFolder)) {
+        return result;
+    }
+
+    if (! await fs.isDirectory(workingFolder)) {
+        return result;
+    }
+
     if (!isGlobPattern(pattern)) {
         return [ path.join(workingFolder, pattern) ];
     }
