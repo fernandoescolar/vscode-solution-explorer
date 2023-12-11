@@ -21,3 +21,5 @@ export class OpenSolutionCommand extends SingleItemActionsCommand {
         return [new OpenSolution(solutionPath, this.eventAggregator)];
     }
 }
+
+

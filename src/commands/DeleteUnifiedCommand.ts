@@ -1,5 +1,5 @@
 import { TreeItem, ContextValues } from "@tree";
-import { ActionsCommand, prepareContextActionGetters } from "@commands";
+import { ActionCommandContext, ActionsCommand, prepareContextActionGetters } from "@commands";
 import {
     Action,
     DeleteProjectFile,
@@ -17,10 +17,9 @@ export class DeleteUnifiedCommand extends ActionsCommand {
         super('Delete');
     }
 
-    public async getActionsBase(clickedItem: TreeItem | undefined, selectedItems: readonly TreeItem[] | undefined):
-        Promise<Action[]> {
+    public async getActionsBase(ctx: ActionCommandContext): Promise<Action[]> {
 
-        const clickedItems = this.getClickedItems(clickedItem, selectedItems);
+        const clickedItems = this.getClickedItems(ctx.clickedItem, ctx.selectedItems);
 
         const topClickedItems = clickedItems.filter(item => !this.includedInFolder(clickedItems, item));
 

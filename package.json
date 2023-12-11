@@ -70,6 +70,11 @@
     ],
     "commands": [
       {
+        "command": "solutionExplorer.openSelectedSolution",
+        "title": "Open in Solution Explorer",
+        "icon": "$(folder-opened)"
+      },
+      {
         "command": "solutionExplorer.openSolution",
         "title": "Open Solution",
         "category": "Solution Explorer",
@@ -328,6 +333,13 @@
       }
     ],
     "menus": {
+      "explorer/context": [
+        {
+          "command": "solutionExplorer.openSelectedSolution",
+          "when": "resourceExtname == .sln",
+          "group": "navigation"
+        }
+      ],
       "view/title": [
         {
           "command": "solutionExplorer.openSolution",

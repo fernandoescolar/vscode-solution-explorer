@@ -1,11 +1,16 @@
 import { TreeItem } from "@tree";
 import { Action } from "@actions";
 
+export class ActionCommandContext {
+    constructor(public readonly clickedItem: TreeItem | undefined, public readonly selectedItems: readonly TreeItem[] | undefined, public readonly args: any) {
+    }
+}
+
 export abstract class ActionsCommand {
     constructor(protected title: string) {
     }
 
-    public abstract getActionsBase(clickedItem: TreeItem | undefined, selectedItems: readonly TreeItem[] | undefined):
+    public abstract getActionsBase(ctx: ActionCommandContext):
         Promise<Action[]>;
 }
 

@@ -24,6 +24,7 @@ export * from "./MoveFileDownCommand";
 export * from "./MoveToSolutionFolderCommand";
 export * from "./OpenFileCommand";
 export * from "./OpenSolutionCommand";
+export * from "./OpenSolutionFromDefaultExplorerCommand";
 export * from "./PackCommand";
 export * from "./PasteCommand";
 export * from "./PublishCommand";

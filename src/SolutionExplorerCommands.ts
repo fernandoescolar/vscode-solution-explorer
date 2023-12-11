@@ -159,6 +159,9 @@ export class SolutionExplorerCommands {
         this.commands['openSolution'] = [new cmds.OpenSolutionCommand(eventAggregator),
             undefined];
 
+        this.commands['openSelectedSolution'] = [new cmds.OpenSolutionFromDefaultExplorerCommand(eventAggregator),
+                undefined];
+
         this.commands['deleteMultiple'] = [new cmds.DeleteUnifiedCommand(),
             [ContextValues.multipleSelection]];
     }
@@ -177,7 +180,8 @@ export class SolutionExplorerCommands {
             vscode.commands.registerCommand(name, async (arg) => {
                 const clickedItem = arg instanceof TreeItem ? arg : undefined;
                 const selectedItems = this.provider.getSelectedItems();
-                const actions = await command.getActionsBase(clickedItem, selectedItems);
+                const ctx = new cmds.ActionCommandContext(clickedItem, selectedItems, arg);
+                const actions = await command.getActionsBase(ctx);
                 if (actions.length > 0) {
                     await this.actionsRunner.run(actions, { isCancellationRequested: false  });
                 }
