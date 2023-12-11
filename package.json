@@ -1,905 +1,925 @@
 {
-    "name": "vscode-solution-explorer",
-    "displayName": "vscode-solution-explorer",
-    "description": "Visual Studio .sln file explorer for Visual Studio Code",
-    "version": "0.8.4",
-    "license": "MIT",
-    "publisher": "fernandoescolar",
-    "icon": "images/icon.png",
-    "author": {
-        "email": "f.escolar@hotmail.com",
-        "name": "Fernando Escolar",
-        "url": "http://fernandoescolar.github.io"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/fernandoescolar/vscode-solution-explorer"
-    },
-    "bugs": {
-        "url": "https://github.com/fernandoescolar/vscode-solution-explorer/issues",
-        "email": "f.escolar@hotmail.com"
-    },
-    "engines": {
-        "vscode": "^1.70.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "onView:slnexpl",
-        "workspaceContains:**/*.sln",
-        "*"
-    ],
-    "main": "./out/extension",
-    "contributes": {
-        "viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "sln_explorer",
-                    "title": "Solution",
-                    "icon": "images/activity-icon.png",
-                    "when": "solutionExplorer.viewInActivityBar && solutionExplorer.loadedFlag"
-                }
-            ]
-        },
-        "views": {
-            "explorer": [
-                {
-                    "id": "slnexpl",
-                    "name": "Solution",
-                    "when": "solutionExplorer.viewInExplorer && solutionExplorer.loadedFlag"
-                }
-            ],
-            "sln_explorer": [
-                {
-                    "id": "slnbrw",
-                    "name": "Explorer",
-                    "when": "solutionExplorer.viewInActivityBar && solutionExplorer.loadedFlag"
-                }
-            ]
-        },
-        "viewsWelcome": [
-            {
-                "view": "slnexpl",
-                "contents": "No visual studio solution found [learn more](https://github.com/fernandoescolar/vscode-solution-explorer#open-solutions).\n[Open solution](command:solutionExplorer.openSolution)\n[Create New Solution](command:solutionExplorer.createNewSolution)"
-            },
-            {
-                "view": "slnbrw",
-                "contents": "No visual studio solution found [learn more](https://github.com/fernandoescolar/vscode-solution-explorer#open-solutions).\n[Open solution](command:solutionExplorer.openSolution)\n[Create New Solution](command:solutionExplorer.createNewSolution)"
-            }
-        ],
-        "commands": [
-            {
-                "command": "solutionExplorer.openSolution",
-                "title": "Open Solution",
-                "category": "Solution Explorer",
-                "icon": "$(folder-opened)"
-            },
-            {
-                "command": "solutionExplorer.refresh",
-                "title": "Refresh",
-                "category": "Solution Explorer",
-                "icon": "$(refresh)"
-            },
-            {
-                "command": "solutionExplorer.collapseAll",
-                "title": "Collapse All",
-                "category": "Solution Explorer",
-                "icon": "$(collapse-all)"
-            },
-            {
-                "command": "solutionExplorer.openFile",
-                "title": "Open File",
-                "category": "Solution Explorer",
-                "icon": "$(edit)"
-            },
-            {
-                "command": "solutionExplorer.renameFile",
-                "title": "Rename",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.revealFileInOS",
-                "title": "Reveal in OS File Manager",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.addSolutionFile",
-                "title": "Add Solution File",
-                "category": "Solution Explorer",
-                "icon": "$(new-file)"
-            },
-            {
-                "command": "solutionExplorer.deleteSolutionFile",
-                "title": "Delete Solution File",
-                "category": "Solution Explorer",
-                "icon": "$(trash)"
-            },
-            {
-                "command": "solutionExplorer.deleteFile",
-                "title": "Delete",
-                "category": "Solution Explorer",
-                "icon": "$(trash)"
-            },
-            {
-                "command": "solutionExplorer.createFile",
-                "title": "Create file",
-                "category": "Solution Explorer",
-                "icon": "$(new-file)"
-            },
-            {
-                "command": "solutionExplorer.createFileAbove",
-                "title": "Create file above",
-                "category": "Solution Explorer",
-                "icon": "$(new-file)"
-            },
-            {
-              "command": "solutionExplorer.createFileBelow",
-              "title": "Create file below",
-              "category": "Solution Explorer",
-              "icon": "$(new-file)"
-            },
-            {
-                "command": "solutionExplorer.renameFolder",
-                "title": "Rename",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.deleteFolder",
-                "title": "Delete",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.createFolder",
-                "title": "Create folder",
-                "category": "Solution Explorer",
-                "icon": "$(new-folder)"
-            },
-            {
-                "command": "solutionExplorer.moveFile",
-                "title": "Move to folder",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.moveFileUp",
-                "title": "Move Up",
-                "category": "Solution Explorer",
-                "icon": "$(arrow-up)"
-            },
-            {
-                "command": "solutionExplorer.moveFileDown",
-                "title": "Move Down",
-                "category": "Solution Explorer",
-                "icon": "$(arrow-down)"
-            },
-            {
-                "command": "solutionExplorer.moveFolder",
-                "title": "Move to folder",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.addPackage",
-                "title": "Add package",
-                "category": "Solution Explorer",
-                "icon": "$(add)"
-            },
-            {
-                "command": "solutionExplorer.updatePackageVersion",
-                "title": "Update package version",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.removePackage",
-                "title": "Remove package",
-                "category": "Solution Explorer",
-                "icon": "$(trash)"
-            },
-            {
-                "command": "solutionExplorer.updatePackagesVersion",
-                "title": "Update packages version",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.addProjectReference",
-                "title": "Add reference",
-                "category": "Solution Explorer",
-                "icon": "$(add)"
-            },
-            {
-                "command": "solutionExplorer.removeProjectReference",
-                "title": "Remove reference",
-                "category": "Solution Explorer",
-                "icon": "$(trash)"
-            },
-            {
-                "command": "solutionExplorer.createNewSolution",
-                "title": "Create new empty solution",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.addNewProject",
-                "title": "Add new project",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.addExistingProject",
-                "title": "Add existing project",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.createSolutionFolder",
-                "title": "Create folder",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.installTemplates",
-                "title": "Install File Creation Templates",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.renameSolutionItem",
-                "title": "Rename",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.moveToSolutionFolder",
-                "title": "Move",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.removeSolutionFolder",
-                "title": "Remove",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.removeProject",
-                "title": "Remove project from solution",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.copy",
-                "title": "Copy",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.duplicate",
-                "title": "Create a copy",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.paste",
-                "title": "Paste",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.build",
-                "title": "Build",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.clean",
-                "title": "Clean",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.pack",
-                "title": "Pack",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.publish",
-                "title": "Publish",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.restore",
-                "title": "Restore",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.run",
-                "title": "Run",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.watchRun",
-                "title": "Watch Run",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.test",
-                "title": "Test",
-                "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.showActiveFileInExplorer",
-                "title": "Select Active Document",
-                "category": "Solution Explorer"
-            },
-            {
-              "command": "solutionExplorer.focus",
-              "title": "Focus",
-              "category": "Solution Explorer"
-            },
-            {
-                "command": "solutionExplorer.deleteMultiple",
-                "title": "Delete Multiple Items",
-                "category": "Solution Explorer"
-            }
-        ],
-        "menus": {
-            "view/title": [
-              {
-                "command": "solutionExplorer.openSolution",
-                "when": "view in solutionexplorer.viewTypes",
-                "group": "navigation"
-              },
-              {
-                "command": "solutionExplorer.refresh",
-                "when": "view in solutionexplorer.viewTypes",
-                "group": "navigation"
-              }
-            ],
-            "view/item/context": [
-              {
-                "command": "solutionExplorer.refresh",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.refresh",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.copy",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.copy",
-                "group": "5_cutcopypaste@1"
-              },
-              {
-                "command": "solutionExplorer.duplicate",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.duplicate",
-                "group": "6_copypath@1"
-              },
-              {
-                "command": "solutionExplorer.paste",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.paste",
-                "group": "5_cutcopypaste@2"
-              },
-              {
-                "command": "solutionExplorer.renameFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.renameFile",
-                "group": "7_modification@1"
-              },
-              {
-                "command": "solutionExplorer.deleteFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.deleteFile",
-                "group": "7_modification@9"
-              },
-              {
-                "command": "solutionExplorer.revealFileInOS",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.revealFileInOS",
-                "group": "navigation"
-              },
-              {
-                "command": "solutionExplorer.createFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createFile",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.createFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-cps",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.createFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-standard",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.createFile",
-                "when": "view in solutionexplorer.viewTypes && (viewItem == project-folder || viewItem == project-folder-fs)",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.createFileAbove",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createFileAbove",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.createFileBelow",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createFileBelow",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.renameFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.renameFolder",
-                "group": "7_modification@1"
-              },
-              {
-                "command": "solutionExplorer.deleteFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.deleteFolder",
-                "group": "7_modification@9"
-              },
-              {
-                "command": "solutionExplorer.createFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createFolder",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.createFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-cps",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.createFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-standard",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.createFolder",
-                "when": "view in solutionexplorer.viewTypes && (viewItem == project-folder || viewItem == project-folder-fs)",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.moveFileUp",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileUp",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.moveFileDown",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileDown",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.moveFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFile",
-                "group": "6_copypath@3"
-              },
-              {
-                "command": "solutionExplorer.moveFileUp",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileUp",
-                "group": "6_copypath@1"
-              },
-              {
-                "command": "solutionExplorer.moveFileDown",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileDown",
-                "group": "6_copypath@2"
-              },
-              {
-                "command": "solutionExplorer.moveFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFolder",
-                "group": "6_copypath@4"
-              },
-              {
-                "command": "solutionExplorer.addPackage",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addPackage",
-                "group": "4_search@1"
-              },
-              {
-                "command": "solutionExplorer.addPackage",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-referenced-packages-cps",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.updatePackageVersion",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.updatePackageVersion",
-                "group": "4_search@1"
-              },
-              {
-                "command": "solutionExplorer.removePackage",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removePackage",
-                "group": "7_modification@9"
-              },
-              {
-                "command": "solutionExplorer.removePackage",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-referenced-package-cps",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.updatePackagesVersion",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.updatePackagesVersion",
-                "group": "4_search@2"
-              },
-              {
-                "command": "solutionExplorer.addProjectReference",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addProjectReference",
-                "group": "4_search@1"
-              },
-              {
-                "command": "solutionExplorer.addProjectReference",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-referenced-projects-cps",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.removeProjectReference",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removeProjectReference",
-                "group": "7_modification@9"
-              },
-              {
-                "command": "solutionExplorer.removeProjectReference",
-                "when": "view in solutionexplorer.viewTypes && viewItem == project-referenced-project-cps",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.openFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.openFile",
-                "group": "navigation"
-              },
-              {
-                "command": "solutionExplorer.openFile",
-                "when": "config.vssolution.openProjectInlineButtonShown && view in solutionexplorer.viewTypes && viewItem == project-cps",
-                "group": "inline"
-              },
-              {
-                "command": "solutionExplorer.createNewSolution",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createNewSolution",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.addNewProject",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addNewProject",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.addExistingProject",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addExistingProject",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.removeProject",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removeProject",
-                "group": "7_modification@9"
-              },
-              {
-                "command": "solutionExplorer.createSolutionFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createSolutionFolder",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.installTemplates",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.installTemplates",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.removeSolutionFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removeSolutionFolder",
-                "group": "7_modification@9"
-              },
-              {
-                "command": "solutionExplorer.addSolutionFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addSolutionFile",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.deleteSolutionFile",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.deleteSolutionFile",
-                "group": "7_modification@9"
-              },
-              {
-                "command": "solutionExplorer.moveToSolutionFolder",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveToSolutionFolder",
-                "group": "2_workspace"
-              },
-              {
-                "command": "solutionExplorer.renameSolutionItem",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.renameSolutionItem",
-                "group": "7_modification@1"
-              },
-              {
-                "command": "solutionExplorer.build",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.build",
-                "group": "99_dotnet_commands"
-              },
-              {
-                "command": "solutionExplorer.clean",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.clean",
-                "group": "99_dotnet_commands"
-              },
-              {
-                "command": "solutionExplorer.pack",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.pack",
-                "group": "99_dotnet_commands"
-              },
-              {
-                "command": "solutionExplorer.publish",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.publish",
-                "group": "99_dotnet_commands"
-              },
-              {
-                "command": "solutionExplorer.restore",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.restore",
-                "group": "99_dotnet_commands"
-              },
-              {
-                "command": "solutionExplorer.run",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.run",
-                "group": "99_dotnet_commands"
-              },
-              {
-                "command": "solutionExplorer.watchRun",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.watchRun",
-                "group": "99_dotnet_commands"
-              },
-              {
-                "command": "solutionExplorer.test",
-                "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.test",
-                "group": "99_dotnet_commands"
-              }
-            ]
-          },
-          "keybindings": [
-            {
-              "command": "solutionExplorer.copy",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.copy",
-              "key": "ctrl+c",
-              "mac": "cmd+c"
-            },
-            {
-              "command": "solutionExplorer.paste",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.paste",
-              "key": "ctrl+v",
-              "mac": "cmd+v"
-            },
-            {
-              "command": "solutionExplorer.renameFile",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.renameFile",
-              "key": "f2",
-              "mac": "f2"
-            },
-            {
-              "command": "solutionExplorer.deleteFile",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.deleteFile",
-              "key": "delete",
-              "mac": "delete"
-            },
-            {
-              "command": "solutionExplorer.renameFolder",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.renameFolder",
-              "key": "f2",
-              "mac": "f2"
-            },
-            {
-              "command": "solutionExplorer.deleteFolder",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.deleteFolder",
-              "key": "delete",
-              "mac": "delete"
-            },
-            {
-              "command": "solutionExplorer.createFile",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.createFile",
-              "key": "ctrl+shift+a",
-              "mac": "cmd+shift+a"
-            },
-            {
-              "command": "solutionExplorer.createFolder",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.createFolder",
-              "key": "ctrl+shift+f",
-              "mac": "cmd+shift+f"
-            },
-            {
-              "command": "solutionExplorer.removePackage",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.removePackage",
-              "key": "delete",
-              "mac": "delete"
-            },
-            {
-              "command": "solutionExplorer.removeProjectReference",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.removeProjectReference",
-              "key": "delete",
-              "mac": "delete"
-            },
-            {
-              "command": "solutionExplorer.createSolutionFolder",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.createSolutionFolder",
-              "key": "ctrl+shift+f",
-              "mac": "cmd+shift+f"
-            },
-            {
-              "command": "solutionExplorer.removeSolutionFolder",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.removeSolutionFolder",
-              "key": "delete",
-              "mac": "delete"
-            },
-            {
-              "command": "solutionExplorer.removeProject",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.removeProject",
-              "key": "delete",
-              "mac": "delete"
-            },
-            {
-              "command": "solutionExplorer.renameSolutionItem",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.renameSolutionItem",
-              "key": "f2",
-              "mac": "f2"
-            },
-            {
-              "command": "solutionExplorer.deleteMultiple",
-              "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.deleteMultiple",
-              "key": "delete",
-              "mac": "delete"
-            },
-            {
-              "command": "solutionExplorer.focus",
-              "key": "ctrl+alt+l",
-              "mac": "ctrl+cmd+l"
-            }
-          ],
-        "configuration": {
-            "type": "object",
-            "title": "vscode-solution-explorer",
-            "properties": {
-                "vssolution.showMode": {
-                    "type": "string",
-                    "enum": [
-                        "activityBar",
-                        "explorer",
-                        "none"
-                    ],
-                    "default": "activityBar",
-                    "description": "Show the solution explorer in the activity bar, in the explorer pane or don't show it."
-                },
-                "vssolution.solutionExplorerIcons": {
-                    "type": "string",
-                    "enum": [
-                        "current-theme",
-                        "mix",
-                        "solution-explorer"
-                    ],
-                    "default": "solution-explorer",
-                    "description": "solution-explorer -> Uses the vscode-solution-explorer custom icons\nmix -> use current theme icons for files and folders\ncurrent-theme -> Uses the installed icon theme"
-                },
-                "vssolution.outputChannelMode": {
-                    "type": "string",
-                    "enum": [
-                        "show",
-                        "append",
-                        "none"
-                    ],
-                    "default": "append",
-                    "description": "The solution explorer output channel mode: show on every single log, append but not show the pane or none"
-                },
-                "vssolution.showTerminalOnCommand": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show the terminal when a command is executed."
-                },
-                "vssolution.trackActiveItem": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Select the active editor file in the solution explorer."
-                },
-                "vssolution.netcoreIgnore": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [
-                        "bin",
-                        "node_modules",
-                        "obj",
-                        ".ds_store",
-                        ".vs"
-                    ],
-                    "description": "Folder and filenames to ignore when get a dotnet core project content"
-                },
-                "vssolution.xxprojItemTypes": {
-                    "type": "object",
-                    "default": {
-                        "*": "Content",
-                        "cs": "Compile",
-                        "cpp": "ClCompile",
-                        "cc": "ClCompile",
-                        "c": "ClCompile",
-                        "h": "ClInclude",
-                        "hpp": "ClInclude",
-                        "vb": "Compile",
-                        "fs": "Compile",
-                        "ts": "TypeScriptCompile"
-                    },
-                    "description": "Type of XML element to put in the xxproj files."
-                },
-                "vssolution.xmlspaces": {
-                    "type": "string",
-                    "default": "2",
-                    "description": "Spaces to be used for indenting XML output. It could be a number or an string. ex. \"2\", \" \" or \"\\t\"."
-                },
-                "vssolution.xmlClosingTagSpace": {
-                    "type": "boolean",
-                    "default": "false",
-                    "description": "Add space at the end of XML closing tag, ex: \" />\""
-                },
-                "vssolution.altSolutionFolders": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "default": [
-                        "src"
-                    ],
-                    "description": "If there is no solution in the workplace root folder, it will search for solutions in any of these folders."
-                },
-                "vssolution.win32Encoding": {
-                    "type": "object",
-                    "default": {
-                        "932": "Shift_JIS",
-                        "936": "GBK",
-                        "950": "BIG5"
-                    },
-                    "description": "Win32 codepage -> iconv.js encoding equivalences."
-                },
-                "vssolution.lineEndings": {
-                    "type": "string",
-                    "enum": [
-                        "lf",
-                        "crlf"
-                    ],
-                    "default": "lf",
-                    "description": "Controls line endings of solution and project files."
-                },
-                "vssolution.itemNesting": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Sets whether related items will be displayed nested"
-                },
-                "vssolution.openProjectOnClick": {
-                  "type": "boolean",
-                  "default": false,
-                  "description": "Sets whether clicking a project in the explorer tree opens the underlying proj file (i.e. the csproj or fsproj)"
-                },
-                "vssolution.openProjectInlineButtonShown": {
-                  "type": "boolean",
-                  "default": true,
-                  "description": "Sets whether projects in the explorer tree include an inline button to open the underlying project file (i.e. the csproj or fsproj)"
-                },
-                "vssolution.openSolutions.inRootFolder": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Sets whether solutions will be automatically loaded from the root folder."
-                },
-                "vssolution.openSolutions.inAltFolders": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Sets whether solutions will be automatically loaded from the altSolutionFolders parameter."
-                },
-                "vssolution.openSolutions.inFoldersAndSubfolders": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Sets whether solutions will be automatically loaded from the current opened folder and subfolders."
-                },
-                "vssolution.openSolutions.selectedInOmnisharp": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Sets whether solutions will be automatically loaded from the current selected solution in Omnisharp extension."
-                },
-                "vssolution.customCommands": {
-                    "type": "object",
-                    "default": {},
-                    "description": "Sets custom the terminal commands."
-                }
-            }
+  "name": "vscode-solution-explorer",
+  "displayName": "vscode-solution-explorer",
+  "description": "Visual Studio .sln file explorer for Visual Studio Code",
+  "version": "0.8.4",
+  "license": "MIT",
+  "publisher": "fernandoescolar",
+  "icon": "images/icon.png",
+  "author": {
+    "email": "f.escolar@hotmail.com",
+    "name": "Fernando Escolar",
+    "url": "http://fernandoescolar.github.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fernandoescolar/vscode-solution-explorer"
+  },
+  "bugs": {
+    "url": "https://github.com/fernandoescolar/vscode-solution-explorer/issues",
+    "email": "f.escolar@hotmail.com"
+  },
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:slnexpl",
+    "workspaceContains:**/*.sln",
+    "*"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sln_explorer",
+          "title": "Solution",
+          "icon": "images/activity-icon.png",
+          "when": "solutionExplorer.viewInActivityBar && solutionExplorer.loadedFlag"
         }
+      ]
     },
-    "scripts": {
-        "vscode:prepublish": "webpack --mode production",
-        "compile": "webpack --mode development",
-        "watch": "webpack --mode development --watch"
+    "views": {
+      "explorer": [
+        {
+          "id": "slnexpl",
+          "name": "Solution",
+          "when": "solutionExplorer.viewInExplorer && solutionExplorer.loadedFlag"
+        }
+      ],
+      "sln_explorer": [
+        {
+          "id": "slnbrw",
+          "name": "Explorer",
+          "when": "solutionExplorer.viewInActivityBar && solutionExplorer.loadedFlag"
+        }
+      ]
     },
-    "devDependencies": {
-        "@types/vscode": "^1.70.0",
-        "@types/webpack-env": "^1.17.0",
-        "@typescript-eslint/eslint-plugin": "^5.31.0",
-        "@typescript-eslint/parser": "^5.31.0",
-        "eslint": "^8.20.0",
-        "mocha": "^10.0.0",
-        "process": "^0.11.10",
-        "ts-loader": "^9.3.1",
-        "typescript": "^4.7.4",
-        "webpack": "^5.76.0",
-        "webpack-cli": "^4.10.0"
+    "viewsWelcome": [
+      {
+        "view": "slnexpl",
+        "contents": "No visual studio solution found [learn more](https://github.com/fernandoescolar/vscode-solution-explorer#open-solutions).\n[Open solution](command:solutionExplorer.openSolution)\n[Create New Solution](command:solutionExplorer.createNewSolution)"
+      },
+      {
+        "view": "slnbrw",
+        "contents": "No visual studio solution found [learn more](https://github.com/fernandoescolar/vscode-solution-explorer#open-solutions).\n[Open solution](command:solutionExplorer.openSolution)\n[Create New Solution](command:solutionExplorer.createNewSolution)"
+      }
+    ],
+    "commands": [
+      {
+        "command": "solutionExplorer.openSolution",
+        "title": "Open Solution",
+        "category": "Solution Explorer",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "solutionExplorer.refresh",
+        "title": "Refresh",
+        "category": "Solution Explorer",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "solutionExplorer.collapseAll",
+        "title": "Collapse All",
+        "category": "Solution Explorer",
+        "icon": "$(collapse-all)"
+      },
+      {
+        "command": "solutionExplorer.openFile",
+        "title": "Open File",
+        "category": "Solution Explorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "solutionExplorer.renameFile",
+        "title": "Rename",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.revealFileInOS",
+        "title": "Reveal in OS File Manager",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.addSolutionFile",
+        "title": "Add Solution File",
+        "category": "Solution Explorer",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "solutionExplorer.deleteSolutionFile",
+        "title": "Delete Solution File",
+        "category": "Solution Explorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "solutionExplorer.deleteFile",
+        "title": "Delete",
+        "category": "Solution Explorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "solutionExplorer.createFile",
+        "title": "Create file",
+        "category": "Solution Explorer",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "solutionExplorer.createFileAbove",
+        "title": "Create file above",
+        "category": "Solution Explorer",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "solutionExplorer.createFileBelow",
+        "title": "Create file below",
+        "category": "Solution Explorer",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "solutionExplorer.renameFolder",
+        "title": "Rename",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.deleteFolder",
+        "title": "Delete",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.createFolder",
+        "title": "Create folder",
+        "category": "Solution Explorer",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "solutionExplorer.moveFile",
+        "title": "Move to folder",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.moveFileUp",
+        "title": "Move Up",
+        "category": "Solution Explorer",
+        "icon": "$(arrow-up)"
+      },
+      {
+        "command": "solutionExplorer.moveFileDown",
+        "title": "Move Down",
+        "category": "Solution Explorer",
+        "icon": "$(arrow-down)"
+      },
+      {
+        "command": "solutionExplorer.moveFolder",
+        "title": "Move to folder",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.addPackage",
+        "title": "Add package",
+        "category": "Solution Explorer",
+        "icon": "$(add)"
+      },
+      {
+        "command": "solutionExplorer.updatePackageVersion",
+        "title": "Update package version",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.removePackage",
+        "title": "Remove package",
+        "category": "Solution Explorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "solutionExplorer.updatePackagesVersion",
+        "title": "Update packages version",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.addProjectReference",
+        "title": "Add reference",
+        "category": "Solution Explorer",
+        "icon": "$(add)"
+      },
+      {
+        "command": "solutionExplorer.removeProjectReference",
+        "title": "Remove reference",
+        "category": "Solution Explorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "solutionExplorer.createNewSolution",
+        "title": "Create new empty solution",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.addNewProject",
+        "title": "Add new project",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.addExistingProject",
+        "title": "Add existing project",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.createSolutionFolder",
+        "title": "Create folder",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.installTemplates",
+        "title": "Install File Creation Templates",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.renameSolutionItem",
+        "title": "Rename",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.moveToSolutionFolder",
+        "title": "Move",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.removeSolutionFolder",
+        "title": "Remove",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.removeProject",
+        "title": "Remove project from solution",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.copy",
+        "title": "Copy",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.duplicate",
+        "title": "Create a copy",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.paste",
+        "title": "Paste",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.build",
+        "title": "Build",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.clean",
+        "title": "Clean",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.pack",
+        "title": "Pack",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.publish",
+        "title": "Publish",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.restore",
+        "title": "Restore",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.run",
+        "title": "Run",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.watchRun",
+        "title": "Watch Run",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.test",
+        "title": "Test",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.showActiveFileInExplorer",
+        "title": "Select Active Document",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.focus",
+        "title": "Focus",
+        "category": "Solution Explorer"
+      },
+      {
+        "command": "solutionExplorer.deleteMultiple",
+        "title": "Delete Multiple Items",
+        "category": "Solution Explorer"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "solutionExplorer.openSolution",
+          "when": "view in solutionexplorer.viewTypes",
+          "group": "navigation"
+        },
+        {
+          "command": "solutionExplorer.refresh",
+          "when": "view in solutionexplorer.viewTypes",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "solutionExplorer.refresh",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.refresh",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.copy",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.copy",
+          "group": "5_cutcopypaste@1"
+        },
+        {
+          "command": "solutionExplorer.duplicate",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.duplicate",
+          "group": "6_copypath@1"
+        },
+        {
+          "command": "solutionExplorer.paste",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.paste",
+          "group": "5_cutcopypaste@2"
+        },
+        {
+          "command": "solutionExplorer.renameFile",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.renameFile",
+          "group": "7_modification@1"
+        },
+        {
+          "command": "solutionExplorer.deleteFile",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.deleteFile",
+          "group": "7_modification@9"
+        },
+        {
+          "command": "solutionExplorer.revealFileInOS",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.revealFileInOS",
+          "group": "navigation"
+        },
+        {
+          "command": "solutionExplorer.createFile",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createFile",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.createFile",
+          "when": "view in solutionexplorer.viewTypes && viewItem == project-cps",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.createFile",
+          "when": "view in solutionexplorer.viewTypes && viewItem == project-standard",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.createFile",
+          "when": "view in solutionexplorer.viewTypes && (viewItem == project-folder || viewItem == project-folder-fs)",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.createFileAbove",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createFileAbove",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.createFileBelow",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createFileBelow",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.renameFolder",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.renameFolder",
+          "group": "7_modification@1"
+        },
+        {
+          "command": "solutionExplorer.deleteFolder",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.deleteFolder",
+          "group": "7_modification@9"
+        },
+        {
+          "command": "solutionExplorer.createFolder",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createFolder",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.createFolder",
+          "when": "view in solutionexplorer.viewTypes && viewItem == project-cps",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.createFolder",
+          "when": "view in solutionexplorer.viewTypes && viewItem == project-standard",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.createFolder",
+          "when": "view in solutionexplorer.viewTypes && (viewItem == project-folder || viewItem == project-folder-fs)",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.moveFileUp",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileUp",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.moveFileDown",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileDown",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.moveFile",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFile",
+          "group": "6_copypath@3"
+        },
+        {
+          "command": "solutionExplorer.moveFileUp",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileUp",
+          "group": "6_copypath@1"
+        },
+        {
+          "command": "solutionExplorer.moveFileDown",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFileDown",
+          "group": "6_copypath@2"
+        },
+        {
+          "command": "solutionExplorer.moveFolder",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveFolder",
+          "group": "6_copypath@4"
+        },
+        {
+          "command": "solutionExplorer.addPackage",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addPackage",
+          "group": "4_search@1"
+        },
+        {
+          "command": "solutionExplorer.addPackage",
+          "when": "view in solutionexplorer.viewTypes && viewItem == project-referenced-packages-cps",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.updatePackageVersion",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.updatePackageVersion",
+          "group": "4_search@1"
+        },
+        {
+          "command": "solutionExplorer.removePackage",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removePackage",
+          "group": "7_modification@9"
+        },
+        {
+          "command": "solutionExplorer.removePackage",
+          "when": "view in solutionexplorer.viewTypes && viewItem == project-referenced-package-cps",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.updatePackagesVersion",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.updatePackagesVersion",
+          "group": "4_search@2"
+        },
+        {
+          "command": "solutionExplorer.addProjectReference",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addProjectReference",
+          "group": "4_search@1"
+        },
+        {
+          "command": "solutionExplorer.addProjectReference",
+          "when": "view in solutionexplorer.viewTypes && viewItem == project-referenced-projects-cps",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.removeProjectReference",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removeProjectReference",
+          "group": "7_modification@9"
+        },
+        {
+          "command": "solutionExplorer.removeProjectReference",
+          "when": "view in solutionexplorer.viewTypes && viewItem == project-referenced-project-cps",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.openFile",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.openFile",
+          "group": "navigation"
+        },
+        {
+          "command": "solutionExplorer.openFile",
+          "when": "config.vssolution.openProjectInlineButtonShown && view in solutionexplorer.viewTypes && viewItem == project-cps",
+          "group": "inline"
+        },
+        {
+          "command": "solutionExplorer.createNewSolution",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createNewSolution",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.addNewProject",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addNewProject",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.addExistingProject",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addExistingProject",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.removeProject",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removeProject",
+          "group": "7_modification@9"
+        },
+        {
+          "command": "solutionExplorer.createSolutionFolder",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createSolutionFolder",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.installTemplates",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.installTemplates",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.removeSolutionFolder",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.removeSolutionFolder",
+          "group": "7_modification@9"
+        },
+        {
+          "command": "solutionExplorer.addSolutionFile",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addSolutionFile",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.deleteSolutionFile",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.deleteSolutionFile",
+          "group": "7_modification@9"
+        },
+        {
+          "command": "solutionExplorer.moveToSolutionFolder",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.moveToSolutionFolder",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.renameSolutionItem",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.renameSolutionItem",
+          "group": "7_modification@1"
+        },
+        {
+          "command": "solutionExplorer.build",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.build",
+          "group": "99_dotnet_commands"
+        },
+        {
+          "command": "solutionExplorer.clean",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.clean",
+          "group": "99_dotnet_commands"
+        },
+        {
+          "command": "solutionExplorer.pack",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.pack",
+          "group": "99_dotnet_commands"
+        },
+        {
+          "command": "solutionExplorer.publish",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.publish",
+          "group": "99_dotnet_commands"
+        },
+        {
+          "command": "solutionExplorer.restore",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.restore",
+          "group": "99_dotnet_commands"
+        },
+        {
+          "command": "solutionExplorer.run",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.run",
+          "group": "99_dotnet_commands"
+        },
+        {
+          "command": "solutionExplorer.watchRun",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.watchRun",
+          "group": "99_dotnet_commands"
+        },
+        {
+          "command": "solutionExplorer.test",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.test",
+          "group": "99_dotnet_commands"
+        }
+      ]
     },
-    "dependencies": {
-        "@types/uuid": "^8.3.4",
-        "clipboardy": "^3.0.0",
-        "eol": "^0.9.1",
-        "handlebars": "^4.7.7",
-        "node-fetch": "^3.2.10",
-        "uuid": "^8.3.2",
-        "xml-js": "^1.6.11"
+    "keybindings": [
+      {
+        "command": "solutionExplorer.copy",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.copy",
+        "key": "ctrl+c",
+        "mac": "cmd+c"
+      },
+      {
+        "command": "solutionExplorer.paste",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.paste",
+        "key": "ctrl+v",
+        "mac": "cmd+v"
+      },
+      {
+        "command": "solutionExplorer.renameFile",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.renameFile",
+        "key": "f2",
+        "mac": "f2"
+      },
+      {
+        "command": "solutionExplorer.deleteFile",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.deleteFile",
+        "key": "delete",
+        "mac": "delete"
+      },
+      {
+        "command": "solutionExplorer.renameFolder",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.renameFolder",
+        "key": "f2",
+        "mac": "f2"
+      },
+      {
+        "command": "solutionExplorer.deleteFolder",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.deleteFolder",
+        "key": "delete",
+        "mac": "delete"
+      },
+      {
+        "command": "solutionExplorer.createFile",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.createFile",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a"
+      },
+      {
+        "command": "solutionExplorer.createFolder",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.createFolder",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f"
+      },
+      {
+        "command": "solutionExplorer.removePackage",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.removePackage",
+        "key": "delete",
+        "mac": "delete"
+      },
+      {
+        "command": "solutionExplorer.removeProjectReference",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.removeProjectReference",
+        "key": "delete",
+        "mac": "delete"
+      },
+      {
+        "command": "solutionExplorer.createSolutionFolder",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.createSolutionFolder",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f"
+      },
+      {
+        "command": "solutionExplorer.removeSolutionFolder",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.removeSolutionFolder",
+        "key": "delete",
+        "mac": "delete"
+      },
+      {
+        "command": "solutionExplorer.removeProject",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.removeProject",
+        "key": "delete",
+        "mac": "delete"
+      },
+      {
+        "command": "solutionExplorer.renameSolutionItem",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.renameSolutionItem",
+        "key": "f2",
+        "mac": "f2"
+      },
+      {
+        "command": "solutionExplorer.deleteMultiple",
+        "when": "focusedView in solutionexplorer.viewTypes && solutionExplorer.selectionContext in solutionExplorer.cmdAllowedContexts.deleteMultiple",
+        "key": "delete",
+        "mac": "delete"
+      },
+      {
+        "command": "solutionExplorer.focus",
+        "key": "ctrl+alt+l",
+        "mac": "ctrl+cmd+l"
+      }
+    ],
+    "languages": [
+      {
+        "id": "sln",
+        "aliases": [
+          "Solution File",
+          "sln"
+        ],
+        "extensions": [
+          ".sln"
+        ],
+        "configuration": "./syntaxes/sln.language.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "sln",
+        "scopeName": "source.solution",
+        "path": "./syntaxes/sln.grammar.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "vscode-solution-explorer",
+      "properties": {
+        "vssolution.showMode": {
+          "type": "string",
+          "enum": [
+            "activityBar",
+            "explorer",
+            "none"
+          ],
+          "default": "activityBar",
+          "description": "Show the solution explorer in the activity bar, in the explorer pane or don't show it."
+        },
+        "vssolution.solutionExplorerIcons": {
+          "type": "string",
+          "enum": [
+            "current-theme",
+            "mix",
+            "solution-explorer"
+          ],
+          "default": "solution-explorer",
+          "description": "solution-explorer -> Uses the vscode-solution-explorer custom icons\nmix -> use current theme icons for files and folders\ncurrent-theme -> Uses the installed icon theme"
+        },
+        "vssolution.outputChannelMode": {
+          "type": "string",
+          "enum": [
+            "show",
+            "append",
+            "none"
+          ],
+          "default": "append",
+          "description": "The solution explorer output channel mode: show on every single log, append but not show the pane or none"
+        },
+        "vssolution.showTerminalOnCommand": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the terminal when a command is executed."
+        },
+        "vssolution.trackActiveItem": {
+          "type": "boolean",
+          "default": false,
+          "description": "Select the active editor file in the solution explorer."
+        },
+        "vssolution.netcoreIgnore": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "bin",
+            "node_modules",
+            "obj",
+            ".ds_store",
+            ".vs"
+          ],
+          "description": "Folder and filenames to ignore when get a dotnet core project content"
+        },
+        "vssolution.xxprojItemTypes": {
+          "type": "object",
+          "default": {
+            "*": "Content",
+            "cs": "Compile",
+            "cpp": "ClCompile",
+            "cc": "ClCompile",
+            "c": "ClCompile",
+            "h": "ClInclude",
+            "hpp": "ClInclude",
+            "vb": "Compile",
+            "fs": "Compile",
+            "ts": "TypeScriptCompile"
+          },
+          "description": "Type of XML element to put in the xxproj files."
+        },
+        "vssolution.xmlspaces": {
+          "type": "string",
+          "default": "2",
+          "description": "Spaces to be used for indenting XML output. It could be a number or an string. ex. \"2\", \" \" or \"\\t\"."
+        },
+        "vssolution.xmlClosingTagSpace": {
+          "type": "boolean",
+          "default": "false",
+          "description": "Add space at the end of XML closing tag, ex: \" />\""
+        },
+        "vssolution.altSolutionFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "src"
+          ],
+          "description": "If there is no solution in the workplace root folder, it will search for solutions in any of these folders."
+        },
+        "vssolution.win32Encoding": {
+          "type": "object",
+          "default": {
+            "932": "Shift_JIS",
+            "936": "GBK",
+            "950": "BIG5"
+          },
+          "description": "Win32 codepage -> iconv.js encoding equivalences."
+        },
+        "vssolution.lineEndings": {
+          "type": "string",
+          "enum": [
+            "lf",
+            "crlf"
+          ],
+          "default": "lf",
+          "description": "Controls line endings of solution and project files."
+        },
+        "vssolution.itemNesting": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sets whether related items will be displayed nested"
+        },
+        "vssolution.openProjectOnClick": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sets whether clicking a project in the explorer tree opens the underlying proj file (i.e. the csproj or fsproj)"
+        },
+        "vssolution.openProjectInlineButtonShown": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sets whether projects in the explorer tree include an inline button to open the underlying project file (i.e. the csproj or fsproj)"
+        },
+        "vssolution.openSolutions.inRootFolder": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sets whether solutions will be automatically loaded from the root folder."
+        },
+        "vssolution.openSolutions.inAltFolders": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sets whether solutions will be automatically loaded from the altSolutionFolders parameter."
+        },
+        "vssolution.openSolutions.inFoldersAndSubfolders": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sets whether solutions will be automatically loaded from the current opened folder and subfolders."
+        },
+        "vssolution.openSolutions.selectedInOmnisharp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sets whether solutions will be automatically loaded from the current selected solution in Omnisharp extension."
+        },
+        "vssolution.customCommands": {
+          "type": "object",
+          "default": {},
+          "description": "Sets custom the terminal commands."
+        }
+      }
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "webpack --mode production",
+    "compile": "webpack --mode development",
+    "watch": "webpack --mode development --watch"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.70.0",
+    "@types/webpack-env": "^1.17.0",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "mocha": "^10.0.0",
+    "process": "^0.11.10",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
+    "webpack": "^5.76.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "@types/uuid": "^8.3.4",
+    "clipboardy": "^3.0.0",
+    "eol": "^0.9.1",
+    "handlebars": "^4.7.7",
+    "node-fetch": "^3.2.10",
+    "uuid": "^8.3.2",
+    "xml-js": "^1.6.11"
+  }
 }

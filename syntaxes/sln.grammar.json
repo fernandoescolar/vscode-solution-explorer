@@ -1,0 +1,208 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Visual Studio Solution File",
+    "scopeName": "source.solution",
+    "fileTypes": [
+        ".sln"
+    ],
+    "patterns": [
+        {
+            "include": "#main"
+        }
+    ],
+    "repository": {
+        "main": {
+            "patterns": [
+                {
+                    "include": "#header"
+                },
+                {
+                    "include": "#functions"
+                },
+                {
+                    "include": "#variables"
+                },
+                {
+                    "include": "#strings"
+                },
+                {
+                    "include": "#numbers"
+                },
+                {
+                    "include": "#booleans"
+                },
+                {
+                    "include": "#punct"
+                }
+            ]
+        },
+        "header": {
+            "patterns": [
+                {
+                    "name": "entity.other.header.format.solution",
+                    "begin": "Microsoft Visual Studio Solution File",
+                    "end": "$"
+                },
+                {
+                    "name": "entity.other.header.major-version.solution",
+                    "begin": "#",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.definition.header.solution"
+                        }
+                    },
+                    "end": "$"
+                }
+            ]
+        },
+        "functions": {
+            "patterns": [
+                {
+                    "name": "meta.block.solution",
+                    "begin": "(?:Project|GlobalSection|Global)",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "keyword.block.start.solution"
+                        }
+                    },
+                    "end": "End(?:Project|GlobalSection|Global)",
+                    "endCaptures": {
+                        "0": {
+                            "name": "keyword.block.start.solution"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#main"
+                        }
+                    ]
+                },
+                {
+                    "name": "meta.parens.solution",
+                    "begin": "\\(",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.section.parens.begin.solution"
+                        }
+                    },
+                    "end": "\\)",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.section.parens.end.solution"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#strings"
+                        },
+                        {
+                            "include": "#variables"
+                        }
+                    ]
+                }
+            ]
+        },
+        "variables": {
+            "patterns": [
+                {
+                    "name": "meta.generic.variable.other.solution",
+                    "match": "(?<![.|])([A-Za-z]+)\\s*(=)",
+                    "captures": {
+                        "0": {
+                            "name": "variable.other.solution"
+                        },
+                        "1": {
+                            "name": "punctuation.separator.declaration.solution"
+                        }
+                    }
+                },
+                {
+                    "name": "meta.generic.variable.property.solution",
+                    "match": "([A-Za-z]+)\\s*(\\|)",
+                    "captures": {
+                        "0": {
+                            "name": "variable.language.property.solution"
+                        },
+                        "1": {
+                            "name": "punctuation.separator.property.solution"
+                        }
+                    }
+                },
+                {
+                    "name": "variable.other.member.solution",
+                    "match": "(?<=[.|])\\s*[A-Za-z0-9 ]+"
+                },
+                {
+                    "name": "variable.language.setting.solution",
+                    "match": "(?:pre|post)Solution"
+                },
+                {
+                    "name": "variable.other.solution",
+                    "match": "[A-Za-z]+"
+                }
+            ]
+        },
+        "strings": {
+            "patterns": [
+                {
+                    "name": "string.quoted.double.solution",
+                    "begin": "\"",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.other.string.begin.solution"
+                        }
+                    },
+                    "end": "\"",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.other.string.end.solution"
+                        }
+                    }
+                },
+                {
+                    "name": "string.quoted.other.guid.solution",
+                    "begin": "{",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "punctuation.other.guid.begin.solution"
+                        }
+                    },
+                    "end": "}",
+                    "endCaptures": {
+                        "0": {
+                            "name": "punctuation.other.guid.end.solution"
+                        }
+                    }
+                }
+            ]
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "name": "string.unquoted.version.solution",
+                    "match": "\\d+(?:\\.\\d+)*"
+                }
+            ]
+        },
+        "booleans": {
+            "patterns": [
+                {
+                    "name": "constant.language.boolean.solution",
+                    "match": "TRUE|FALSE"
+                }
+            ]
+        },
+        "punct": {
+            "patterns": [
+                {
+                    "name": "punctuation.separator.attributes.solution",
+                    "match": ","
+                },
+                {
+                    "name": "punctuation.accessor.solution",
+                    "match": "."
+                }
+            ]
+        }
+    }
+}
