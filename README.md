@@ -1,5 +1,5 @@
 
-> **⚠️⚠️⚠️ Microsoft has created a new extension which provides an official solution explorer for Visual Studio Code. You can find more information [here](https://code.visualstudio.com/docs/csharp/project-management).**
+> **⚠️ Please note, while there is another extension offering a solution explorer for Visual Studio Code, it's important to clarify that this is not the official Microsoft extension. For the official extension, you can visit [this link](https://code.visualstudio.com/docs/csharp/project-management).**
 
 # vscode-solution-explorer
 
