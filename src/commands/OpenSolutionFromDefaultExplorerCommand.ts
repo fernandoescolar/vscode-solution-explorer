@@ -1,10 +1,11 @@
 import { IEventAggregator } from "@events";
-import { Action, OpenSolution } from "@actions";
+import { Action, Focus, OpenSolution } from "@actions";
+import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { SingleItemActionsFromDefaultExplorerCommand } from "./SingleItemActionsFromDefaultExplorerCommand";
 
 
 export class OpenSolutionFromDefaultExplorerCommand extends SingleItemActionsFromDefaultExplorerCommand {
-    constructor(private readonly eventAggregator: IEventAggregator) {
+    constructor(private readonly eventAggregator: IEventAggregator, private readonly provider: SolutionExplorerProvider) {
         super('Open Solution');
     }
 
@@ -13,6 +14,9 @@ export class OpenSolutionFromDefaultExplorerCommand extends SingleItemActionsFro
     }
 
     public async getActions(item: string): Promise<Action[]> {
-        return [new OpenSolution(item, this.eventAggregator)];
+        return [
+            new OpenSolution(item, this.eventAggregator),
+            new Focus(this.provider)
+        ];
     }
 }
