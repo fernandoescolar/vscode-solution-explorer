@@ -23,6 +23,7 @@ export * from "./MoveFileUpCommand";
 export * from "./MoveFileDownCommand";
 export * from "./MoveToSolutionFolderCommand";
 export * from "./OpenFileCommand";
+export * from "./OpenFileAndFocusCommand";
 export * from "./OpenSolutionCommand";
 export * from "./OpenSolutionFromDefaultExplorerCommand";
 export * from "./PackCommand";

@@ -99,6 +99,12 @@
         "icon": "$(edit)"
       },
       {
+        "command": "solutionExplorer.openFileAndFocus",
+        "title": "Open File",
+        "category": "Solution Explorer",
+        "icon": "$(edit)"
+      },
+      {
         "command": "solutionExplorer.renameFile",
         "title": "Rename",
         "category": "Solution Explorer"
@@ -730,6 +736,11 @@
         "command": "solutionExplorer.focus",
         "key": "ctrl+alt+l",
         "mac": "ctrl+cmd+l"
+      },
+      {
+        "command": "solutionExplorer.openFileAndFocus",
+        "key": "ctrl+enter",
+        "mac": "ctrl+enter"
       }
     ],
     "languages": [

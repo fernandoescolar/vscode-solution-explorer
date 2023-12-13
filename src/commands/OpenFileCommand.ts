@@ -38,3 +38,4 @@ export class OpenFileCommand extends SingleItemActionsCommand {
         return result;
     }
 }
+

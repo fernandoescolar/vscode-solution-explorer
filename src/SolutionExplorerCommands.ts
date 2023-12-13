@@ -102,6 +102,9 @@ export class SolutionExplorerCommands {
         this.commands['openFile'] = [new cmds.OpenFileCommand(),
             [ ...both(ContextValues.solution, ContextValues.project), ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
+        this.commands['openFileAndFocus'] = [new cmds.OpenFileAndFocusCommand(),
+                [ ...both(ContextValues.solution, ContextValues.project), ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
+
         this.commands['pack'] = [new cmds.PackCommand(),
             cps(ContextValues.solution, ContextValues.project)];
 
@@ -159,7 +162,7 @@ export class SolutionExplorerCommands {
         this.commands['openSolution'] = [new cmds.OpenSolutionCommand(eventAggregator),
             undefined];
 
-        this.commands['openSelectedSolution'] = [new cmds.OpenSolutionFromDefaultExplorerCommand(eventAggregator),
+        this.commands['openSelectedSolution'] = [new cmds.OpenSolutionFromDefaultExplorerCommand(eventAggregator, provider),
                 undefined];
 
         this.commands['deleteMultiple'] = [new cmds.DeleteUnifiedCommand(),
