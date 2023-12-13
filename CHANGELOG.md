@@ -2,6 +2,18 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.8.5
+
+Bugfix #274: Trying to solve "Element with id is already registered" error.
+
+Enhancement #277: Adding new command to open a file and focus the document using ctrl+enter keybinding.
+
+Enhancement #289: Add context option to Open in Solution Explorer
+
+Enhancement #295: Syntax coloring for .sln files
+
+Renaming the extension terminal from "dotnet" to "solution-explorer" to avoid conflicts with other extensions.
+
 ## 0.8.4
 
 Bugfix #291: allow move folder up/down, thanks to [Spencer Farley](https://github.com/farlee2121)
