@@ -108,10 +108,10 @@
                     "name": "meta.generic.variable.other.solution",
                     "match": "(?<![.|])([A-Za-z]+)\\s*(=)",
                     "captures": {
-                        "0": {
+                        "1": {
                             "name": "variable.other.solution"
                         },
-                        "1": {
+                        "2": {
                             "name": "punctuation.separator.declaration.solution"
                         }
                     }
@@ -120,10 +120,10 @@
                     "name": "meta.generic.variable.property.solution",
                     "match": "([A-Za-z]+)\\s*(\\|)",
                     "captures": {
-                        "0": {
+                        "1": {
                             "name": "variable.language.property.solution"
                         },
-                        "1": {
+                        "2": {
                             "name": "punctuation.separator.property.solution"
                         }
                     }
@@ -161,18 +161,7 @@
                 },
                 {
                     "name": "string.quoted.other.guid.solution",
-                    "begin": "{",
-                    "beginCaptures": {
-                        "0": {
-                            "name": "punctuation.other.guid.begin.solution"
-                        }
-                    },
-                    "end": "}",
-                    "endCaptures": {
-                        "0": {
-                            "name": "punctuation.other.guid.end.solution"
-                        }
-                    }
+                    "match": "\\{\\h{8}(?:-\\h{4}){3}-\\h{12}\\}"
                 }
             ]
         },
