@@ -734,11 +734,13 @@
       },
       {
         "command": "solutionExplorer.focus",
+        "when": "editorTextFocus",
         "key": "ctrl+alt+l",
         "mac": "ctrl+cmd+l"
       },
       {
         "command": "solutionExplorer.openFileAndFocus",
+        "when": "focusedView in solutionexplorer.viewTypes",
         "key": "ctrl+enter",
         "mac": "ctrl+enter"
       }
