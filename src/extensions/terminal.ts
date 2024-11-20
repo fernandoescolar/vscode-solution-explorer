@@ -17,9 +17,12 @@ function ensureTerminal(path: string): vscode.Terminal {
 
 export function execute(args: string[], path: string): void {
     const terminal = ensureTerminal(path);
-    terminal.sendText([ ...args ].join(' '), true);
-
-    if (config.getShowTerminalOnCommand()) {
-        terminal.show();
-    }
+    // This is a workaround to ensure the terminal is ready to receive the command
+    // If we don't wait a little bit, with some commands we kill the terminal
+    setTimeout(() => {
+        terminal.sendText([ ...args ].join(' '), true);
+        if (config.getShowTerminalOnCommand()) {
+            terminal.show();
+        }
+    }, 1);
 }
