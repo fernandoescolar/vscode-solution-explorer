@@ -2,7 +2,7 @@ import { PackageReference } from "@core/Projects";
 import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues, TreeItemFactory } from "@tree";
 
 export class ProjectReferencedPackageTreeItem extends TreeItem {
-    constructor(context: TreeItemContext, private pkgRef: PackageReference, private dependencies: PackageReference[], contextValue: string = ContextValues.projectReferencedPackage) {
+    constructor(context: TreeItemContext, pkgRef: PackageReference, private dependencies: PackageReference[], contextValue: string = ContextValues.projectReferencedPackage) {
         super(
             context,
             pkgRef.name,
@@ -11,6 +11,7 @@ export class ProjectReferencedPackageTreeItem extends TreeItem {
             pkgRef.name
         );
         this.description = pkgRef.version;
+        this.id += pkgRef.version;
         this.allowIconTheme = false;
         this.addContextValueSuffix();
     }

@@ -64,6 +64,14 @@ export abstract class TreeItem extends vscode.TreeItem {
 			let childContext = this.context.copy(undefined, this);
 			try {
 				this.children = await this.createChildren(childContext);
+				// clean duplicated ids
+				let ids: string[] = [];
+				this.children = this.children.filter(c => {
+					const i = c.id || '';
+					if (ids.indexOf(i) >= 0) { return false; }
+					ids.push(i);
+					return true;
+				});
 			} catch {
 				this.children = [];
 			}
