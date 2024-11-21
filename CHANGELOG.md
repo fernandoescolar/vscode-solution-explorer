@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.x.x
+
+Fixing duplicated items in the tree view: "Element with id is already registered" error
+
+Fixing issue with terminal after executing the update all packages in project command.
+
+Adding new nuget package management inline in a .csproj file.
+
 ## 0.8.6
 
 Bugfix #296: Ctr+Enter hotkey should have a "when" condition to not mess with other hotkeys

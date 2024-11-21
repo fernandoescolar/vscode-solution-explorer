@@ -84,6 +84,9 @@ export class SolutionExplorerCommands {
         this.commands['installTemplates'] = [new cmds.InstallWorkspaceTemplateFilesCommand(templateEngineCollection),
             both(ContextValues.solution)];
 
+        this.commands['invalidateNugetCache'] = [new cmds.InvalidateNugetCacheCommand(),
+            undefined];
+
         this.commands['moveFile'] = [new cmds.MoveCommand(provider),
             [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 

@@ -27,8 +27,10 @@ Table of Content:
     - [Create, delete, rename or move solution, solution folders and projects](#create-delete-rename-or-move-solution-solution-folders-and-projects)
     - [Add or remove nuget packages](#add-or-remove-nuget-packages)
     - [Update all nuget packages versions](#update-all-nuget-packages-versions)
+    - [Inline nuget package version management (csproj)](#inline-nuget-package-version-management-csproj)
     - [Add or remove project references](#add-or-remove-project-references)
     - [Create file templates](#create-file-templates)
+    - [Solution syntax highlighting](#solution-syntax-highlighting)
   - [Extension Settings](#extension-settings)
           - [Example](#example)
   - [Known Issues](#known-issues)
@@ -204,6 +206,16 @@ Only available when the project is of kind CPS (dotnet core).
 
 ![Update all nuget packages versions](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-update-packages-versions.gif)
 
+### Inline nuget package version management (csproj)
+
+Only available when the project is of kind CPS (dotnet core) c# projects.
+
+![Inline nuget package version management (csproj)](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-csproj-nuget-management.gif)
+
+If you open a `.csproj` file you can see if the nuget packages versions are out-dated. You can update them by clicking on the `💡` icon and select the version you want to use. It also adds code completions for packages names and versions.
+
+**Notes**: This feature uses caching to avoid unnecessary calls to the nuget server. If you want to force the cache update you can use the `Solution Explorer: Invalidate Nuget Cache` command.
+
 ### Add or remove project references
 
 Only available when the project is of kind CPS (dotnet core).
@@ -221,6 +233,12 @@ You can customize the templates for your project. First of all click with the ri
 We strongly recommend you to update your templates after updating this extension:
 
 ![Install Or Update templates](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-install-templates.gif)
+
+### Solution syntax highlighting
+
+This extension adds syntax highlighting to `.sln` files.
+
+![Solution syntax highlighting](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-sln-syntax.png)
 
 ## Extension Settings
 

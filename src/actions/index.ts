@@ -20,6 +20,7 @@ export * from "./DeleteSolutionFolder";
 export * from "./DeleteSolutionFile";
 export * from "./Focus";
 export * from "./InstallWorkspaceTemplateFiles";
+export * from "./InvalidateNugetCache";
 export * from "./MoveProject";
 export * from "./MoveProjectFile";
 export * from "./MoveProjectFileUp";

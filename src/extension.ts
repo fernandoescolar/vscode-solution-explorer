@@ -11,6 +11,7 @@ import { SolutionExplorerCommands } from "./SolutionExplorerCommands";
 import { SolutionExplorerFileWatcher } from "./SolutionExplorerFileWatcher";
 import { SolutionExplorerOutputChannel } from "./SolutionExplorerOutputChannel";
 import { OmnisharpIntegrationService } from "./OmnisharpIntegrationService";
+import { LanguageExtensions } from "./language";
 import { TemplateEngineCollection } from "@templates";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -27,6 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
     const solutionExplorerFileWatcher = new SolutionExplorerFileWatcher(eventAggregator);
     const solutionExplorerOutputChannel = new SolutionExplorerOutputChannel(eventAggregator);
     const omnisharpIntegrationService = new OmnisharpIntegrationService(eventAggregator);
+    const nugetCompletionItemProvider = new LanguageExtensions(context);
 
     register(context, config);
     register(context, eventAggregator);
@@ -41,6 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
     register(context, solutionExplorerFileWatcher);
     register(context, solutionExplorerOutputChannel);
     register(context, omnisharpIntegrationService);
+    register(context, nugetCompletionItemProvider);
 }
 
 export function deactivate() {
