@@ -1,11 +1,11 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class RemovePackageReference extends CustomTerminalAction {
+export class DotNetRemovePackageReference extends CustomTerminalAction {
     constructor(private readonly projectPath: string, private readonly packageId: string) {
         super({
             name: "removePackageReferenceFromProject",
             parameters: { projectPath, packageId },
-            workingFolder: RemovePackageReference.getWorkingPath(projectPath)
+            workingFolder: DotNetRemovePackageReference.getWorkingPath(projectPath)
         });
     }
 

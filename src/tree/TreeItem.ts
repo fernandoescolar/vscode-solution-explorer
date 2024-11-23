@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as path from "@extensions/path";
 import * as config from "@extensions/config";
 import { fasthash } from "@extensions/hash";
-import { ProjectInSolution, SolutionFile } from "@core/Solutions";
+import { Solution, SolutionItem } from "@core/Solutions";
 import { Project } from "@core/Projects";
 import * as TreeItemIconProvider from "./TreeItemIconProvider";
 import { TreeItemContext } from "./TreeItemContext";
@@ -20,7 +20,7 @@ export abstract class TreeItem extends vscode.TreeItem {
         public collapsibleState: vscode.TreeItemCollapsibleState,
 		public contextValue: string,
 		public path?: string,
-		public readonly projectInSolution?: ProjectInSolution
+		public readonly solutionItem?: SolutionItem
 	) {
 		super(label, collapsibleState);
 		this.createId();
@@ -38,7 +38,7 @@ export abstract class TreeItem extends vscode.TreeItem {
 		return this.context.parent;
 	}
 
-	public get solution(): SolutionFile {
+	public get solution(): Solution {
 		return this.context.solution;
 	}
 

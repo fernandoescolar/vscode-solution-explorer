@@ -1,14 +1,14 @@
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import { Action, ActionContext } from "./base/Action";
-import { ProjectInSolution, SolutionFile } from "@core/Solutions";
+import { SolutionItem, Solution } from "@core/Solutions";
 
-export class DeleteSolutionFile implements Action {
-    constructor(private readonly solution: SolutionFile, private readonly projectInSolution: ProjectInSolution, private filePath: string) {
+export class SlnDeleteSolutionFile implements Action {
+    constructor(private readonly solution: Solution, private readonly solutionItem: SolutionItem, private filePath: string) {
     }
 
     public toString(): string {
-        return `Delete file ${this.filePath} from folder ${this.projectInSolution.projectName} in solution ${this.solution.name}`;
+        return `Delete file ${this.filePath} from folder ${this.solutionItem.name} in solution ${this.solution.name}`;
     }
 
     public async execute(context: ActionContext): Promise<void> {
@@ -26,7 +26,7 @@ export class DeleteSolutionFile implements Action {
         let lines: string[] = data.split('\n');
         let lineIndex = -1, projectLineIndexStart = -1, projectLineIndexEnd = -1, hasSection = false;
         lines.some((line, index, arr) => {
-            if (projectLineIndexStart < 0 && line.trim().startsWith('Project(') && line.indexOf('"' + this.projectInSolution.projectGuid + '"') > 0) {
+            if (projectLineIndexStart < 0 && line.trim().startsWith('Project(') && line.indexOf('"' + this.solutionItem.id + '"') > 0) {
                 projectLineIndexStart = index;
             }
 

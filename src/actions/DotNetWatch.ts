@@ -1,11 +1,11 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class Watch extends CustomTerminalAction {
+export class DotNetWatch extends CustomTerminalAction {
     constructor(private readonly projectPath: string) {
         super({
             name: "watch",
             parameters: { projectPath },
-            workingFolder: Watch.getWorkingPath(projectPath)
+            workingFolder: DotNetWatch.getWorkingPath(projectPath)
         });
     }
 

@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "@extensions/fs";
-import { ProjectInSolution, SolutionFile, SolutionProjectType } from "@core/Solutions";
+import { SolutionItem, Solution, SolutionFolder } from "@core/Solutions";
 import { Action, ActionContext } from "./base/Action";
 
-export class CreateSolutionFolder implements Action {
-    constructor(private readonly solution: SolutionFile, private readonly folderName: string, private readonly projectInSolution?: ProjectInSolution) {
+export class SlnCreateSolutionFolder implements Action {
+    constructor(private readonly solution: Solution, private readonly folderName: string, private readonly parentItem?: SolutionItem) {
     }
 
     public toString(): string {
@@ -14,12 +14,12 @@ export class CreateSolutionFolder implements Action {
     public async execute(context: ActionContext): Promise<void> {
         if (context.cancelled) { return; }
 
-        if (!this.projectInSolution) {
-            if (this.solution.projects.findIndex(p => p.projectName === this.folderName && p.projectType === SolutionProjectType.solutionFolder && !p.parentProjectGuid) >= 0) {
+        if (!this.parentItem) {
+            if (this.solution.getFolders().some(p => p.name === this.folderName)) {
                 throw new Error('Can not create solution folder, the folder already exists');
             }
         } else {
-            if (this.solution.projects.findIndex(p => p.projectName === this.folderName && p.projectType === SolutionProjectType.solutionFolder && p.parentProjectGuid === this.projectInSolution?.projectGuid) >= 0) {
+            if (this.parentItem instanceof SolutionFolder && this.parentItem.getFolders().some(p => p.name === this.folderName)) {
                 throw new Error('Can not create solution folder, the folder already exists');
             }
         }
@@ -38,12 +38,12 @@ export class CreateSolutionFolder implements Action {
 
                 return false;
             });
-            if (this.projectInSolution && done) {
+            if (this.parentItem && done) {
                 let endGlobalIndex: number = -1;
                 done = lines.some((line, index, arr) => {
-                    if (this.projectInSolution && line.trim() === 'GlobalSection(NestedProjects) = preSolution') {
+                    if (this.parentItem && line.trim() === 'GlobalSection(NestedProjects) = preSolution') {
                         lines.splice(index + 1, 0,
-                            '		{' + guid + '} = ' + this.projectInSolution.projectGuid + '\r'
+                            '		{' + guid + '} = ' + this.parentItem.id + '\r'
                         );
                         return true;
                     }
@@ -58,7 +58,7 @@ export class CreateSolutionFolder implements Action {
                 if (!done && endGlobalIndex > 0) {
                     lines.splice(endGlobalIndex, 0,
                         '	GlobalSection(NestedProjects) = preSolution\r',
-                        '		{' + guid + '} = ' + this.projectInSolution.projectGuid + '\r',
+                        '		{' + guid + '} = ' + this.parentItem.id + '\r',
                         '	EndGlobalSection\r');
                     done = true;
                 }

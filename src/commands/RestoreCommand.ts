@@ -1,5 +1,5 @@
 import { ContextValues, TreeItem } from "@tree";
-import { Action, Restore } from "@actions";
+import { Action, DotNetRestore } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class RestoreCommand extends SingleItemActionsCommand {
@@ -14,6 +14,6 @@ export class RestoreCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
-        return [ new Restore(item.path) ];
+        return [ new DotNetRestore(item.path) ];
     }
 }

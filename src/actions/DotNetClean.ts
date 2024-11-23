@@ -1,15 +1,15 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class Build extends CustomTerminalAction {
+export class DotNetClean extends CustomTerminalAction {
     constructor(private readonly projectPath: string) {
         super({
-            name: "build",
+            name: "clean",
             parameters: { projectPath  },
-            workingFolder: Build.getWorkingPath(projectPath)
+            workingFolder: DotNetClean.getWorkingPath(projectPath)
         });
     }
 
     public toString(): string {
-        return `Build project ${this.projectPath}`;
+        return `Clean project ${this.projectPath}`;
     }
 }

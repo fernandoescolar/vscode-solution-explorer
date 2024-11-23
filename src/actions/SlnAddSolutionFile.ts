@@ -2,16 +2,16 @@ import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import * as dialogs from "@extensions/dialogs";
 import { Action, ActionContext } from "./base/Action";
-import { ProjectInSolution, SolutionFile } from "@core/Solutions";
+import { SolutionItem, Solution } from "@core/Solutions";
 
 type CopyFileOptions = "Yes" | "Skip" | "Cancel";
 
-export class AddSolutionFile implements Action {
-    constructor(private readonly solution: SolutionFile, private readonly projectInSolution: ProjectInSolution, private filePath: string) {
+export class SlnAddSolutionFile implements Action {
+    constructor(private readonly solution: Solution, private readonly solutionItem: SolutionItem, private filePath: string) {
     }
 
     public toString(): string {
-        return `Add file ${this.filePath} to folder ${this.projectInSolution.projectName} in solution ${this.solution.name}`;
+        return `Add file ${this.filePath} to folder ${this.solutionItem.name} in solution ${this.solution.name}`;
     }
 
     public async execute(context: ActionContext): Promise<void> {
@@ -82,7 +82,7 @@ export class AddSolutionFile implements Action {
         const lines: string[] = data.split('\n');
         let projectLineIndexStart = -1, lineIndex = -1, hasSection = false;
         lines.some((line, index, arr) => {
-            if (projectLineIndexStart < 0 && line.trim().startsWith('Project(') && line.indexOf('"' + this.projectInSolution.projectGuid + '"') > 0) {
+            if (projectLineIndexStart < 0 && line.trim().startsWith('Project(') && line.indexOf('"' + this.solutionItem.id + '"') > 0) {
                 projectLineIndexStart = index;
             }
 

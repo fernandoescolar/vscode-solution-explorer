@@ -1,7 +1,7 @@
 import * as dialogs from '@extensions/dialogs';
 import * as nuget from '@extensions/nuget';
 import { TreeItem } from "@tree";
-import { Action, AddPackageReference } from "@actions";
+import { Action, DotNetAddPackageReference } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class AddPackageCommand extends SingleItemActionsCommand {
@@ -30,7 +30,7 @@ export class AddPackageCommand extends SingleItemActionsCommand {
             return [];
         }
 
-        return [ new AddPackageReference(item.project.fullPath, parameters[1], parameters[2]) ];
+        return [ new DotNetAddPackageReference(item.project.fullPath, parameters[1], parameters[2]) ];
     }
 
     private async getNugetFeeds(projectFullPath: string): Promise<string[]> {

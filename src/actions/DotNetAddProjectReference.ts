@@ -1,15 +1,15 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class RemoveProjectReference extends CustomTerminalAction {
+export class DotNetAddProjectReference extends CustomTerminalAction {
     constructor(private readonly projectPath: string, private readonly referencedProjectPath: string) {
         super({
-            name: "removeProjectReferenceFromProject",
+            name: "addProjectReferenceToProject",
             parameters: { projectPath, referencedProjectPath },
-            workingFolder: RemoveProjectReference.getWorkingPath(projectPath)
+            workingFolder: DotNetAddProjectReference.getWorkingPath(projectPath)
         });
     }
 
     public toString(): string {
-        return `Remove project reference ${this.referencedProjectPath} from project ${this.projectPath}`;
+        return `Add project reference ${this.referencedProjectPath} to project ${this.projectPath}`;
     }
 }

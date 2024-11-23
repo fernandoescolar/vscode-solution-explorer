@@ -1,15 +1,15 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class Pack extends CustomTerminalAction {
+export class DotNetRun extends CustomTerminalAction {
     constructor(private readonly projectPath: string) {
         super({
-            name: "pack",
+            name: "run",
             parameters: { projectPath },
-            workingFolder: Pack.getWorkingPath(projectPath)
+            workingFolder: DotNetRun.getWorkingPath(projectPath)
         });
     }
 
     public toString(): string {
-        return `Pack project ${this.projectPath}`;
+        return `Run project ${this.projectPath}`;
     }
 }

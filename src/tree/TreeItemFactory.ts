@@ -1,6 +1,6 @@
 import * as path from "@extensions/path";
 import { getItemNesting } from "@extensions/config";
-import { ProjectInSolution, SolutionProjectType, SolutionFile } from "@core/Solutions";
+import { Solution, SolutionProject, SolutionFolder, SolutionItem } from "@core/Solutions";
 import { PackageReference, Project, ProjectFactory, ProjectItemEntry } from "@core/Projects";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree/TreeItem";
@@ -16,7 +16,7 @@ import { StandardProjectTreeItem } from "@tree/items/standard/StandardProjectTre
 import { SolutionFileTreeItem } from "@tree/items/SolutionFileTreeItem";
 import { ProjectReferencedPackageTreeItem } from "./items/ProjectReferencedPackageTreeItem";
 
-export async function createFromSolution(provider: SolutionExplorerProvider, solution: SolutionFile, workspaceRoot: string): Promise<TreeItem> {
+export async function createFromSolution(provider: SolutionExplorerProvider, solution: Solution, workspaceRoot: string): Promise<TreeItem> {
     let context = new TreeItemContext(provider, solution, workspaceRoot);
     let treeItem = new SolutionTreeItem(context);
     await treeItem.getChildren();
@@ -24,29 +24,24 @@ export async function createFromSolution(provider: SolutionExplorerProvider, sol
     return treeItem;
 }
 
-export async function createItemsFromSolution(context: TreeItemContext, solution: SolutionFile, projectInSolution?: ProjectInSolution): Promise<TreeItem[]> {
+export async function createItemsFromSolution(context: TreeItemContext, solution: Solution, solutionItem?: SolutionItem): Promise<TreeItem[]> {
     let result: TreeItem[] = [];
-    let folders: ProjectInSolution[] = [];
-    let projects: ProjectInSolution[] = [];
-    solution.projects.forEach(project => {
-        if (!projectInSolution && project.parentProjectGuid) { return false; }
-        if (projectInSolution && project.parentProjectGuid !== projectInSolution.projectGuid) { return false; }
-        if (project.projectType === SolutionProjectType.solutionFolder) {
-            folders.push(project);
-        } else {
-            projects.push(project);
-        }
-    });
+    let folders: SolutionFolder[] = solution.getFolders();
+    let projects: SolutionProject[] = solution.getProjects();
+    if (solutionItem instanceof SolutionFolder) {
+        folders = solutionItem.getFolders();
+        projects = solutionItem.getProjects();
+    }
 
     folders.sort((a, b) => {
-        let x = a.projectName.toLowerCase();
-        let y = b.projectName.toLowerCase();
+        let x = a.name.toLowerCase();
+        let y = b.name.toLowerCase();
         return x < y ? -1 : x > y ? 1 : 0;
     });
 
     projects.sort((a, b) => {
-        let x = a.projectName.toLowerCase();
-        let y = b.projectName.toLowerCase();
+        let x = a.name.toLowerCase();
+        let y = b.name.toLowerCase();
         return x < y ? -1 : x > y ? 1 : 0;
     });
 
@@ -58,18 +53,18 @@ export async function createItemsFromSolution(context: TreeItemContext, solution
         result.push(await createFromProject(context, projects[i]));
     }
 
-    if (projectInSolution) {
-        Object.keys(projectInSolution.solutionItems).forEach(k => {
-            const fullpath = path.join(solution.folderPath, projectInSolution.solutionItems[k]);
-            result.push(new SolutionFileTreeItem(context, k, fullpath, projectInSolution));
+    if (solutionItem instanceof SolutionFolder) {
+        Object.keys(solutionItem.solutionFiles).forEach(k => {
+            const fullpath = path.join(solution.folderPath, solutionItem.solutionFiles[k]);
+            result.push(new SolutionFileTreeItem(context, k, fullpath, solutionItem));
         });
     }
 
     return result;
 }
 
-async function createFromProject(context: TreeItemContext, project: ProjectInSolution): Promise<TreeItem> {
-    if (project.projectType === SolutionProjectType.solutionFolder) {
+async function createFromProject(context: TreeItemContext, project: SolutionItem): Promise<TreeItem> {
+    if (project instanceof SolutionFolder) {
         const treeItem = await SolutionFolderTreeItem.create(context, project);
         await treeItem.getChildren();
         return treeItem;

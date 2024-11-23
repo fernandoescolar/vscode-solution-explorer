@@ -1,5 +1,5 @@
 import { ContextValues, TreeItem } from "@tree";
-import { Action, Clean } from "@actions";
+import { Action, DotNetClean } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class CleanCommand extends SingleItemActionsCommand {
@@ -14,6 +14,6 @@ export class CleanCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
-        return [ new Clean(item.path) ];
+        return [ new DotNetClean(item.path) ];
     }
 }

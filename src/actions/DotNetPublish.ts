@@ -1,11 +1,11 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class Publish extends CustomTerminalAction {
+export class DotNetPublish extends CustomTerminalAction {
     constructor(private readonly projectPath: string) {
         super({
             name: "publish",
             parameters: { projectPath },
-            workingFolder: Publish.getWorkingPath(projectPath)
+            workingFolder: DotNetPublish.getWorkingPath(projectPath)
         });
     }
 

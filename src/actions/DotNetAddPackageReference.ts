@@ -1,12 +1,12 @@
 import { TerminalCommand } from "@extensions/defaultTerminalCommands";
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class AddPackageReference extends CustomTerminalAction {
+export class DotNetAddPackageReference extends CustomTerminalAction {
     constructor(private readonly projectPath: string, private readonly packageId: string, packageVersion?: string) {
         super({
-            name: AddPackageReference.getTerminalCommand(projectPath, packageId, packageVersion),
+            name: DotNetAddPackageReference.getTerminalCommand(projectPath, packageId, packageVersion),
             parameters: { projectPath, packageId, packageVersion: packageVersion || "" },
-            workingFolder: AddPackageReference.getWorkingPath(projectPath)
+            workingFolder: DotNetAddPackageReference.getWorkingPath(projectPath)
         });
     }
 

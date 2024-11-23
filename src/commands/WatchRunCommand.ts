@@ -1,5 +1,5 @@
 import { ContextValues, TreeItem } from "@tree";
-import { Action, Watch } from "@actions";
+import { Action, DotNetWatch } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class WatchRunCommand extends SingleItemActionsCommand {
@@ -14,6 +14,6 @@ export class WatchRunCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
-        return [ new Watch(item.path) ];
+        return [ new DotNetWatch(item.path) ];
     }
 }

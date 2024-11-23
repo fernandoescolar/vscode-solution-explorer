@@ -1,11 +1,11 @@
-import { ProjectInSolution } from "@core/Solutions";
+import { SolutionItem } from "@core/Solutions";
 import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } from "@tree";
 import { ErrorTreeItem } from "./ErrorTreeItem";
 
 export class UnknownProjectTreeItem extends TreeItem {
 
-    constructor(context: TreeItemContext, projectInSolution: ProjectInSolution) {
-        super(context, projectInSolution.projectName, TreeItemCollapsibleState.Collapsed, ContextValues.project, projectInSolution.fullPath, projectInSolution);
+    constructor(context: TreeItemContext, solutionItem: SolutionItem) {
+        super(context, solutionItem.name, TreeItemCollapsibleState.Collapsed, ContextValues.project, solutionItem.fullPath, solutionItem);
         this.allowIconTheme = false;
     }
 

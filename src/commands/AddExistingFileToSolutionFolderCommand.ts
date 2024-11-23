@@ -1,7 +1,8 @@
 import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
-import { Action, AddSolutionFile } from "@actions";
+import { Action, SlnAddSolutionFile } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
+import { SolutionType } from "@core/Solutions";
 
 export class AddExistingFileToSolutionFolderCommand extends SingleItemActionsCommand {
     constructor() {
@@ -9,16 +10,20 @@ export class AddExistingFileToSolutionFolderCommand extends SingleItemActionsCom
     }
 
     public shouldRun(item: TreeItem | undefined): boolean {
-        return !!item && !!item.projectInSolution && (item.contextValue === ContextValues.solutionFolder);
+        return !!item && !!item.solutionItem && (item.contextValue === ContextValues.solutionFolder);
     }
 
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         const filePath = await dialogs.openFile('Select a file to add');
-        if (!item || !item.solution || !item.projectInSolution || !filePath) {
+        if (!item || !item.solution || !item.solutionItem || !filePath) {
             return [];
         }
 
-        return [ new AddSolutionFile(item.solution, item.projectInSolution, filePath) ];
+        if (item.solution.type === SolutionType.Sln) {
+            return [ new SlnAddSolutionFile(item.solution, item.solutionItem, filePath) ];
+        }
+
+        return [];
     }
 }
 

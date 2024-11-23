@@ -1,5 +1,5 @@
 import { ContextValues, TreeItem } from "@tree";
-import { Action, Pack } from "@actions";
+import { Action, DotNetPack } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class PackCommand extends SingleItemActionsCommand {
@@ -14,6 +14,6 @@ export class PackCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
-        return [ new Pack(item.path) ];
+        return [ new DotNetPack(item.path) ];
     }
 }

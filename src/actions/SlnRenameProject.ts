@@ -3,12 +3,12 @@ import * as fs from "@extensions/fs";
 import * as dialogs from "@extensions/dialogs";
 import { Project } from "@core/Projects";
 import { ActionContext } from "./base/Action";
-import { SolutionFile } from "@core/Solutions";
-import { RenameSolutionFolder } from "./RenameSolutionFolder";
+import { Solution } from "@core/Solutions";
+import { SlnRenameSolutionFolder } from "./SlnRenameSolutionFolder";
 
 
-export class RenameProject extends RenameSolutionFolder {
-    constructor(solution: SolutionFile, private readonly project: Project, private readonly projectname: string, private readonly newprojectname: string) {
+export class SlnRenameProject extends SlnRenameSolutionFolder {
+    constructor(solution: Solution, private readonly project: Project, private readonly projectname: string, private readonly newprojectname: string) {
         super(solution, projectname, newprojectname);
     }
 

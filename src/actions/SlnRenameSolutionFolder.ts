@@ -1,10 +1,10 @@
 import * as fs from "@extensions/fs";
 import { Action, ActionContext } from "./base/Action";
-import { SolutionFile } from "@core/Solutions";
+import { Solution } from "@core/Solutions";
 
 
-export class RenameSolutionFolder implements Action {
-    constructor(protected readonly solution: SolutionFile, private readonly folderName: string, private readonly newFolderName: string) {
+export class SlnRenameSolutionFolder implements Action {
+    constructor(protected readonly solution: Solution, private readonly folderName: string, private readonly newFolderName: string) {
     }
 
     public toString(): string {

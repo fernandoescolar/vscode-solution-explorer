@@ -1,11 +1,11 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class Test extends CustomTerminalAction {
+export class DotNetTest extends CustomTerminalAction {
     constructor(private readonly projectPath: string) {
         super({
             name: "test",
             parameters: { projectPath },
-            workingFolder: Test.getWorkingPath(projectPath)
+            workingFolder: DotNetTest.getWorkingPath(projectPath)
         });
     }
 

@@ -1,8 +1,8 @@
 import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
-import { SolutionProjectType, ProjectInSolution, SolutionFile } from "@core/Solutions";
-import { Action, MoveProject, MoveSolutionFolder } from "@actions";
+import { Solution, SolutionType } from "@core/Solutions";
+import { Action, SlnMoveProject, SlnMoveSolutionFolder } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
@@ -11,7 +11,7 @@ export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
     }
 
     public shouldRun(item: TreeItem | undefined): boolean {
-        return !!item && !!item.solution &&  !!item.projectInSolution;
+        return !!item && !!item.solution &&  !!item.solutionItem;
     }
 
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
@@ -20,26 +20,24 @@ export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
         const folder = await dialogs.selectOption('Select folder...', () => this.getFolders(item.solution));
         if (!folder) { return []; }
 
-        const projectInSolution = item.projectInSolution;
-        if (!projectInSolution) { return []; }
+        const solutionItem = item.solutionItem;
+        if (!solutionItem) { return []; }
 
-        if (ContextValues.matchAnyLanguage(ContextValues.project, item.contextValue)) {
-            return [ new MoveProject(item.solution, projectInSolution, folder) ];
+        if (item.solution.type === SolutionType.Sln && ContextValues.matchAnyLanguage(ContextValues.project, item.contextValue)) {
+            return [ new SlnMoveProject(item.solution, solutionItem, folder) ];
         }
 
-        if (ContextValues.matchAnyLanguage(ContextValues.solutionFolder, item.contextValue)) {
-            return [ new MoveSolutionFolder(item.solution, projectInSolution, folder) ];
+        if (item.solution.type === SolutionType.Sln && ContextValues.matchAnyLanguage(ContextValues.solutionFolder, item.contextValue)) {
+            return [ new SlnMoveSolutionFolder(item.solution, solutionItem, folder) ];
         }
 
         return [];
     }
 
-    private getFolders(solution: SolutionFile): Promise<{[id:string]: string}> {
+    private getFolders(solution: Solution): Promise<{[id:string]: string}> {
         let folders: { id: string, name: string }[] = [];
-        solution.projects.forEach(p => {
-            if (p.projectType === SolutionProjectType.solutionFolder) {
-                folders.push( { id: p.projectGuid, name: this.getFolderName(p, solution) });
-            }
+        solution.getAllFolders().forEach(p => {
+            folders.push( { id: p.id, name: p.getFullDisplayName() });
         });
 
         folders.sort((a, b) => {
@@ -55,12 +53,5 @@ export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
         });
 
         return Promise.resolve(result);
-    }
-
-    private getFolderName(p: ProjectInSolution, solution: SolutionFile): string {
-        if (!p.parentProjectGuid) { return  path.sep + p.projectName; }
-
-        let parent = solution.projectsById[p.parentProjectGuid];
-        return this.getFolderName(parent, solution) + path.sep + p.projectName;
     }
 }

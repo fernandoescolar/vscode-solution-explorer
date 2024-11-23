@@ -1,5 +1,5 @@
 import { ContextValues, TreeItem } from "@tree";
-import { Action, Run } from "@actions";
+import { Action, DotNetRun } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class RunCommand extends SingleItemActionsCommand {
@@ -14,6 +14,6 @@ export class RunCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
-        return [ new Run(item.path) ];
+        return [ new DotNetRun(item.path) ];
     }
 }

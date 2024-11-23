@@ -1,8 +1,8 @@
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
-import { ProjectInSolution, SolutionProjectType, ProjectTypeIds } from "../Solutions";
 import { MsBuildProject } from "./MsBuildProject";
 import { Project } from "./Project";
+import { SolutionItem, SolutionProject, SolutionProjectType } from "@core/Solutions";
 
 const projectFileExtensions: { [id: string]: string } = {
     [".csproj"]: ".cs",
@@ -13,23 +13,29 @@ const projectFileExtensions: { [id: string]: string } = {
 };
 
 export class ProjectFactory {
-    public static async parse(project: string | ProjectInSolution): Promise<Project | undefined> {
-        const fullPath: string = typeof project === "string" ? project : project.fullPath;
-        if (!(await fs.exists(fullPath))) {
+    public static async parse(project: SolutionItem): Promise<Project | undefined> {
+        const p = project as SolutionProject;
+        if (!p) {
             return undefined;
         }
 
-        let result = ProjectFactory.loadNodejsProject(fullPath);
-        if (!result && typeof project !== "string") {
-            result = ProjectFactory.loadProjectByType(project);
+        const fullPath = project.fullPath || "";
+        if (!(await fs.exists(fullPath))) {
+            return undefined;
         }
-        if (!result) {
-            result = ProjectFactory.loadProjectByExtension(fullPath);
+        let result: Project | undefined;
+        if (p.type === SolutionProjectType.default) {
+            result = ProjectFactory.loadDefaultProject(fullPath);
         }
-
-        ProjectFactory.getFileDefaultExtension(result);
+        if (p.type === SolutionProjectType.noReferences) {
+            result = ProjectFactory.loadNoReferencesProject(fullPath);
+        }
+        if (p.type === SolutionProjectType.shared) {
+            result = ProjectFactory.loadSharedProject(fullPath);
+        }
 
         if (result) {
+            ProjectFactory.getFileDefaultExtension(result);
             try {
                 await result.preload();
             } catch (e) {
@@ -47,41 +53,6 @@ export class ProjectFactory {
         const fileExtension = projectFileExtensions[extension];
         if (project && fileExtension) {
             project.fileExtension = fileExtension;
-        }
-    }
-
-    private static loadNodejsProject(fullPath: string): Project | undefined {
-        if (fullPath.toLocaleLowerCase().endsWith(".njsproj")) {
-            return ProjectFactory.loadNoReferencesProject(fullPath);
-        }
-    }
-
-    private static loadProjectByType(project: ProjectInSolution): Project | undefined {
-        if (project.projectType === SolutionProjectType.knownToBeMSBuildFormat) {
-            return ProjectFactory.loadDefaultProject(project.fullPath);
-        }
-
-        if (project.projectType === SolutionProjectType.webProject) {
-            return ProjectFactory.loadDefaultProject(project.fullPath);
-        }
-
-        if (project.projectTypeId === ProjectTypeIds.shProjectGuid) {
-            return ProjectFactory.loadSharedProject(project.fullPath);
-        }
-
-        if (project.projectTypeId === ProjectTypeIds.deployProjectGuid) {
-            return ProjectFactory.loadNoReferencesProject(project.fullPath);
-        }
-    }
-
-    private static loadProjectByExtension(fullPath: string): Project | undefined {
-        const extension = path.extname(fullPath);
-        if (extension === ".shproj") {
-            return ProjectFactory.loadSharedProject(fullPath);
-        } else if (extension === ".a") {
-
-        } else {
-            return ProjectFactory.loadDefaultProject(fullPath);
         }
     }
 

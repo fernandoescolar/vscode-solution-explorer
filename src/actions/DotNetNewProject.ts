@@ -1,6 +1,6 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class CreateProject extends CustomTerminalAction {
+export class DotNetCreateProject extends CustomTerminalAction {
     constructor(projectType: string, language: string, private readonly projectName: string, folderName: string, workingFolder: string) {
         super({
             name: "createProject",

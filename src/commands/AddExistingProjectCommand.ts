@@ -1,6 +1,6 @@
 import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
-import { Action, AddExistingProject } from "@actions";
+import { Action, DotNetAddExistingProject } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 
@@ -22,7 +22,7 @@ export class AddExistingProjectCommand extends SingleItemActionsCommand {
             return [];
         }
 
-        return [ new AddExistingProject(solution, projectPath) ];
+        return [ new DotNetAddExistingProject(solution, projectPath) ];
     }
 
     private getSolutions(item: TreeItem): dialogs.ItemsOrItemsResolver {

@@ -1,15 +1,15 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class Restore extends CustomTerminalAction {
+export class DotNetPack extends CustomTerminalAction {
     constructor(private readonly projectPath: string) {
         super({
-            name: "restore",
+            name: "pack",
             parameters: { projectPath },
-            workingFolder: Restore.getWorkingPath(projectPath)
+            workingFolder: DotNetPack.getWorkingPath(projectPath)
         });
     }
 
     public toString(): string {
-        return `Restore project ${this.projectPath}`;
+        return `Pack project ${this.projectPath}`;
     }
 }

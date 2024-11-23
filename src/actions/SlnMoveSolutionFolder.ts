@@ -1,9 +1,9 @@
 import * as fs from "@extensions/fs";
 import { Action, ActionContext } from "./base/Action";
-import { ProjectInSolution, SolutionFile } from "@core/Solutions";
+import { Solution, SolutionFolder, SolutionItem } from "@core/Solutions";
 
-export class MoveSolutionFolder implements Action {
-    constructor(protected readonly solution: SolutionFile, protected readonly projectInSolution: ProjectInSolution, protected readonly targetPath: string) {
+export class SlnMoveSolutionFolder implements Action {
+    constructor(protected readonly solution: Solution, protected readonly solutionItem: SolutionItem, protected readonly folderId: string) {
     }
 
     public async execute(context: ActionContext): Promise<void> {
@@ -12,16 +12,16 @@ export class MoveSolutionFolder implements Action {
         let data: string = await fs.readFile(this.solution.fullPath);
         let lines: string[] = data.split('\n');
         let done: boolean = false;
-        if (!this.projectInSolution.parentProjectGuid) {
-            if (this.targetPath === 'root') {
+        if (this.solutionItem.parent instanceof Solution) {
+            if (this.folderId === 'root') {
                 return;
             }
 
             let endGlobalIndex: number = -1;
             done = lines.some((line, index, arr) => {
-                if (this.projectInSolution && line.trim() === 'GlobalSection(NestedProjects) = preSolution') {
+                if (this.solutionItem && line.trim() === 'GlobalSection(NestedProjects) = preSolution') {
                     lines.splice(index + 1, 0,
-                        '		' + this.projectInSolution.projectGuid + ' = ' + this.targetPath + '\r'
+                        '		' + this.solutionItem.id + ' = ' + this.folderId + '\r'
                     );
                     return true;
                 }
@@ -36,19 +36,22 @@ export class MoveSolutionFolder implements Action {
             if (!done && endGlobalIndex > 0) {
                 lines.splice(endGlobalIndex, 0,
                     '	GlobalSection(NestedProjects) = preSolution\r',
-                    '		' + this.projectInSolution.projectGuid + ' = ' + this.targetPath + '\r',
+                    '		' + this.solutionItem.id + ' = ' + this.folderId + '\r',
                     '	EndGlobalSection\r');
                 done = true;
             }
-        } else if (this.targetPath !== 'root') {
-            let index = lines.findIndex(l => l.trim().startsWith(this.projectInSolution.projectGuid + ' = ' + this.projectInSolution.parentProjectGuid));
+        } else if (this.folderId !== 'root') {
+            const parentId = this.solutionItem.parent instanceof SolutionFolder ? this.solutionItem.parent.id : '';
+            const index = lines.findIndex(l => l.trim().startsWith(this.solutionItem.id + ' = ' + parentId));
             if (index >= 0) {
                 lines.splice(index, 1,
-                    '		' + this.projectInSolution.projectGuid + ' = ' + this.targetPath + '\r');
+                    '		' + this.solutionItem.id + ' = ' + this.folderId + '\r');
                 done = true;
             }
         } else {
-            let index = lines.findIndex(l => l.trim().startsWith(this.projectInSolution.projectGuid + ' = ' + this.projectInSolution.parentProjectGuid));
+            const parentId = this.solutionItem.parent instanceof SolutionFolder ? this.solutionItem.parent.id : '';
+
+            const index = lines.findIndex(l => l.trim().startsWith(this.solutionItem.id + ' = ' + parentId));
             if (index >= 0) {
                 lines.splice(index, 1);
                 done = true;
@@ -63,6 +66,6 @@ export class MoveSolutionFolder implements Action {
     }
 
     public toString(): string {
-        return `Move solution folder ${this.projectInSolution.projectName} to ${this.targetPath}in ${this.solution.name}`;
+        return `Move solution folder ${this.solutionItem.name} to ${this.folderId} in ${this.solution.name}`;
     }
 }

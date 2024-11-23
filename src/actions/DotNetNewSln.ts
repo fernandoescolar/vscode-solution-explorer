@@ -1,6 +1,6 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class CreateSolution extends CustomTerminalAction {
+export class DotNetNewSln extends CustomTerminalAction {
     constructor(private readonly solutionName: string, workingFolder: string) {
         super({
             name: "createSolution",

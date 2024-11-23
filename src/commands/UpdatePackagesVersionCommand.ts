@@ -1,5 +1,5 @@
 import { TreeItem } from "@tree";
-import { Action, AddPackageReference } from "@actions";
+import { Action, DotNetAddPackageReference } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class UpdatePackagesVersionCommand extends SingleItemActionsCommand {
@@ -16,6 +16,6 @@ export class UpdatePackagesVersionCommand extends SingleItemActionsCommand {
 
         const references = await item.project.getPackageReferences();
         const project = item.project;
-        return references.map(reference => new AddPackageReference(project.fullPath, reference.name));
+        return references.map(reference => new DotNetAddPackageReference(project.fullPath, reference.name));
     }
 }

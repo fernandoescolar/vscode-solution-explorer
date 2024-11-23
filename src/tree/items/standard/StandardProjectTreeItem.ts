@@ -1,13 +1,13 @@
 import { EventTypes, IEvent, ISubscription, IFileEvent, FileEvent } from "@events";
-import { ProjectInSolution } from "@core/Solutions";
+import { SolutionItem } from "@core/Solutions";
 import { TreeItemContext } from "@tree";
 import { ProjectTreeItem } from "@tree/items/ProjectTreeItem";
 
 export class StandardProjectTreeItem extends ProjectTreeItem {
     private subscription: ISubscription | undefined;
 
-    constructor(context: TreeItemContext, projectInSolution: ProjectInSolution) {
-        super(context, projectInSolution);
+    constructor(context: TreeItemContext, solutionItem: SolutionItem) {
+        super(context, solutionItem);
         this.subscription = context.eventAggregator.subscribe(EventTypes.file, evt => this.onFileEvent(evt));
     }
 

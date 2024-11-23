@@ -1,5 +1,5 @@
 import { ContextValues, TreeItem } from "@tree";
-import { Action, Publish } from "@actions";
+import { Action, DotNetPublish } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class PublishCommand extends SingleItemActionsCommand {
@@ -14,6 +14,6 @@ export class PublishCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.path) { return []; }
 
-        return [ new Publish(item.path) ];
+        return [ new DotNetPublish(item.path) ];
     }
 }

@@ -1,9 +1,9 @@
 import * as dialogs from "@extensions/dialogs";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { ContextValues, TreeItem } from "@tree";
-import { ProjectInSolution } from "@core/Solutions";
-import { Action, RenameProject, RenameSolution, RenameSolutionFolder } from "@actions";
+import { Action, SlnRenameProject, RenameSolution, SlnRenameSolutionFolder } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
+import { SolutionType } from "@core/Solutions";
 
 export class RenameSolutionItemCommand extends SingleItemActionsCommand {
     constructor(private readonly provider: SolutionExplorerProvider) {
@@ -24,12 +24,12 @@ export class RenameSolutionItemCommand extends SingleItemActionsCommand {
             return [ new RenameSolution(item.solution.fullPath, newname) ];
         }
 
-        if (item.projectInSolution && item.project) {
-            return [ new RenameProject(item.solution, item.project, item.label, newname) ];
+        if (item.solution.type === SolutionType.Sln && item.solutionItem && item.project) {
+            return [ new SlnRenameProject(item.solution, item.project, item.label, newname) ];
         }
 
-        if (item.projectInSolution) {
-            return [ new RenameSolutionFolder(item.solution, item.label, newname) ];
+        if (item.solution.type === SolutionType.Sln && item.solutionItem) {
+            return [ new SlnRenameSolutionFolder(item.solution, item.label, newname) ];
         }
 
         return [];

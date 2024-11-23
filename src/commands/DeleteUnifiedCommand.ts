@@ -4,13 +4,14 @@ import {
     Action,
     DeleteProjectFile,
     DeleteProjectFolder,
-    DeleteSolutionFile,
-    DeleteSolutionFolder,
-    RemoveExistingProject,
-    RemovePackageReference,
-    RemoveProjectReference,
+    SlnDeleteSolutionFile,
+    SlnDeleteSolutionFolder,
+    DotNetRemoveExistingProject,
+    DotNetRemovePackageReference,
+    DotNetRemoveProjectReference,
     DeleteMultipleItems
 } from "@actions";
+import { SolutionType } from "@core/Solutions";
 
 export class DeleteUnifiedCommand extends ActionsCommand {
     constructor() {
@@ -107,19 +108,19 @@ export class DeleteUnifiedCommand extends ActionsCommand {
                 ? [new DeleteProjectFolder(item.project, item.path, showDialog)] : []],
 
             [ContextValues.projectReferencedPackage, 'cps', item => item.project && item.path
-                ? [new RemovePackageReference(item.project.fullPath, item.path)] : []],
+                ? [new DotNetRemovePackageReference(item.project.fullPath, item.path)] : []],
 
             [ContextValues.projectReferencedProject, 'cps', item => item.project && item.path
-                ? [new RemoveProjectReference(item.project.fullPath, item.path)] : []],
+                ? [new DotNetRemoveProjectReference(item.project.fullPath, item.path)] : []],
 
             [ContextValues.project, item => item.project
-                ? [new RemoveExistingProject(item.solution.fullPath, item.project.fullPath)] : []],
+                ? [new DotNetRemoveExistingProject(item.solution.fullPath, item.project.fullPath)] : []],
 
-            [ContextValues.solutionFile, item => item.projectInSolution && item.path
-                ? [new DeleteSolutionFile(item.solution, item.projectInSolution, item.path)] : []],
+            [ContextValues.solutionFile, item => item.solution.type === SolutionType.Sln && item.solutionItem && item.path
+                ? [new SlnDeleteSolutionFile(item.solution, item.solutionItem, item.path)] : []],
 
-            [ContextValues.solutionFolder, item => item.projectInSolution
-                ? [new DeleteSolutionFolder(item.solution, item.projectInSolution)] : []],
+            [ContextValues.solutionFolder, item => item.solution.type === SolutionType.Sln && item.solutionItem
+                ? [new SlnDeleteSolutionFolder(item.solution, item.solutionItem)] : []],
         ]);
     }
 }

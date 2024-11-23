@@ -1,7 +1,7 @@
 import * as dialogs from '@extensions/dialogs';
 import * as nuget from '@extensions/nuget';
 import { ContextValues, TreeItem } from "@tree";
-import { Action, AddPackageReference } from "@actions";
+import { Action, DotNetAddPackageReference } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class UpdatePackageVersionCommand extends SingleItemActionsCommand {
@@ -31,6 +31,6 @@ export class UpdatePackageVersionCommand extends SingleItemActionsCommand {
             return [];
         }
 
-        return [ new AddPackageReference(item.project.fullPath, packageId, parameters[1]) ];
+        return [ new DotNetAddPackageReference(item.project.fullPath, packageId, parameters[1]) ];
     }
 }

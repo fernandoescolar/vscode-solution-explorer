@@ -1,11 +1,11 @@
 import { CustomTerminalAction } from "./base/CustomTerminalAction";
 
-export class AddExistingProject extends CustomTerminalAction {
+export class DotNetAddExistingProject extends CustomTerminalAction {
     constructor(private readonly solutionPath: string, private readonly projectPath: string) {
         super({
             name: "addExistingProjectToSolution",
             parameters: { solutionPath, projectPath },
-            workingFolder: AddExistingProject.getWorkingPath(solutionPath)
+            workingFolder: DotNetAddExistingProject.getWorkingPath(solutionPath)
         });
     }
 

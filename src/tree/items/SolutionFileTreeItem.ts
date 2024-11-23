@@ -1,9 +1,9 @@
-import { ProjectInSolution } from "@core/Solutions";
+import { SolutionItem } from "@core/Solutions";
 import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } from "@tree";
 
 export class SolutionFileTreeItem extends TreeItem {
-    constructor(context: TreeItemContext, name: string, filepath: string, projectInSolution: ProjectInSolution) {
-        super(context, name, TreeItemCollapsibleState.None, ContextValues.solutionFile, filepath, projectInSolution);
+    constructor(context: TreeItemContext, name: string, filepath: string, solutionItem: SolutionItem) {
+        super(context, name, TreeItemCollapsibleState.None, ContextValues.solutionFile, filepath, solutionItem);
     }
 
     command = {

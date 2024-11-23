@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
-import { Action, CreateSolution } from "@actions";
+import { Action, DotNetNewSln } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class CreateNewSolutionCommand extends SingleItemActionsCommand {
@@ -20,6 +20,6 @@ export class CreateNewSolutionCommand extends SingleItemActionsCommand {
             return [];
         }
 
-        return [ new CreateSolution(solutionName, workingFolder) ];
+        return [ new DotNetNewSln(solutionName, workingFolder) ];
     }
 }

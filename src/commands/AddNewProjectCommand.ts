@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import * as path from "@extensions/path";
 import * as dialogs from '@extensions/dialogs';
 import { ContextValues, TreeItem } from "@tree";
-import { Action, AddExistingProject, CreateProject } from '@actions';
+import { Action, DotNetAddExistingProject, DotNetCreateProject } from '@actions';
 import { SingleItemActionsCommand } from "@commands";
 import { SolutionExplorerProvider } from '@SolutionExplorerProvider';
 
@@ -70,8 +70,8 @@ export class AddNewProjectCommand extends SingleItemActionsCommand {
         if (language === 'VB') { projectPath += '.vbproj'; }
 
         return [
-            new CreateProject(projectType, language, projectName, folderName, workingpath),
-            new AddExistingProject(solution, projectPath)
+            new DotNetCreateProject(projectType, language, projectName, folderName, workingpath),
+            new DotNetAddExistingProject(solution, projectPath)
         ];
     }
 

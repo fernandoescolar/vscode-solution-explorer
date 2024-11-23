@@ -1,5 +1,5 @@
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
-import { SolutionFile } from "@core/Solutions";
+import { SolutionFactory } from "@core/Solutions";
 import { TreeItem, TreeItemFactory } from "@tree";
 
 
@@ -28,7 +28,7 @@ export class SolutionTreeItemCollection {
 	}
 
 	public async addSolution(solutionPath: string, rootPath: string, solutionProvider: SolutionExplorerProvider): Promise<void> {
-		const solution = await SolutionFile.parse(solutionPath);
+		const solution = await SolutionFactory.load(solutionPath);
 		const item = await TreeItemFactory.createFromSolution(solutionProvider, solution, rootPath);
 		if (!this.children) {
 			this.children = [];

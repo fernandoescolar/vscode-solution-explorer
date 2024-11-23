@@ -1,10 +1,10 @@
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
-import { ProjectInSolution } from "@core/Solutions";
+import { SolutionItem, SolutionFolder } from "@core/Solutions";
 import { TreeItem, TreeItemCollapsibleState, TreeItemFactory, TreeItemContext, ContextValues } from "@tree";
 
-async function getPath(context: TreeItemContext, projectInSolution: ProjectInSolution): Promise<string | undefined> {
-    const folder = path.join(path.dirname(context.solution.fullPath), projectInSolution.projectName);
+async function getPath(context: TreeItemContext, solutionItem: SolutionItem): Promise<string | undefined> {
+    const folder = path.join(path.dirname(context.solution.fullPath), solutionItem.name);
     const exists = await fs.exists(folder);
     if (exists) {
         const isDirectory = await fs.isDirectory(folder);
@@ -17,12 +17,12 @@ async function getPath(context: TreeItemContext, projectInSolution: ProjectInSol
 }
 
 export class SolutionFolderTreeItem extends TreeItem {
-    private constructor(context: TreeItemContext, projectInSolution: ProjectInSolution, path: string | undefined) {
-        super(context, projectInSolution.projectName, TreeItemCollapsibleState.Expanded, ContextValues.solutionFolder, path, projectInSolution);
+    private constructor(context: TreeItemContext, solutionItem: SolutionItem, path: string | undefined) {
+        super(context, solutionItem.name, TreeItemCollapsibleState.Expanded, ContextValues.solutionFolder, path, solutionItem);
     }
 
     protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
-        return TreeItemFactory.createItemsFromSolution(childContext, this.solution, this.projectInSolution);
+        return TreeItemFactory.createItemsFromSolution(childContext, this.solution, this.solutionItem);
     }
 
     public async search(filepath: string): Promise<TreeItem | null> {
@@ -39,9 +39,9 @@ export class SolutionFolderTreeItem extends TreeItem {
 		return null;
 	}
 
-    public static async create(context: TreeItemContext, projectInSolution: ProjectInSolution): Promise<SolutionFolderTreeItem> {
-        const path = await getPath(context, projectInSolution);
-        const solutionFolder = new SolutionFolderTreeItem(context, projectInSolution, path);
+    public static async create(context: TreeItemContext, solutionItem: SolutionItem): Promise<SolutionFolderTreeItem> {
+        const path = await getPath(context, solutionItem);
+        const solutionFolder = new SolutionFolderTreeItem(context, solutionItem, path);
         return solutionFolder;
     }
 }
