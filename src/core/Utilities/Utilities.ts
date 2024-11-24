@@ -2,7 +2,7 @@ import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import { DirectorySearchResult } from "./DirectorySearchResult";
 
-export async function searchFilesInDir(startPath:string, extension: string, recursive: boolean = false) : Promise<string[]> {
+export async function searchFilesInDir(startPath:string, extensions: string[], recursive: boolean = false) : Promise<string[]> {
     if (!(await fs.exists(startPath))) {
         return [];
     }
@@ -11,14 +11,18 @@ export async function searchFilesInDir(startPath:string, extension: string, recu
     let files = await fs.readdir(startPath);
     for (let i = 0; i < files.length; i++) {
         let filename = path.join(startPath, files[i]);
-        if (filename.endsWith(extension)) {
-            result.push(filename);
-        }
+        extensions.some(ext => {
+            if (filename.endsWith(ext)) {
+                result.push(filename);
+                return true;
+            }
+            return false;
+        });
 
         if (recursive) {
             let isDirectory = await fs.isDirectory(filename);
             if (isDirectory) {
-                let subresult = await searchFilesInDir(filename, extension, recursive);
+                let subresult = await searchFilesInDir(filename, extensions, recursive);
                 result = result.concat(subresult);
             }
         }

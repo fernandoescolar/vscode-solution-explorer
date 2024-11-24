@@ -18,7 +18,7 @@ class SolutionObject {
 }
 
 class SolutionParentObject extends SolutionObject {
-    protected readonly items: SolutionItem[] = [];
+    protected items: SolutionItem[] = [];
 
     public addItem(item: SolutionItem): void {
         this.items.push(item);

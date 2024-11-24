@@ -5,7 +5,7 @@ export async function openSolutionFile(label: string): Promise<string | undefine
         openLabel: label,
         canSelectFolders: false,
         canSelectMany: false,
-        filters: { ['Solution files']: [ 'sln' ] }
+        filters: { ['Solution files']: [ 'sln', 'slnx' ] }
     });
 
     if (uris !== undefined && uris.length > 0) {

@@ -23,6 +23,7 @@ interface EventStream {
 const CSHARP_EXTENSION_ID = 'ms-dotnettools.csharp';
 const SELECT_SOLUTION_EVENT_TYPE = 4;
 const SOLUTION_EXTENSION = '.sln';
+const SOLUTIONX_EXTENSION = '.slnx';
 
 export class OmnisharpIntegrationService extends vscode.Disposable {
 
@@ -69,6 +70,10 @@ export class OmnisharpIntegrationService extends vscode.Disposable {
         if (event.type === SELECT_SOLUTION_EVENT_TYPE) {
             const solutionPath = (event as OmnisharpInitialisationEvent).solutionPath;
             if (solutionPath.toLocaleLowerCase().endsWith(SOLUTION_EXTENSION)) {
+                const e = new SolutionSelected(solutionPath);
+                this.eventAggregator.publish(e);
+            }
+            if (solutionPath.toLocaleLowerCase().endsWith(SOLUTIONX_EXTENSION)) {
                 const e = new SolutionSelected(solutionPath);
                 this.eventAggregator.publish(e);
             }

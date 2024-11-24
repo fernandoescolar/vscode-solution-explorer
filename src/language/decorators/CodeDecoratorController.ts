@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { ICodeDecorator } from "./ICodeDecorator";
 
 export class CodeDecoratorController {
-    private timeout: NodeJS.Timer | undefined = undefined;
+    private timeout: NodeJS.Timer | number | undefined = undefined;
 
     constructor(private readonly context: vscode.ExtensionContext, private readonly decorators: ICodeDecorator[]) {
     }
@@ -41,7 +41,7 @@ export class CodeDecoratorController {
 
 	private triggerUpdateDecorations(activeEditor: vscode.TextEditor, throttle = false) {
 		if (this.timeout) {
-			clearTimeout(this.timeout);
+			clearTimeout(this.timeout as number);
 			this.timeout = undefined;
 		}
 

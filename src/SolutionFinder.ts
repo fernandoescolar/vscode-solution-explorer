@@ -23,7 +23,7 @@ export class SolutionFinder {
 
 	public isWorkspaceSolutionFile(filePath: string): boolean {
 		return this.workspaceRoots.indexOf(path.dirname(filePath)) >= 0
-		    	&& filePath.endsWith('.sln');
+		    	&& (filePath.endsWith('.sln') || filePath.endsWith('.slnx'));
 	}
 
     public async findSolutions(): Promise<FoundPath[]> {
@@ -35,7 +35,7 @@ export class SolutionFinder {
 
 		if (config.getOpenSolutionsInRootFolder()) {
 			for (let i = 0; i < this.workspaceRoots.length; i++) {
-				const paths = await Utilities.searchFilesInDir(this.workspaceRoots[i], '.sln');
+				const paths = await Utilities.searchFilesInDir(this.workspaceRoots[i], ['.sln', '.slnx']);
 				paths.forEach(p => solutionPaths.push({ root: this.workspaceRoots[i], sln: p }));
 			}
 		}
@@ -44,7 +44,7 @@ export class SolutionFinder {
 			let altFolders = config.getAlternativeSolutionFolders();
 			for (let i = 0; i < altFolders.length; i++) {
 				for (let j = 0; j < this.workspaceRoots.length; j++) {
-					const paths = await Utilities.searchFilesInDir(path.join(this.workspaceRoots[j], altFolders[i]), '.sln');
+					const paths = await Utilities.searchFilesInDir(path.join(this.workspaceRoots[j], altFolders[i]), ['.sln', '.slnx']);
 					paths.forEach(p => solutionPaths.push({ root: this.workspaceRoots[j], sln: p }));
 				}
 			}
@@ -52,7 +52,7 @@ export class SolutionFinder {
 
 		if (config.getOpenSolutionsInFoldersAndSubfolders()) {
 			for (let i = 0; i < this.workspaceRoots.length; i++) {
-				const paths = await Utilities.searchFilesInDir(this.workspaceRoots[i], '.sln', true);
+				const paths = await Utilities.searchFilesInDir(this.workspaceRoots[i], ['.sln', '.slnx'], true);
 				paths.forEach(p => solutionPaths.push({ root: this.workspaceRoots[i], sln: p }));
 			}
 		}
