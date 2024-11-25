@@ -2,7 +2,7 @@
   "name": "vscode-solution-explorer",
   "displayName": "vscode-solution-explorer",
   "description": "Visual Studio .sln file explorer for Visual Studio Code",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "license": "MIT",
   "publisher": "fernandoescolar",
   "icon": "images/icon.png",
@@ -26,8 +26,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:slnexpl",
     "workspaceContains:**/*.sln",
+    "workspaceContains:**/*.slnx",
     "*"
   ],
   "main": "./out/extension",
@@ -348,6 +348,11 @@
         {
           "command": "solutionExplorer.openSelectedSolution",
           "when": "resourceExtname == .sln",
+          "group": "navigation"
+        },
+        {
+          "command": "solutionExplorer.openSelectedSolution",
+          "when": "resourceExtname == .slnx",
           "group": "navigation"
         }
       ],
@@ -761,6 +766,16 @@
           ".sln"
         ],
         "configuration": "./syntaxes/sln.language.json"
+      },
+      {
+        "id": "slnx",
+        "aliases": [
+          "Solution XML File",
+          "sln"
+        ],
+        "extensions": [
+          ".slnx"
+        ]
       }
     ],
     "grammars": [
@@ -768,6 +783,11 @@
         "language": "sln",
         "scopeName": "source.solution",
         "path": "./syntaxes/sln.grammar.json"
+      },
+      {
+        "language": "slnx",
+        "scopeName": "source.solutionx",
+        "path": "./syntaxes/slnx.grammar.json"
       }
     ],
     "configuration": {

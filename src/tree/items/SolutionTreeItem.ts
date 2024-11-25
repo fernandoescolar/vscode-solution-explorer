@@ -1,5 +1,5 @@
 import { ISubscription, EventTypes, IEvent, IFileEvent, FileEventType } from "@events";
-import { Solution, SolutionFactory } from "@core/Solutions";
+import { Solution, SolutionFactory, SolutionType } from "@core/Solutions";
 import { TreeItem, TreeItemCollapsibleState, TreeItemFactory, TreeItemContext, ContextValues } from "@tree";
 
 export class SolutionTreeItem extends TreeItem {
@@ -9,6 +9,7 @@ export class SolutionTreeItem extends TreeItem {
         super(context, context.solution.name, TreeItemCollapsibleState.Expanded, ContextValues.solution, context.solution.fullPath);
         this.allowIconTheme = false;
         this.subscription = context.eventAggregator.subscribe(EventTypes.file, evt => this.onFileEvent(evt));
+        this.description = context.solution.type === SolutionType.Sln ? '' : 'readonly';
     }
 
     public refreshContextValue(): void {

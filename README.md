@@ -69,7 +69,7 @@ You can execute the "Open solution" command from the command palette or from the
 
 ### Omnisharp integration
 
-You can enable omnisharp integration and vscode-solution-explorer will open the same .sln file you open with Microsoft extension.
+You can enable omnisharp integration and vscode-solution-explorer will open the same .sln or .slnx file you open with Microsoft extension.
 
 ![Activate Omnisharp integration in settings panel](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/omnisharp-integration.png)
 
@@ -239,6 +239,10 @@ We strongly recommend you to update your templates after updating this extension
 This extension adds syntax highlighting to `.sln` files.
 
 ![Solution syntax highlighting](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-sln-syntax.png)
+
+And also for `.slnx` files.
+
+![Solution XML syntax highlighting](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-slnx-syntax.png)
 
 ## Extension Settings
 

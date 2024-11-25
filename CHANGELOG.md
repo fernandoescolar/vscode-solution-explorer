@@ -2,13 +2,17 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
-## 0.x.x
+## 0.8.7
 
 Fixing duplicated items in the tree view: "Element with id is already registered" error
 
 Fixing issue with terminal after executing the update all packages in project command.
 
 Adding new nuget package management inline in a .csproj file.
+
+Adding readonly support for .slnx files.
+
+Adding .slnx grammar support for highlighting.
 
 ## 0.8.6
 

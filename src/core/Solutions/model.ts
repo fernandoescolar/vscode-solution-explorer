@@ -17,7 +17,7 @@ class SolutionObject {
     }
 }
 
-class SolutionParentObject extends SolutionObject {
+export class SolutionParentObject extends SolutionObject {
     protected items: SolutionItem[] = [];
 
     public addItem(item: SolutionItem): void {

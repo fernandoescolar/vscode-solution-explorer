@@ -14,7 +14,7 @@ export class SlnLoader {
         solution.type = SolutionType.Sln;
         solution.fullPath = filepath;
         solution.folderPath = path.dirname(filepath);
-        solution.name = path.basename(filepath);
+        solution.name = path.basename(filepath, path.extname(filepath));
         sln.projects.filter(x => !x.parentProjectGuid).forEach(project => {
             const i = this.createSolutionItem(sln, project);
             solution.addItem(i);
