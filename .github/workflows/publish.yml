@@ -22,7 +22,12 @@ jobs:
       run: npm i -g vsce
 
     - name: publish vsce
-      run: vsce publish -p ${{ secrets.VSCE_TOKEN }}
+      id: publisher
+      run: |
+        vsce publish -p ${{ secrets.VSCE_TOKEN }}
+        file=$(realpath $(ls -t *.vsix | head -1))
+        echo "::notice ::Generating a VSIX file at ${file}"
+        echo "vsix_path=${file}" >> "$GITHUB_OUTPUT"
 
     - name:  publish ovsx
       run: npx ovsx publish ${{ steps.publisher.ouputs.vsix_path }}  -p ${{ secrets.OVSX_TOKEN }}
