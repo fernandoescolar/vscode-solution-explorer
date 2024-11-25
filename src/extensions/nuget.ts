@@ -66,9 +66,22 @@ export async function getNugetFeeds(projectPath: string): Promise<NugetFeed[]> {
                                         }
                                     }
 
-                                    if (result.findIndex(f => f.name === name) < 0) {
+                                    const existing = result.find(f => f.name === name);
+                                    if (!existing) {
                                         const feed: NugetFeed = { name, url, searchApiUrl: '', packageVersionsUrl: '', userName, password };
                                         result.push(feed);
+                                    } else {
+                                        if (!existing.url) {
+                                            existing.url = url;
+                                            existing.searchApiUrl = '';
+                                            existing.packageVersionsUrl = '';
+                                        }
+                                        if (!existing.userName) {
+                                            existing.userName = userName;
+                                        }
+                                        if (!existing.password) {
+                                            existing.password = password;
+                                        }
                                     }
                                 }
                             }
@@ -183,7 +196,7 @@ function getFetchOptions(feed: NugetFeed): RequestInit {
 
 export async function searchPackagesByName(projectPath: string, query: string): Promise<NugetPackage[]> {
     const feeds = await getNugetFeeds(projectPath);
-    const promises = feeds.map(feed => searchNugetPackage(feed, query));
+    const promises = feeds.map(feed => searchNugetPackage(feed, query).then(packages => packages).catch(() => []));
     const results = await Promise.all(promises);
     const packages = results.flatMap(result => result);
     return packages.reduce((acc, pkg) => {
@@ -200,7 +213,7 @@ export async function searchPackageVersions(projectPath: string, id: string, inc
         uniqueVersions = versionsCache[id].versions;
     } else {
         const feeds = await getNugetFeeds(projectPath);
-        const promises = feeds.map(feed => getNugetPackageVersions(feed, id));
+        const promises = feeds.map(feed => getNugetPackageVersions(feed, id).then(versions => versions).catch(() => []));
         const results = await Promise.all(promises);
         const versions = results.flatMap(result => result);
         uniqueVersions = Array.from(new Set(versions));
