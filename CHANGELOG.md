@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.8.8
+
+Fixing issues managing nuget packages with multiple `nuget.config` files and not working feeds.
+
+Fixing the github actions flow.
+
 ## 0.8.7
 
 Fixing duplicated items in the tree view: "Element with id is already registered" error
