@@ -3,10 +3,11 @@ import * as fs from "@extensions/fs";
 import * as xml from "@extensions/xml";
 import { XmlElement } from "@extensions/xml";
 import * as config from "@extensions/config";
-import { Include, ProjectItem, ProjectItemsFactory } from "../Items";
+import { Include, PackageReference, ProjectItem, ProjectItemsFactory } from "../Items";
 import { ProjectFileStat } from "../ProjectFileStat";
 import { Manager } from "./Manager";
 import { Direction, RelativeFilePosition } from "../RelativeFilePosition";
+import { NugetDependencies } from "@extensions/nuget-dependencies";
 
 interface NamedHierarchy<T>{
     groupName: string;
@@ -395,6 +396,16 @@ export class XmlManager implements Manager {
         const content = await fs.readFile(this.fullPath);
         this.document = await xml.parseToJson(content);
         this.projectItems = this.parseDocument();
+    }
+
+    public async updatePackageReference(packages: NugetDependencies): Promise<void>
+    {
+        this.projectItems.forEach(pi => {
+            if (pi instanceof PackageReference && !pi.version && packages[pi.name.toLowerCase()])
+            {
+                pi.version = packages[pi.name.toLowerCase()].version;
+            }            
+        });
     }
 
     public async getProjectItems(): Promise<ProjectItem[]> {
