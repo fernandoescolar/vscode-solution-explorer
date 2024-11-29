@@ -2,10 +2,15 @@ import * as vscode from "vscode";
 import * as nuget from '@extensions/nuget';
 
 export class NugetVersionCodeActionProvider implements vscode.CodeActionProvider {
+    private readonly regEx: RegExp;
+
+    constructor(tagName: string) {
+        this.regEx = new RegExp(`<${tagName} Include="(.*)" Version="(.*)"`);
+    }
+
     async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<(vscode.CodeAction | vscode.Command)[] | null | undefined> {
         const line = document.lineAt(range.start.line).text;
-        const regEx = /<PackageReference Include="(.*)" Version="(.*)" /;
-        const match = regEx.exec(line);
+        const match = this.regEx.exec(line);
         if (!match) {
             return undefined;
         }

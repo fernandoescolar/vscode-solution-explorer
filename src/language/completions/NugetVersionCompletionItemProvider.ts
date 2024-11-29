@@ -2,10 +2,15 @@ import * as vscode from "vscode";
 import * as nuget from '@extensions/nuget';
 
 export class NugetVersionCompletionItemProvider implements vscode.CompletionItemProvider {
+    private readonly regEx: RegExp;
+
+    constructor(tagName: string) {
+        this.regEx = new RegExp(`<${tagName} Include="(.*)" `);
+    }
+
     async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
         const linePrefix = document.lineAt(position).text.substr(0, position.character);
-        const regEx = /<PackageReference Include="(.*)" /;
-        const match = regEx.exec(linePrefix);
+        const match = this.regEx.exec(linePrefix);
         if (!match) {
             return undefined;
         }

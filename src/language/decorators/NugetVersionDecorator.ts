@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import * as nuget from "@extensions/nuget";
 import { ICodeDecorator } from "./ICodeDecorator";
-import { CSPROJ } from "../filters";
 
 export class NugetVersionDecorator implements ICodeDecorator
 {
@@ -24,17 +23,18 @@ export class NugetVersionDecorator implements ICodeDecorator
         }
     });
 
-    get filter(): vscode.DocumentSelector {
-        return CSPROJ;
+    private readonly regEx: RegExp;
+
+    constructor(public readonly filter: vscode.DocumentSelector,tagName: string) {
+        this.regEx = new RegExp(`<${tagName} Include="(.+)" Version="(.+)"`, "g");
     }
 
     async decorate(editor: vscode.TextEditor): Promise<void> {
         const text = editor.document.getText();
         const okDecorations: vscode.DecorationOptions[] = [];
         const newDecorations: vscode.DecorationOptions[] = [];
-        const regEx = /<PackageReference Include="(.+)" Version="(.+)"/g;
         let match;
-        while ((match = regEx.exec(text))) {
+        while ((match = this.regEx.exec(text))) {
             const id = match[1];
             const version = match[2];
             const versions = await nuget.searchPackageVersions(editor.document.uri.fsPath, id);
@@ -50,12 +50,12 @@ export class NugetVersionDecorator implements ICodeDecorator
 
             if (isNew) {
                 newDecorations.push(decoration);
+                editor.setDecorations(this.newType, newDecorations);
             } else {
                 okDecorations.push(decoration);
+                editor.setDecorations(this.okType, okDecorations);
             }
         }
 
-        editor.setDecorations(this.okType, okDecorations);
-        editor.setDecorations(this.newType, newDecorations);
     }
 }

@@ -3,7 +3,7 @@ import { NugetVersionCodeActionProvider } from "./actions/NugetVersionCodeAction
 import { NugetNameCompletionItemProvider } from "./completions/NugetNameCompletionItemProvider";
 import { NugetVersionCompletionItemProvider } from "./completions/NugetVersionCompletionItemProvider";
 import { CodeDecoratorController } from "./decorators/CodeDecoratorController";
-import { CSPROJ } from "./filters";
+import { CSPROJ, PACKAGES_PROPS } from "./filters";
 import { NugetVersionDecorator } from "./decorators/NugetVersionDecorator";
 
 export class LanguageExtensions {
@@ -12,27 +12,34 @@ export class LanguageExtensions {
     }
 
     register() {
-        const decorator = new CodeDecoratorController(this.context, [
-            new NugetVersionDecorator()
-        ]);
+        const fileTypes = [
+            { filter: CSPROJ, tagName: "PackageReference"},
+            { filter: PACKAGES_PROPS, tagName: "PackageVersion"}
+        ];
+
+        const decorator = new CodeDecoratorController(this.context,
+            fileTypes.map(({filter, tagName}) => new NugetVersionDecorator(filter, tagName))
+        );
         decorator.register();
 
-        this.context.subscriptions.push(vscode.languages.registerCodeActionsProvider(
-            CSPROJ,
-            new NugetVersionCodeActionProvider(),
-        ));
+        fileTypes.forEach(({filter, tagName}) => {
+            this.context.subscriptions.push(vscode.languages.registerCodeActionsProvider(
+                filter,
+                new NugetVersionCodeActionProvider(tagName),
+            ));
 
-        this.context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
-            CSPROJ,
-            new NugetNameCompletionItemProvider(),
-            '.', '"'
-        ));
+            this.context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
+                filter,
+                new NugetNameCompletionItemProvider(tagName),
+                '.', '"'
+            ));
 
-        this.context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
-            CSPROJ,
-            new NugetVersionCompletionItemProvider(),
-            '.', '"'
-        ));
+            this.context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
+                filter,
+                new NugetVersionCompletionItemProvider(tagName),
+                '.', '"'
+            ));
+        });
     }
 
 }
