@@ -1,3 +1,4 @@
+import { XmlElement } from "@extensions/xml";
 import { ProjectItem } from "./ProjectItem";
 
 export class PackageReference extends ProjectItem {
@@ -5,7 +6,24 @@ export class PackageReference extends ProjectItem {
     super("PackageReference");
   }
 
-  public UpdateVersion(newVersion: string): void {
+  public hasVersion(): boolean {
+    return !!this.version;
+  }
+
+  public updateVersion(newVersion: string): void {
     this.version = newVersion;
   }
+
+  public toElement(): XmlElement {
+    return {
+      type: "element",
+      name: "PackageReference",
+      attributes: {
+        Include: this.name,
+        Version: this.version,
+      },
+    };
+  }
+
+  
 }
