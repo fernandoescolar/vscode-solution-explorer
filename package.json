@@ -133,6 +133,11 @@
         "icon": "$(trash)"
       },
       {
+        "command": "solutionExplorer.createDirectoryPackages",
+        "title": "Add Directory.Packages.props",
+        "category": "Solution Explorer"
+      },
+      {
         "command": "solutionExplorer.createFile",
         "title": "Create file",
         "category": "Solution Explorer",
@@ -432,6 +437,11 @@
         {
           "command": "solutionExplorer.createFileBelow",
           "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createFileBelow",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.createDirectoryPackages",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createDirectoryPackages",
           "group": "2_workspace"
         },
         {

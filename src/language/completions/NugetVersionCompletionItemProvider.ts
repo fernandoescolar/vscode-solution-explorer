@@ -4,10 +4,10 @@ import * as nuget from '@extensions/nuget';
 export class NugetVersionCompletionItemProvider implements vscode.CompletionItemProvider {
     async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
         const linePrefix = document.lineAt(position).text.substr(0, position.character);
-        const regEx = /<PackageReference Include="(.*)" /;
+        const regEx = /<Package(?:Reference|Version) Include="([^"\n]*)$/;
         const match = regEx.exec(linePrefix);
         if (!match) {
-            return undefined;
+          return undefined;
         }
         const id = match[1];
         if (!linePrefix.endsWith("Version=\"")) {

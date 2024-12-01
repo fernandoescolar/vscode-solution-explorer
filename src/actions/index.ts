@@ -8,6 +8,7 @@ export * from "./DotNetClean";
 export * from "./CollapseAll";
 export * from "./Copy";
 export * from "./CopyProjectFile";
+export * from "./CreateDirectoryPackages"
 export * from "./CreateProjectFile";
 export * from "./CreateProjectFolder";
 export * from "./DotNetNewProject";

@@ -2,9 +2,10 @@ import { execSync } from 'child_process';
 import * as path from "@extensions/path";
 import * as dialogs from '@extensions/dialogs';
 import { ContextValues, TreeItem } from "@tree";
-import { Action, DotNetAddExistingProject, DotNetCreateProject } from '@actions';
+import { Action, CreateDirectoryPackages, DotNetAddExistingProject, DotNetCreateProject } from '@actions';
 import { SingleItemActionsCommand } from "@commands";
 import { SolutionExplorerProvider } from '@SolutionExplorerProvider';
+import { Solution } from '@core/Solutions';
 
 type ProjectType = { name: string, value: string, languages: string[] };
 
@@ -48,13 +49,13 @@ export class AddNewProjectCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         this.loadProjectTemplates();
         this.wizard = dialogs.wizard('Add new project')
-                             .selectOption('Select solution', this.getSolutions(item))
-                             .selectOption('Select project type', this.getProjectTypes())
-                             .selectOption('Select language', () => this.getLanguages())
-                             .getText('Project name')
-                             .getText('Folder name', '', () => this.getCurrentProjectName());
+            .selectOption('Select solution', this.getSolutions(item))
+            .selectOption('Select project type', this.getProjectTypes())
+            .selectOption('Select language', () => this.getLanguages())
+            .getText('Project name')
+            .getText('Folder name', '', () => this.getCurrentProjectName());
 
-        const parameters = await this.wizard .run();
+        const parameters = await this.wizard.run();
         if (!parameters || parameters.length < 5) { return []; }
 
         const solution = parameters[0];
@@ -124,8 +125,8 @@ export class AddNewProjectCommand extends SingleItemActionsCommand {
         }
     }
 
-    private getProjectTypes(): { [id:string]: string } {
-        let result: { [id:string]: string } = {};
+    private getProjectTypes(): { [id: string]: string } {
+        let result: { [id: string]: string } = {};
         PROJECT_TYPES.forEach(pt => {
             result[pt.name] = pt.value;
         });
@@ -133,7 +134,7 @@ export class AddNewProjectCommand extends SingleItemActionsCommand {
     }
 
     private getLanguages(): Promise<string[]> {
-        let result: string[] =  [ 'C#' ];
+        let result: string[] = ['C#'];
         if (this.wizard && this.wizard.context && this.wizard.context.results[1]) {
             let selectedProject = this.wizard.context.results[1];
             let index = PROJECT_TYPES.findIndex(pt => pt.value === selectedProject);

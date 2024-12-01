@@ -4,7 +4,7 @@ import * as nuget from '@extensions/nuget';
 export class NugetVersionCodeActionProvider implements vscode.CodeActionProvider {
     async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<(vscode.CodeAction | vscode.Command)[] | null | undefined> {
         const line = document.lineAt(range.start.line).text;
-        const regEx = /<PackageReference Include="(.*)" Version="(.*)" /;
+        const regEx =/<Package(?:Reference|Version) Include="(.*)" Version="(.*)" /;
         const match = regEx.exec(line);
         if (!match) {
             return undefined;
