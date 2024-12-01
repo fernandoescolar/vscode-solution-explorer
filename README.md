@@ -244,6 +244,14 @@ And also for `.slnx` files.
 
 ![Solution XML syntax highlighting](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-slnx-syntax.png)
 
+### Create Directory.Packages.props
+
+You can add a `Directory.Packages.props` on Solution under `Solution items` folder. This option will remove all `Version` attribute of the `PacakageReferences` in the projects files. You can also add an existing `Directory.Packages.props` with `Add Solution file` on a folder.
+
+![Add Directory.Packages.props](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-create-directory-packages.gif)
+
+If a `Directory.Packages.props` are already present on the solution, after add a new project all `PackageReferences` will be updated and added the `PackageVersion` to the current file.
+
 ## Extension Settings
 
 You can configure the extension in the Visual Studio Code settings panel:

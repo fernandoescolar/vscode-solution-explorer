@@ -41,7 +41,7 @@ export class SolutionTreeItem extends TreeItem {
                 this.refresh();
 
                 DirectoryPackages.existsInPath(this.solution.folderPath).then(exists => {
-                    if (exists) {
+                    if (exists && !DirectoryPackages.isRunning()) {
                         const directoryPackages = new DirectoryPackages(this.solution.folderPath);
                         directoryPackages.load();
                         directoryPackages.addProjects(this.solution.getAllProjects());

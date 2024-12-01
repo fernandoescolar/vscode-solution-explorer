@@ -12,6 +12,7 @@ export class DirectoryPackages {
   private _propertyGroups: PropertyGroup[];
   private _xml: XmlManager;
   private _pathToFolder: string;
+  private static _generating: boolean = false;
 
   private _fullPath(): string {
     return path.join(this._pathToFolder, DIRECTORY_PACKAGES_FILE_NAME);
@@ -125,14 +126,22 @@ export class DirectoryPackages {
 
   public async addProject(projectItem: SolutionProject) {
     if (!projectItem || !projectItem.fullPath) return;
-    return this.addProjectFile(projectItem.fullPath);
+    this.addProjectFile(projectItem.fullPath);
+    return;
+  }
+
+  public static isRunning(): boolean {
+    return this._generating;
   }
 
   public async addProjects(projectItems: SolutionProject[]) {
     if (!projectItems) return;
+    if (DirectoryPackages._generating) return;
+    DirectoryPackages._generating = true;
     for (const p of projectItems) {
       await this.addProject(p);
     }
+    DirectoryPackages._generating = false;
 
   }
 

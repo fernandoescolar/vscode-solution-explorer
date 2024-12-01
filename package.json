@@ -134,7 +134,7 @@
       },
       {
         "command": "solutionExplorer.createDirectoryPackages",
-        "title": "Create Directory.Packages.props file",
+        "title": "Add Directory.Packages.props",
         "category": "Solution Explorer"
       },
       {
