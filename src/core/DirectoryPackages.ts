@@ -65,6 +65,10 @@ export class DirectoryPackages {
     });
 
     if (!this._itemGroups[key].hasElements()) delete this._itemGroups[key];
+    this._itemGroups[key].packageVersions =
+      this._itemGroups[key].packageVersions.sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+      )
   }
 
   public removeItemGroup(
@@ -146,6 +150,7 @@ export class DirectoryPackages {
     for (const p of projectItems) {
       await this.addProject(p);
     }
+    
     DirectoryPackages._generating = false;
   }
 
