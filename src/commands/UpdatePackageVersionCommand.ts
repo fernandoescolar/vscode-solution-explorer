@@ -30,7 +30,7 @@ export class UpdatePackageVersionCommand extends SingleItemActionsCommand {
         if (!parameters) {
             return [];
         }
-
-        return [ new DotNetAddPackageReference(item.project.fullPath, packageId, parameters[1]) ];
+        const parameterVersion = parameters.length > 1 ? parameters[1] : parameters[0];
+        return [ new DotNetAddPackageReference(item.project.fullPath, packageId, parameterVersion) ];
     }
 }

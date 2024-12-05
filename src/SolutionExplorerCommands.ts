@@ -47,7 +47,11 @@ export class SolutionExplorerCommands {
 
         this.commands['copy'] = [new cmds.CopyCommand(),
             anyLang(ContextValues.projectFolder, ContextValues.projectFile)];
-
+        this.commands["createDirectoryPackages"] = [
+          new cmds.CreateDirectoryPackagesCommand(),
+          both(ContextValues.solution),
+        ];
+        
         this.commands['createFile'] = [new cmds.CreateFileCommand(templateEngineCollection),
             [ContextValues.projectFile, ...anyLang(ContextValues.projectFolder), ...both(ContextValues.project)]];
 

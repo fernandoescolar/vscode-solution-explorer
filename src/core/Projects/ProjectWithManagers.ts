@@ -24,6 +24,8 @@ export abstract class ProjectWithManagers extends ProjectWithNugetDependencies {
     public async refresh(): Promise<void> {
         await super.refresh();
         await this.xml.refresh();
+        const nugetDependencies = await this.getNugetPackageDependencies();
+        await this.xml.updatePackageReference(nugetDependencies);
     }
 
     public createFile(folderpath: string, filename: string, content?: string | undefined, relativePosition?:RelativeFilePosition): Promise<string> {
