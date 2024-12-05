@@ -104,13 +104,18 @@ export class SlnAddSolutionFile implements Action {
         });
 
         if (projectLineIndexStart >= 0 && lineIndex >= 0) {
-            this.updateLines(lines, lineIndex, relativeFilePath, !hasSection);
+            this.updateLines(lines,projectLineIndexStart, lineIndex, relativeFilePath, !hasSection);
             await fs.writeFile(this.solution.fullPath, lines.join('\n'));
         }
     }
 
-    protected updateLines(lines: string[], index: number, filePath: string, includeSection: boolean): void {
+    protected updateLines(lines: string[],projectLineIndexStart: number, index: number, filePath: string, includeSection: boolean): void {
         const lineToAdd = '\t\t' + filePath + ' = ' + filePath + '\r';
+        try {
+            const sectionLines = lines.slice(projectLineIndexStart, index + 1);
+            if (sectionLines.filter(l => l === lineToAdd).length > 0)
+                return;
+        } catch (e) { }
         const content = includeSection ?
         [
             '\tProjectSection(SolutionItems) = preProject\r',
