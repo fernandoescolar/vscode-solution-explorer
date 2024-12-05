@@ -45,25 +45,26 @@ export class DirectoryPackages {
     if (!itemGroup.hasElements()) return;
 
     if (!this._itemGroups[key]) {
-      this._itemGroups[key] = new ItemGroup(itemGroup.name, itemGroup.condition, itemGroup.label);
+      this._itemGroups[key] = new ItemGroup(
+        itemGroup.name,
+        itemGroup.condition,
+        itemGroup.label
+      );
     }
 
     itemGroup.packageReferences
       .sort((a, b) => a.name.localeCompare(b.name))
       .forEach((p) => {
         const pv = PackageVersion.fromPackageReference(p);
-        if (pv && !this.hasPackageVersionName(pv.name, itemGroup.condition))
+        if (pv && !this.hasPackageVersionName(pv.name, itemGroup.condition) && this._itemGroups[key].condition===itemGroup.condition)
           this._itemGroups[key].packageVersions.push(pv);
       });
 
-    itemGroup.packageVersions
-      .forEach((p) => {
-        this._itemGroups[key].packageVersions.push(p);
-      })
+    itemGroup.packageVersions.forEach((p) => {
+      this._itemGroups[key].packageVersions.push(p);
+    });
 
-    if (!this._itemGroups[key].hasElements())
-      delete this._itemGroups[key];
-
+    if (!this._itemGroups[key].hasElements()) delete this._itemGroups[key];
   }
 
   public removeItemGroup(
@@ -76,8 +77,17 @@ export class DirectoryPackages {
     }
   }
 
-  public hasPackageVersionName(name: string, condition: string | undefined): boolean {
-    return Object.values(this._itemGroups).filter((i) => i.condition === condition && i.packageVersions.filter((pv) => pv.name === name).length > 0)?.length > 0
+  public hasPackageVersionName(
+    name: string,
+    condition: string | undefined
+  ): boolean {
+    return (
+      Object.values(this._itemGroups).filter(
+        (i) =>
+          i.condition === condition &&
+          i.packageVersions.filter((pv) => pv.name.toLocaleLowerCase() === name.toLocaleLowerCase()).length > 0
+      )?.length > 0
+    );
   }
 
   public async save(): Promise<void> {
@@ -87,10 +97,7 @@ export class DirectoryPackages {
       elements: [this.toElement()],
     });
 
-    await fs.writeFile(
-      path.join(this._fullPath()),
-      content
-    );
+    await fs.writeFile(path.join(this._fullPath()), content);
   }
 
   public async load(): Promise<void> {
@@ -112,21 +119,19 @@ export class DirectoryPackages {
   }
 
   public async addProjectFile(projectFilePath: string): Promise<void> {
-    if (!await fs.exists(projectFilePath)) return;
+    if (!(await fs.exists(projectFilePath))) return;
     const xmlProject = new XmlManager(projectFilePath);
     const projectItemGroups = await xmlProject.getItemGroups();
     projectItemGroups.forEach((ig) => {
       this.addItemGroup(ig);
-    })
+    });
     await this.save();
     await xmlProject.deletePackageReferencesVersion();
-
-
   }
 
-  public async addProject(projectItem: SolutionProject) {
+  public async addProject(projectItem: SolutionProject): Promise<void> {
     if (!projectItem || !projectItem.fullPath) return;
-    this.addProjectFile(projectItem.fullPath);
+    await this.addProjectFile(projectItem.fullPath);
     return;
   }
 
@@ -134,7 +139,7 @@ export class DirectoryPackages {
     return this._generating;
   }
 
-  public async addProjects(projectItems: SolutionProject[]) {
+  public async addProjects(projectItems: SolutionProject[]): Promise<void> {
     if (!projectItems) return;
     if (DirectoryPackages._generating) return;
     DirectoryPackages._generating = true;
@@ -142,7 +147,6 @@ export class DirectoryPackages {
       await this.addProject(p);
     }
     DirectoryPackages._generating = false;
-
   }
 
   public toElement(): XmlElement {

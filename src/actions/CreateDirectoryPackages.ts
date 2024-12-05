@@ -2,6 +2,7 @@ import { Solution } from "@core/Solutions";
 import { Action, ActionContext } from "./base/Action";
 import { DirectoryPackages } from "@core/DirectoryPackages";
 import * as vscode from "vscode";
+import * as fs from "@extensions/fs";
 
 export class CreateDirectoryPackages implements Action {
   constructor(private readonly solution: Solution) {}
@@ -15,7 +16,7 @@ export class CreateDirectoryPackages implements Action {
       .findFiles("**/Directory.Build.props")
       .then((directoryFiles) => {
         if (directoryFiles.length == 0) return [];
-        return directoryFiles.map((file) => file.path);
+        return directoryFiles.map((file) => file.fsPath);
       });
   }
   public async execute(context: ActionContext): Promise<void> {
@@ -23,9 +24,11 @@ export class CreateDirectoryPackages implements Action {
     const directoryBuildsFiles = await this.getDirectoryBuildFiles();
     const directoryPackage = new DirectoryPackages(this.solution.folderPath);
     await directoryPackage.load();
-    directoryBuildsFiles.forEach(async (f) => {
-      await directoryPackage.addProjectFile(f);
-    });
+
     await directoryPackage.addProjects(projects);
+
+    for (var db in directoryBuildsFiles) {
+      await await directoryPackage.addProjectFile(directoryBuildsFiles[db]);
+    }
   }
 }
