@@ -8,9 +8,10 @@ import { Folder } from "./Folder";
 import { Include } from "./Include";
 import { Remove } from "./Remove";
 import { Update } from "./Update";
+import { PackageVersion } from "./PackageVersion";
 
-const ignoreItems = [ "AssemblyMetadata", "BaseApplicationManifest", "CodeAnalysisImport", "COMReference", "COMFileReference", "Import", "InternalsVisibleTo", "NativeReference", "TrimmerRootAssembly", "Using", "Protobuf" ];
-const knownTypes = [ "Reference", "PackageReference", "ProjectReference", "Folder", "Content", "Compile", "None", "EmbeddedResource" ];
+const ignoreItems = ["AssemblyMetadata", "BaseApplicationManifest", "CodeAnalysisImport", "COMReference", "COMFileReference", "Import", "InternalsVisibleTo", "NativeReference", "TrimmerRootAssembly", "Using", "Protobuf"];
+const knownTypes = ["Reference", "PackageReference", "ProjectReference", "Folder", "Content", "Compile", "None", "EmbeddedResource", "PackageVersion"];
 
 export function createProjectElement(xml: XmlElement, properties: Record<string, string>): ProjectItem | undefined {
     if (ignoreItems.indexOf(xml.name) >= 0) {
@@ -25,6 +26,10 @@ export function createProjectElement(xml: XmlElement, properties: Record<string,
 
     if (xml.name === "PackageReference" && xml.attributes && xml.attributes.Include) {
         return new PackageReference(xml.attributes.Include, xml.attributes.Version);
+    }
+
+    if (xml.name === "PackageVersion" && xml.attributes && xml.attributes.Include && xml.attributes.Version) {
+        return new PackageVersion(xml.attributes.Include, xml.attributes.Version);
     }
 
     if (xml.name === "ProjectReference" && xml.attributes && xml.attributes.Include) {
@@ -45,8 +50,8 @@ export function createProjectElement(xml: XmlElement, properties: Record<string,
         const linkBase = getLinkBase(xml);
         const dependentUpon = getDependentUpon(xml);
         const excludes = xml.attributes.Exclude
-          ? replacePropertiesInPath(xml.attributes.Exclude, properties)
-          : undefined;
+            ? replacePropertiesInPath(xml.attributes.Exclude, properties)
+            : undefined;
         return new Include(xml.name, include, link, linkBase, excludes, dependentUpon);
     }
 

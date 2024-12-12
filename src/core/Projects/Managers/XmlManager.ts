@@ -3,14 +3,15 @@ import * as fs from "@extensions/fs";
 import * as xml from "@extensions/xml";
 import { XmlElement } from "@extensions/xml";
 import * as config from "@extensions/config";
-import { Include, ProjectItem, ProjectItemsFactory } from "../Items";
+import { Include, ItemGroup, PackageReference, PackageVersion, ProjectItem, ProjectItemsFactory, PropertyGroup } from "../Items";
 import { ProjectFileStat } from "../ProjectFileStat";
 import { Manager } from "./Manager";
 import { Direction, RelativeFilePosition } from "../RelativeFilePosition";
+import { NugetDependencies } from "@extensions/nuget-dependencies";
 
-interface NamedHierarchy<T>{
+interface NamedHierarchy<T> {
     groupName: string;
-    item:T|undefined;
+    item: T | undefined;
     children: NamedHierarchy<T>[]
 }
 
@@ -18,6 +19,8 @@ export class XmlManager implements Manager {
     private readonly projectFolderPath: string;
     private document: XmlElement | undefined;
     private projectItems: ProjectItem[] = [];
+    private itemGroups: ItemGroup[] = [];
+    private propertyGroups: PropertyGroup[] = [];
     private currentItemGroup: xml.XmlElement | undefined = undefined;
     private _sdk: string | undefined;
     private _toolsVersion: string | undefined;
@@ -143,12 +146,12 @@ export class XmlManager implements Manager {
         return newRelativePath;
     }
 
-    
-    private collectProjectItems<T>(project: xml.XmlElement,map:(group:xml.XmlElement, item:xml.XmlElement, itemIndex:number, groupIndex: number) => T|undefined): T[] {
+
+    private collectProjectItems<T>(project: xml.XmlElement, map: (group: xml.XmlElement, item: xml.XmlElement, itemIndex: number, groupIndex: number) => T | undefined): T[] {
         const collected: T[] = [];
         this.someProjectItem(project, (itemGroup, item, itemIndex, groupIndex) => {
             const mapped = map(itemGroup, item, itemIndex, groupIndex)
-            if(mapped){
+            if (mapped) {
                 collected.push(mapped)
             }
             return false;
@@ -156,11 +159,11 @@ export class XmlManager implements Manager {
         return collected;
     }
 
-    private groupBy<T>(array: T[], groupf: (item:T)=>string): Record<string,T[]> {
+    private groupBy<T>(array: T[], groupf: (item: T) => string): Record<string, T[]> {
         const dict: Record<string, T[]> = {}
-        array.forEach(item =>{
+        array.forEach(item => {
             const key = groupf(item)
-            if(!dict[key]){
+            if (!dict[key]) {
                 dict[key] = [];
             }
             dict[key].push(item);
@@ -168,63 +171,63 @@ export class XmlManager implements Manager {
         return dict;
     }
 
-    private partition<T>(array: T[], testf: (item:T) =>boolean):  [passed:T[], failed:T[]]{
+    private partition<T>(array: T[], testf: (item: T) => boolean): [passed: T[], failed: T[]] {
         const passed: T[] = [];
         const failed: T[] = []
-  
+
         array.forEach(x => {
-            if(testf(x)){
+            if (testf(x)) {
                 passed.push(x);
             }
             else failed.push(x);
         });
-  
+
         return [passed, failed];
     }
 
-    private pathSegments (_path: string): string[] {
+    private pathSegments(_path: string): string[] {
         return _path.split(path.sep);
     }
-    private buildHierarchyFromName<T>(items: T[], nameSegmentsf: (item: T) => string[]): NamedHierarchy<T>[]{
+    private buildHierarchyFromName<T>(items: T[], nameSegmentsf: (item: T) => string[]): NamedHierarchy<T>[] {
         const withRelativePath = items.map(x => ({
             relativeSegments: nameSegmentsf(x),
             item: x
         }))
-        .filter(x => x.relativeSegments && x.relativeSegments.length > 0);
+            .filter(x => x.relativeSegments && x.relativeSegments.length > 0);
 
-        const recurse = (withRelativePaths: {relativeSegments:string[]; item:T}[]): NamedHierarchy<T>[] => {
+        const recurse = (withRelativePaths: { relativeSegments: string[]; item: T }[]): NamedHierarchy<T>[] => {
             const groups = this.groupBy(withRelativePaths, (x) => x.relativeSegments[0]);
-            
+
             return Object.keys(groups)
-            .map((group:string) =>{
-                const groupItems = groups[group];
-                const [pathIsExactlyGroup, children] = this.partition(groupItems,(x) => x.relativeSegments.length === 1);
+                .map((group: string) => {
+                    const groupItems = groups[group];
+                    const [pathIsExactlyGroup, children] = this.partition(groupItems, (x) => x.relativeSegments.length === 1);
 
-                const popTopSegment = (x: {relativeSegments:string[]; item:T}) =>{
-                    x.relativeSegments = x.relativeSegments.slice(1)
-                    return x;
-                }
-                
-                const groupNode:NamedHierarchy<T> = {
-                    groupName: group,
-                    item: undefined,
-                    children: children.length > 0 ? recurse(children.map(popTopSegment)) : []
-                }
+                    const popTopSegment = (x: { relativeSegments: string[]; item: T }) => {
+                        x.relativeSegments = x.relativeSegments.slice(1)
+                        return x;
+                    }
 
-                if(pathIsExactlyGroup.length > 0){
-                    groupNode.item = pathIsExactlyGroup[0].item;
-                }
-                return groupNode;
-            });
+                    const groupNode: NamedHierarchy<T> = {
+                        groupName: group,
+                        item: undefined,
+                        children: children.length > 0 ? recurse(children.map(popTopSegment)) : []
+                    }
+
+                    if (pathIsExactlyGroup.length > 0) {
+                        groupNode.item = pathIsExactlyGroup[0].item;
+                    }
+                    return groupNode;
+                });
         }
         return recurse(withRelativePath);
     }
 
-    private buildProjectItemHierarchy(project: xml.XmlElement){
-        
-        const qualifingProjectItems = 
-            this.collectProjectItems(project, (itemGroup, element, index, groupIndex)=>{
-                if (element.attributes && element.attributes.Include){
+    private buildProjectItemHierarchy(project: xml.XmlElement) {
+
+        const qualifingProjectItems =
+            this.collectProjectItems(project, (itemGroup, element, index, groupIndex) => {
+                if (element.attributes && element.attributes.Include) {
 
                     return {
                         itemGroup: itemGroup,
@@ -241,22 +244,22 @@ export class XmlManager implements Manager {
         return this.buildHierarchyFromName(qualifingProjectItems, x => this.pathSegments(x.path));
     }
 
-    private getPeerCollection<T>(path:string, hierarchy: NamedHierarchy<T>[]){
-        const recurse = (relativeSegments: string[], toSearch: NamedHierarchy<T>[]): NamedHierarchy<T>[] =>{
-            if(relativeSegments.length > 1){
+    private getPeerCollection<T>(path: string, hierarchy: NamedHierarchy<T>[]) {
+        const recurse = (relativeSegments: string[], toSearch: NamedHierarchy<T>[]): NamedHierarchy<T>[] => {
+            if (relativeSegments.length > 1) {
                 const found = toSearch.find((x) => x.groupName === relativeSegments[0]);
-                if(!found) return [];
+                if (!found) return [];
                 else return recurse(relativeSegments.slice(1), found.children);
             }
-            else{
+            else {
                 return toSearch;
-            }   
+            }
         }
         return recurse(this.pathSegments(path), hierarchy);
     }
 
-    private getHierarchyLeafs<T>(hierarchy: NamedHierarchy<T>): T[]{
-        const recurse = (hierarchy: NamedHierarchy<T>) : T[] =>{
+    private getHierarchyLeafs<T>(hierarchy: NamedHierarchy<T>): T[] {
+        const recurse = (hierarchy: NamedHierarchy<T>): T[] => {
             const leafs = hierarchy.item ? [hierarchy.item] : []
             const childLeafs = hierarchy.children.flatMap(x => recurse(x))
 
@@ -265,9 +268,9 @@ export class XmlManager implements Manager {
         return recurse(hierarchy);
     }
 
-    private orderProjectItems(projectItems: {groupIndex: number, itemIndexInGroup:number, itemGroup:XmlElement, element: XmlElement}[]){
-        return projectItems.sort((left, right) =>{
-            if(left.groupIndex != right.groupIndex) return left.groupIndex < right.groupIndex ? -1 : 1;
+    private orderProjectItems(projectItems: { groupIndex: number, itemIndexInGroup: number, itemGroup: XmlElement, element: XmlElement }[]) {
+        return projectItems.sort((left, right) => {
+            if (left.groupIndex != right.groupIndex) return left.groupIndex < right.groupIndex ? -1 : 1;
             else if (left.itemIndexInGroup != right.itemIndexInGroup) return left.groupIndex < right.groupIndex ? -1 : 1;
             else return 0;
         })
@@ -285,21 +288,21 @@ export class XmlManager implements Manager {
         const groupToMove_IndexInPeers = peers.findIndex(pi => pi.groupName === path.basename(relativePath).toLocaleLowerCase());
         const groupToMove = groupToMove_IndexInPeers !== -1 ? peers[groupToMove_IndexInPeers] : undefined;
 
-        if(groupToMove && groupToMove_IndexInPeers > 0){
+        if (groupToMove && groupToMove_IndexInPeers > 0) {
             const groupAbove = peers[groupToMove_IndexInPeers - 1];
             const topItemInGroupAbove = this.orderProjectItems(this.getHierarchyLeafs(groupAbove))[0]
             const itemsToMove = this.orderProjectItems(this.getHierarchyLeafs(groupToMove));
 
             const elementFinder = (toFind: XmlElement) => ((other: XmlElement) => toFind.attributes.Include === other.attributes.Include);
             // remove items from their previous positions
-            itemsToMove.forEach((toMove) =>{
+            itemsToMove.forEach((toMove) => {
                 // IMPORTANT: we can't use the index on the leaf item because the indexes change as we update the project file
                 let deleteIndex = toMove.itemGroup.elements.findIndex(elementFinder(toMove.element));
                 toMove.itemGroup.elements.splice(deleteIndex, 1);
             });
             // insert to new location
             let insertBaseIndex = topItemInGroupAbove.itemGroup.elements.findIndex(elementFinder(topItemInGroupAbove.element));
-            itemsToMove.forEach((toMove, i) =>{
+            itemsToMove.forEach((toMove, i) => {
                 topItemInGroupAbove.itemGroup.elements.splice(insertBaseIndex + i, 0, toMove.element);
             })
         }
@@ -321,27 +324,27 @@ export class XmlManager implements Manager {
         const groupToMove_IndexInPeers = peers.findIndex(pi => pi.groupName === path.basename(relativePath).toLocaleLowerCase());
         const groupToMove = groupToMove_IndexInPeers !== -1 ? peers[groupToMove_IndexInPeers] : undefined;
 
-        if(groupToMove && groupToMove_IndexInPeers < (peers.length - 1)){
+        if (groupToMove && groupToMove_IndexInPeers < (peers.length - 1)) {
             const groupBelow = peers[groupToMove_IndexInPeers + 1];
             const itemsInGroupBelow = this.orderProjectItems(this.getHierarchyLeafs(groupBelow));
-            const bottomItemInGroupBelow = itemsInGroupBelow[itemsInGroupBelow.length -1];
+            const bottomItemInGroupBelow = itemsInGroupBelow[itemsInGroupBelow.length - 1];
             const itemsToMove = this.orderProjectItems(this.getHierarchyLeafs(groupToMove));
 
             const elementFinder = (toFind: XmlElement) => ((other: XmlElement) => toFind.attributes.Include === other.attributes.Include);
             // remove items from their previous positions
-            itemsToMove.forEach((toMove) =>{
+            itemsToMove.forEach((toMove) => {
                 // IMPORTANT: we can't use the index on the leaf item because the indexes change as we update the project file
                 let deleteIndex = toMove.itemGroup.elements.findIndex(elementFinder(toMove.element))
                 toMove.itemGroup.elements.splice(deleteIndex, 1);
             });
             // insert to new location
             let insertBaseIndex = bottomItemInGroupBelow.itemGroup.elements.findIndex(elementFinder(bottomItemInGroupBelow.element));
-            if(insertBaseIndex === bottomItemInGroupBelow.itemGroup.elements.length){
+            if (insertBaseIndex === bottomItemInGroupBelow.itemGroup.elements.length) {
                 itemsToMove.forEach(bottomItemInGroupBelow.itemGroup.elements.push);
             }
-            else{
-                itemsToMove.forEach((toMove,i) =>{
-                    bottomItemInGroupBelow.itemGroup.elements.splice(insertBaseIndex+i+1, 0, toMove.element);
+            else {
+                itemsToMove.forEach((toMove, i) => {
+                    bottomItemInGroupBelow.itemGroup.elements.splice(insertBaseIndex + i + 1, 0, toMove.element);
                 });
             }
         }
@@ -397,9 +400,27 @@ export class XmlManager implements Manager {
         this.projectItems = this.parseDocument();
     }
 
+    public async updatePackageReference(packages: NugetDependencies): Promise<void> {
+        this.projectItems.forEach(pi => {
+            if (pi instanceof PackageReference && !pi.version && packages[pi.name.toLowerCase()]) {
+                pi.version = packages[pi.name.toLowerCase()].version;
+            }
+        });
+    }
+
     public async getProjectItems(): Promise<ProjectItem[]> {
         await this.ensureIsLoaded();
         return this.projectItems;
+    }
+
+    public async getItemGroups(): Promise<ItemGroup[]> {
+        await this.ensureIsLoaded();
+        return this.itemGroups;
+    }
+
+    public async getPropertyGroups(): Promise<PropertyGroup[]> {
+        await this.ensureIsLoaded();
+        return this.propertyGroups;
     }
 
     public async tryReplaceLinkFolderName(relativePath: string, oldName: string, newName: string): Promise<boolean> {
@@ -452,11 +473,10 @@ export class XmlManager implements Manager {
                 element.elements.forEach((e: xml.XmlElement) => {
                     nodeNames.forEach(nodeName => {
                         if (e.name === nodeName) {
-                            if (  replaceAttribute(e, 'LinkBase', oldName, newName)
-                               || replaceElementText(e, 'LinkBase', oldName, newName)
-                               || replaceAttribute(e, 'Link', oldName, newName)
-                               || replaceElementText(e, 'Link', oldName, newName) )
-                            {
+                            if (replaceAttribute(e, 'LinkBase', oldName, newName)
+                                || replaceElementText(e, 'LinkBase', oldName, newName)
+                                || replaceAttribute(e, 'Link', oldName, newName)
+                                || replaceElementText(e, 'Link', oldName, newName)) {
                                 result = true;
                             }
                         }
@@ -623,20 +643,20 @@ export class XmlManager implements Manager {
         }
     }
 
-    private someProjectItem(project: xml.XmlElement, test:(group:xml.XmlElement, item:xml.XmlElement, index:number, groupIndex: number) => Boolean): xml.XmlElement | undefined {
+    private someProjectItem(project: xml.XmlElement, test: (group: xml.XmlElement, item: xml.XmlElement, index: number, groupIndex: number) => Boolean): xml.XmlElement | undefined {
         const nodeNames = this.getXmlNodeNames();
         const isValidElement = (e: xml.XmlElement) => nodeNames.length === 0 || nodeNames.indexOf(e.name) > -1;
 
-        for(let groupIndex = 0; groupIndex < project.elements.length; groupIndex++) {
+        for (let groupIndex = 0; groupIndex < project.elements.length; groupIndex++) {
             const maybeGroup = project.elements[groupIndex];
-            if(maybeGroup.name === 'ItemGroup' && maybeGroup.elements && Array.isArray(maybeGroup.elements)){
-                const curried = (item: xml.XmlElement, itemIndex:number) : Boolean => isValidElement(item) ? test(maybeGroup, item, itemIndex, groupIndex) : false
+            if (maybeGroup.name === 'ItemGroup' && maybeGroup.elements && Array.isArray(maybeGroup.elements)) {
+                const curried = (item: xml.XmlElement, itemIndex: number): Boolean => isValidElement(item) ? test(maybeGroup, item, itemIndex, groupIndex) : false
                 const item = maybeGroup.elements.some(curried);
-                if(item){
+                if (item) {
                     return item;
                 }
             }
-       }
+        }
     }
 
     private currentItemGroupAdd(type: string, include: string, isFolder: boolean = false, relativePosition?: RelativeFilePosition): void {
@@ -661,14 +681,14 @@ export class XmlManager implements Manager {
             }
         }
 
-        if(relativePosition){
-            if(!this.document) return;
+        if (relativePosition) {
+            if (!this.document) return;
             const project = XmlManager.getProjectElement(this.document);
-            if(!project){return;}
-            
+            if (!project) { return; }
+
             const lowercaseTargetFilePath = this.getRelativePath(relativePosition.fullpath).toLocaleLowerCase();
-            
-            this.someProjectItem(project, (itemGroup, e, index) =>{
+
+            this.someProjectItem(project, (itemGroup, e, index) => {
                 if (e.attributes && e.attributes.Include && e.attributes.Include.toLocaleLowerCase() === lowercaseTargetFilePath) {
                     if (index >= 0) {
                         const indexOffset = relativePosition.direction === Direction.Above ? 0 : 1;
@@ -681,7 +701,7 @@ export class XmlManager implements Manager {
                 return false;
             });
         }
-        else{
+        else {
             itemGroup.elements.push(newItemElement);
         }
     }
@@ -747,20 +767,41 @@ export class XmlManager implements Manager {
 
         project.elements.forEach((element: XmlElement) => {
             if (element.name === 'PropertyGroup') {
+                const pg = new PropertyGroup({});
                 XmlManager.ensureElements(element);
                 element.elements.forEach((e: XmlElement) => {
                     let value = e.elements?.find((el: XmlElement) => el.type == "text")?.text ?? "";
                     Object.entries(properties).forEach(([k, v]) => value = value.replaceAll(`$(${k})`, v));
                     properties[e.name] = value;
+                    pg.items[e.name] = value;
                 });
+                this.propertyGroups.push(pg);
             }
             else if (element.name === 'ItemGroup') {
                 XmlManager.ensureElements(element);
+                const label = element.attributes?.Label ?? undefined;
+                const condition = element.attributes?.Condition ?? undefined;
+
+                const currentItemGroups = this.itemGroups?.filter(ig => ig.label === label && ig.condition == condition);
+                let itemGroup: ItemGroup;
+                if (currentItemGroups.length > 0)
+                    itemGroup = currentItemGroups[0];
+                else {
+                    itemGroup = new ItemGroup("ItemGroup", condition, label);
+                    this.itemGroups.push(itemGroup);
+                }
+
+
                 element.elements.forEach((e: XmlElement) => {
                     const projectItem = ProjectItemsFactory.createProjectElement(e, properties);
                     if (!projectItem) {
                         return;
                     }
+                    if (projectItem instanceof PackageReference)
+                        itemGroup.packageReferences.push(projectItem);
+                    if (projectItem instanceof PackageVersion)
+                        itemGroup.packageVersions.push(projectItem);
+
 
                     result.push(projectItem);
                 });
@@ -845,4 +886,31 @@ export class XmlManager implements Manager {
 
         return element;
     }
+
+    public async deletePackageReferencesVersion(): Promise<void> {
+        await this.ensureIsLoaded();
+        if (!this.document) {
+            return;
+        }
+        function removeVersionAttributes(node: any): void {
+
+            if (node.attributes && node.attributes.Version) {
+                delete node.attributes.Version; // Eliminar el atributo 'Version'
+            }
+
+
+            for (const key in node) {
+                if (node.hasOwnProperty(key) && Array.isArray(node[key])) {
+                    node[key].forEach(removeVersionAttributes); // Procesar cada nodo hijo
+                }
+            }
+        }
+
+        removeVersionAttributes(this.document);
+        this.saveProject();
+        return;
+
+    }
+
+
 }
