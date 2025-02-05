@@ -4,6 +4,8 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 ## 0.8.9
 
+PR #313: Add Directory.Packages.props support thanks to [Guillermo Pérez](https://github.com/gperezivo)
+
 Better nuget in code management: new tooltip with version and new configuration options.
 
 ## 0.8.8
