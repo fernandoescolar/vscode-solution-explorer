@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.8.9
+
+Better nuget in code management: new tooltip with version and new configuration options.
+
 ## 0.8.8
 
 Fixing issues managing nuget packages with multiple `nuget.config` files and not working feeds.

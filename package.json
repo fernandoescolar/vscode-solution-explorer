@@ -2,7 +2,7 @@
   "name": "vscode-solution-explorer",
   "displayName": "vscode-solution-explorer",
   "description": "Visual Studio .sln file explorer for Visual Studio Code",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "license": "MIT",
   "publisher": "fernandoescolar",
   "icon": "images/icon.png",
@@ -951,6 +951,26 @@
           "type": "object",
           "default": {},
           "description": "Sets custom the terminal commands."
+        },
+        "vssolution.nuget.includePrerelease": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sets whether to include prerelease packages when searching for NuGet packages."
+        },
+        "vssolution.nuget.codeDecorators": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sets whether to show NuGet package versions in the code."
+        },
+        "vssolution.nuget.codeActions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sets whether to show NuGet package versions in the code actions."
+        },
+        "vssolution.nuget.codeCompletions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sets whether to show NuGet package versions and names in the code completions."
         }
       }
     }
@@ -967,7 +987,7 @@
     "@typescript-eslint/parser": "^5.31.0",
     "eslint": "^8.20.0",
     "mocha": "^10.0.0",
-    "process": "^0.11.10",
+    "process": "0.11.10",
     "ts-loader": "^9.3.1",
     "typescript": "^4.7.4",
     "webpack": "^5.94.0",

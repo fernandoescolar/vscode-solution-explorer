@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 
-export const CSPROJ: vscode.DocumentSelector = { pattern: "**/*.csproj" };
-export const NUGETDECLARATIONS: vscode.DocumentSelector = {
-  pattern: "**/{*.csproj,Directory.Packages.props,Directory.Build.props}",
-};
+export const PACKAGE_REFERENCE_FILTER: vscode.DocumentSelector = { pattern: '**/{*.csproj,Directory.Build.props}' };
+
+export const PACKAGE_VERSION_FILTER: vscode.DocumentSelector = { pattern: '**/Directory.Packages.props' };

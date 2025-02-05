@@ -1,40 +1,46 @@
 import * as vscode from "vscode";
 import * as nuget from "@extensions/nuget";
 import { ICodeDecorator } from "./ICodeDecorator";
-import { CSPROJ, NUGETDECLARATIONS } from "../filters";
+
+const okType = vscode.window.createTextEditorDecorationType({
+    isWholeLine: false,
+    cursor: "pointer",
+    after: {
+        contentText: "✅",
+        margin: "0 0 0 0",
+        color: new vscode.ThemeColor("editorLineNumber.foreground"),
+        fontWeight: "bold",
+        fontStyle: "underline",
+    }
+});
+
+const newType = vscode.window.createTextEditorDecorationType({
+    isWholeLine: false,
+    cursor: "pointer",
+    rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+    after: {
+        contentText: "🆕",
+        margin: "0 0 0 0",
+        color: new vscode.ThemeColor("editorLineNumber.foreground"),
+        fontWeight: "bold",
+        fontStyle: "underline",
+    }
+});
 
 export class NugetVersionDecorator implements ICodeDecorator
 {
-    private okType = vscode.window.createTextEditorDecorationType({
-        after: {
-            contentText: "✅",
-            margin: "0 0 0 0",
-            color: new vscode.ThemeColor("editorLineNumber.foreground"),
-            fontWeight: "bold",
-            fontStyle: "underline",
-        }
-    });
-    private newType = vscode.window.createTextEditorDecorationType({
-        after: {
-            contentText: "🆕",
-            margin: "0 0 0 0",
-            color: new vscode.ThemeColor("editorLineNumber.foreground"),
-            fontWeight: "bold",
-            fontStyle: "underline",
-        }
-    });
+    private readonly regEx: RegExp;
 
-    get filter(): vscode.DocumentSelector {
-        return NUGETDECLARATIONS;
+    constructor(public readonly filter: vscode.DocumentSelector, tagName: string) {
+        this.regEx = new RegExp(`<${tagName} Include="(.+)" Version="(.+)"`, "g");
     }
 
     async decorate(editor: vscode.TextEditor): Promise<void> {
         const text = editor.document.getText();
         const okDecorations: vscode.DecorationOptions[] = [];
         const newDecorations: vscode.DecorationOptions[] = [];
-        const regEx = /<Package(?:Reference|Version) Include="(.+)" Version="(.+)"/g;
         let match;
-        while ((match = regEx.exec(text))) {
+        while ((match = this.regEx.exec(text))) {
             const id = match[1];
             const version = match[2];
             const versions = await nuget.searchPackageVersions(editor.document.uri.fsPath, id);
@@ -43,19 +49,40 @@ export class NugetVersionDecorator implements ICodeDecorator
             }
 
             const isNew = versions[0] !== version;
-            const hoverMessage = isNew ? `Version ${version} is outdated` : `Version ${version} is up-to-date`;
-            const startPos = editor.document.positionAt(match.index);
-            const endPos = editor.document.positionAt(match.index + match[0].length);
+            const versionIndex = match.index + match[0].indexOf(version);
+            const startPos = editor.document.positionAt(versionIndex - 1);
+            const endPos = editor.document.positionAt(versionIndex + match[2].length + 1);
+            const hoverMessage = NugetVersionDecorator.getHoverMessage(id, versions, version, startPos, endPos, isNew);
             const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage };
 
             if (isNew) {
                 newDecorations.push(decoration);
+                editor.setDecorations(newType, newDecorations);
             } else {
                 okDecorations.push(decoration);
+                editor.setDecorations(okType, okDecorations);
             }
         }
 
-        editor.setDecorations(this.okType, okDecorations);
-        editor.setDecorations(this.newType, newDecorations);
+        editor.setDecorations(newType, newDecorations);
+        editor.setDecorations(okType, okDecorations);
+    }
+
+    static getHoverMessage(name: string, versions: string[], version: string, startPos: vscode.Position, endPos: vscode.Position, isNew: boolean): vscode.MarkdownString {
+        let message = "Versions:";
+        versions.forEach(v => {
+            const args = [startPos, endPos, v];
+            const command = vscode.Uri.parse(`command:solutionExplorer.updatePackageVersionInline?${encodeURIComponent(JSON.stringify(args))}`);
+            if (v === version) {
+                message += `\r\n- **${v}** *current*`;
+            } else {
+                message += `\r\n- [${v}](${command})`;
+            }
+        });
+
+        const contents = new vscode.MarkdownString(message);
+        contents.isTrusted = true;
+
+        return contents;
     }
 }

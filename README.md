@@ -5,7 +5,7 @@
 
 This extension adds a Visual Studio Solution File explorer panel in Visual Studio Code. Now you can navigate into your solution following the original Visual Studio structure.
 
-> *It was originally intended to work with .Net Core solutions and projects. And that is why compatibility with other types of projects (such as .Net Framework or C++) is not guaranteed.*
+> *It was originally intended to work with .Net Core solutions and projects. For this reason, the compatibility with other types of projects (such as .Net Framework or C++) is not guaranteed.*
 
 ![Visual Studio Code Solution Explorer Showcase](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-show-case.gif)
 
@@ -31,6 +31,7 @@ Table of Content:
     - [Add or remove project references](#add-or-remove-project-references)
     - [Create file templates](#create-file-templates)
     - [Solution syntax highlighting](#solution-syntax-highlighting)
+    - [Create Directory.Packages.props](#create-directorypackagesprops)
   - [Extension Settings](#extension-settings)
           - [Example](#example)
   - [Known Issues](#known-issues)
@@ -69,7 +70,7 @@ You can execute the "Open solution" command from the command palette or from the
 
 ### Omnisharp integration
 
-You can enable omnisharp integration and vscode-solution-explorer will open the same .sln or .slnx file you open with Microsoft extension.
+You can enable omnisharp integration and vscode-solution-explorer will open the same .sln or .slnx file you open with Microsoft`s extension.
 
 ![Activate Omnisharp integration in settings panel](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/omnisharp-integration.png)
 
@@ -144,7 +145,7 @@ If you want to customize the terminal commands you can change them in the settin
 
 It will replace keywords like `$solutionPath` or `$projectPath` with the actual values.
 
-As an example, if you want to compile in `Release` mode everytime you publish a project you can create somethink like:
+As an example, if you want to compile in `Release` mode every time you publish a project you can create something like:
 
 ```json
 {
@@ -195,7 +196,7 @@ As an Example:
 If you are working with `/drive/path/to/project.csproj`, it will look for:
 - `/drive/path/to/nuget.config`
 - `/drive/path/nuget.config`
-- `/drivenuget.config`
+- `/drive/nuget.config`
 - `/nuget.config`
 
 > Note vscode-solution-explorer only supports ClearTextPassword credencials in nuget.config
@@ -213,6 +214,10 @@ Only available when the project is of kind CPS (dotnet core) c# projects.
 ![Inline nuget package version management (csproj)](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-csproj-nuget-management.gif)
 
 If you open a `.csproj` file you can see if the nuget packages versions are out-dated. You can update them by clicking on the `💡` icon and select the version you want to use. It also adds code completions for packages names and versions.
+
+Or if you hover over a package version you can see a tooltip with all the available versions.
+
+![Inline nuget package version management (csproj)](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-csproj-nuget-management.png)
 
 **Notes**: This feature uses caching to avoid unnecessary calls to the nuget server. If you want to force the cache update you can use the `Solution Explorer: Invalidate Nuget Cache` command.
 
@@ -261,10 +266,10 @@ You can configure the extension in the Visual Studio Code settings panel:
 - `vssolution.solutionExplorerIcons` "solution-explorer": custom items from vscode-solution-explorer extension. "mix": file and folder icons from the installed icons theme. "current-theme": all the icons are from the installed icons theme.
 
 - `vssolution.outputChannelMode` The solution explorer output channel mode: `show` on every single log, `append` but not show the pane or `none`.
--
+
 - `vssolution.showTerminalOnCommand` Show the terminal when a command is executed.
 
-- `vssolution.trackActiveItem` Select the active editor file in the solution explorer (not recomended).
+- `vssolution.trackActiveItem` Select the active editor file in the solution explorer (not recommended).
 
 - `vssolution.itemNesting` Sets whether related items will be displayed nested.
 
@@ -272,7 +277,7 @@ You can configure the extension in the Visual Studio Code settings panel:
 
 - `vssolution.xxprojItemTypes` Type of XML element to put in the xxproj files.
 
-- `vssolution.xmlspaces` Spaces to be used for indenting XML output. It could be a number or an string. ex. "2", " " or "t".
+- `vssolution.xmlspaces` Spaces to be used for indenting XML output. It could be a number or an string. ex. "2", " " or "\t".
 
 - `vssolution.altSolutionFolders` If there is no solution in the workplace root folder, it will search for solutions in any of these folders.
 
@@ -288,7 +293,15 @@ You can configure the extension in the Visual Studio Code settings panel:
 
 - `vssolution.openSolutions.inFoldersAndSubfolders` Sets whether solutions will be automatically loaded from the current opened folder and subfolders.
 
-- `vssolution.openSolutions.selectedInOmnisharp` Sets whether solutions will be automatically loaded from the current selected solution in Omnisharp extension.
+- `vssolution.openSolutions.selectedInOmnisharp` Sets whether to include prerelease packages when searching for NuGet packages.
+
+- `vssolution.nuget.includePrerelease` Sets whether to include prerelease packages when searching for nuget packages.
+
+- `vssolution.nuget.codeDecorators` Sets whether to show NuGet package versions in the code.
+
+- `vssolution.nuget.codeActions` Sets whether to show NuGet package versions in the code actions.
+
+- `vssolution.nuget.codeCompletions` Sets whether to show NuGet package versions and names in the code completions.
 
 ###### Example
 
@@ -343,7 +356,9 @@ You can configure the extension in the Visual Studio Code settings panel:
     "vssolution.openSolutions.inFoldersAndSubfolders": false,
     "vssolution.openSolutions.selectedInOmnisharp": true,
 
-    "vssolution.openProjectOnClick": false
+    "vssolution.openProjectOnClick": false,
+
+    "vssolution.nuget.includePrerelease": true
 }
 ```
 

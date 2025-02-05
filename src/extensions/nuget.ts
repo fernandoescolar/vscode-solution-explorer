@@ -2,6 +2,8 @@ import fetch, { RequestInit } from "node-fetch";
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import * as xml from "@extensions/xml";
+import * as config from "@extensions/config";
+
 
 const maxCacheTime = 1000 * 60 * 30; // 30 minutes
 const feedsCache: {[url: string]: { feeds: NugetFeed[], time: Date } } = {};
@@ -207,7 +209,7 @@ export async function searchPackagesByName(projectPath: string, query: string): 
     }, Array<NugetPackage>());
 }
 
-export async function searchPackageVersions(projectPath: string, id: string, includePreRelease: boolean = false): Promise<string[]> {
+export async function searchPackageVersions(projectPath: string, id: string, includePreRelease: boolean | undefined = undefined): Promise<string[]> {
     let uniqueVersions = [];
     if (versionsCache[id] && new Date().getTime() - versionsCache[id].time.getTime() < maxCacheTime) {
         uniqueVersions = versionsCache[id].versions;
@@ -222,6 +224,7 @@ export async function searchPackageVersions(projectPath: string, id: string, inc
         }
     }
 
+    includePreRelease = includePreRelease === undefined ? config.getNugetIncludePrerelease() : includePreRelease;
     if (!includePreRelease) {
         uniqueVersions = uniqueVersions.filter(v => !v.includes("-"));
     }

@@ -22,6 +22,10 @@ const OPEN_SOLUTIONS_IN_ALTERNATIVE_FOLDERS_NAME = 'openSolutions.inAltFolders';
 const OPEN_SOLUTIONS_IN_FOLDER_AND_SUBFOLDERS_NAME = 'openSolutions.inFoldersAndSubfolders';
 const OPEN_SOLUTION_SELECTED_IN_OMNISHARP_NAME = 'openSolutions.selectedInOmnisharp';
 const CUSTOM_COMMANDS_NAME = 'customCommands';
+const NUGET_INCLUDE_PRERELEASE_NAME = 'nuget.includePrerelease';
+const NUGET_CODE_DECORATORS_NAME = 'nuget.codeDecorators';
+const NUGET_CODE_ACTIONS_NAME = 'nuget.codeActions';
+const NUGET_CODE_COMPLETIONS_NAME = 'nuget.codeCompletions';
 
 let config: vscode.WorkspaceConfiguration;
 
@@ -139,4 +143,20 @@ export function getCustomCommands(key: TerminalCommand): string[] {
     }
 
     return result.slice();
+}
+
+export function getNugetIncludePrerelease(): boolean {
+    return config.get<boolean>(NUGET_INCLUDE_PRERELEASE_NAME, false);
+}
+
+export function getNugetCodeDecorators(): boolean {
+    return config.get<boolean>(NUGET_CODE_DECORATORS_NAME, true);
+}
+
+export function getNugetCodeActions(): boolean {
+    return config.get<boolean>(NUGET_CODE_ACTIONS_NAME, true);
+}
+
+export function getNugetCodeCompletions(): boolean {
+    return config.get<boolean>(NUGET_CODE_COMPLETIONS_NAME, true);
 }
