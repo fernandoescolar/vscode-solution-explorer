@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.9.0
+
+Issue #317 In response to an 'Action Required: DMCA Report Regarding Extension' notification from Microsoft, the extension's logo has been updated. Thanks to [Le Dinh Dang Khoa](https://github.com/Jackpieking) for warning us about this.
+
 ## 0.8.9
 
 PR #313: Add Directory.Packages.props support thanks to [Guillermo Pérez](https://github.com/gperezivo)
