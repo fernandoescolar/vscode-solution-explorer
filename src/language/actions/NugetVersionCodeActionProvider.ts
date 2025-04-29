@@ -5,7 +5,7 @@ export class NugetVersionCodeActionProvider implements vscode.CodeActionProvider
     private readonly regEx: RegExp;
 
     constructor(tagName: string) {
-        this.regEx = new RegExp(`<${tagName} Include="(.*)" Version="(.*)"`);
+        this.regEx = new RegExp(`<${tagName} Include="(.+)" Version="([0-9A-Za-z-.]+)"`);
     }
 
     async provideCodeActions(document: vscode.TextDocument, range: vscode.Range | vscode.Selection, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<(vscode.CodeAction | vscode.Command)[] | null | undefined> {
