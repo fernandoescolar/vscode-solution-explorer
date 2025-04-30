@@ -157,8 +157,8 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	private selectTreeItem(element: sln.TreeItem): void {
-		if (this.treeView && this.treeView.visible) {
-			this.treeView.reveal(element, { select: true, focus: false });
+		if (this.treeView) {
+			this.treeView.reveal(element, { select: true, focus: true });
 		}
 	}
 
