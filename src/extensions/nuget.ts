@@ -229,20 +229,78 @@ export async function searchPackageVersions(projectPath: string, id: string, inc
         uniqueVersions = uniqueVersions.filter(v => !v.includes("-"));
     }
 
-    const orderedVersions = uniqueVersions.sort((a, b) => {
-        const aParts = a.split('.').map(v => parseInt(v));
-        const bParts = b.split('.').map(v => parseInt(v));
-        for (let i = 0; i < aParts.length; i++) {
-            if (aParts[i] === bParts[i]) {
-                continue;
-            }
-            return bParts[i] - aParts[i];
-        }
-        return 0;
-    });
+    const orderedVersions = uniqueVersions.sort(comparePackageVersions);
 
     cleanCache();
     return orderedVersions;
+}
+
+/**
+   * Semantic versioning compare
+   */
+export function comparePackageVersions(a: string, b: string): number
+{
+  const aParts = splitVersion(a);
+  const bParts = splitVersion(b);
+  const length = Math.min(aParts.length, bParts.length);
+
+  for (let i = 0; i < length; i++) {
+      const cmp = cmpPart(aParts[i], bParts[i])
+      if (cmp === 0) {
+          continue;
+      }
+
+      return cmp;
+  }
+
+  return length === 3
+    ? aParts.length - bParts.length
+    : bParts.length - aParts.length;
+
+  function cmpPart(a: string, b: string): number
+  {
+    if (a === b) {
+      return 0;
+    }
+
+    if (!a) {
+      return 1;
+    }
+
+    if (!b) {
+      return -1;
+    }
+
+    const aNumber = Number(a);
+    const bNumber = Number(b);
+    if (!isNaN(aNumber) && !isNaN(bNumber)) {
+      return bNumber - aNumber;
+    }
+
+    return b > a ? 1 : -1;
+  }
+
+  function splitVersion(version: string): string[]
+  {
+    const metaDataIndex = version.indexOf("+");
+    const preReleaseIndex = version.indexOf("-");
+
+    let versionParts = version.substr(0, preReleaseIndex < 0 ? undefined : preReleaseIndex).split(".");
+
+    if (versionParts.length !== 3) {
+      versionParts.push("0");
+    }
+    if (versionParts.length !== 3) {
+      versionParts.push("0");
+    }
+
+    if (preReleaseIndex >= 0) {
+      const preReleasePart = version.substr(preReleaseIndex + 1, metaDataIndex < 0 ? undefined : metaDataIndex - preReleaseIndex - 1).split(".");
+      versionParts = versionParts.concat(preReleasePart);
+    }
+
+    return versionParts;
+  }
 }
 
 export function invalidateCache() {
