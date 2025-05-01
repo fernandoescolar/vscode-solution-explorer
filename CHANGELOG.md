@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.9.1
+
+Bugfix #316: inline nuget package bug if there is condition. Thanks to [Vasek](https://github.com/Vasek-gh)
+
+Bugfix #319: Select active document not set focus on solution view. Thanks to [Vasek](https://github.com/Vasek-gh)
+
+Bugfix #314: Restoring the missing "win32Encoding" configuration parameter to help people fixing win32 encoding problems in the output.
+
 ## 0.9.0
 
 Issue #317 In response to an 'Action Required: DMCA Report Regarding Extension' notification from Microsoft, the extension's logo has been updated. Thanks to [Le Dinh Dang Khoa](https://github.com/Jackpieking) for warning us about this.
