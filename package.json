@@ -2,7 +2,7 @@
   "name": "vscode-solution-explorer",
   "displayName": "vscode-solution-explorer",
   "description": "Visual Studio .sln file explorer for Visual Studio Code",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "license": "MIT",
   "publisher": "fernandoescolar",
   "icon": "images/icon.png",
@@ -981,7 +981,7 @@
     "watch": "webpack --mode development --watch"
   },
   "devDependencies": {
-    "@types/vscode": "^1.73.0",
+    "@types/vscode": "^1.99.1",
     "@types/webpack-env": "^1.17.0",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
