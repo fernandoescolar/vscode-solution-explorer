@@ -201,6 +201,8 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		if (!shouldExecute) { return; }
 		if (!vscode.window.activeTextEditor) { return; }
 		if (vscode.window.activeTextEditor.document.uri.scheme !== 'file') { return; }
+		const showMode = config.getShowMode();
+		if (showMode === "activityBar" && !this.treeView?.visible) { return; }
 
 		this.selectActiveDocument();
 	}
