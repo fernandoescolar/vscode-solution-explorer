@@ -1,7 +1,7 @@
 import { ContextValues, TreeItem } from "@tree";
 import { Action, SlnMoveProject } from "@actions";
 import { DropHandler } from "./DropHandler";
-import { SolutionType } from "@core/Solutions";
+import { SolutionType, SolutionFolder } from "@core/Solutions";
 
 export class MoveSolutionFolderInTheSameSolution extends DropHandler {
     public async canHandle(source: TreeItem, target: TreeItem): Promise<boolean> {
@@ -9,13 +9,10 @@ export class MoveSolutionFolderInTheSameSolution extends DropHandler {
     }
 
     public async handle(source: TreeItem, target: TreeItem): Promise<Action[]> {
-        if (!target.solutionItem) { return []; }
-
         const targetpath = this.isSolution(target) ? 'root' :
-            this.isProject(target) ? target.solutionItem.id || 'root' :
-                this.isSolutionFolder(target) ? target.solutionItem.id :
+            this.isSolutionFolder(target) ? target.solutionItem?.id :
+                this.isProject(target) ? (target.solutionItem?.parent as SolutionFolder)?.id :
                     undefined;
-
         if (!target.solution || !source.solutionItem || targetpath === undefined) { return []; }
 
         if (target.solution.type === SolutionType.Sln) {

@@ -17,6 +17,7 @@ export class SlnLoader {
         solution.name = path.basename(filepath, path.extname(filepath));
         sln.projects.filter(x => !x.parentProjectGuid).forEach(project => {
             const i = this.createSolutionItem(sln, project);
+            i.parent = solution;
             solution.addItem(i);
         });
 
@@ -31,6 +32,7 @@ export class SlnLoader {
             folder.solutionFiles = project.solutionItems;
             sln.projects.filter(x => x.parentProjectGuid === project.projectGuid).forEach(x => {
                 const i = this.createSolutionItem(sln, x);
+                i.parent = folder;
                 folder.addItem(i);
             });
 
