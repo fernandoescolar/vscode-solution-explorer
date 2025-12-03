@@ -2,6 +2,16 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.9.2
+
+PR #323: Fix: moving project to virtual folder. Thanks to [Mohamed Fat-hy](https://github.com/mhmdfathy96)
+
+PR #333: activate editor change only tree view visible. Thanks to [Jinwon Jung](https://github.com/guithin)
+
+PR #336: Fix solution folder move handler to correctly detect valid targets. Thanks to [lhz](https://github.com/lhzcm)
+
+Add support to open solutions defined in `dotnet.defaultSolution` setting. Using the new configuration parameter `vssolution.openSolutions.inSettings`.
+
 ## 0.9.1
 
 Bugfix #316: inline nuget package bug if there is condition. Thanks to [Vasek](https://github.com/Vasek-gh)
