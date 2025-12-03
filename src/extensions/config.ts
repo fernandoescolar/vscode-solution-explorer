@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { defaultTerminalCommands, TerminalCommand } from "./defaultTerminalCommands";
 
 const CONFIGURATION_NAME = 'vssolution';
+const DOTNET_CONFIGURATION_NAME = 'dotnet';
 const ITEM_TYPE_NAME = 'xxprojItemTypes';
 const SHOW_MODE_NAME = 'showMode';
 const TRACK_ACTIVE_ITEM_NAME = 'trackActiveItem';
@@ -21,6 +22,7 @@ const OPEN_SOLUTIONS_IN_ROOT_FOLDER_NAME = 'openSolutions.inRootFolder';
 const OPEN_SOLUTIONS_IN_ALTERNATIVE_FOLDERS_NAME = 'openSolutions.inAltFolders';
 const OPEN_SOLUTIONS_IN_FOLDER_AND_SUBFOLDERS_NAME = 'openSolutions.inFoldersAndSubfolders';
 const OPEN_SOLUTION_SELECTED_IN_OMNISHARP_NAME = 'openSolutions.selectedInOmnisharp';
+const OPEN_SOLUTION_IN_SETTINGS_NAME = 'openSolutions.inSettings';
 const CUSTOM_COMMANDS_NAME = 'customCommands';
 const NUGET_INCLUDE_PRERELEASE_NAME = 'nuget.includePrerelease';
 const NUGET_CODE_DECORATORS_NAME = 'nuget.codeDecorators';
@@ -28,6 +30,7 @@ const NUGET_CODE_ACTIONS_NAME = 'nuget.codeActions';
 const NUGET_CODE_COMPLETIONS_NAME = 'nuget.codeCompletions';
 
 let config: vscode.WorkspaceConfiguration;
+let dotnetConfig: vscode.WorkspaceConfiguration;
 
 export type LineEndingsType = "lf" | "crlf";
 export type ShowMode = "activityBar" | "explorer" | "none";
@@ -36,6 +39,7 @@ export type OutputChannelMode = "show" | "append" | "none";
 
 export function register() {
     config = vscode.workspace.getConfiguration(CONFIGURATION_NAME);
+    dotnetConfig = vscode.workspace.getConfiguration(DOTNET_CONFIGURATION_NAME);
 }
 
 export function getItemTypes(): { [id: string]: string } {
@@ -135,6 +139,10 @@ export function getOpenSolutionsSelectedInOmnisharp(): boolean {
     return config.get<boolean>(OPEN_SOLUTION_SELECTED_IN_OMNISHARP_NAME, false);
 }
 
+export function getOpenSolutionsInSettings(): boolean {
+    return config.get<boolean>(OPEN_SOLUTION_IN_SETTINGS_NAME, false);
+}
+
 export function getCustomCommands(key: TerminalCommand): string[] {
     const commands = config.get<{ [id: string]: string[] }>(CUSTOM_COMMANDS_NAME, {});
     let result = commands[key];
@@ -159,4 +167,8 @@ export function getNugetCodeActions(): boolean {
 
 export function getNugetCodeCompletions(): boolean {
     return config.get<boolean>(NUGET_CODE_COMPLETIONS_NAME, true);
+}
+
+export function getDotnetDefaultSolution(): string {
+    return dotnetConfig.get<string>("defaultSolution", "");
 }

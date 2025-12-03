@@ -295,6 +295,8 @@ You can configure the extension in the Visual Studio Code settings panel:
 
 - `vssolution.openSolutions.selectedInOmnisharp` Sets whether to include prerelease packages when searching for NuGet packages.
 
+- `vssolution.openSolutions.inSettings` Sets whether solutions will be automatically loaded from the `dotnet.defaultSolution` parameter.
+
 - `vssolution.nuget.includePrerelease` Sets whether to include prerelease packages when searching for nuget packages.
 
 - `vssolution.nuget.codeDecorators` Sets whether to show NuGet package versions in the code.
