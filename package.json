@@ -20,7 +20,7 @@
     "email": "f.escolar@hotmail.com"
   },
   "engines": {
-    "vscode": "^1.73.0"
+    "vscode": "^1.99.1"
   },
   "categories": [
     "Other"
