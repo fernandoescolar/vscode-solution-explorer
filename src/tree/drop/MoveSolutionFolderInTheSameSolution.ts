@@ -1,5 +1,5 @@
 import { ContextValues, TreeItem } from "@tree";
-import { Action, SlnMoveProject } from "@actions";
+import { Action, SlnMoveSolutionFolder, SlnxMoveSolutionFolder } from "@actions";
 import { DropHandler } from "./DropHandler";
 import { SolutionType, SolutionFolder } from "@core/Solutions";
 
@@ -15,8 +15,14 @@ export class MoveSolutionFolderInTheSameSolution extends DropHandler {
                     undefined;
         if (!target.solution || !source.solutionItem || targetpath === undefined) { return []; }
 
-        if (target.solution.type === SolutionType.Sln) {
-            return [new SlnMoveProject(target.solution, source.solutionItem, targetpath)];
+        if (source.solutionItem instanceof SolutionFolder) {
+            if (target.solution.type === SolutionType.Sln) {
+                return [new SlnMoveSolutionFolder(target.solution, source.solutionItem, targetpath)];
+            }
+
+            if (target.solution.type === SolutionType.Slnx) {
+                return [new SlnxMoveSolutionFolder(target.solution, source.solutionItem, targetpath)];
+            }
         }
 
         return [];

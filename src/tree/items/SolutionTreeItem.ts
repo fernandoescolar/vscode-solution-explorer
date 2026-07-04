@@ -10,7 +10,7 @@ export class SolutionTreeItem extends TreeItem {
         super(context, context.solution.name, TreeItemCollapsibleState.Expanded, ContextValues.solution, context.solution.fullPath);
         this.allowIconTheme = false;
         this.subscription = context.eventAggregator.subscribe(EventTypes.file, evt => this.onFileEvent(evt));
-        this.description = context.solution.type === SolutionType.Sln ? '' : 'readonly';
+        this.description = '';
     }
 
     public refreshContextValue(): void {

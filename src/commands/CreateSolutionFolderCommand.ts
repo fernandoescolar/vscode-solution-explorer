@@ -1,8 +1,8 @@
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
-import { Action, SlnCreateSolutionFolder } from "@actions";
+import { Action, SlnCreateSolutionFolder, SlnxCreateSolutionFolder } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
-import { SolutionType } from "@core/Solutions";
+import { SolutionType, SolutionFolder } from "@core/Solutions";
 
 export class CreateSolutionFolderCommand extends SingleItemActionsCommand {
     constructor() {
@@ -22,8 +22,16 @@ export class CreateSolutionFolderCommand extends SingleItemActionsCommand {
         if (!folderName) {
             return [];
         }
+
+        // Ensure solutionItem is either undefined (root) or a SolutionFolder
+        const parentFolder = item.solutionItem instanceof SolutionFolder ? item.solutionItem : undefined;
+
         if (item.solution.type === SolutionType.Sln) {
-            return [ new SlnCreateSolutionFolder(item.solution, folderName, item.solutionItem) ];
+            return [ new SlnCreateSolutionFolder(item.solution, folderName, parentFolder) ];
+        }
+
+        if (item.solution.type === SolutionType.Slnx) {
+            return [ new SlnxCreateSolutionFolder(item.solution, folderName, parentFolder) ];
         }
 
         return [];

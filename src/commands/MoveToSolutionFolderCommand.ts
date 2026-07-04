@@ -1,8 +1,8 @@
 import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
-import { Solution, SolutionType } from "@core/Solutions";
-import { Action, SlnMoveProject, SlnMoveSolutionFolder } from "@actions";
+import { Solution, SolutionType, SolutionFolder } from "@core/Solutions";
+import { Action, SlnMoveSolutionFolder, SlnxMoveSolutionFolder } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
 
 export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
@@ -23,12 +23,14 @@ export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
         const solutionItem = item.solutionItem;
         if (!solutionItem) { return []; }
 
-        if (item.solution.type === SolutionType.Sln && ContextValues.matchAnyLanguage(ContextValues.project, item.contextValue)) {
-            return [ new SlnMoveProject(item.solution, solutionItem, folder) ];
-        }
+        if (solutionItem instanceof SolutionFolder) {
+            if (item.solution.type === SolutionType.Sln) {
+                return [ new SlnMoveSolutionFolder(item.solution, solutionItem, folder) ];
+            }
 
-        if (item.solution.type === SolutionType.Sln && ContextValues.matchAnyLanguage(ContextValues.solutionFolder, item.contextValue)) {
-            return [ new SlnMoveSolutionFolder(item.solution, solutionItem, folder) ];
+            if (item.solution.type === SolutionType.Slnx) {
+                return [ new SlnxMoveSolutionFolder(item.solution, solutionItem, folder) ];
+            }
         }
 
         return [];

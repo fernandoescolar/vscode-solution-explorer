@@ -1,8 +1,8 @@
 import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
-import { Action, SlnAddSolutionFile } from "@actions";
+import { Action, SlnAddSolutionFile, SlnxAddSolutionFile } from "@actions";
 import { SingleItemActionsCommand } from "@commands";
-import { SolutionType } from "@core/Solutions";
+import { SolutionType, SolutionFolder } from "@core/Solutions";
 
 export class AddExistingFileToSolutionFolderCommand extends SingleItemActionsCommand {
     constructor() {
@@ -19,8 +19,14 @@ export class AddExistingFileToSolutionFolderCommand extends SingleItemActionsCom
             return [];
         }
 
-        if (item.solution.type === SolutionType.Sln) {
-            return [ new SlnAddSolutionFile(item.solution, item.solutionItem, filePath) ];
+        if (item.solutionItem instanceof SolutionFolder) {
+            if (item.solution.type === SolutionType.Sln) {
+                return [ new SlnAddSolutionFile(item.solution, item.solutionItem, filePath) ];
+            }
+
+            if (item.solution.type === SolutionType.Slnx) {
+                return [ new SlnxAddSolutionFile(item.solution, item.solutionItem, filePath) ];
+            }
         }
 
         return [];

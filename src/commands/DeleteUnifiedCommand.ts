@@ -6,12 +6,14 @@ import {
     DeleteProjectFolder,
     SlnDeleteSolutionFile,
     SlnDeleteSolutionFolder,
+    SlnxDeleteSolutionFile,
+    SlnxDeleteSolutionFolder,
     DotNetRemoveExistingProject,
     DotNetRemovePackageReference,
     DotNetRemoveProjectReference,
     DeleteMultipleItems
 } from "@actions";
-import { SolutionType } from "@core/Solutions";
+import { SolutionType, SolutionFolder } from "@core/Solutions";
 
 export class DeleteUnifiedCommand extends ActionsCommand {
     constructor() {
@@ -116,11 +118,17 @@ export class DeleteUnifiedCommand extends ActionsCommand {
             [ContextValues.project, item => item.project
                 ? [new DotNetRemoveExistingProject(item.solution.fullPath, item.project.fullPath)] : []],
 
-            [ContextValues.solutionFile, item => item.solution.type === SolutionType.Sln && item.solutionItem && item.path
+            [ContextValues.solutionFile, item => item.solution.type === SolutionType.Sln && item.solutionItem instanceof SolutionFolder && item.path
                 ? [new SlnDeleteSolutionFile(item.solution, item.solutionItem, item.path)] : []],
 
-            [ContextValues.solutionFolder, item => item.solution.type === SolutionType.Sln && item.solutionItem
+            [ContextValues.solutionFile, item => item.solution.type === SolutionType.Slnx && item.solutionItem instanceof SolutionFolder && item.path
+                ? [new SlnxDeleteSolutionFile(item.solution, item.solutionItem, item.path)] : []],
+
+            [ContextValues.solutionFolder, item => item.solution.type === SolutionType.Sln && item.solutionItem instanceof SolutionFolder
                 ? [new SlnDeleteSolutionFolder(item.solution, item.solutionItem)] : []],
+
+            [ContextValues.solutionFolder, item => item.solution.type === SolutionType.Slnx && item.solutionItem instanceof SolutionFolder
+                ? [new SlnxDeleteSolutionFolder(item.solution, item.solutionItem)] : []],
         ]);
     }
 }
