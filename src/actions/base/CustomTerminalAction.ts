@@ -18,10 +18,17 @@ export abstract class CustomTerminalAction extends TerminalAction {
         const args = config.getCustomCommands(name);
         for(let i = 0; i < args.length; i++) {
             replacements.forEach(replacement => {
-                args[i] = args[i].replace(replacement.search, replacement.value);
+                args[i] = args[i].replace(replacement.search, CustomTerminalAction.escapeShellArgument(replacement.value));
             });
         }
 
         return args;
+    }
+
+    private static escapeShellArgument(arg: string): string {
+        if (process.platform === "win32") {
+            return `"${arg.replace(/"/g, '""')}"`;
+        }
+        return `'${arg.replace(/'/g, "'\"'\"'")}'`;
     }
 }
