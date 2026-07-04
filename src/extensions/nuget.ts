@@ -237,15 +237,18 @@ export async function searchPackageVersions(projectPath: string, id: string, inc
 
 /**
    * Semantic versioning compare
+   * Supports versions with 3 or 4 parts: 1.0.0, 1.0.0.1, 1.0.0-beta, 1.0.0-rc1, 1.0.0+build
    */
 export function comparePackageVersions(a: string, b: string): number
 {
   const aParts = splitVersion(a);
   const bParts = splitVersion(b);
-  const length = Math.min(aParts.length, bParts.length);
+  const length = Math.max(aParts.length, bParts.length);
 
   for (let i = 0; i < length; i++) {
-      const cmp = cmpPart(aParts[i], bParts[i])
+      const aPart = aParts[i] || "0";
+      const bPart = bParts[i] || "0";
+      const cmp = cmpPart(aPart, bPart);
       if (cmp === 0) {
           continue;
       }
@@ -253,9 +256,7 @@ export function comparePackageVersions(a: string, b: string): number
       return cmp;
   }
 
-  return length === 3
-    ? aParts.length - bParts.length
-    : bParts.length - aParts.length;
+  return 0;
 
   function cmpPart(a: string, b: string): number
   {
@@ -263,21 +264,13 @@ export function comparePackageVersions(a: string, b: string): number
       return 0;
     }
 
-    if (!a) {
-      return 1;
-    }
-
-    if (!b) {
-      return -1;
-    }
-
     const aNumber = Number(a);
     const bNumber = Number(b);
     if (!isNaN(aNumber) && !isNaN(bNumber)) {
-      return bNumber - aNumber;
+      return aNumber - bNumber;
     }
 
-    return b > a ? 1 : -1;
+    return a > b ? 1 : -1;
   }
 
   function splitVersion(version: string): string[]
@@ -286,13 +279,6 @@ export function comparePackageVersions(a: string, b: string): number
     const preReleaseIndex = version.indexOf("-");
 
     let versionParts = version.substr(0, preReleaseIndex < 0 ? undefined : preReleaseIndex).split(".");
-
-    if (versionParts.length !== 3) {
-      versionParts.push("0");
-    }
-    if (versionParts.length !== 3) {
-      versionParts.push("0");
-    }
 
     if (preReleaseIndex >= 0) {
       const preReleasePart = version.substr(preReleaseIndex + 1, metaDataIndex < 0 ? undefined : metaDataIndex - preReleaseIndex - 1).split(".");
