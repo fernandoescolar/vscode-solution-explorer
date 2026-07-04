@@ -2,7 +2,7 @@
   "name": "vscode-solution-explorer",
   "displayName": "vscode-solution-explorer",
   "description": "Visual Studio .sln file explorer for Visual Studio Code",
-  "version": "0.8.9",
+  "version": "0.9.2",
   "license": "MIT",
   "publisher": "fernandoescolar",
   "icon": "images/icon.png",
@@ -20,7 +20,7 @@
     "email": "f.escolar@hotmail.com"
   },
   "engines": {
-    "vscode": "^1.73.0"
+    "vscode": "^1.99.1"
   },
   "categories": [
     "Other"
@@ -947,6 +947,11 @@
           "default": false,
           "description": "Sets whether solutions will be automatically loaded from the current selected solution in Omnisharp extension."
         },
+        "vssolution.openSolutions.inSettings": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sets whether solutions will be automatically loaded from the 'dotnet.defaultSolution' parameter in the settings.json file."
+        },
         "vssolution.customCommands": {
           "type": "object",
           "default": {},
@@ -981,7 +986,7 @@
     "watch": "webpack --mode development --watch"
   },
   "devDependencies": {
-    "@types/vscode": "^1.73.0",
+    "@types/vscode": "^1.99.1",
     "@types/webpack-env": "^1.17.0",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
@@ -998,6 +1003,7 @@
     "clipboardy": "^3.0.0",
     "eol": "^0.9.1",
     "handlebars": "^4.7.7",
+    "iconv-lite": "^0.6.3",
     "node-fetch": "^3.2.10",
     "uuid": "^8.3.2",
     "xml-js": "^1.6.11"

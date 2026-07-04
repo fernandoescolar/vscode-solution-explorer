@@ -29,7 +29,11 @@ export async function writeFile(path: string, content: string): Promise<void> {
 
 export async function unlink(path: string): Promise<void> {
     const uri = vscode.Uri.file(path);
-    await vscode.workspace.fs.delete(uri, { useTrash: true });
+    try {
+        await vscode.workspace.fs.delete(uri, { useTrash: true });
+    } catch {
+        await vscode.workspace.fs.delete(uri);
+    }
 }
 
 export async function mkdir(path: string): Promise<void> {
@@ -39,7 +43,11 @@ export async function mkdir(path: string): Promise<void> {
 
 export async function rmdirRecursive(path: string): Promise<void> {
     const uri = vscode.Uri.file(path);
-    await vscode.workspace.fs.delete(uri, { useTrash: true, recursive: true });
+    try {
+        await vscode.workspace.fs.delete(uri, { useTrash: true, recursive: true });
+    } catch {
+        await vscode.workspace.fs.delete(uri, { recursive: true });
+    }
 }
 
 export async function rename(sourcePath: string, targetPath: string): Promise<void> {

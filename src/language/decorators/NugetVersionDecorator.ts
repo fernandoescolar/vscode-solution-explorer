@@ -32,7 +32,7 @@ export class NugetVersionDecorator implements ICodeDecorator
     private readonly regEx: RegExp;
 
     constructor(public readonly filter: vscode.DocumentSelector, tagName: string) {
-        this.regEx = new RegExp(`<${tagName} Include="(.+)" Version="(.+)"`, "g");
+        this.regEx = new RegExp(`<${tagName} Include="(.+)" Version="([0-9A-Za-z-.]+)"`, "g");
     }
 
     async decorate(editor: vscode.TextEditor): Promise<void> {
@@ -48,7 +48,7 @@ export class NugetVersionDecorator implements ICodeDecorator
                 continue;
             }
 
-            const isNew = versions[0] !== version;
+            const isNew = nuget.comparePackageVersions(version, versions[0]) > 0;
             const versionIndex = match.index + match[0].indexOf(version);
             const startPos = editor.document.positionAt(versionIndex - 1);
             const endPos = editor.document.positionAt(versionIndex + match[2].length + 1);

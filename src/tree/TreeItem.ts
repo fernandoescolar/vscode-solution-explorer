@@ -149,7 +149,10 @@ export abstract class TreeItem extends vscode.TreeItem {
 		   || (iconType === "mix" && !this._allowIconTheme)) {
 			TreeItemIconProvider.findIconPath(this.label, this.path || "", this.contextValue)
 			                    .then( iconPath => {
-									this.iconPath = iconPath;
+									this.iconPath = {
+										light: vscode.Uri.file(iconPath.light),
+										dark: vscode.Uri.file(iconPath.dark)
+									};
 									this.context.provider.refresh(this);
 								});
 		} else {

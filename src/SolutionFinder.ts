@@ -1,4 +1,5 @@
 import * as path from "@extensions/path";
+import * as fs from "@extensions/fs";
 import * as config from "@extensions/config";
 import * as Utilities from "@core/Utilities";
 import { EventTypes, IEvent, IEventAggregator, ISolutionSelected, ISubscription } from "@events";
@@ -31,6 +32,16 @@ export class SolutionFinder {
 
 		if (this.openCommandSolutionPath) {
 			solutionPaths.push({ root: path.dirname(this.openCommandSolutionPath), sln: this.openCommandSolutionPath });
+		}
+
+		if (config.getOpenSolutionsInSettings()) {
+			const defaultSolution = config.getDotnetDefaultSolution();
+			if (defaultSolution && defaultSolution.length > 0) {
+				const defaultSolutionPath = path.join(this.workspaceRoots[0], defaultSolution);
+				if (await fs.exists(defaultSolutionPath)) {
+					solutionPaths.push({ root: this.workspaceRoots[0], sln: defaultSolutionPath });
+				}
+			}
 		}
 
 		if (config.getOpenSolutionsInRootFolder()) {

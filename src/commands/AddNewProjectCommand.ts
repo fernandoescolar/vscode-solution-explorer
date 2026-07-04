@@ -1,11 +1,10 @@
-import { execSync } from 'child_process';
 import * as path from "@extensions/path";
 import * as dialogs from '@extensions/dialogs';
 import { ContextValues, TreeItem } from "@tree";
-import { Action, CreateDirectoryPackages, DotNetAddExistingProject, DotNetCreateProject } from '@actions';
+import { Action, DotNetAddExistingProject, DotNetCreateProject } from '@actions';
 import { SingleItemActionsCommand } from "@commands";
 import { SolutionExplorerProvider } from '@SolutionExplorerProvider';
-import { Solution } from '@core/Solutions';
+import { execSync } from '@extensions/child_process';
 
 type ProjectType = { name: string, value: string, languages: string[] };
 
