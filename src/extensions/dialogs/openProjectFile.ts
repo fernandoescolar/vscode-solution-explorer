@@ -5,7 +5,7 @@ export async function openProjectFile(label: string): Promise<string | undefined
         openLabel: label,
         canSelectFolders: false,
         canSelectMany: false,
-        filters: { ['Projects']: [ 'csproj', 'vbproj', 'fsproj', 'vcxproj' ] }
+        filters: { ['Projects']: [ 'csproj', 'vbproj', 'fsproj', 'vcxproj', '*proj' ] }
     });
 
     if (uris !== undefined && uris.length > 0) {
