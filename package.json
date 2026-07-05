@@ -330,7 +330,8 @@
       {
         "command": "solutionExplorer.showActiveFileInExplorer",
         "title": "Select Active Document",
-        "category": "Solution Explorer"
+        "category": "Solution Explorer",
+         "icon": "$(eye)"
       },
       {
         "command": "solutionExplorer.focus",
@@ -369,6 +370,11 @@
         },
         {
           "command": "solutionExplorer.refresh",
+          "when": "view in solutionexplorer.viewTypes",
+          "group": "navigation"
+        },
+        {
+          "command": "solutionExplorer.showActiveFileInExplorer",
           "when": "view in solutionexplorer.viewTypes",
           "group": "navigation"
         }
