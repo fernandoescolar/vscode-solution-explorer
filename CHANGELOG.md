@@ -2,6 +2,20 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.9.3
+
+PR #339: Support delete in Remote Env. Thanks to [gitdialbertoannunziata](https://github.com/gitdialbertoannunziata)
+
+PR #343: fix(security): 2 improvements across 2 files. Thanks to [tomaioo](https://github.com/tomaioo)
+
+Bugfix #337: Nuget: wrong latest version.
+
+Enhancement #325: Adding Button for Select Active Item.
+
+Enhancement #309: Added full support for .slnx files, though it is still buggy in .NET CLI 10.
+
+Updating dependencies.
+
 ## 0.9.2
 
 PR #323: Fix: moving project to virtual folder. Thanks to [Mohamed Fat-hy](https://github.com/mhmdfathy96)

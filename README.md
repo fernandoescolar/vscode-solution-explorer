@@ -404,5 +404,7 @@ Branded icons are licensed under their copyright license.
 [lhz](https://github.com/lhzcm)
 [Spencer Farley](https://github.com/farlee2121)
 [Fadi Hania](https://github.com/fadihania)
+[tomaioo](https://github.com/tomaioo)
+[gitdialbertoannunziata](https://github.com/gitdialbertoannunziata)
 
 **Enjoy!**
