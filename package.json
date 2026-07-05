@@ -986,12 +986,12 @@
     "watch": "webpack --mode development --watch"
   },
   "devDependencies": {
+    "@types/node": "^18.19.130",
     "@types/vscode": "^1.99.1",
     "@types/webpack-env": "^1.17.0",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
     "eslint": "^8.20.0",
-    "mocha": "^10.8.2",
     "process": "0.11.10",
     "ts-loader": "^9.3.1",
     "typescript": "^4.7.4",
