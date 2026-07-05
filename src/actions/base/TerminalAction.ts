@@ -11,8 +11,18 @@ export abstract class TerminalAction implements Action {
             return Promise.resolve();
         }
 
-        terminal.execute(this.args, this.workingFolder);
+        const sanitizedArgs = this.args.map(arg => this.sanitizeArg(arg));
+        const sanitizedWorkingFolder = this.sanitizePath(this.workingFolder);
+        terminal.execute(sanitizedArgs, sanitizedWorkingFolder);
         return Promise.resolve();
+    }
+
+    private sanitizeArg(arg: string): string {
+        return arg.replace(/[;|&$`\\]/g, '');
+    }
+
+    private sanitizePath(filePath: string): string {
+        return filePath.replace(/[;|&$`\\]/g, '');
     }
 
     protected static getWorkingPath(solutionPath: string): string {
