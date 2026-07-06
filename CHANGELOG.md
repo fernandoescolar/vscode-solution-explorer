@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.9.5
+
+Fixin nuget order (use the API order).
+
+In fish in linux the commands where not working well.
+
+Development version fixed to v9.9.9.
+
 ## 0.9.4
 
 Bugfix #347: Fix sanitize for win 32.
