@@ -2,6 +2,14 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.9.4
+
+Bugfix #347: Fix sanitize for win 32.
+
+Enhancement #329: Add option to save all files before executing terminal commands.
+
+Add step to set version from release tag in publish workflow.
+
 ## 0.9.3
 
 PR #339: Support delete in Remote Env. Thanks to [gitdialbertoannunziata](https://github.com/gitdialbertoannunziata)
