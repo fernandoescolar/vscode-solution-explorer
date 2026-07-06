@@ -4,7 +4,7 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 ## 0.9.5
 
-Fixin nuget order (use the API order).
+Fixing nuget order (use the API order).
 
 In fish in linux the commands where not working well.
 
