@@ -845,6 +845,11 @@
           "default": true,
           "description": "Show the terminal when a command is executed."
         },
+        "vssolution.saveBeforeExecute": {
+          "type": "boolean",
+          "default": false,
+          "description": "Save all open files before executing a terminal command (e.g. dotnet build, clean, test)."
+        },
         "vssolution.trackActiveItem": {
           "type": "boolean",
           "default": false,

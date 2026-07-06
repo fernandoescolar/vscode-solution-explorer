@@ -269,6 +269,8 @@ You can configure the extension in the Visual Studio Code settings panel:
 
 - `vssolution.showTerminalOnCommand` Show the terminal when a command is executed.
 
+- `vssolution.saveBeforeExecute` Save all open files before executing a terminal command (e.g. dotnet build, clean, test). 
+
 - `vssolution.trackActiveItem` Select the active editor file in the solution explorer (not recommended).
 
 - `vssolution.itemNesting` Sets whether related items will be displayed nested.
@@ -316,6 +318,8 @@ You can configure the extension in the Visual Studio Code settings panel:
     "vssolution.outputChannelMode": "show",
 
     "vssolution.showTerminalOnCommand": true,
+
+    "vssolution.saveBeforeExecute": false,
 
     "vssolution.trackActiveItem": false,
 

@@ -24,6 +24,7 @@ const OPEN_SOLUTIONS_IN_FOLDER_AND_SUBFOLDERS_NAME = 'openSolutions.inFoldersAnd
 const OPEN_SOLUTION_SELECTED_IN_OMNISHARP_NAME = 'openSolutions.selectedInOmnisharp';
 const OPEN_SOLUTION_IN_SETTINGS_NAME = 'openSolutions.inSettings';
 const CUSTOM_COMMANDS_NAME = 'customCommands';
+const SAVE_BEFORE_EXECUTE_NAME = 'saveBeforeExecute';
 const NUGET_INCLUDE_PRERELEASE_NAME = 'nuget.includePrerelease';
 const NUGET_CODE_DECORATORS_NAME = 'nuget.codeDecorators';
 const NUGET_CODE_ACTIONS_NAME = 'nuget.codeActions';
@@ -76,6 +77,10 @@ export function getOutputChannelMode(): OutputChannelMode {
 
 export function getShowTerminalOnCommand(): boolean {
     return config.get<boolean>(SHOW_TERMINAL_ON_COMMAND_NAME, true);
+}
+
+export function getSaveBeforeExecute(): boolean {
+    return config.get<boolean>(SAVE_BEFORE_EXECUTE_NAME, false);
 }
 
 export function getNetCoreIgnore(): string[] {
