@@ -18,10 +18,16 @@ export abstract class TerminalAction implements Action {
     }
 
     private sanitizeArg(arg: string): string {
+        if (process.platform === "win32") {
+            return arg.replace(/[;|&$`]/g, '');
+        }
         return arg.replace(/[;|&$`\\]/g, '');
     }
 
     private sanitizePath(filePath: string): string {
+        if (process.platform === "win32") {
+            return filePath.replace(/[;|&$`]/g, '');
+        }
         return filePath.replace(/[;|&$`\\]/g, '');
     }
 
