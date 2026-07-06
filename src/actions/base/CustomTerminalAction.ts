@@ -29,6 +29,9 @@ export abstract class CustomTerminalAction extends TerminalAction {
         if (process.platform === "win32") {
             return `"${arg.replace(/"/g, '""')}"`;
         }
-        return `'${arg.replace(/'/g, "'\"'\"'")}'`;
+        if (process.platform === "darwin") {
+            return `'${arg.replace(/'/g, "'\"'\"'")}'`;
+        }
+        return `${arg.replace(/'/g, "\"")}`;
     }
 }
