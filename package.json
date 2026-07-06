@@ -2,7 +2,7 @@
   "name": "vscode-solution-explorer",
   "displayName": "vscode-solution-explorer",
   "description": "Visual Studio .sln file explorer for Visual Studio Code",
-  "version": "0.9.3",
+  "version": "9.9.9",
   "license": "MIT",
   "publisher": "fernandoescolar",
   "icon": "images/icon.png",
