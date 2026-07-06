@@ -18,6 +18,12 @@ jobs:
     - name: npm install
       run: npm install
 
+    - name: set version from tag
+      run: |
+        TAG="${{ github.event.release.tag_name }}"
+        VERSION="${TAG#v}"
+        npm version "$VERSION" --no-git-tag-version
+
     - name: install vsce
       run: npm i -g vsce
 
