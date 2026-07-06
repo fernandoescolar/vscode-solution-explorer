@@ -9,7 +9,7 @@ export class NugetVersionCompletionItemProvider implements vscode.CompletionItem
     }
 
     async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): Promise<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem> | null | undefined> {
-        const linePrefix = document.lineAt(position).text.substr(0, position.character);
+        const linePrefix = document.lineAt(position).text.slice(0, position.character);
         const match = this.regEx.exec(linePrefix);
         if (!match) {
           return undefined;

@@ -229,7 +229,8 @@ export async function searchPackageVersions(projectPath: string, id: string, inc
         uniqueVersions = uniqueVersions.filter(v => !v.includes("-"));
     }
 
-    const orderedVersions = uniqueVersions.sort(comparePackageVersions);
+    const orderedVersions = uniqueVersions.reverse();
+    //const orderedVersions = uniqueVersions.sort(comparePackageVersions);
 
     cleanCache();
     return orderedVersions;
@@ -278,10 +279,10 @@ export function comparePackageVersions(a: string, b: string): number
     const metaDataIndex = version.indexOf("+");
     const preReleaseIndex = version.indexOf("-");
 
-    let versionParts = version.substr(0, preReleaseIndex < 0 ? undefined : preReleaseIndex).split(".");
+    let versionParts = version.slice(0, preReleaseIndex < 0 ? undefined : preReleaseIndex).split(".");
 
     if (preReleaseIndex >= 0) {
-      const preReleasePart = version.substr(preReleaseIndex + 1, metaDataIndex < 0 ? undefined : metaDataIndex - preReleaseIndex - 1).split(".");
+      const preReleasePart = version.slice(preReleaseIndex + 1, metaDataIndex < 0 ? undefined : metaDataIndex - preReleaseIndex - 1).split(".");
       versionParts = versionParts.concat(preReleasePart);
     }
 
