@@ -1,4 +1,6 @@
 out
+bin
+obj
 node_modules
 .vscode-test/
 .vsix
