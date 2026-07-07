@@ -2,6 +2,16 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.9.6
+
+Add New Project command with UI.
+
+Adding multilanguage support. Currently are supported (AI generated): DE, ES, FR, PT-PT, PT-BR and ZH-CN.
+
+Improving MsBuild support: Adding properties, conditions and .props and .targets support.
+
+MsBuild Properties editor at solution level or project level.
+
 ## 0.9.5
 
 Fixing nuget order (use the API order).

@@ -24,6 +24,9 @@ export class SolutionExplorerCommands {
         this.commands['addNewProject'] = [new cmds.AddNewProjectCommand(provider),
             both(ContextValues.solution)];
 
+        this.commands['addNewProjectUI'] = [new cmds.AddNewProjectUICommand(this.context, provider),
+            both(ContextValues.solution)];
+
         this.commands['addPackage'] = [new cmds.AddPackageCommand(),
             cps(ContextValues.project, ContextValues.projectReferencedPackages)];
 
@@ -51,7 +54,7 @@ export class SolutionExplorerCommands {
           new cmds.CreateDirectoryPackagesCommand(),
           both(ContextValues.solution),
         ];
-        
+
         this.commands['createFile'] = [new cmds.CreateFileCommand(templateEngineCollection),
             [ContextValues.projectFile, ...anyLang(ContextValues.projectFolder), ...both(ContextValues.project)]];
 

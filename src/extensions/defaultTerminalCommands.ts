@@ -7,7 +7,7 @@ export const defaultTerminalCommands = {
     addProjectReferenceToProject: [ "dotnet", "add", "\"$projectPath\"", "reference", "\"$referencedProjectPath\"" ],
     build: [ "dotnet", "build", "\"$projectPath\"" ],
     clean: [ "dotnet", "clean", "\"$projectPath\"" ],
-    createProject: [ "dotnet", "new", "\"$projectType\"", "-lang", "\"$language\"", "-n", "\"$projectName\"", "-o", "\"$folderName\"" ],
+    createProject: [ "dotnet", "new", "\"$projectType\"", "-lang", "\"$language\"", "-n", "\"$projectName\"", "-o", "\"$folderName\"", "-f", "\"$framework\"" ],
     createSolution: [ "dotnet", "new", "sln", "-n", "\"$solutionName\"" ],
     pack: [ "dotnet", "pack", "\"$projectPath\"" ],
     publish: [ "dotnet", "publish", "\"$projectPath\"" ],

@@ -4,6 +4,7 @@ export * from "./SingleItemActionsCommand";
 export * from "./AddExistingFileToSolutionFolderCommand";
 export * from "./AddExistingProjectCommand";
 export * from "./AddNewProjectCommand";
+export * from "./AddNewProjectUICommand";
 export * from "./AddPackageCommand";
 export * from "./AddProjectReferenceCommand";
 export * from "./BuildCommand";

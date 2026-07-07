@@ -244,6 +244,11 @@
         "category": "%category.solutionExplorer%"
       },
       {
+        "command": "solutionExplorer.addNewProjectUI",
+        "title": "%command.addNewProjectUI.title%",
+        "category": "%category.solutionExplorer%"
+      },
+      {
         "command": "solutionExplorer.addExistingProject",
         "title": "%command.addExistingProject.title%",
         "category": "%category.solutionExplorer%"
@@ -594,6 +599,11 @@
         {
           "command": "solutionExplorer.addNewProject",
           "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addNewProject",
+          "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.addNewProjectUI",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.addNewProjectUI",
           "group": "2_workspace"
         },
         {
