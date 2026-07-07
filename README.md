@@ -25,6 +25,7 @@ Table of Content:
     - [Drag and drop files, folders and projects](#drag-and-drop-files-folders-and-projects)
     - [Create, delete, rename or project folders and files](#create-delete-rename-or-project-folders-and-files)
     - [Create, delete, rename or move solution, solution folders and projects](#create-delete-rename-or-move-solution-solution-folders-and-projects)
+    - [Add new project (panel)](#add-new-project-panel)
     - [Add or remove nuget packages](#add-or-remove-nuget-packages)
     - [Update all nuget packages versions](#update-all-nuget-packages-versions)
     - [Inline nuget package version management (csproj)](#inline-nuget-package-version-management-csproj)
@@ -34,6 +35,7 @@ Table of Content:
     - [Create Directory.Packages.props](#create-directorypackagesprops)
     - [MSBuild property and condition evaluation](#msbuild-property-and-condition-evaluation)
     - [Edit MSBuild Properties](#edit-msbuild-properties)
+    - [Multilanguage support](#multilanguage-support)
   - [Extension Settings](#extension-settings)
           - [Example](#example)
   - [Known Issues](#known-issues)
@@ -170,6 +172,15 @@ As an example, if you want to compile in `Release` mode every time you publish a
 
 ![Create, delete, rename or move solution, solution folders and projects](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-solution-files.gif)
 
+### Add new project (panel)
+
+Besides the classic step-by-step "Add new project" wizard, solutions have an "Add new project (panel)" command that opens a Visual Studio-style, two-pane dialog: a searchable list of the `dotnet new` templates installed on your machine on the left (filterable by name or tag), and on the right a form to set the Project Name, Project Language, Location (with a folder picker) and .NET Framework once you pick a template.
+
+
+![New Project UI](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-new-project-ui.png)
+
+The template's description and the frameworks it actually supports are fetched on selection, so the Framework field is populated per-template rather than a generic list; fields that don't apply to a given template (e.g. one that only supports a single language, or doesn't expose a `--framework` option) are disabled instead of shown as free-form input.
+
 ### Add or remove nuget packages
 
 Only available when the project is of kind CPS (dotnet core).
@@ -274,6 +285,12 @@ The project reader understands a realistic subset of MSBuild, so the tree reflec
 Solution and project nodes have an "Edit MSBuild Properties..." command (also in their context menu) that opens a form to override `Configuration`, `Platform`, `TargetFramework` (offered as a dropdown when the project multi-targets) and any custom property, without touching the project files themselves. Overrides set on a project take precedence over the ones set on its solution, which in turn take precedence over the `vssolution.defaultMsBuildConfiguration` / `defaultMsBuildPlatform` settings below.
 
 ![Add Directory.Packages.props](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-edit-msbuild-properties.png)
+
+### Multilanguage support
+
+The extension's UI (commands, menus, settings descriptions and the panels above) is localized and follows VS Code's display language automatically. Currently supported languages: English (base), German (`de`), Spanish (`es`), French (`fr`), Portuguese - Portugal (`pt-pt`), Portuguese - Brazil (`pt-br`) and Simplified Chinese (`zh-cn`).
+
+> The `de`, `es`, `fr`, `pt-pt`, `pt-br` and `zh-cn` translations are AI-generated. If you're a native speaker and spot a mistake, contributions/corrections are very welcome.
 
 ## Extension Settings
 
