@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { Project } from "@core/Projects";
@@ -42,7 +43,7 @@ export class DeleteProjectFile implements Action {
             options.push('Yes All', 'Skip All');
         }
 
-        const option = await dialogs.confirm(`Are you sure you want to delete '${filename}'?`, ...options);
+        const option = await dialogs.confirm(t("Are you sure you want to delete '{0}'?", filename), ...options);
 
         if (option === 'Yes All') {
             context.yesAll = true;

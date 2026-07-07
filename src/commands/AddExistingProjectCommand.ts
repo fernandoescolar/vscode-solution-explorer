@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
 import { Action, DotNetAddExistingProject } from "@actions";
@@ -16,8 +17,8 @@ export class AddExistingProjectCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item) { return []; }
 
-        const solution = await dialogs.selectOption('Select solution', this.getSolutions(item));
-        const projectPath = await dialogs.openProjectFile('Select a project file to add');
+        const solution = await dialogs.selectOption(t('Select solution'), this.getSolutions(item));
+        const projectPath = await dialogs.openProjectFile(t('Select a project file to add'));
         if (!solution || !projectPath) {
             return [];
         }

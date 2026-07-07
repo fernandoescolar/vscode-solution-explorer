@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import * as dialogs from "@extensions/dialogs";
@@ -24,7 +25,7 @@ export class RenameSolution implements Action {
 
         const caseChanged = this.solutionPath.toLowerCase() === newSolutionPath.toLowerCase();
         if (await fs.exists(newSolutionPath) && !caseChanged) {
-            await dialogs.showError("Solution already exists");
+            await dialogs.showError(t("Solution already exists"));
             return;
         }
 

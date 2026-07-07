@@ -1,10 +1,11 @@
+import { t } from "@extensions/translations";
 import { Reference } from "@core/Projects";
 import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } from "@tree";
 import { ProjectReferencedAssemblyTreeItem } from "./ProjectReferencedAssemblyTreeItem";
 
 export class ProjectReferencedAssembliesTreeItem extends TreeItem {
     constructor(context: TreeItemContext) {
-        super(context, "assemblies", TreeItemCollapsibleState.Collapsed, ContextValues.projectReferencedProjects);
+        super(context, t("assemblies"), TreeItemCollapsibleState.Collapsed, ContextValues.projectReferencedProjects);
         this.allowIconTheme = false;
         this.addContextValueSuffix();
     }

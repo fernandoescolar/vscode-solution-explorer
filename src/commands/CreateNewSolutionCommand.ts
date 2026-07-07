@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { t } from "@extensions/translations";
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
 import { Action, DotNetNewSln } from "@actions";
@@ -14,7 +15,7 @@ export class CreateNewSolutionCommand extends SingleItemActionsCommand {
     }
 
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
-        const solutionName = await dialogs.getText('Solution name');
+        const solutionName = await dialogs.getText(t('Solution name'));
         const workingFolder = vscode.workspace.rootPath;
         if (!solutionName || !workingFolder) {
             return [];

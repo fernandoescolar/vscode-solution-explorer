@@ -1,9 +1,10 @@
+import { t } from "@extensions/translations";
 import { PackageReference } from "@core/Projects";
 import { TreeItem, TreeItemContext, TreeItemCollapsibleState, ContextValues, TreeItemFactory } from "@tree";
 
 export class ProjectReferencedPackagesTreeItem extends TreeItem {
     constructor(context: TreeItemContext) {
-        super(context, "packages", TreeItemCollapsibleState.Collapsed, ContextValues.projectReferencedPackages);
+        super(context, t("packages"), TreeItemCollapsibleState.Collapsed, ContextValues.projectReferencedPackages);
         this.allowIconTheme = false;
         this.addContextValueSuffix();
     }

@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { ContextValues, TreeItem } from "@tree";
@@ -17,7 +18,7 @@ export class MoveToSolutionFolderCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.solution) { return []; }
 
-        const folder = await dialogs.selectOption('Select folder...', () => this.getFolders(item.solution));
+        const folder = await dialogs.selectOption(t('Select folder...'), () => this.getFolders(item.solution));
         if (!folder) { return []; }
 
         const solutionItem = item.solutionItem;

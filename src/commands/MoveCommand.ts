@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as dialogs from "@extensions/dialogs";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem, ContextValues } from "@tree";
@@ -19,7 +20,7 @@ export class MoveCommand extends SingleItemActionsCommand {
         if (!item || !item.project || !item.path) { return []; }
 
         const folders = await item.project?.getFolderList() ?? [];
-        const folder = await dialogs.selectOption('Select folder...', folders);
+        const folder = await dialogs.selectOption(t('Select folder...'), folders);
         if (!folder) { return []; }
 
         if (ContextValues.matchAnyLanguage(ContextValues.projectFile, item.contextValue)) {

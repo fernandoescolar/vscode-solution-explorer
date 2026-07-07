@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import * as dialogs from "@extensions/dialogs";
@@ -73,7 +74,7 @@ export class CopyProjectFile implements Action {
             options.push('Overwrite All', 'Keep Both All', 'Skip All');
         }
 
-        const option = await dialogs.confirm(`Are you sure you want to move '${filename}' overriding the existing file?`, ...options);
+        const option = await dialogs.confirm(t("Are you sure you want to move '{0}' overriding the existing file?", filename), ...options);
 
         if (option === 'Overwrite All') {
             context.overwriteAll = true;

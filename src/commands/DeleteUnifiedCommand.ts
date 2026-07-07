@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import { TreeItem, ContextValues } from "@tree";
 import { ActionCommandContext, ActionsCommand, prepareContextActionGetters } from "@commands";
 import {
@@ -47,10 +48,10 @@ export class DeleteUnifiedCommand extends ActionsCommand {
 
             const actions = topClickedItems.flatMap(item => this.getItemDeleteActions(item, false));
             const groupDescriptions = [
-                'delete the selected items',
-                'remove the selected references',
-                'remove the selected projects',
-                'delete the selected items'
+                t('delete the selected items'),
+                t('remove the selected references'),
+                t('remove the selected projects'),
+                t('delete the selected items')
             ];
             return [new DeleteMultipleItems(actions, groupDescriptions[clickedGroups[0]])];
         }

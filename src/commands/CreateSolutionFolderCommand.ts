@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem } from "@tree";
 import { Action, SlnCreateSolutionFolder, SlnxCreateSolutionFolder } from "@actions";
@@ -18,7 +19,7 @@ export class CreateSolutionFolderCommand extends SingleItemActionsCommand {
             return [];
         }
 
-        const folderName = await dialogs.getText('New folder name');
+        const folderName = await dialogs.getText(t('New folder name'));
         if (!folderName) {
             return [];
         }

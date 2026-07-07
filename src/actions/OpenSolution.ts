@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { IEventAggregator, SolutionSelected } from "@events";
@@ -14,7 +15,7 @@ export class OpenSolution implements Action {
 
         if (!this.checkFolderContainsSolution()) {
             const folder = path.dirname(this.solutionPath);
-            const option = await dialogs.confirm(`The folder '${folder}' is not opened in the workspace, do you want to open it?`, "Yes", "No");
+            const option = await dialogs.confirm(t("The folder '{0}' is not opened in the workspace, do you want to open it?", folder), "Yes", "No");
             if (option === "Yes") {
                 await vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(folder));
             } else {

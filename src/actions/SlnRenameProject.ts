@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import * as dialogs from "@extensions/dialogs";
@@ -29,7 +30,7 @@ export class SlnRenameProject extends SlnRenameSolutionFolder {
 
         const caseChanged = this.project.fullPath.toLowerCase() === newProjectPath.toLowerCase();
         if (await fs.exists(newProjectPath) && !caseChanged) {
-            await dialogs.showError("Project already exists");
+            await dialogs.showError(t("Project already exists"));
             return;
         }
 

@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { t } from "@extensions/translations";
 
 export interface MsBuildPropertiesFormOptions {
     title: string;
@@ -45,6 +46,22 @@ function renderHtml(options: MsBuildPropertiesFormOptions): string {
     const targetFramework = escapeHtml(options.current["TargetFramework"] ?? "");
     const customEntries = Object.entries(options.current).filter(([key]) => NAMED_KEYS.indexOf(key) < 0);
 
+    const strings = {
+        hint: t("These overrides only affect how Solution Explorer evaluates Condition/property values in this workspace - they aren't written to any project file."),
+        configuration: t("Configuration"),
+        platform: t("Platform"),
+        targetFramework: t("TargetFramework"),
+        none: t("(none)"),
+        custom: t("Custom..."),
+        customProperties: t("Custom properties"),
+        addProperty: t("+ Add property"),
+        cancel: t("Cancel"),
+        save: t("Save"),
+        propertyName: t("Property name"),
+        value: t("Value"),
+        remove: t("Remove"),
+    };
+
     const tfOptionsHtml = options.targetFrameworkChoices
         .map(tf => `<option value="${escapeHtml(tf)}" ${tf === options.current["TargetFramework"] ? "selected" : ""}>${escapeHtml(tf)}</option>`)
         .join("");
@@ -52,9 +69,9 @@ function renderHtml(options: MsBuildPropertiesFormOptions): string {
     const targetFrameworkFieldHtml = options.targetFrameworkChoices.length > 0
         ? `
             <select id="targetFrameworkSelect">
-                <option value="">(none)</option>
+                <option value="">${escapeHtml(strings.none)}</option>
                 ${tfOptionsHtml}
-                <option value="__custom__" ${options.targetFrameworkChoices.indexOf(options.current["TargetFramework"] ?? "") < 0 && targetFramework ? "selected" : ""}>Custom...</option>
+                <option value="__custom__" ${options.targetFrameworkChoices.indexOf(options.current["TargetFramework"] ?? "") < 0 && targetFramework ? "selected" : ""}>${escapeHtml(strings.custom)}</option>
             </select>
             <input type="text" id="targetFrameworkCustom" placeholder="e.g. net8.0"
                    value="${targetFramework}"
@@ -63,7 +80,7 @@ function renderHtml(options: MsBuildPropertiesFormOptions): string {
         : `<input type="text" id="targetFrameworkCustom" placeholder="e.g. net8.0" value="${targetFramework}" />`;
 
     const customRowsHtml = customEntries
-        .map(([key, value]) => customRowHtml(escapeHtml(key), escapeHtml(value)))
+        .map(([key, value]) => customRowHtml(escapeHtml(key), escapeHtml(value), strings.propertyName, strings.value, strings.remove))
         .join("");
 
     return `<!DOCTYPE html>
@@ -114,36 +131,41 @@ function renderHtml(options: MsBuildPropertiesFormOptions): string {
 </head>
 <body>
     <h2>${escapeHtml(options.title)}</h2>
-    <div class="hint">These overrides only affect how Solution Explorer evaluates Condition/property values in this workspace - they aren't written to any project file.</div>
+    <div class="hint">${escapeHtml(strings.hint)}</div>
 
     <div class="field">
-        <label for="configuration">Configuration</label>
+        <label for="configuration">${escapeHtml(strings.configuration)}</label>
         <input type="text" id="configuration" placeholder="e.g. Debug" value="${configuration}" />
     </div>
 
     <div class="field">
-        <label for="platform">Platform</label>
+        <label for="platform">${escapeHtml(strings.platform)}</label>
         <input type="text" id="platform" placeholder="e.g. AnyCPU" value="${platform}" />
     </div>
 
     <div class="field">
-        <label>TargetFramework</label>
+        <label>${escapeHtml(strings.targetFramework)}</label>
         ${targetFrameworkFieldHtml}
     </div>
 
     <fieldset>
-        <legend>Custom properties</legend>
+        <legend>${escapeHtml(strings.customProperties)}</legend>
         <div id="customRows">${customRowsHtml}</div>
-        <button type="button" class="secondary" id="addCustom">+ Add property</button>
+        <button type="button" class="secondary" id="addCustom">${escapeHtml(strings.addProperty)}</button>
     </fieldset>
 
     <div class="actions">
-        <button type="button" class="secondary" id="cancel">Cancel</button>
-        <button type="button" id="save">Save</button>
+        <button type="button" class="secondary" id="cancel">${escapeHtml(strings.cancel)}</button>
+        <button type="button" id="save">${escapeHtml(strings.save)}</button>
     </div>
 
 <script>
     const vscode = acquireVsCodeApi();
+    const i18n = {
+        propertyName: ${JSON.stringify(strings.propertyName)},
+        value: ${JSON.stringify(strings.value)},
+        remove: ${JSON.stringify(strings.remove)}
+    };
 
     const tfSelect = document.getElementById('targetFrameworkSelect');
     const tfCustom = document.getElementById('targetFrameworkCustom');
@@ -158,9 +180,9 @@ function renderHtml(options: MsBuildPropertiesFormOptions): string {
 
     function customRowHtml(key, value) {
         return \`<div class="customRow">
-            <input type="text" class="customKey" placeholder="Property name" value="\${key}" />
-            <input type="text" class="customValue" placeholder="Value" value="\${value}" />
-            <button type="button" class="secondary removeCustom">Remove</button>
+            <input type="text" class="customKey" placeholder="\${i18n.propertyName}" value="\${key}" />
+            <input type="text" class="customValue" placeholder="\${i18n.value}" value="\${value}" />
+            <button type="button" class="secondary removeCustom">\${i18n.remove}</button>
         </div>\`;
     }
 
@@ -206,11 +228,11 @@ function renderHtml(options: MsBuildPropertiesFormOptions): string {
 </html>`;
 }
 
-function customRowHtml(key: string, value: string): string {
+function customRowHtml(key: string, value: string, propertyNameLabel: string, valueLabel: string, removeLabel: string): string {
     return `<div class="customRow">
-        <input type="text" class="customKey" placeholder="Property name" value="${key}" />
-        <input type="text" class="customValue" placeholder="Value" value="${value}" />
-        <button type="button" class="secondary removeCustom">Remove</button>
+        <input type="text" class="customKey" placeholder="${escapeHtml(propertyNameLabel)}" value="${key}" />
+        <input type="text" class="customValue" placeholder="${escapeHtml(valueLabel)}" value="${value}" />
+        <button type="button" class="secondary removeCustom">${escapeHtml(removeLabel)}</button>
     </div>`;
 }
 

@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem, ContextValues } from "@tree";
@@ -16,7 +17,7 @@ export class CreateFolderCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project || !item.path) { return []; }
 
-        const folderName = await dialogs.getText('New folder name');
+        const folderName = await dialogs.getText(t('New folder name'));
         if (!folderName) {
             return [];
         }

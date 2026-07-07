@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import { TreeItem } from "@tree";
 import { SingleItemActionsCommand } from "@commands";
 import { Action, DotNetAddProjectReference } from "@actions";
@@ -16,7 +17,7 @@ export class AddProjectReferenceCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item || !item.project) { return []; }
 
-        const projectPath = await dialogs.selectOption('Select project...', () => this.getCPSProjects(item));
+        const projectPath = await dialogs.selectOption(t('Select project...'), () => this.getCPSProjects(item));
         if (!projectPath) { return []; }
 
         return [ new DotNetAddProjectReference(item.project.fullPath, projectPath) ];

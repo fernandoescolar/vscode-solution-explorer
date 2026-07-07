@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { t } from "@extensions/translations";
 import * as msBuildPropertyOverrides from "@extensions/msBuildPropertyOverrides";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { ContextValues, TreeItem } from "@tree";
@@ -31,7 +32,7 @@ export class EditMsBuildPropertiesCommand extends SingleItemActionsCommand {
             .filter(tf => tf.length > 0);
 
         const values = await showMsBuildPropertiesForm(this.context, {
-            title: `Edit MSBuild Properties - ${item.label}`,
+            title: t("Edit MSBuild Properties - {0}", item.label),
             current,
             targetFrameworkChoices
         });

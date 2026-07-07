@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem, ContextValues } from "@tree";
 import { Action, RenameProjectFile, RenameProjectFolder } from "@actions";
@@ -16,7 +17,7 @@ export class RenameCommand extends SingleItemActionsCommand {
         if (!item || !item.project || !item.path) { return []; }
 
         const oldname = item.label;
-        const newname = await dialogs.getText('New name', 'New name', item.label);
+        const newname = await dialogs.getText(t('New name'), t('New name'), item.label);
         if (!newname) { return []; }
 
         if (ContextValues.matchAnyLanguage(ContextValues.projectFile, item.contextValue)) {

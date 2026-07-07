@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import * as dialogs from "@extensions/dialogs";
@@ -25,7 +26,7 @@ export class RenameProjectFile implements Action {
 
         const caseChanged = this.filePath.toLowerCase() === newfilePath.toLowerCase();
         if (await fs.exists(newfilePath) && !caseChanged) {
-            await dialogs.showError("File already exists");
+            await dialogs.showError(t("File already exists"));
             return;
         }
 

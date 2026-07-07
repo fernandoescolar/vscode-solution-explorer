@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as dialogs from "@extensions/dialogs";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { ContextValues, TreeItem } from "@tree";
@@ -17,7 +18,7 @@ export class RenameSolutionItemCommand extends SingleItemActionsCommand {
     public async getActions(item: TreeItem | undefined): Promise<Action[]> {
         if (!item) { return []; }
 
-        const newname = await dialogs.getText('New name', 'New name', item.label);
+        const newname = await dialogs.getText(t('New name'), t('New name'), item.label);
         if (!newname) { return []; }
 
         if (item.contextValue === ContextValues.solution || item.contextValue === ContextValues.solution + '-cps') {

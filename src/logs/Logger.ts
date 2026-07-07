@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import { ILogger } from "./ILogger";
 import { IEventAggregator, LogEvent, LogEventType } from "../events";
 
@@ -13,16 +14,16 @@ export class Logger implements ILogger {
 
     public info(text: string): void {
         if (!text) { return; }
-        this.log("info: " + text);
+        this.log(t("info: {0}", text));
     }
 
     public error(text: string): void {
         if (!text) { return; }
-        this.log("error: " + text);
+        this.log(t("error: {0}", text));
     }
 
     public warn(text: string): void {
         if (!text) { return; }
-        this.log("warning: " + text);
+        this.log(t("warning: {0}", text));
     }
 }

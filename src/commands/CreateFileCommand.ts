@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { TreeItem, ContextValues } from "@tree";
@@ -12,7 +13,7 @@ export class CreateFileCommand extends SingleItemActionsCommand {
     private wizard: dialogs.Wizard | undefined;
 
     constructor(private readonly templaceEngineCollection: TemplateEngineCollection, private readonly relativeToSelected?: Direction) {
-        super('Create file');
+        super(t('Create file'));
     }
 
     public shouldRun(item: TreeItem | undefined): boolean {
@@ -33,8 +34,8 @@ export class CreateFileCommand extends SingleItemActionsCommand {
             };
 
         this.wizard = dialogs.wizard(this.title)
-                             .getText('New file name', 'file.extension')
-                             .selectOption('Select template', () => this.getTemplatesTypes());
+                             .getText(t('New file name'), 'file.extension')
+                             .selectOption(t('Select template'), () => this.getTemplatesTypes());
 
         const parameters = await this.wizard.run();
         if (!parameters) {

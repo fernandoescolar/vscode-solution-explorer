@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as dialogs from "@extensions/dialogs";
 import { Project } from "@core/Projects";
@@ -50,7 +51,7 @@ export class MoveProjectFolder implements Action {
             options.push('Skip', 'Skip All');
         }
 
-        const option = await dialogs.confirm(`There is already a folder named '${foldername}'`, ...options);
+        const option = await dialogs.confirm(t("There is already a folder named '{0}'", foldername), ...options);
 
         if (option === 'Skip All') {
             context.skipAll = true;

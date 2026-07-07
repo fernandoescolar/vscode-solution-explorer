@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as dialogs from "@extensions/dialogs";
 import { TemplateEngineCollection } from "@templates";
 import { Action, ActionContext } from "./base/Action";
@@ -8,7 +9,7 @@ export class InstallWorkspaceTemplateFiles implements Action {
 
     public async execute(context: ActionContext): Promise<void> {
         if (await this.templateEngineCollection.exists(this.workspace)){
-            if (await dialogs.confirm(`Template files already exist in ${this.workspace}. Do you want to overwrite them?`, 'Yes') !== 'Yes') {
+            if (await dialogs.confirm(t("Template files already exist in {0}. Do you want to overwrite them?", this.workspace), 'Yes') !== 'Yes') {
                 return;
             }
         }

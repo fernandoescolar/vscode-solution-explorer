@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as dialogs from "@extensions/dialogs";
 import { Action, ActionContext } from "./base/Action";
 
@@ -38,7 +39,7 @@ export class DeleteMultipleItems implements Action {
             options.push('Yes All', 'Skip All');
         }
 
-        const option = await dialogs.confirm(`Are you sure you want to ${this.operationDescription}?`, ...options);
+        const option = await dialogs.confirm(t("Are you sure you want to {0}?", this.operationDescription), ...options);
 
         if (option === 'Yes All') {
             context.yesAll = true;

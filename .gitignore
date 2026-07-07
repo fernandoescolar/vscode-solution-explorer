@@ -5,3 +5,9 @@ node_modules
 .vscode-test/
 .vsix
 .DS_Store
+
+# generated from translations/*.json (see scripts/generate-all-translations.js)
+/package.nls.json
+/package.nls.*.json
+/l10n/bundle.l10n.json
+/l10n/bundle.l10n.*.json

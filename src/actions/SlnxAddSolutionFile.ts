@@ -1,3 +1,4 @@
+import { t } from "@extensions/translations";
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import * as dialogs from "@extensions/dialogs";
@@ -64,7 +65,7 @@ export class SlnxAddSolutionFile implements Action {
             options.push('Yes All', 'Skip All');
         }
 
-        const option = await dialogs.confirm(`The file ${filename} is out of the solution scope, do you want to create a copy?`, ...options);
+        const option = await dialogs.confirm(t("The file {0} is out of the solution scope, do you want to create a copy?", filename), ...options);
 
         if (option === 'Yes All') {
             context.yesAll = true;
@@ -93,7 +94,7 @@ export class SlnxAddSolutionFile implements Action {
 
         const editor = new SlnxDocumentEditor(this.solution, root);
         const filename = path.basename(relativeFilePath);
-        
+
         // Add to XML
         editor.addSolutionFile(filename, relativeFilePath, this.solutionItem as SolutionFolder);
 
