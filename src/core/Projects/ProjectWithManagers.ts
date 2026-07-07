@@ -7,9 +7,9 @@ export abstract class ProjectWithManagers extends ProjectWithNugetDependencies {
     protected readonly xml: XmlManager;
     protected readonly files: FileManager;
 
-    constructor(projectFullPath: string, withReferences?: boolean, includePrefix?: string) {
+    constructor(projectFullPath: string, withReferences?: boolean, includePrefix?: string, solutionFullPath?: string) {
         super(projectFullPath, withReferences);
-        this.xml = new XmlManager(projectFullPath, includePrefix);
+        this.xml = new XmlManager(projectFullPath, includePrefix, solutionFullPath);
         this.files = new FileManager(projectFullPath);
     }
 

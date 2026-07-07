@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import * as config from "@extensions/config";
+import * as msBuildPropertyOverrides from "@extensions/msBuildPropertyOverrides";
 import { EventAggregator } from "@events";
 import { Logger } from "@logs";
 import { ActionsRunner } from "./ActionsRunner";
@@ -31,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
     const nugetCompletionItemProvider = new LanguageExtensions(context);
 
     register(context, config);
+    msBuildPropertyOverrides.register(context);
     register(context, eventAggregator);
     register(context, logger);
     register(context, actionsRunner);

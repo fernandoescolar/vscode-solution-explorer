@@ -3,6 +3,7 @@ import * as fs from "@extensions/fs";
 import * as xml from "@extensions/xml";
 import { XmlElement } from "@extensions/xml";
 import * as config from "@extensions/config";
+import * as msBuildPropertyOverrides from "@extensions/msBuildPropertyOverrides";
 import { Include, ItemGroup, PackageReference, PackageVersion, ProjectItem, ProjectItemsFactory, PropertyGroup } from "../Items";
 import * as ConditionEvaluator from "../ConditionEvaluator";
 import { ProjectFileStat } from "../ProjectFileStat";
@@ -28,7 +29,7 @@ export class XmlManager implements Manager {
     private _sdk: string | undefined;
     private _toolsVersion: string | undefined;
 
-    constructor(private readonly fullPath: string, private readonly includePrefix?: string) {
+    constructor(private readonly fullPath: string, private readonly includePrefix?: string, private readonly solutionFullPath?: string) {
         this.projectFolderPath = path.dirname(fullPath);
     }
 
@@ -865,7 +866,7 @@ export class XmlManager implements Manager {
             ? this.projectFolderPath.substring(root.length)
             : this.projectFolderPath;
 
-        return {
+        const properties: Record<string, string> = {
             MSBuildProjectDirectory: this.projectFolderPath,
             MSBuildProjectDirectoryNoRoot: directoryNoRoot,
             MSBuildProjectFullPath: this.fullPath,
@@ -877,6 +878,12 @@ export class XmlManager implements Manager {
             Configuration: config.getDefaultMsBuildConfiguration(),
             Platform: config.getDefaultMsBuildPlatform(),
         };
+
+        // user-configured overrides (via the "Edit MSBuild Properties" command) win over
+        // the extension-wide settings above; project-level overrides win over solution-level
+        Object.assign(properties, msBuildPropertyOverrides.getEffectiveOverrides(this.fullPath, this.solutionFullPath));
+
+        return properties;
     }
 
     private substituteProperties(value: string, properties: Record<string, string>): string {

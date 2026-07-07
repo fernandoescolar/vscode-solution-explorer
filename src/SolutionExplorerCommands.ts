@@ -82,6 +82,9 @@ export class SolutionExplorerCommands {
         this.commands['duplicate'] = [new cmds.DuplicateCommand(),
             [ContextValues.projectFile, ...fsharp(ContextValues.projectFile)]];
 
+        this.commands['editMsBuildProperties'] = [new cmds.EditMsBuildPropertiesCommand(context, provider),
+            both(ContextValues.solution, ContextValues.project)];
+
         this.commands['focus'] = [new cmds.FocusCommand(provider),
             undefined];
 

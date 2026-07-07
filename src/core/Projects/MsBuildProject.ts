@@ -10,8 +10,8 @@ export class MsBuildProject extends ProjectWithManagers {
     private packagesReferences: PackageReference[] = [];
     private projectItemEntries: ProjectItemEntry[] = [];
 
-    constructor(projectFullPath: string, withReferences?: boolean, includePrefix?: string) {
-        super(projectFullPath, withReferences, includePrefix);
+    constructor(projectFullPath: string, withReferences?: boolean, includePrefix?: string, solutionFullPath?: string) {
+        super(projectFullPath, withReferences, includePrefix, solutionFullPath);
     }
 
     public async preload(): Promise<void> {

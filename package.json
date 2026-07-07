@@ -138,6 +138,12 @@
         "category": "Solution Explorer"
       },
       {
+        "command": "solutionExplorer.editMsBuildProperties",
+        "title": "Edit MSBuild Properties...",
+        "category": "Solution Explorer",
+        "icon": "$(settings-gear)"
+      },
+      {
         "command": "solutionExplorer.createFile",
         "title": "Create file",
         "category": "Solution Explorer",
@@ -449,6 +455,16 @@
           "command": "solutionExplorer.createDirectoryPackages",
           "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.createDirectoryPackages",
           "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.editMsBuildProperties",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.editMsBuildProperties",
+          "group": "2_workspace"
+        },
+          {
+          "command": "solutionExplorer.editMsBuildProperties",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.editMsBuildProperties",
+          "group": "inline"
         },
         {
           "command": "solutionExplorer.renameFolder",

@@ -32,6 +32,8 @@ Table of Content:
     - [Create file templates](#create-file-templates)
     - [Solution syntax highlighting](#solution-syntax-highlighting)
     - [Create Directory.Packages.props](#create-directorypackagesprops)
+    - [MSBuild property and condition evaluation](#msbuild-property-and-condition-evaluation)
+    - [Edit MSBuild Properties](#edit-msbuild-properties)
   - [Extension Settings](#extension-settings)
           - [Example](#example)
   - [Known Issues](#known-issues)
@@ -257,6 +259,22 @@ You can add a `Directory.Packages.props` on Solution under `Solution items` fold
 
 If a `Directory.Packages.props` are already present on the solution, after add a new project all `PackageReferences` will be updated and added the `PackageVersion` to the current file.
 
+### MSBuild property and condition evaluation
+
+The project reader understands a realistic subset of MSBuild, so the tree reflects what would actually be built instead of just what's literally written in the `xxproj` file:
+
+- **`Condition` attributes** are evaluated (not just stored) on `PropertyGroup`, `ItemGroup` and individual items, supporting `==`, `!=`, `And`/`Or`/`!`, parentheses, `Exists()` and boolean literals. This fixes the common "same property set for Debug and Release in two different `PropertyGroup`s" case, which previously always resolved to whichever one appeared last in the file.
+- **Properties** (`$(...)`) cascade in document order like real MSBuild, including reserved ones seeded up front: `MSBuildProjectDirectory`, `MSBuildProjectDirectoryNoRoot`, `MSBuildProjectFullPath`, `MSBuildProjectFile`, `MSBuildProjectName`, `MSBuildProjectExtension`, `MSBuildThisFileDirectory`, `MSBuildVersion`, `Configuration` and `Platform`.
+- **Multi-targeted projects** (`<TargetFrameworks>net8.0;net472</TargetFrameworks>`) get a derived `$(TargetFramework)` (the first entry) so per-TFM conditions still resolve, even though this reader evaluates the project once rather than per target framework.
+- **`<Import>`** elements, and auto-discovered `Directory.Build.props` / `Directory.Build.targets` / `Directory.Packages.props` (found by walking up from the project directory, same as MSBuild), are merged into the evaluation - including central package management version resolution for `PackageReference`s that don't specify a `Version`.
+- Changes to any of these `.props`/`.targets` files - even ones living outside the project's own folder - automatically reload the affected project(s) in the tree.
+
+### Edit MSBuild Properties
+
+Solution and project nodes have an "Edit MSBuild Properties..." command (also in their context menu) that opens a form to override `Configuration`, `Platform`, `TargetFramework` (offered as a dropdown when the project multi-targets) and any custom property, without touching the project files themselves. Overrides set on a project take precedence over the ones set on its solution, which in turn take precedence over the `vssolution.defaultMsBuildConfiguration` / `defaultMsBuildPlatform` settings below.
+
+![Add Directory.Packages.props](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-edit-msbuild-properties.png)
+
 ## Extension Settings
 
 You can configure the extension in the Visual Studio Code settings panel:
@@ -269,7 +287,7 @@ You can configure the extension in the Visual Studio Code settings panel:
 
 - `vssolution.showTerminalOnCommand` Show the terminal when a command is executed.
 
-- `vssolution.saveBeforeExecute` Save all open files before executing a terminal command (e.g. dotnet build, clean, test). 
+- `vssolution.saveBeforeExecute` Save all open files before executing a terminal command (e.g. dotnet build, clean, test).
 
 - `vssolution.trackActiveItem` Select the active editor file in the solution explorer (not recommended).
 
@@ -306,6 +324,12 @@ You can configure the extension in the Visual Studio Code settings panel:
 - `vssolution.nuget.codeActions` Sets whether to show NuGet package versions in the code actions.
 
 - `vssolution.nuget.codeCompletions` Sets whether to show NuGet package versions and names in the code completions.
+
+- `vssolution.defaultMsBuildConfiguration` Default value for the `$(Configuration)` MSBuild property used to evaluate `Condition` attributes when reading project files (default `"Debug"`).
+
+- `vssolution.defaultMsBuildPlatform` Default value for the `$(Platform)` MSBuild property used to evaluate `Condition` attributes when reading project files (default `"AnyCPU"`).
+
+- `vssolution.defaultMsBuildVersion` Value for the `$(MSBuildVersion)` reserved MSBuild property, since this extension does not invoke an actual build engine and so cannot detect it automatically.
 
 ###### Example
 

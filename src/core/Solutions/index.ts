@@ -2,6 +2,7 @@ export {
     Solution,
     SolutionType,
     SolutionItem,
+    SolutionParentObject,
     SolutionFolder,
     SolutionProject,
     SolutionProjectType,

@@ -2,7 +2,7 @@ import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import { MsBuildProject } from "./MsBuildProject";
 import { Project } from "./Project";
-import { SolutionItem, SolutionProject, SolutionProjectType } from "@core/Solutions";
+import { Solution, SolutionItem, SolutionParentObject, SolutionProject, SolutionProjectType } from "@core/Solutions";
 
 const projectFileExtensions: { [id: string]: string } = {
     [".csproj"]: ".cs",
@@ -23,15 +23,16 @@ export class ProjectFactory {
         if (!(await fs.exists(fullPath))) {
             return undefined;
         }
+        const solutionFullPath = ProjectFactory.findSolutionFullPath(project);
         let result: Project | undefined;
         if (p.type === SolutionProjectType.default) {
-            result = ProjectFactory.loadDefaultProject(fullPath);
+            result = ProjectFactory.loadDefaultProject(fullPath, solutionFullPath);
         }
         if (p.type === SolutionProjectType.noReferences) {
-            result = ProjectFactory.loadNoReferencesProject(fullPath);
+            result = ProjectFactory.loadNoReferencesProject(fullPath, solutionFullPath);
         }
         if (p.type === SolutionProjectType.shared) {
-            result = ProjectFactory.loadSharedProject(fullPath);
+            result = ProjectFactory.loadSharedProject(fullPath, solutionFullPath);
         }
 
         if (result) {
@@ -56,15 +57,28 @@ export class ProjectFactory {
         }
     }
 
-    private static loadDefaultProject(fullPath: string): Project {
-        return new MsBuildProject(fullPath, undefined, undefined);
+    // walks up .parent until it finds the owning Solution, so project-level
+    // MSBuild property overrides can fall back to a solution-level default
+    private static findSolutionFullPath(item: SolutionItem): string | undefined {
+        let current: SolutionItem | SolutionParentObject | undefined = item;
+        while (current) {
+            if (current instanceof Solution) {
+                return current.fullPath;
+            }
+            current = current.parent;
+        }
+        return undefined;
     }
 
-    private static loadNoReferencesProject(fullPath: string): Project {
-        return new MsBuildProject(fullPath, false, undefined);
+    private static loadDefaultProject(fullPath: string, solutionFullPath?: string): Project {
+        return new MsBuildProject(fullPath, undefined, undefined, solutionFullPath);
     }
 
-    private static loadSharedProject(fullPath: string): Project {
-        return new MsBuildProject(fullPath.replace(".shproj", ".projitems"), false, "$(MSBuildThisFileDirectory)");
+    private static loadNoReferencesProject(fullPath: string, solutionFullPath?: string): Project {
+        return new MsBuildProject(fullPath, false, undefined, solutionFullPath);
+    }
+
+    private static loadSharedProject(fullPath: string, solutionFullPath?: string): Project {
+        return new MsBuildProject(fullPath.replace(".shproj", ".projitems"), false, "$(MSBuildThisFileDirectory)", solutionFullPath);
     }
 }

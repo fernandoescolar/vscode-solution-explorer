@@ -17,6 +17,7 @@ export * from "./CreateNewSolutionCommand";
 export * from "./CreateSolutionFolderCommand";
 export * from "./DeleteUnifiedCommand";
 export * from "./DuplicateCommand";
+export * from "./EditMsBuildPropertiesCommand";
 export * from "./FocusCommand";
 export * from "./InstallWorkspaceTemplateFilesCommand";
 export * from "./InvalidateNugetCacheCommand";
