@@ -1,5 +1,6 @@
 import * as path from "@extensions/path";
 import { XmlElement } from "@extensions/xml";
+import * as ConditionEvaluator from "../ConditionEvaluator";
 import { ProjectItem } from "./ProjectItem";
 import { Reference } from "./Reference";
 import { PackageReference } from "./PackageReference";
@@ -13,8 +14,12 @@ import { PackageVersion } from "./PackageVersion";
 const ignoreItems = ["AssemblyMetadata", "BaseApplicationManifest", "CodeAnalysisImport", "COMReference", "COMFileReference", "Import", "InternalsVisibleTo", "NativeReference", "TrimmerRootAssembly", "Using", "Protobuf"];
 const knownTypes = ["Reference", "PackageReference", "ProjectReference", "Folder", "Content", "Compile", "None", "EmbeddedResource", "PackageVersion"];
 
-export function createProjectElement(xml: XmlElement, properties: Record<string, string>): ProjectItem | undefined {
+export async function createProjectElement(xml: XmlElement, properties: Record<string, string>, baseDir?: string): Promise<ProjectItem | undefined> {
     if (ignoreItems.indexOf(xml.name) >= 0) {
+        return undefined;
+    }
+
+    if (!(await ConditionEvaluator.evaluate(xml.attributes?.Condition, properties, baseDir))) {
         return undefined;
     }
 

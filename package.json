@@ -855,6 +855,21 @@
           "default": false,
           "description": "Select the active editor file in the solution explorer."
         },
+        "vssolution.defaultMsBuildConfiguration": {
+          "type": "string",
+          "default": "Debug",
+          "description": "Default value for the $(Configuration) MSBuild property used to evaluate Condition attributes when reading project files."
+        },
+        "vssolution.defaultMsBuildPlatform": {
+          "type": "string",
+          "default": "AnyCPU",
+          "description": "Default value for the $(Platform) MSBuild property used to evaluate Condition attributes when reading project files."
+        },
+        "vssolution.defaultMsBuildVersion": {
+          "type": "string",
+          "default": "17.11.9",
+          "description": "Value for the $(MSBuildVersion) reserved MSBuild property (this extension does not invoke an actual build engine, so this cannot be detected automatically)."
+        },
         "vssolution.netcoreIgnore": {
           "type": "array",
           "items": {

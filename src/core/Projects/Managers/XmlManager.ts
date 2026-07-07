@@ -4,6 +4,7 @@ import * as xml from "@extensions/xml";
 import { XmlElement } from "@extensions/xml";
 import * as config from "@extensions/config";
 import { Include, ItemGroup, PackageReference, PackageVersion, ProjectItem, ProjectItemsFactory, PropertyGroup } from "../Items";
+import * as ConditionEvaluator from "../ConditionEvaluator";
 import { ProjectFileStat } from "../ProjectFileStat";
 import { Manager } from "./Manager";
 import { Direction, RelativeFilePosition } from "../RelativeFilePosition";
@@ -21,6 +22,8 @@ export class XmlManager implements Manager {
     private projectItems: ProjectItem[] = [];
     private itemGroups: ItemGroup[] = [];
     private propertyGroups: PropertyGroup[] = [];
+    private externalFiles: string[] = [];
+    private properties: Record<string, string> = {};
     private currentItemGroup: xml.XmlElement | undefined = undefined;
     private _sdk: string | undefined;
     private _toolsVersion: string | undefined;
@@ -397,7 +400,7 @@ export class XmlManager implements Manager {
     public async refresh(): Promise<void> {
         const content = await fs.readFile(this.fullPath);
         this.document = await xml.parseToJson(content);
-        this.projectItems = this.parseDocument();
+        this.projectItems = await this.parseDocument();
     }
 
     public async updatePackageReference(packages: NugetDependencies): Promise<void> {
@@ -421,6 +424,26 @@ export class XmlManager implements Manager {
     public async getPropertyGroups(): Promise<PropertyGroup[]> {
         await this.ensureIsLoaded();
         return this.propertyGroups;
+    }
+
+    // full paths of every .props/.targets file this project pulled in while
+    // evaluating (explicit <Import>s, plus auto-discovered Directory.Build.*
+    // and Directory.Packages.props) - used to know when a change to one of
+    // them should trigger a reload of this project, even though the file
+    // itself lives outside the project's own directory.
+    public async getExternalFiles(): Promise<string[]> {
+        await this.ensureIsLoaded();
+        return this.externalFiles;
+    }
+
+    // the fully evaluated property bag as it stood at the end of parsing: values
+    // explicitly set in the project's own/imported PropertyGroups (Condition-aware,
+    // last unconditioned or matching-condition value wins) plus reserved MSBuild
+    // properties seeded up front (MSBuildProjectName, TargetFramework derived from
+    // TargetFrameworks, Configuration/Platform defaults, etc.)
+    public async getProperties(): Promise<Record<string, string>> {
+        await this.ensureIsLoaded();
+        return { ...this.properties };
     }
 
     public async tryReplaceLinkFolderName(relativePath: string, oldName: string, newName: string): Promise<boolean> {
@@ -744,7 +767,7 @@ export class XmlManager implements Manager {
         }
     }
 
-    private parseDocument(): ProjectItem[] {
+    private async parseDocument(): Promise<ProjectItem[]> {
         if (!this.document) { return []; }
 
         const project = XmlManager.getProjectElement(this.document);
@@ -759,25 +782,142 @@ export class XmlManager implements Manager {
 
         this._toolsVersion = project.attributes && project.attributes.ToolsVersion;
 
-        const properties: Record<string, string> = {};
+        this.propertyGroups = [];
+        this.itemGroups = [];
+        this.externalFiles = [];
+
+        const properties: Record<string, string> = this.createBuiltInProperties();
         if (this.includePrefix?.startsWith("$(") && this.includePrefix?.endsWith(")")) {
             const propertyName = this.includePrefix.substring(2, this.includePrefix.length - 1);
             properties[propertyName] = "";
         }
 
-        project.elements.forEach((element: XmlElement) => {
+        // a file never auto-imports itself (relevant when this XmlManager IS a
+        // Directory.Build.props/Directory.Packages.props being read directly)
+        const importedFiles = new Set<string>([this.fullPath.toLocaleLowerCase()]);
+
+        const buildProps = await this.findAncestorFile(this.projectFolderPath, XmlManager.DIRECTORY_BUILD_PROPS);
+        if (buildProps) {
+            await this.importFile(buildProps, properties, result, importedFiles, 0);
+        }
+
+        const packagesProps = await this.findAncestorFile(this.projectFolderPath, XmlManager.DIRECTORY_PACKAGES_PROPS);
+        if (packagesProps) {
+            await this.importFile(packagesProps, properties, result, importedFiles, 0);
+        }
+
+        await this.processElements(project.elements, this.projectFolderPath, properties, result, importedFiles, 0);
+
+        const buildTargets = await this.findAncestorFile(this.projectFolderPath, XmlManager.DIRECTORY_BUILD_TARGETS);
+        if (buildTargets) {
+            await this.importFile(buildTargets, properties, result, importedFiles, 0);
+        }
+
+        this.resolveCentralPackageVersions(result, properties);
+        this.properties = properties;
+
+        return result;
+    }
+
+    private static readonly DIRECTORY_BUILD_PROPS = "Directory.Build.props";
+    private static readonly DIRECTORY_BUILD_TARGETS = "Directory.Build.targets";
+    private static readonly DIRECTORY_PACKAGES_PROPS = "Directory.Packages.props";
+
+    // walks up from startDir to the filesystem root looking for fileName,
+    // matching MSBuild's implicit Directory.Build.*/Directory.Packages.props discovery
+    private async findAncestorFile(startDir: string, fileName: string): Promise<string | undefined> {
+        let dir = startDir;
+        while (true) {
+            const candidate = path.join(dir, fileName);
+            if (await fs.exists(candidate)) { return candidate; }
+
+            const parent = path.dirname(dir);
+            if (parent === dir) { return undefined; }
+            dir = parent;
+        }
+    }
+
+    private resolveCentralPackageVersions(result: ProjectItem[], properties: Record<string, string>): void {
+        if ((properties['ManagePackageVersionsCentrally'] ?? '').toLocaleLowerCase() === 'false') { return; }
+
+        const versions = new Map<string, string>();
+        result.forEach(item => {
+            if (item instanceof PackageVersion) {
+                versions.set(item.name.toLocaleLowerCase(), item.version);
+            }
+        });
+
+        if (versions.size === 0) { return; }
+
+        result.forEach(item => {
+            if (item instanceof PackageReference && !item.hasVersion()) {
+                const version = versions.get(item.name.toLocaleLowerCase());
+                if (version) { item.updateVersion(version); }
+            }
+        });
+    }
+
+    private createBuiltInProperties(): Record<string, string> {
+        const extension = path.extname(this.fullPath);
+        const name = path.basename(this.fullPath, extension);
+        const root = path.parse(this.projectFolderPath).root;
+        const directoryNoRoot = this.projectFolderPath.startsWith(root)
+            ? this.projectFolderPath.substring(root.length)
+            : this.projectFolderPath;
+
+        return {
+            MSBuildProjectDirectory: this.projectFolderPath,
+            MSBuildProjectDirectoryNoRoot: directoryNoRoot,
+            MSBuildProjectFullPath: this.fullPath,
+            MSBuildProjectFile: name + extension,
+            MSBuildProjectName: name,
+            MSBuildProjectExtension: extension,
+            MSBuildThisFileDirectory: this.projectFolderPath + path.sep,
+            MSBuildVersion: config.getDefaultMsBuildVersion(),
+            Configuration: config.getDefaultMsBuildConfiguration(),
+            Platform: config.getDefaultMsBuildPlatform(),
+        };
+    }
+
+    private substituteProperties(value: string, properties: Record<string, string>): string {
+        Object.entries(properties).forEach(([k, v]) => value = value.replaceAll(`$(${k})`, v));
+        return value;
+    }
+
+    private async processElements(elements: XmlElement[], baseDir: string, properties: Record<string, string>, result: ProjectItem[], importedFiles: Set<string>, depth: number): Promise<void> {
+        for (const element of elements) {
             if (element.name === 'PropertyGroup') {
+                if (!(await ConditionEvaluator.evaluate(element.attributes?.Condition, properties, baseDir))) {
+                    continue;
+                }
+
                 const pg = new PropertyGroup({});
                 XmlManager.ensureElements(element);
-                element.elements.forEach((e: XmlElement) => {
+                for (const e of element.elements) {
+                    if (!(await ConditionEvaluator.evaluate(e.attributes?.Condition, properties, baseDir))) {
+                        continue;
+                    }
+
                     let value = e.elements?.find((el: XmlElement) => el.type == "text")?.text ?? "";
-                    Object.entries(properties).forEach(([k, v]) => value = value.replaceAll(`$(${k})`, v));
+                    value = this.substituteProperties(value, properties);
                     properties[e.name] = value;
                     pg.items[e.name] = value;
-                });
+
+                    // multi-targeted projects only set TargetFrameworks (plural); MSBuild
+                    // evaluates once per TFM, but this reader is single-pass, so fall back
+                    // to the first one so $(TargetFramework) conditions still resolve
+                    if (e.name === 'TargetFrameworks' && !properties['TargetFramework']) {
+                        const firstFramework = value.split(';').map((v: string) => v.trim()).find((v: string) => v.length > 0);
+                        if (firstFramework) { properties['TargetFramework'] = firstFramework; }
+                    }
+                }
                 this.propertyGroups.push(pg);
             }
             else if (element.name === 'ItemGroup') {
+                if (!(await ConditionEvaluator.evaluate(element.attributes?.Condition, properties, baseDir))) {
+                    continue;
+                }
+
                 XmlManager.ensureElements(element);
                 const label = element.attributes?.Label ?? undefined;
                 const condition = element.attributes?.Condition ?? undefined;
@@ -791,24 +931,67 @@ export class XmlManager implements Manager {
                     this.itemGroups.push(itemGroup);
                 }
 
-
-                element.elements.forEach((e: XmlElement) => {
-                    const projectItem = ProjectItemsFactory.createProjectElement(e, properties);
+                for (const e of element.elements) {
+                    const projectItem = await ProjectItemsFactory.createProjectElement(e, properties, baseDir);
                     if (!projectItem) {
-                        return;
+                        continue;
                     }
                     if (projectItem instanceof PackageReference)
                         itemGroup.packageReferences.push(projectItem);
                     if (projectItem instanceof PackageVersion)
                         itemGroup.packageVersions.push(projectItem);
 
-
                     result.push(projectItem);
-                });
+                }
             }
-        });
+            else if (element.name === 'Import') {
+                await this.processImport(element, baseDir, properties, result, importedFiles, depth);
+            }
+        }
+    }
 
-        return result;
+    private async processImport(element: XmlElement, baseDir: string, properties: Record<string, string>, result: ProjectItem[], importedFiles: Set<string>, depth: number): Promise<void> {
+        if (depth >= 10) { return; }
+        if (!(await ConditionEvaluator.evaluate(element.attributes?.Condition, properties, baseDir))) {
+            return;
+        }
+
+        const projectAttribute = element.attributes?.Project;
+        if (!projectAttribute) { return; }
+
+        const importPaths = this.substituteProperties(projectAttribute, properties).split(';');
+        for (const importPath of importPaths) {
+            const trimmed = importPath.trim();
+            if (!trimmed) { continue; }
+
+            const resolvedPath = path.resolve(baseDir, trimmed);
+            await this.importFile(resolvedPath, properties, result, importedFiles, depth);
+        }
+    }
+
+    // reads and merges a .props/.targets file's PropertyGroup/ItemGroup/Import
+    // elements into the current evaluation, in place. Unresolved (e.g. SDK-provided)
+    // or already-imported files are silently skipped (fail-open, no cycles).
+    private async importFile(resolvedPath: string, properties: Record<string, string>, result: ProjectItem[], importedFiles: Set<string>, depth: number): Promise<void> {
+        const normalizedPath = resolvedPath.toLocaleLowerCase();
+        if (importedFiles.has(normalizedPath) || !(await fs.exists(resolvedPath))) { return; }
+
+        const content = await fs.readFile(resolvedPath);
+        const importedDocument = await xml.parseToJson(content);
+        const importedProject = XmlManager.getProjectElement(importedDocument);
+        if (!importedProject) { return; }
+        XmlManager.ensureElements(importedProject);
+
+        importedFiles.add(normalizedPath);
+        this.externalFiles.push(resolvedPath);
+
+        const importDir = path.dirname(resolvedPath);
+        const previousThisFileDirectory = properties['MSBuildThisFileDirectory'];
+        properties['MSBuildThisFileDirectory'] = importDir + path.sep;
+
+        await this.processElements(importedProject.elements, importDir, properties, result, importedFiles, depth + 1);
+
+        properties['MSBuildThisFileDirectory'] = previousThisFileDirectory;
     }
 
     private async saveProject(): Promise<void> {
@@ -911,6 +1094,4 @@ export class XmlManager implements Manager {
         return;
 
     }
-
-
 }

@@ -52,6 +52,16 @@ export class MsBuildProject extends ProjectWithManagers {
         return this.projectItemEntries;
     }
 
+    // .props/.targets files (explicit <Import>s, Directory.Build.*, Directory.Packages.props)
+    // this project pulled in while evaluating, even when they live outside its own directory
+    public async getExternalDependencyFiles(): Promise<string[]> {
+        return this.xml.getExternalFiles();
+    }
+
+    public async getProperties(): Promise<Record<string, string>> {
+        return this.xml.getProperties();
+    }
+
     public async getFolderList(): Promise<string[]> {
         await this.getProjectItemEntries();
         const result: string[] = [ '.' ];

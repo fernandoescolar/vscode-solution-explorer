@@ -25,6 +25,9 @@ const OPEN_SOLUTION_SELECTED_IN_OMNISHARP_NAME = 'openSolutions.selectedInOmnish
 const OPEN_SOLUTION_IN_SETTINGS_NAME = 'openSolutions.inSettings';
 const CUSTOM_COMMANDS_NAME = 'customCommands';
 const SAVE_BEFORE_EXECUTE_NAME = 'saveBeforeExecute';
+const DEFAULT_MSBUILD_CONFIGURATION_NAME = 'defaultMsBuildConfiguration';
+const DEFAULT_MSBUILD_PLATFORM_NAME = 'defaultMsBuildPlatform';
+const DEFAULT_MSBUILD_VERSION_NAME = 'defaultMsBuildVersion';
 const NUGET_INCLUDE_PRERELEASE_NAME = 'nuget.includePrerelease';
 const NUGET_CODE_DECORATORS_NAME = 'nuget.codeDecorators';
 const NUGET_CODE_ACTIONS_NAME = 'nuget.codeActions';
@@ -85,6 +88,18 @@ export function getSaveBeforeExecute(): boolean {
 
 export function getNetCoreIgnore(): string[] {
     return config.get<string[]>(NETCORE_IGNORE_NAME, [ "bin", "node_modules", "obj", ".ds_store" ]);
+}
+
+export function getDefaultMsBuildConfiguration(): string {
+    return config.get<string>(DEFAULT_MSBUILD_CONFIGURATION_NAME, "Debug");
+}
+
+export function getDefaultMsBuildPlatform(): string {
+    return config.get<string>(DEFAULT_MSBUILD_PLATFORM_NAME, "AnyCPU");
+}
+
+export function getDefaultMsBuildVersion(): string {
+    return config.get<string>(DEFAULT_MSBUILD_VERSION_NAME, "17.11.9");
 }
 
 export function getAlternativeSolutionFolders(): string[] {

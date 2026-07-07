@@ -54,6 +54,14 @@ export abstract class Project {
 
     public abstract getFolderList(): Promise<string[]>;
 
+    public async getExternalDependencyFiles(): Promise<string[]> {
+        return [];
+    }
+
+    public async getProperties(): Promise<Record<string, string>> {
+        return {};
+    }
+
     public abstract statFile(filepath: string, folderPath: string): Promise<ProjectFileStat>;
 
     public abstract moveFile(filepath: string, newfolderPath: string): Promise<string>;

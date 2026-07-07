@@ -24,12 +24,24 @@ export class StandardProjectTreeItem extends ProjectTreeItem {
         return fileEvent.path === this.project?.fullPath;
     }
 
-    private onFileEvent(event: IEvent): void {
+    private isBuildFile(filepath: string): boolean {
+        const lower = filepath.toLocaleLowerCase();
+        return lower.endsWith('.props') || lower.endsWith('.targets');
+    }
+
+    private async onFileEvent(event: IEvent): Promise<void> {
         let fileEvent = <IFileEvent> event;
-        if (this.shouldHandleFileEvent(fileEvent) && this.project) {
-            this.project.refresh().then(res => {
-                this.refresh();
-            });
+        if (!this.project) { return; }
+
+        let shouldRefresh = this.shouldHandleFileEvent(fileEvent);
+        if (!shouldRefresh && this.isBuildFile(fileEvent.path)) {
+            const externalFiles = await this.project.getExternalDependencyFiles();
+            shouldRefresh = externalFiles.some(f => f.toLocaleLowerCase() === fileEvent.path.toLocaleLowerCase());
+        }
+
+        if (shouldRefresh) {
+            await this.project.refresh();
+            this.refresh();
         }
     }
 }

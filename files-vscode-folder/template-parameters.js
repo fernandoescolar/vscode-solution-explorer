@@ -1,28 +1,20 @@
 const path = require("path");
 
-module.exports = function(filename, projectPath, folderPath, xml) {
-    let namespace;
-    xml.elements.some(e => {
-        if (e.name === 'PropertyGroup' && e.elements) {
-            const rootNamespace = e.elements.find(p => p.name === 'RootNamespace');
-            if (rootNamespace && rootNamespace.elements && rootNamespace.elements[0]) {
-                namespace = rootNamespace.elements[0].text;
-                return true;
-            }
-        }
-    });
+module.exports = function(filename, projectPath, folderPath, xml, props) {
+    let namespace = props.RootNamespace;
+    if (!namespace) namespace = props.Namespace;
+    if (!namespace) namespace = props.MSBuildProjectName;
+    if (!namespace && projectPath)  namespace = path.basename(projectPath, path.extname(projectPath));
 
-    if (!namespace && projectPath) {
-        namespace = path.basename(projectPath, path.extname(projectPath));
-        if (folderPath) {
-            namespace += "." + folderPath.replace(path.dirname(projectPath), "").substring(1).replace(/[\\\/]/g, ".");
-        }
-        namespace = namespace.replace(/[\\\-]/g, "_");
+    if (namespace && folderPath) {
+        namespace += "." + folderPath.replace(path.dirname(projectPath), "").substring(1).replace(/[\\\/]/g, ".");
     }
 
     if (!namespace) {
         namespace = "Unknown";
     }
+
+    namespace = namespace.replace(/[\\\-]/g, "_");
 
     return {
         namespace: namespace,

@@ -25,3 +25,7 @@ export function relative(from: string, to: string): string {
 export function resolve(...paths: string[]): string {
     return path.resolve(...paths);
 }
+
+export function parse(filepath: string): path.ParsedPath {
+    return path.parse(filepath);
+}
