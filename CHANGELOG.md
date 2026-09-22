@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## 0.9.8
+
+PR #360: nest related items that keep the parent's full name- #360. Thanks to [RabitLogic](https://github.com/RabitLogic)
+
 ## 0.9.7
 
 Bugfix #350: Removed automatic Directory.Packages regeneration.

@@ -201,7 +201,18 @@ function getNestedFiles(files: ProjectItemEntry[], relativeFilePath: string): Pr
     const filename = path.basename(relativeFilePath);
     const extension = path.extname(filename);
     const name = path.basename(filename, extension) + ".";
-    return files.filter(f => f.name !== filename && f.name.startsWith(name) && f.name.endsWith(extension));
+    return files.filter(f =>
+        f.name !== filename &&
+        (
+            // Foo.cs <- Foo.Designer.cs / Foo.g.cs
+            // appsettings.json <- appsettings.Development.json
+            (f.name.startsWith(name) && f.name.endsWith(extension)) ||
+            // Login.cshtml <- Login.cshtml.cs / Login.cshtml.css
+            // Razor Pages code-behind keeps the full name of its view as prefix,
+            // so the extension check above never matches it.
+            f.name.startsWith(filename + '.')
+        )
+    );
 }
 
 function getDependants(files: ProjectItemEntry[], fullFilePath: string): ProjectItemEntry[] {
