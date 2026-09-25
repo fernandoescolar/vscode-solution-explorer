@@ -22,7 +22,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 				public readonly eventAggregator: IEventAggregator,
 				public readonly logger: ILogger) {
 
-		super(() => this.dispose());
+		super(() => this.unregister());
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		//vscode.window.onDidChangeVisibleTextEditors(data => this.onVisibleEditorsChanged(data));
     }
