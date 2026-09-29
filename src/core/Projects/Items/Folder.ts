@@ -43,7 +43,12 @@ export class Folder extends ProjectItem {
                 });
             }
 
-            relativeFolder = path.dirname(relativeFolder);
+            const parentFolder = path.dirname(relativeFolder);
+            if (parentFolder === relativeFolder) {
+                break;
+            }
+
+            relativeFolder = parentFolder;
             filepath = path.dirname(filepath);
         }
 

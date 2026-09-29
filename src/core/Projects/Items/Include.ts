@@ -13,7 +13,7 @@ export class Include extends IncludeBase {
     public async getEntries(projectBasePath: string, entries: ProjectItemEntry[]): Promise<ProjectItemEntry[]> {
         for (const pattern of this.value.split(';')) {
             const internalPath = this.getInternalPath(pattern);
-            const searchPath = glob.isGlobPattern(pattern) ? path.join(projectBasePath, internalPath) : projectBasePath;
+            const searchPath = glob.isGlobPattern(pattern) ? path.resolve(projectBasePath, internalPath) : projectBasePath;
             const result = await glob.globFileSearch(searchPath, this.cleanPathDownAtStart(pattern), this.exclude ? this.exclude?.split(';') : undefined);
             for (const filepath of result) {
                 const recursiveDir = this.getRecursiveDir(filepath, projectBasePath);
@@ -65,7 +65,12 @@ export class Include extends IncludeBase {
                 });
             }
 
-            relativeFolder = path.dirname(relativeFolder);
+            const parentFolder = path.dirname(relativeFolder);
+            if (parentFolder === relativeFolder) {
+                break;
+            }
+
+            relativeFolder = parentFolder;
             filepath = path.dirname(filepath);
         }
 

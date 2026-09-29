@@ -38,7 +38,7 @@ export async function globFileSearch(workingFolder: string, pattern: string, exc
     }
 
     if (!isGlobPattern(pattern)) {
-        return [ path.join(workingFolder, pattern) ];
+        return [ path.resolve(workingFolder, pattern) ];
     }
 
     const files = await fs.readdir(workingFolder);
