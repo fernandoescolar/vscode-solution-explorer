@@ -6,6 +6,10 @@ All notable changes to the "vscode-solution-explorer" extension will be document
 
 PR #360: nest related items that keep the parent's full name- #360. Thanks to [RabitLogic](https://github.com/RabitLogic)
 
+PR #362: fix(projects): extension host crash on Windows with an absolute item include. Thanks to [LefebvreAnael](https://github.com/LefebvreAnael)
+
+Bugfix #361: nuget - shows "ok" checkboxes for old versions.
+
 ## 0.9.7
 
 Bugfix #350: Removed automatic Directory.Packages regeneration.
