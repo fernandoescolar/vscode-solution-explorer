@@ -48,7 +48,7 @@ export class NugetVersionDecorator implements ICodeDecorator
                 continue;
             }
 
-            const isNew = nuget.comparePackageVersions(version, versions[0]) > 0;
+            const isNew = nuget.comparePackageVersions(version, versions[0]) < 0;
             const versionIndex = match.index + match[0].indexOf(version);
             const startPos = editor.document.positionAt(versionIndex - 1);
             const endPos = editor.document.positionAt(versionIndex + match[2].length + 1);
