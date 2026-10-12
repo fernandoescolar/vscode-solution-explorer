@@ -190,7 +190,8 @@ export class SlnxDocumentEditor {
         }
 
         for (const el of searchIn.elements as xml.XmlElement[]) {
-            if (el.type === 'element' && el.name === 'Folder' && el.attributes?.Name === folderName) {
+            const elName = el.attributes?.Name;
+            if (el.type === 'element' && el.name === 'Folder' && (elName === folderName || elName?.replace(/^[\/\\]+|[\/\\]+$/g, '') === folderName)) {
                 return el;
             }
 

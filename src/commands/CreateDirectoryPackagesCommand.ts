@@ -5,11 +5,10 @@ import {
   CreateDirectoryPackages,
   SlnAddSolutionFile,
   SlnCreateSolutionFolder,
+  SlnxAddSolutionFile,
+  SlnxCreateSolutionFolder,
 } from "@actions";
-import {
-  AddExistingFileToSolutionFolderCommand,
-  SingleItemActionsCommand,
-} from "@commands";
+import { SingleItemActionsCommand } from "@commands";
 import { SolutionFolder, SolutionType } from "@core/Solutions";
 import { DIRECTORY_PACKAGES_FILE_NAME } from "@core/DirectoryPackages";
 import { SolutionTreeItem } from "@tree/items/SolutionTreeItem";
@@ -27,31 +26,39 @@ export class CreateDirectoryPackagesCommand extends SingleItemActionsCommand {
     if (
       !item ||
       !item.solution ||
-      item.solution.type != SolutionType.Sln ||
       !item.solution.fullPath
     ) {
       return [];
     }
 
-    let actions = [];
+    const solution = item.solution;
+    const folderName = "Solution items";
+    const filePath = path.join(solution.folderPath, DIRECTORY_PACKAGES_FILE_NAME);
+    const existingFolder = solution.getFolders().find((f) => f.name === folderName);
 
-    if (
-      item.solution.getFolders().filter((f) => f.name === "Solution items")
-        .length == 0
-    ) {
-      actions.push(
-        new SlnCreateSolutionFolder(
-          item.solution,
-          "Solution items",
-          item.solutionItem
-        )
-      );
+    if (solution.type === SolutionType.Sln) {
+      const actions: Action[] = [];
+      if (!existingFolder) {
+        actions.push(new SlnCreateSolutionFolder(solution, folderName, item.solutionItem));
+      }
+
+      actions.push(new CreateDirectoryPackages(solution));
+      actions.push(new SlnAddSolutionFile(solution, new SolutionFolder(folderName), filePath));
+      return actions;
     }
 
-    actions.push(new CreateDirectoryPackages(item.solution));
-    actions.push(new SlnAddSolutionFile(item.solution, new SolutionFolder("Solution items"), path.join(item.solution.folderPath, DIRECTORY_PACKAGES_FILE_NAME)));
+    if (solution.type === SolutionType.Slnx) {
+      const actions: Action[] = [];
+      if (!existingFolder) {
+        actions.push(new SlnxCreateSolutionFolder(solution, folderName));
+      }
 
-    if (item.solution.type === SolutionType.Sln) {
+      // the slnx editor locates the target <Folder> element by name
+      const folder = existingFolder ?? new SolutionFolder(folderName);
+      folder.name = folderName;
+
+      actions.push(new CreateDirectoryPackages(solution));
+      actions.push(new SlnxAddSolutionFile(solution, folder, filePath));
       return actions;
     }
 
