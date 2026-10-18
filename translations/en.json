@@ -130,6 +130,7 @@
     "Select template": "Select template",
     "Solution already exists": "Solution already exists",
     "Solution name": "Solution name",
+    "Startup project": "Startup project",
     "TargetFramework": "TargetFramework",
     "Template files already exist in {0}. Do you want to overwrite them?": "Template files already exist in {0}. Do you want to overwrite them?",
     "The file {0} is out of the solution scope, do you want to create a copy?": "The file {0} is out of the solution scope, do you want to create a copy?",
