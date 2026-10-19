@@ -5,6 +5,7 @@ obj
 node_modules
 .vscode-test/
 .vsix
+*.vsix
 .DS_Store
 
 # generated from translations/*.json (see scripts/generate-all-translations.js)

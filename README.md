@@ -22,6 +22,7 @@ Table of Content:
     - [Find Solution files](#find-solution-files)
   - [Features](#features)
     - [Run dotnet commands in solutions and projects](#run-dotnet-commands-in-solutions-and-projects)
+    - [Startup project](#startup-project)
     - [Drag and drop files, folders and projects](#drag-and-drop-files-folders-and-projects)
     - [Create, delete, rename or project folders and files](#create-delete-rename-or-project-folders-and-files)
     - [Create, delete, rename or move solution, solution folders and projects](#create-delete-rename-or-move-solution-solution-folders-and-projects)
@@ -158,6 +159,15 @@ As an example, if you want to compile in `Release` mode every time you publish a
   }
 }
 ```
+
+### Startup project
+
+The startup project is detected from the workspace configuration, the same project that runs when you start debugging:
+
+1. The first configuration in `.vscode/launch.json` that points to a project of the solution (through `project`, `program` or `cwd`).
+2. If no launch configuration matches, the first project with a `Project` profile in its `Properties/launchSettings.json`.
+
+The startup project is sorted first (its containing solution folder is moved to the top as well) and its name is colored with the theme highlight color (foreground only, no background). The order is refreshed automatically when `launch.json` or `launchSettings.json` changes, and the `.sln` file is never modified.
 
 ### Drag and drop files, folders and projects
 

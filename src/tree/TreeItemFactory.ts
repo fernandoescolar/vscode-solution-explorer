@@ -1,6 +1,7 @@
 import * as path from "@extensions/path";
 import { getItemNesting } from "@extensions/config";
 import { Solution, SolutionProject, SolutionFolder, SolutionItem } from "@core/Solutions";
+import { compareSolutionItems, isStartupProjectPath } from "@core/Solutions/SolutionItemSort";
 import { PackageReference, Project, ProjectFactory, ProjectItemEntry } from "@core/Projects";
 import { SolutionExplorerProvider } from "@SolutionExplorerProvider";
 import { TreeItem } from "@tree/TreeItem";
@@ -33,24 +34,26 @@ export async function createItemsFromSolution(context: TreeItemContext, solution
         projects = solutionItem.getProjects();
     }
 
-    folders.sort((a, b) => {
-        let x = a.name.toLowerCase();
-        let y = b.name.toLowerCase();
-        return x < y ? -1 : x > y ? 1 : 0;
-    });
+    const startupProject = context.provider.findStartupProject(solution);
+    const isStartupPath = (item: SolutionItem): boolean => isStartupProjectPath(item, startupProject);
+    const compareSolutionItemNames = (a: SolutionItem, b: SolutionItem): number => compareSolutionItems(a, b, startupProject);
 
-    projects.sort((a, b) => {
-        let x = a.name.toLowerCase();
-        let y = b.name.toLowerCase();
-        return x < y ? -1 : x > y ? 1 : 0;
-    });
+    folders.sort(compareSolutionItemNames);
+    projects.sort(compareSolutionItemNames);
 
-    for(let i = 0; i < folders.length; i++) {
-        result.push(await createFromProject(context, folders[i]));
+    const startupProjects = projects.filter(isStartupPath);
+    const otherProjects = projects.filter(p => !isStartupPath(p));
+
+    for (const project of startupProjects) {
+        result.push(await createFromProject(context, project));
     }
 
-    for(let i = 0; i < projects.length; i++) {
-        result.push(await createFromProject(context, projects[i]));
+    for (const folder of folders) {
+        result.push(await createFromProject(context, folder));
+    }
+
+    for (const project of otherProjects) {
+        result.push(await createFromProject(context, project));
     }
 
     if (solutionItem instanceof SolutionFolder) {

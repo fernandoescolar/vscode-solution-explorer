@@ -29,6 +29,7 @@ export class SolutionTreeItemCollection {
 
 	public async addSolution(solutionPath: string, rootPath: string, solutionProvider: SolutionExplorerProvider): Promise<void> {
 		const solution = await SolutionFactory.load(solutionPath);
+		await solutionProvider.resolveStartupProject(solution);
 		const item = await TreeItemFactory.createFromSolution(solutionProvider, solution, rootPath);
 		if (!this.children) {
 			this.children = [];
