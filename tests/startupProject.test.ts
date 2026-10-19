@@ -4,7 +4,7 @@ const assert = require("assert/strict");
 const test = require("node:test");
 const path = require("path");
 import { compareSolutionItems, isSamePath, isStartupProjectPath } from "../src/core/Solutions/SolutionItemSort";
-import { findStartupProjectFromLaunchConfigurations, findStartupProjectFromLaunchSettings, hasProjectLaunchProfile } from "../src/core/Solutions/StartupProjectResolver";
+import { findStartupProjectFromLaunchConfigurations, findStartupProjectFromLaunchSettings, hasProjectLaunchProfile, resolveLaunchPath } from "../src/core/Solutions/StartupProjectResolver";
 import type { SolutionItem } from "../src/core/Solutions/model";
 
 type TestItem = SolutionItem & { getFolders?: () => SolutionItem[] };
@@ -116,9 +116,34 @@ test("findProjectFromLaunchConfigurations skips configurations with unresolved v
     assert.equal(findStartupProjectFromLaunchConfigurations(configurations, resolve, projectPaths), entry.fullPath);
 });
 
+test("findProjectFromLaunchConfigurations rejects a configuration when any declared path field is unresolved", () => {
+    const resolve = (value: string) => value.includes('${env:') ? undefined : value;
+    const cwd = path.join(root, 'src', 'MPAssembleRecipe.Entry');
+    const configurations = [
+        { program: '${env:APP}/App.dll', cwd },
+        { project: path.join(root, 'src', 'MPAssembleRecipe.Business', 'MPAssembleRecipe.Business.csproj') }
+    ];
+
+    assert.equal(findStartupProjectFromLaunchConfigurations(configurations, resolve, projectPaths), business.fullPath);
+});
+
 test("findProjectFromLaunchConfigurations returns undefined without configurations", () => {
     assert.equal(findStartupProjectFromLaunchConfigurations(undefined, resolveWorkspaceFolder, projectPaths), undefined);
     assert.equal(findStartupProjectFromLaunchConfigurations([], resolveWorkspaceFolder, projectPaths), undefined);
+});
+
+test("resolveLaunchPath expands workspace folder variables and relative paths", () => {
+    assert.equal(resolveLaunchPath('${workspaceFolder}/src/MPAssembleRecipe.Entry/MPAssembleRecipe.Entry.csproj', root, () => undefined),
+        path.resolve(root, 'src', 'MPAssembleRecipe.Entry', 'MPAssembleRecipe.Entry.csproj'));
+    assert.equal(resolveLaunchPath('src/MPAssembleRecipe.Entry', root, () => undefined),
+        path.resolve(root, 'src', 'MPAssembleRecipe.Entry'));
+    assert.equal(resolveLaunchPath('${workspaceFolder:other}/App.csproj', root, name => name === 'other' ? root : undefined),
+        path.resolve(root, 'App.csproj'));
+});
+
+test("resolveLaunchPath rejects unknown workspace folder variables and other variables", () => {
+    assert.equal(resolveLaunchPath('${workspaceFolder:Missing}/App.csproj', root, () => undefined), undefined);
+    assert.equal(resolveLaunchPath('${env:APP}/App.dll', root, () => undefined), undefined);
 });
 
 test("hasProjectLaunchProfile detects Project profiles", () => {

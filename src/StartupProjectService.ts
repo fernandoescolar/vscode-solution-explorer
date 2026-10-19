@@ -3,14 +3,16 @@ import * as fs from "@extensions/fs";
 import * as path from "@extensions/path";
 import { Solution } from "@core/Solutions";
 import { isSamePath, normalizePath } from "./core/Solutions/SolutionItemSort";
-import { LaunchSettingsEntry, findStartupProjectFromLaunchConfigurations, findStartupProjectFromLaunchSettings } from "./core/Solutions/StartupProjectResolver";
+import { LaunchSettingsEntry, findStartupProjectFromLaunchConfigurations, findStartupProjectFromLaunchSettings, resolveLaunchPath } from "./core/Solutions/StartupProjectResolver";
 
 export class StartupProjectService implements vscode.Disposable {
     private readonly startupProjects = new Map<string, string | undefined>();
+    private readonly solutionProjects = new Map<string, string[]>();
     private readonly onDidChangeEmitter = new vscode.EventEmitter<void>();
     private readonly onDidInvalidateEmitter = new vscode.EventEmitter<void>();
     private readonly watchers: vscode.FileSystemWatcher[] = [];
-    private foldersSubscription: vscode.Disposable | undefined;
+    private readonly subscriptions: vscode.Disposable[] = [];
+    private generation = 0;
 
     public readonly onDidChange = this.onDidChangeEmitter.event;
     public readonly onDidInvalidate = this.onDidInvalidateEmitter.event;
@@ -25,7 +27,15 @@ export class StartupProjectService implements vscode.Disposable {
             watcher.onDidDelete(() => this.invalidate());
         }
 
-        this.foldersSubscription = vscode.workspace.onDidChangeWorkspaceFolders(() => this.invalidate());
+        this.subscriptions.push(
+            vscode.workspace.onDidChangeWorkspaceFolders(() => this.invalidate()),
+            // the effective launch configuration may also come from a .code-workspace file or from user settings
+            vscode.workspace.onDidChangeConfiguration(e => {
+                if (e.affectsConfiguration('launch')) {
+                    this.invalidate();
+                }
+            })
+        );
     }
 
     public unregister(): void {
@@ -34,8 +44,8 @@ export class StartupProjectService implements vscode.Disposable {
         }
         this.watchers.length = 0;
 
-        this.foldersSubscription?.dispose();
-        this.foldersSubscription = undefined;
+        this.subscriptions.forEach(subscription => subscription.dispose());
+        this.subscriptions.length = 0;
     }
 
     public getStartupProject(solutionPath: string): string | undefined {
@@ -43,21 +53,35 @@ export class StartupProjectService implements vscode.Disposable {
     }
 
     public isStartupProjectPath(filepath: string): boolean {
-        for (const projectPath of this.startupProjects.values()) {
-            if (projectPath && isSamePath(projectPath, filepath)) {
-                return true;
-            }
+        let result = false;
+        for (const [solutionKey, projectPaths] of this.solutionProjects) {
+            if (!projectPaths.some(projectPath => isSamePath(projectPath, filepath))) { continue; }
+
+            // a project shared by several solutions is only the startup one when no solution disagrees
+            const startupProject = this.startupProjects.get(solutionKey);
+            if (!startupProject) { continue; }
+            if (!isSamePath(startupProject, filepath)) { return false; }
+
+            result = true;
         }
 
-        return false;
+        return result;
     }
 
     public async resolve(solution: Solution): Promise<void> {
         const key = normalizePath(solution.fullPath);
         if (this.startupProjects.has(key)) { return; }
 
-        const current = await this.detect(solution);
-        this.startupProjects.set(key, current);
+        const generation = this.generation;
+        const projectPaths = solution.getAllProjects()
+            .map(project => project.fullPath)
+            .filter((projectPath): projectPath is string => !!projectPath);
+
+        const startupProject = await this.detect(solution, projectPaths);
+        if (generation !== this.generation) { return; }
+
+        this.solutionProjects.set(key, projectPaths);
+        this.startupProjects.set(key, startupProject);
         this.onDidChangeEmitter.fire();
     }
 
@@ -68,15 +92,13 @@ export class StartupProjectService implements vscode.Disposable {
     }
 
     private invalidate(): void {
+        this.generation++;
         this.startupProjects.clear();
+        this.solutionProjects.clear();
         this.onDidInvalidateEmitter.fire();
     }
 
-    private async detect(solution: Solution): Promise<string | undefined> {
-        const projectPaths = solution.getAllProjects()
-            .map(project => project.fullPath)
-            .filter((projectPath): projectPath is string => !!projectPath);
-
+    private async detect(solution: Solution, projectPaths: string[]): Promise<string | undefined> {
         if (projectPaths.length === 0) { return undefined; }
 
         const launchProject = this.detectFromLaunch(solution, projectPaths);
@@ -93,7 +115,8 @@ export class StartupProjectService implements vscode.Disposable {
 
         return findStartupProjectFromLaunchConfigurations(
             configurations,
-            value => this.resolveLaunchPath(value, workspaceFolderPath),
+            value => resolveLaunchPath(value, workspaceFolderPath,
+                name => vscode.workspace.workspaceFolders?.find(f => f.name.toLowerCase() === name.toLowerCase())?.uri.fsPath),
             projectPaths);
     }
 
@@ -112,21 +135,5 @@ export class StartupProjectService implements vscode.Disposable {
         }
 
         return findStartupProjectFromLaunchSettings(entries);
-    }
-
-    private resolveLaunchPath(value: string, workspaceFolderPath: string): string | undefined {
-        const withWorkspaceFolder = value.replace(/\$\{(?:workspaceFolder|workspaceRoot)(?::([^}]+))?\}/gi,
-            (_match: string, folderName: string | undefined) => {
-                if (!folderName) { return workspaceFolderPath; }
-                const folder = vscode.workspace.workspaceFolders?.find(f => f.name.toLowerCase() === folderName.toLowerCase());
-                return folder ? folder.uri.fsPath : '';
-            });
-
-        if (/\$\{[^}]+\}/.test(withWorkspaceFolder)) { return undefined; }
-
-        const resolved = path.isAbsolute(withWorkspaceFolder)
-            ? withWorkspaceFolder
-            : path.join(workspaceFolderPath, withWorkspaceFolder);
-        return path.resolve(resolved);
     }
 }

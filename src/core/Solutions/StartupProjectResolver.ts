@@ -33,6 +33,21 @@ function isInside(filePath: string, directory: string): boolean {
         && !path.isAbsolute(relative);
 }
 
+export function resolveLaunchPath(value: string, workspaceFolderPath: string, findWorkspaceFolder: (name: string) => string | undefined): string | undefined {
+    const replaced = value.replace(/\$\{(?:workspaceFolder|workspaceRoot)(?::([^}]+))?\}/gi,
+        (match: string, folderName: string | undefined) => {
+            if (!folderName) { return workspaceFolderPath; }
+
+            // keep the variable when the folder is unknown so the check below rejects the path
+            return findWorkspaceFolder(folderName) ?? match;
+        });
+
+    if (/\$\{[^}]+\}/.test(replaced)) { return undefined; }
+
+    const resolved = path.isAbsolute(replaced) ? replaced : path.join(workspaceFolderPath, replaced);
+    return path.resolve(resolved);
+}
+
 export function findProjectContainingPath(projectPaths: string[], filePath: string): string | undefined {
     let result: string | undefined;
     for (const projectPath of projectPaths) {
@@ -54,33 +69,35 @@ export function findProjectFromLaunchConfiguration(configuration: unknown, resol
     const config = configuration as LaunchConfigurationLike;
 
     const project = asPath(config.project);
-    if (project) {
-        const resolved = resolvePath(project);
-        if (resolved) {
-            const exact = projectPaths.find(p => isSamePath(p, resolved));
-            if (exact) { return exact; }
-
-            const inDirectory = projectPaths.find(p => isSamePath(path.dirname(p), resolved));
-            if (inDirectory) { return inDirectory; }
-        }
-    }
-
     const program = asPath(config.program);
-    if (program) {
-        const resolved = resolvePath(program);
-        if (resolved) {
-            const containing = findProjectContainingPath(projectPaths, resolved);
-            if (containing) { return containing; }
-        }
+    const cwd = asPath(config.cwd);
+    if (!project && !program && !cwd) { return undefined; }
+
+    const resolvedProject = project ? resolvePath(project) : undefined;
+    const resolvedProgram = program ? resolvePath(program) : undefined;
+    const resolvedCwd = cwd ? resolvePath(cwd) : undefined;
+
+    // every declared path field has to resolve, otherwise the configuration is ambiguous
+    if ((project && !resolvedProject) || (program && !resolvedProgram) || (cwd && !resolvedCwd)) {
+        return undefined;
     }
 
-    const cwd = asPath(config.cwd);
-    if (cwd) {
-        const resolved = resolvePath(cwd);
-        if (resolved) {
-            const exactDirectory = projectPaths.find(p => isSamePath(path.dirname(p), resolved));
-            if (exactDirectory) { return exactDirectory; }
-        }
+    if (resolvedProject) {
+        const exact = projectPaths.find(p => isSamePath(p, resolvedProject));
+        if (exact) { return exact; }
+
+        const inDirectory = projectPaths.find(p => isSamePath(path.dirname(p), resolvedProject));
+        if (inDirectory) { return inDirectory; }
+    }
+
+    if (resolvedProgram) {
+        const containing = findProjectContainingPath(projectPaths, resolvedProgram);
+        if (containing) { return containing; }
+    }
+
+    if (resolvedCwd) {
+        const exactDirectory = projectPaths.find(p => isSamePath(path.dirname(p), resolvedCwd));
+        if (exactDirectory) { return exactDirectory; }
     }
 
     return undefined;
