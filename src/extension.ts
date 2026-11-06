@@ -8,6 +8,8 @@ import { SolutionTreeItemCollection } from "./SolutionTreeItemCollection";
 import { SolutionFinder } from "./SolutionFinder";
 import { SolutionExplorerDragAndDropController } from "./SolutionExplorerDragAndDropController";
 import { SolutionExplorerProvider } from "./SolutionExplorerProvider";
+import { StartupProjectService } from "./StartupProjectService";
+import { StartupProjectDecorationProvider } from "./StartupProjectDecorationProvider";
 import { SolutionExplorerCommands } from "./SolutionExplorerCommands";
 import { SolutionExplorerFileWatcher } from "./SolutionExplorerFileWatcher";
 import { SolutionExplorerOutputChannel } from "./SolutionExplorerOutputChannel";
@@ -24,7 +26,9 @@ export function activate(context: vscode.ExtensionContext) {
     const solutionFinder = new SolutionFinder(paths, eventAggregator);
     const solutionExplorerDragAndDropController = new SolutionExplorerDragAndDropController(actionsRunner, solutionTreeItemCollection);
     const templateEngineCollection = new TemplateEngineCollection();
-    const solutionExplorerProvider = new SolutionExplorerProvider(solutionFinder, solutionTreeItemCollection, solutionExplorerDragAndDropController, templateEngineCollection, eventAggregator, logger);
+    const startupProjectService = new StartupProjectService();
+    const startupProjectDecorationProvider = new StartupProjectDecorationProvider(startupProjectService);
+    const solutionExplorerProvider = new SolutionExplorerProvider(solutionFinder, solutionTreeItemCollection, solutionExplorerDragAndDropController, templateEngineCollection, startupProjectService, eventAggregator, logger);
     const solutionExplorerCommands = new SolutionExplorerCommands(context, solutionExplorerProvider, actionsRunner, templateEngineCollection, eventAggregator);
     const solutionExplorerFileWatcher = new SolutionExplorerFileWatcher(eventAggregator);
     const solutionExplorerOutputChannel = new SolutionExplorerOutputChannel(eventAggregator);
@@ -38,6 +42,8 @@ export function activate(context: vscode.ExtensionContext) {
     register(context, actionsRunner);
     register(context, solutionTreeItemCollection);
     register(context, solutionFinder);
+    register(context, startupProjectService);
+    register(context, startupProjectDecorationProvider);
     register(context, solutionExplorerDragAndDropController);
     register(context, templateEngineCollection);
     register(context, solutionExplorerProvider);

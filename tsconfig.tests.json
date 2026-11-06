@@ -6,7 +6,10 @@
         "module": "commonjs",
         "types": ["node"],
         "skipLibCheck": true,
-        "paths": {}
+        "baseUrl": ".",
+        "paths": {
+            "@extensions/*": ["./src/extensions/*"]
+        }
     },
     "include": [
         "tests/**/*.ts",
