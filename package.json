@@ -1040,7 +1040,7 @@
     "watch": "webpack --mode development --watch",
     "compile:tests": "tsc -p tsconfig.tests.json",
     "test": "npm run test:unit",
-    "test:unit": "npm run compile:tests && node --test .tmp-tests/tests/**/*.test.js",
+    "test:unit": "npm run compile:tests && node --require ./scripts/register-test-aliases.js --test .tmp-tests/tests/**/*.test.js",
     "translations:generate": "node ./scripts/generate-all-translations.js",
     "translations:merge": "node ./scripts/merge-translations.js",
     "translations:split": "node ./scripts/split-translations.js",

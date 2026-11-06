@@ -2,9 +2,13 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
-## Unreleased
+## 0.9.9
 
-Feature: startup project. The project used by the active `.vscode/launch.json` configuration (or by `Properties/launchSettings.json`) is sorted first and its name is colored with the theme highlight color.
+PR #368: startup project. The project used by the active `.vscode/launch.json` configuration (or by `Properties/launchSettings.json`) is sorted first and its name is colored with the theme highlight color. Thanks to [RabitLogic](https://github.com/RabitLogic)
+
+Bugfix #262 & PR #371: use icon theme for solution folders. Thanks to [Vinicius Oliveira](https://github.com/eovinicius)
+
+Bugfix #331 #260 & PR #372: feat: add Sync namespaces command for C# projects. Thanks to [Vinicius Oliveira](https://github.com/eovinicius)
 
 ## 0.9.8
 
