@@ -29,3 +29,7 @@ export function resolve(...paths: string[]): string {
 export function parse(filepath: string): path.ParsedPath {
     return path.parse(filepath);
 }
+
+export function isAbsolute(filepath: string): boolean {
+    return path.isAbsolute(filepath);
+}

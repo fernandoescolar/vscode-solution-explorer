@@ -2,16 +2,22 @@ import * as vscode from "vscode";
 import * as config from "@extensions/config";
 import * as sln from "@tree";
 
+import { Solution, SolutionProject } from "@core/Solutions";
+import { isSamePath } from "@core/Solutions/SolutionItemSort";
 import { IEventAggregator, EventTypes, IEvent, ISubscription, IFileEvent } from "@events";
 import { ILogger } from "@logs";
 import { TemplateEngineCollection } from "@templates";
 import { SolutionFinder } from "./SolutionFinder";
 import { SolutionExplorerDragAndDropController } from "./SolutionExplorerDragAndDropController";
 import { SolutionTreeItemCollection } from "./SolutionTreeItemCollection";
+import { StartupProjectService } from "./StartupProjectService";
 
 export class SolutionExplorerProvider extends vscode.Disposable implements vscode.TreeDataProvider<sln.TreeItem> {
 	private fileSubscription: ISubscription | undefined;
 	private solutionSubscription: ISubscription | undefined;
+	private startupProjectSubscription: vscode.Disposable | undefined;
+	private creatingSolutionItems = false;
+	private refreshPending = false;
 	private treeView: vscode.TreeView<sln.TreeItem> | undefined;
 	private _onDidChangeTreeData: vscode.EventEmitter<sln.TreeItem | undefined> = new vscode.EventEmitter<sln.TreeItem | undefined>();
 
@@ -19,6 +25,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		        private readonly solutionTreeItemCollection: SolutionTreeItemCollection,
 				private readonly dragAndDropController: SolutionExplorerDragAndDropController,
 				private readonly templateEngineCollection: TemplateEngineCollection,
+				private readonly startupProjectService: StartupProjectService,
 				public readonly eventAggregator: IEventAggregator,
 				public readonly logger: ILogger) {
 
@@ -53,6 +60,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 			};
 			this.solutionSubscription = this.eventAggregator.subscribe(EventTypes.solution, evt => this.onSolutionEvent(evt));
 			this.fileSubscription = this.eventAggregator.subscribe(EventTypes.file, evt => this.onFileEvent(evt));
+			this.startupProjectSubscription = this.startupProjectService.onDidInvalidate(() => this.onStartupProjectInvalidated());
 			if (showMode === "activityBar") {
 				this.treeView = vscode.window.createTreeView('slnbrw', options);
 			} else if (showMode === "explorer") {
@@ -85,6 +93,11 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 			this.fileSubscription = undefined;
 		}
 
+		if (this.startupProjectSubscription) {
+			this.startupProjectSubscription.dispose();
+			this.startupProjectSubscription = undefined;
+		}
+
 		if (this.treeView) {
 			this.treeView.dispose();
 			this.treeView = undefined;
@@ -101,6 +114,20 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	public getTreeItem(element: sln.TreeItem): vscode.TreeItem {
 		return element;
+	}
+
+	public getStartupProject(solutionPath: string): string | undefined {
+		return this.startupProjectService.getStartupProject(solutionPath);
+	}
+
+	public findStartupProject(solution: Solution): SolutionProject | undefined {
+		const startupProject = this.getStartupProject(solution.fullPath);
+		if (!startupProject) { return undefined; }
+		return solution.getAllProjects().find(p => isSamePath(p.fullPath, startupProject));
+	}
+
+	public resolveStartupProject(solution: Solution): Promise<void> {
+		return this.startupProjectService.resolve(solution);
 	}
 
 	public getSelectedItems(): readonly sln.TreeItem[] | undefined {
@@ -163,23 +190,41 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 	}
 
 	private async createSolutionItems(): Promise<sln.TreeItem[]> {
-		if (!this.solutionFinder) { return []; }
+		this.creatingSolutionItems = true;
+		try {
+			if (!this.solutionFinder) { return []; }
 
-		let solutionPaths = await this.solutionFinder.findSolutions();
-		if (solutionPaths.length <= 0 && this.solutionFinder.hasWorkspaceRoots) {
-			// return empty to show welcome view
-			return [];
-		}
+			let solutionPaths = await this.solutionFinder.findSolutions();
+			if (solutionPaths.length <= 0 && this.solutionFinder.hasWorkspaceRoots) {
+				// return empty to show welcome view
+				return [];
+			}
 
-		this.templateEngineCollection.reset();
-		for(let i = 0; i < solutionPaths.length; i++) {
-			let s = solutionPaths[i];
+			this.templateEngineCollection.reset();
+			for(let i = 0; i < solutionPaths.length; i++) {
+				let s = solutionPaths[i];
 
-			await this.solutionTreeItemCollection.addSolution(s.sln, s.root, this);
-			this.templateEngineCollection.createTemplateEngine(s.root);
+				await this.solutionTreeItemCollection.addSolution(s.sln, s.root, this);
+				this.templateEngineCollection.createTemplateEngine(s.root);
+			}
+		} finally {
+			this.creatingSolutionItems = false;
+			if (this.refreshPending) {
+				this.refreshPending = false;
+				setTimeout(() => this.refresh(), 0);
+			}
 		}
 
 		return this.solutionTreeItemCollection.items;
+	}
+
+	private onStartupProjectInvalidated(): void {
+		if (this.creatingSolutionItems) {
+			this.refreshPending = true;
+			return;
+		}
+
+		this.refresh();
 	}
 
 	private onFileEvent(event: IEvent): void {

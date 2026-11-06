@@ -6,13 +6,17 @@
         "module": "commonjs",
         "types": ["node"],
         "skipLibCheck": true,
-        "paths": {}
+        "baseUrl": ".",
+        "paths": {
+            "@extensions/*": ["./src/extensions/*"]
+        }
     },
     "include": [
         "tests/**/*.ts",
         "src/extensions/shell.ts",
         "src/core/Namespaces/CSharpNamespace.ts",
         "src/extensions/concurrency.ts"
+        "src/core/Solutions/SolutionFolderPath.ts"
     ],
     "exclude": [
         "node_modules",
