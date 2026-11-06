@@ -10,7 +10,9 @@
     },
     "include": [
         "tests/**/*.ts",
-        "src/extensions/shell.ts"
+        "src/extensions/shell.ts",
+        "src/core/Namespaces/CSharpNamespace.ts",
+        "src/extensions/concurrency.ts"
     ],
     "exclude": [
         "node_modules",
