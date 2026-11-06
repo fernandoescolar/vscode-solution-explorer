@@ -36,6 +36,7 @@ Table of Content:
     - [Create Directory.Packages.props](#create-directorypackagesprops)
     - [MSBuild property and condition evaluation](#msbuild-property-and-condition-evaluation)
     - [Edit MSBuild Properties](#edit-msbuild-properties)
+    - [Sync namespaces (C#)](#sync-namespaces-c)
     - [Multilanguage support](#multilanguage-support)
   - [Extension Settings](#extension-settings)
           - [Example](#example)
@@ -295,6 +296,15 @@ The project reader understands a realistic subset of MSBuild, so the tree reflec
 Solution and project nodes have an "Edit MSBuild Properties..." command (also in their context menu) that opens a form to override `Configuration`, `Platform`, `TargetFramework` (offered as a dropdown when the project multi-targets) and any custom property, without touching the project files themselves. Overrides set on a project take precedence over the ones set on its solution, which in turn take precedence over the `vssolution.defaultMsBuildConfiguration` / `defaultMsBuildPlatform` settings below.
 
 ![Add Directory.Packages.props](https://github.com/fernandoescolar/vscode-solution-explorer/raw/main/images/vscode-solution-explorer-edit-msbuild-properties.png)
+
+### Sync namespaces (C#)
+
+Solution and C# project nodes have a "Sync namespaces" command in their context menu that updates the `namespace` declaration of every `.cs` file to match its folder, using each project's `RootNamespace` (or the project name) as the base. On the solution node it runs on every C# project of the solution, with a single confirmation. For example, `Features/Orders/CreateOrder.cs` in a project with root namespace `Acme.Api` gets `namespace Acme.Api.Features.Orders`.
+
+- Both file-scoped (`namespace X;`) and block-scoped (`namespace X { }`) declarations are supported.
+- Linked files, files in ignored folders (`vssolution.netcoreIgnore`, e.g. `bin` and `obj`), auto-generated files and files with no namespace or more than one namespace are left untouched.
+- A confirmation shows how many files will change before anything is written.
+- References to the old namespaces in other files (`using` directives, fully qualified names) are not updated.
 
 ### Multilanguage support
 

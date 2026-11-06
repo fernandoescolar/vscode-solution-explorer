@@ -14,6 +14,8 @@
     "include": [
         "tests/**/*.ts",
         "src/extensions/shell.ts",
+        "src/core/Namespaces/CSharpNamespace.ts",
+        "src/extensions/concurrency.ts"
         "src/core/Solutions/SolutionFolderPath.ts"
     ],
     "exclude": [
