@@ -13,7 +13,8 @@
     },
     "include": [
         "tests/**/*.ts",
-        "src/extensions/shell.ts"
+        "src/extensions/shell.ts",
+        "src/core/Solutions/SolutionFolderPath.ts"
     ],
     "exclude": [
         "node_modules",
