@@ -1,15 +1,19 @@
 import * as path from "@extensions/path";
 import * as fs from "@extensions/fs";
 import { SolutionItem, SolutionFolder } from "@core/Solutions";
+import { getSolutionFolderCandidatePaths } from "@core/Solutions/SolutionFolderPath";
 import { TreeItem, TreeItemCollapsibleState, TreeItemFactory, TreeItemContext, ContextValues } from "@tree";
 
 async function getPath(context: TreeItemContext, solutionItem: SolutionItem): Promise<string | undefined> {
-    const folder = path.join(path.dirname(context.solution.fullPath), solutionItem.name);
-    const exists = await fs.exists(folder);
-    if (exists) {
-        const isDirectory = await fs.isDirectory(folder);
-        if (isDirectory) {
-            return folder;
+    const solutionDirectory = path.dirname(context.solution.fullPath);
+    for (const segments of getSolutionFolderCandidatePaths(solutionItem)) {
+        const folder = path.join(solutionDirectory, ...segments);
+        const exists = await fs.exists(folder);
+        if (exists) {
+            const isDirectory = await fs.isDirectory(folder);
+            if (isDirectory) {
+                return folder;
+            }
         }
     }
 
