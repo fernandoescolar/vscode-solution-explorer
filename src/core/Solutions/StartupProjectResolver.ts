@@ -1,4 +1,4 @@
-import * as path from "../../extensions/path";
+import * as path from "@extensions/path";
 
 export type PathResolver = (value: string) => string | undefined;
 

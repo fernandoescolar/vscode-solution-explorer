@@ -1,4 +1,4 @@
-import * as path from "../../extensions/path";
+import * as path from "@extensions/path";
 import type { SolutionFolder, SolutionItem } from "./model";
 
 export function normalizePath(filepath: string): string {
