@@ -1,0 +1,169 @@
+declare const require: (name: string) => any;
+
+const assert = require("assert/strict");
+const test = require("node:test");
+import {
+    findNamespaceDeclarations,
+    getExpectedNamespace,
+    getRootNamespace,
+    maskCommentsAndStrings,
+    syncNamespaceDeclaration,
+    toNamespace
+} from "../src/core/Namespaces/CSharpNamespace";
+
+test("toNamespace replaces invalid characters and prefixes segments starting with a digit", () => {
+    assert.equal(toNamespace("My-App"), "My_App");
+    assert.equal(toNamespace("My App"), "My_App");
+    assert.equal(toNamespace("2024"), "_2024");
+    assert.equal(toNamespace("Acme.Web-Api"), "Acme.Web_Api");
+    assert.equal(toNamespace("Ação"), "Ação");
+});
+
+test("toNamespace keeps accented folder names returned in decomposed form (macOS)", () => {
+    assert.equal(toNamespace("Ação".normalize("NFD")), "Ação");
+    assert.equal(getExpectedNamespace("Acme.Api", ["Configuração".normalize("NFD")]), "Acme.Api.Configuração");
+});
+
+test("toNamespace works with Windows and POSIX folder names alike", () => {
+    assert.equal(getExpectedNamespace("Acme.Api", ["Features", "Orders"]), getExpectedNamespace("Acme.Api", "Features/Orders".split(/[\\/]/)));
+    assert.equal(getExpectedNamespace("Acme.Api", ["Features", "Orders"]), getExpectedNamespace("Acme.Api", "Features\\Orders".split(/[\\/]/)));
+});
+
+test("syncNamespaceDeclaration keeps Windows line endings", () => {
+    const content = "using System;\r\n\r\nnamespace Old.Ns\r\n{\r\n}\r\n";
+    const result = syncNamespaceDeclaration(content, "Acme.Api");
+
+    assert.deepEqual(result, {
+        status: "updated",
+        previous: "Old.Ns",
+        expected: "Acme.Api",
+        content: "using System;\r\n\r\nnamespace Acme.Api\r\n{\r\n}\r\n"
+    });
+});
+
+test("getRootNamespace uses the RootNamespace property when it is a literal", () => {
+    assert.equal(getRootNamespace("Acme.Orders", "Orders.Api"), "Acme.Orders");
+});
+
+test("getRootNamespace falls back to the project name", () => {
+    assert.equal(getRootNamespace(undefined, "Orders.Api"), "Orders.Api");
+    assert.equal(getRootNamespace("", "my-api"), "my_api");
+    assert.equal(getRootNamespace("$(MSBuildProjectName)", "Orders.Api"), "Orders.Api");
+});
+
+test("getExpectedNamespace appends the folders to the root namespace", () => {
+    assert.equal(getExpectedNamespace("Acme.Api", []), "Acme.Api");
+    assert.equal(getExpectedNamespace("Acme.Api", ["Features", "Orders"]), "Acme.Api.Features.Orders");
+    assert.equal(getExpectedNamespace("Acme.Api", ["Background Jobs", "v2"]), "Acme.Api.Background_Jobs.v2");
+    assert.equal(getExpectedNamespace("Acme.Api", ["Domain.Orders"]), "Acme.Api.Domain.Orders");
+});
+
+test("syncNamespaceDeclaration updates a file-scoped namespace", () => {
+    const content = "using System;\n\nnamespace Acme.Api.Old;\n\npublic class Order { }\n";
+    const result = syncNamespaceDeclaration(content, "Acme.Api.Orders");
+
+    assert.deepEqual(result, {
+        status: "updated",
+        previous: "Acme.Api.Old",
+        expected: "Acme.Api.Orders",
+        content: "using System;\n\nnamespace Acme.Api.Orders;\n\npublic class Order { }\n"
+    });
+});
+
+test("syncNamespaceDeclaration updates a block-scoped namespace", () => {
+    const content = "namespace Acme.Api.Old\n{\n    public class Order { }\n}\n";
+    const result = syncNamespaceDeclaration(content, "Acme.Api.Orders");
+
+    assert.deepEqual(result, {
+        status: "updated",
+        previous: "Acme.Api.Old",
+        expected: "Acme.Api.Orders",
+        content: "namespace Acme.Api.Orders\n{\n    public class Order { }\n}\n"
+    });
+});
+
+test("syncNamespaceDeclaration preserves a leading UTF-8 BOM", () => {
+    const content = "\uFEFFnamespace Acme.Api.Old;\n";
+    const result = syncNamespaceDeclaration(content, "Acme.Api.Orders");
+
+    assert.deepEqual(result, {
+        status: "updated",
+        previous: "Acme.Api.Old",
+        expected: "Acme.Api.Orders",
+        content: "\uFEFFnamespace Acme.Api.Orders;\n"
+    });
+});
+
+test("syncNamespaceDeclaration keeps a file that already matches", () => {
+    const result = syncNamespaceDeclaration("namespace Acme.Api.Orders;\n", "Acme.Api.Orders");
+
+    assert.equal(result.status, "unchanged");
+});
+
+test("syncNamespaceDeclaration skips files without namespace", () => {
+    const result = syncNamespaceDeclaration("var app = WebApplication.Create(args);\napp.Run();\n", "Acme.Api");
+
+    assert.deepEqual(result, { status: "skipped", reason: "no-namespace" });
+});
+
+test("syncNamespaceDeclaration skips files with more than one namespace", () => {
+    const content = "namespace A\n{\n}\n\nnamespace B\n{\n}\n";
+    const result = syncNamespaceDeclaration(content, "Acme.Api");
+
+    assert.deepEqual(result, { status: "skipped", reason: "multiple-namespaces" });
+});
+
+test("syncNamespaceDeclaration skips auto-generated files", () => {
+    const content = "// <auto-generated />\nnamespace Acme.Api.Migrations;\n";
+    const result = syncNamespaceDeclaration(content, "Acme.Api.Data.Migrations");
+
+    assert.deepEqual(result, { status: "skipped", reason: "generated" });
+});
+
+test("findNamespaceDeclarations ignores comments and strings", () => {
+    const content = [
+        "// namespace Commented.Out;",
+        "/* namespace Block.Comment { } */",
+        "namespace Real.One;",
+        "class C",
+        "{",
+        "    string a = \"namespace InString;\";",
+        "    string b = @\"namespace \"\"Verbatim\"\" {\";",
+        "    string c = \"\"\"",
+        "        namespace RawString;",
+        "        \"\"\";",
+        "    char d = '\"';",
+        "    string e = $\"namespace {Name};\";",
+        "}"
+    ].join("\n");
+
+    const declarations = findNamespaceDeclarations(content);
+
+    assert.equal(declarations.length, 1);
+    assert.equal(declarations[0].name, "Real.One");
+});
+
+test("findNamespaceDeclarations does not match identifiers containing the keyword", () => {
+    const content = "var @namespace = 1;\nvar mynamespace = 2;\nnamespace Real;\n";
+
+    const declarations = findNamespaceDeclarations(content);
+
+    assert.equal(declarations.length, 1);
+    assert.equal(declarations[0].name, "Real");
+});
+
+test("maskCommentsAndStrings keeps positions and line breaks", () => {
+    const content = "a // c\nb \"s\"\n";
+    const masked = maskCommentsAndStrings(content);
+
+    assert.equal(masked.length, content.length);
+    assert.equal(masked, "a     \nb    \n");
+});
+
+test("maskCommentsAndStrings keeps line breaks inside multi-line comments and strings", () => {
+    const content = "a /* x\ny */ b\nc \"\"\"\nraw\n\"\"\" d\n";
+    const masked = maskCommentsAndStrings(content);
+
+    assert.equal(masked.length, content.length);
+    assert.equal(masked, "a     \n     b\nc    \n   \n    d\n");
+});

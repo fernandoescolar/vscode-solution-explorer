@@ -169,6 +169,9 @@ export class SolutionExplorerCommands {
         this.commands['updatePackagesVersion'] = [new cmds.UpdatePackagesVersionCommand(),
             cps(ContextValues.project, ContextValues.projectReferencedPackages)];
 
+        this.commands['syncNamespaces'] = [new cmds.SyncNamespacesCommand(),
+            both(ContextValues.solution, ContextValues.project)];
+
         this.commands['watchRun'] = [new cmds.WatchRunCommand(),
             cps(ContextValues.project)];
 
