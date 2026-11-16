@@ -1,9 +1,10 @@
 import { XmlElement } from "@extensions/xml";
 import { ProjectItem } from "./ProjectItem";
+import { ReferenceType } from "../ReferenceType";
 
 export class PackageReference extends ProjectItem {
   constructor(public readonly name: string, public version: string) {
-    super("PackageReference");
+    super(ReferenceType[ReferenceType.PackageReference]);
   }
 
   public hasVersion(): boolean {

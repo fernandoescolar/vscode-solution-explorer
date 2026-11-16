@@ -174,7 +174,9 @@ export abstract class TreeItem extends vscode.TreeItem {
 			ContextValues.projectReferencedPackages,
 			ContextValues.projectReferencedProject,
 			ContextValues.projectReferencedProjects,
-			ContextValues.projectReferences
+			ContextValues.projectReferences,
+			ContextValues.projectReferencedAssemblies,
+			ContextValues.projectReferencedAssembly
 		];
 
 		if (ignoreTypes.indexOf(this.contextValue) >= 0) {

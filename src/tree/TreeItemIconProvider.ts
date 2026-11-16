@@ -53,6 +53,14 @@ export async function findIconPath(name: string, path: string, contextValue: str
         return getIconPath('PackageReference.svg','PackageReference-dark.svg');
     }
 
+    if(ContextValues.matchAnyLanguage(ContextValues.projectReferencedAssemblies, contextValue)) {
+        return getIconPath('referenced-assemblies.svg','referenced-assemblies-dark.svg');
+    }
+
+    if(ContextValues.matchAnyLanguage(ContextValues.projectReferencedAssembly, contextValue)) {
+        return getIconPath('referenced-assembly.svg','referenced-assembly-dark.svg');
+    }
+    
     if (contextValue === ContextValues.solutionFolder || ContextValues.matchAnyLanguage(ContextValues.projectFolder, contextValue)) {
         if (path && path.endsWith("wwwroot")) {
             return getIconPath('WebFolderOpened.svg','WebFolderOpened-dark.svg');

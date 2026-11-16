@@ -6,6 +6,7 @@ export * from "./MapItemsResolver";
 export * from "./openFile";
 export * from "./openProjectFile";
 export * from "./openSolutionFile";
+export * from "./openReferenceFile";
 export * from "./SearchItemsResolver";
 export * from "./SearchMapItemsResolver";
 export * from "./searchOption";

@@ -3,6 +3,7 @@ import * as path from "@extensions/path";
 import * as config from "@extensions/config";
 import { ProjectItemEntry, PackageReference, ProjectReference, Reference } from "./Items";
 import { ProjectWithManagers } from "./ProjectWithManagers";
+import { ReferenceType } from "./ReferenceType";
 
 export class MsBuildProject extends ProjectWithManagers {
     private references: Reference[] = [];
@@ -158,5 +159,29 @@ export class MsBuildProject extends ProjectWithManagers {
         }
 
         return result;
+    }
+
+    public async removeReference(reference: Reference): Promise<void> {
+        await this.xml.removeReference(reference);
+        await this.refresh();
+    }
+
+    public async addReference(reference: Reference): Promise<void> {
+        const references = await this.getReferences();
+        if(references.some(r => r.name === reference.name)) {
+            return;
+        }
+        await this.xml.addReference(reference);
+        await this.refresh();
+    }
+    
+    public async getReferenceTypes(): Promise<ReferenceType>{
+        if(!this.hasReferences){
+            return ReferenceType.None;
+        }
+        await this.checkProjectLoaded();
+        return (this.references.length > 0 ? ReferenceType.Reference : ReferenceType.None) |
+        (this.projectReferences.length > 0 ? ReferenceType.ProjectReference : ReferenceType.None) |
+        (this.packagesReferences.length > 0 ? ReferenceType.PackageReference : ReferenceType.None)
     }
 }

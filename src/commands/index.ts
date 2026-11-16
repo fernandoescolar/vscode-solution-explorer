@@ -45,3 +45,4 @@ export * from "./UpdatePackagesVersionCommand";
 export * from "./WatchRunCommand";
 export * from "./UpdatePackageVersionCommand";
 export * from "./SyncNamespacesCommand";
+export * from "./AddAssembliesReferenceCommand";

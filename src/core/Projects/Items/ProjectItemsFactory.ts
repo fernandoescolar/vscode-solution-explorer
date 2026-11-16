@@ -26,7 +26,8 @@ export async function createProjectElement(xml: XmlElement, properties: Record<s
     if (xml.name === "Reference" && xml.attributes && xml.attributes.Include) {
         const include = replacePropertiesInPath(xml.attributes.Include, properties, false);
         const props = getNameAndVersion(include);
-        return new Reference(props.name, props.version);
+        const hintPath = getHintPath(xml)
+        return new Reference(props.name, props.version, hintPath);
     }
 
     if (xml.name === "PackageReference" && xml.attributes && xml.attributes.Include) {
@@ -97,6 +98,11 @@ function getNameAndVersion(fullyQualifiedName: string): { name: string; version:
         name: parts[0],
         version: version ? version.split('=')[1] : undefined
     };
+}
+
+function getHintPath(xml: XmlElement) {
+    const hintPath = xml.elements?.find((e: XmlElement) => e.name === "HintPath")?.elements?.[0]?.text;
+    return hintPath ? toOSPath(hintPath) : undefined;
 }
 
 function toOSPath(input: string): string {

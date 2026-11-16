@@ -3,6 +3,7 @@ import { NugetDependencies } from "@extensions/nuget-dependencies";
 import { PackageReference, ProjectItemEntry, ProjectReference, Reference } from "./Items";
 import { ProjectFileStat } from "./ProjectFileStat";
 import { RelativeFilePosition } from "./RelativeFilePosition";
+import { ReferenceType } from "./ReferenceType";
 
 export abstract class Project {
     constructor(public readonly projectFullPath: string, private readonly withReferences?: boolean) {
@@ -75,4 +76,9 @@ export abstract class Project {
     public abstract refresh(): Promise<void>;
 
     public abstract preload(): Promise<void>;
+
+    public abstract removeReference(reference: Reference): Promise<void>;
+    
+    public abstract addReference(reference: Reference): Promise<void>;
+    public abstract getReferenceTypes(): Promise<ReferenceType>;
 }

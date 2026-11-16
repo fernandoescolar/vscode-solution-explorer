@@ -1,6 +1,6 @@
 import { t } from "@extensions/translations";
 import { TreeItem, ContextValues } from "@tree";
-import { ActionCommandContext, ActionsCommand, prepareContextActionGetters } from "@commands";
+import { ActionCommandContext, ActionsCommand, prepareContextActionGetters, RefreshCommand } from "@commands";
 import {
     Action,
     DeleteProjectFile,
@@ -12,9 +12,12 @@ import {
     DotNetRemoveExistingProject,
     DotNetRemovePackageReference,
     DotNetRemoveProjectReference,
-    DeleteMultipleItems
+    RemoveAssemblyReference,
+    DeleteMultipleItems,
+    RefreshTreeItem
 } from "@actions";
 import { SolutionType, SolutionFolder } from "@core/Solutions";
+import { ProjectReferencedAssemblyTreeItem } from "@tree/items/ProjectReferencedAssemblyTreeItem";
 
 export class DeleteUnifiedCommand extends ActionsCommand {
     constructor() {
@@ -36,7 +39,7 @@ export class DeleteUnifiedCommand extends ActionsCommand {
             const { both, cps, anyLang } = ContextValues;
             const allowedContextGroups = [
                 anyLang(ContextValues.projectFile, ContextValues.projectFolder),
-                cps(ContextValues.projectReferencedPackage, ContextValues.projectReferencedProject),
+                [...cps(ContextValues.projectReferencedPackage, ContextValues.projectReferencedProject), ...both(ContextValues.projectReferencedAssembly)],
                 both(ContextValues.project),
                 [ContextValues.solutionFile, ContextValues.solutionFolder],
             ];
@@ -115,6 +118,9 @@ export class DeleteUnifiedCommand extends ActionsCommand {
 
             [ContextValues.projectReferencedProject, 'cps', item => item.project && item.path
                 ? [new DotNetRemoveProjectReference(item.project.fullPath, item.path)] : []],
+
+            [ContextValues.projectReferencedAssembly, item => item.project && item instanceof ProjectReferencedAssemblyTreeItem
+                ? [new RemoveAssemblyReference(item.project, item.reference)] : []],
 
             [ContextValues.project, item => item.project
                 ? [new DotNetRemoveExistingProject(item.solution.fullPath, item.project.fullPath)] : []],

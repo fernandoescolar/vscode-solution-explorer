@@ -3,6 +3,7 @@ import { TreeItem, TreeItemCollapsibleState, TreeItemContext, ContextValues } fr
 import { ProjectReferencedProjectsTreeItem } from "./ProjectReferencedProjectsTreeItem";
 import { ProjectReferencedAssembliesTreeItem } from "./ProjectReferencedAssembliesTreeItem";
 import { ProjectReferencedPackagesTreeItem } from "./ProjectReferencedPackagesTreeItem";
+import { ReferenceType } from "@core/Projects/ReferenceType";
 
 export class ProjectReferencesTreeItem extends TreeItem {
     constructor(context: TreeItemContext) {
@@ -10,16 +11,16 @@ export class ProjectReferencesTreeItem extends TreeItem {
         this.allowIconTheme = false;
     }
 
-    protected createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
+    protected async createChildren(childContext: TreeItemContext): Promise<TreeItem[]> {
         const result: TreeItem[] = [];
         if (this.project?.type === "cps") {
             result.push(new ProjectReferencedProjectsTreeItem(childContext));
-        } else {
+        }
+        if(ReferenceType.hasFlag((await this.project?.getReferenceTypes()) ?? ReferenceType.None, ReferenceType.Reference) || this.project?.type !== "cps") {
             result.push(new ProjectReferencedAssembliesTreeItem(childContext));
         }
         result.push(new ProjectReferencedPackagesTreeItem(childContext));
-
-        return Promise.resolve(result);
+        return result;
     }
 
     protected loadThemeIcon(fullpath: string): void {

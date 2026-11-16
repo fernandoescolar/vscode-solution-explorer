@@ -4,7 +4,7 @@ import * as xml from "@extensions/xml";
 import { XmlElement } from "@extensions/xml";
 import * as config from "@extensions/config";
 import * as msBuildPropertyOverrides from "@extensions/msBuildPropertyOverrides";
-import { Include, ItemGroup, PackageReference, PackageVersion, ProjectItem, ProjectItemsFactory, PropertyGroup } from "../Items";
+import { Include, ItemGroup, PackageReference, PackageVersion, ProjectItem, ProjectItemsFactory, PropertyGroup, Reference } from "../Items";
 import * as ConditionEvaluator from "../ConditionEvaluator";
 import { ProjectFileStat } from "../ProjectFileStat";
 import { Manager } from "./Manager";
@@ -1100,5 +1100,70 @@ export class XmlManager implements Manager {
         await this.saveProject();
         return;
 
+    }
+    public async removeReference(reference: Reference): Promise<void> {
+        await this.ensureIsLoaded();
+        if (!this.document) { return; }
+
+        const project = XmlManager.getProjectElement(this.document);
+        if (!project) { return; }
+
+        const normalize = (p: string) => p.trim().replace(/[\\/]+/g, '/');
+        const getHintPath = (e: XmlElement): string | undefined => {
+            const hint = e.elements?.find((c: XmlElement) => c.name === 'HintPath');
+            return hint?.elements?.[0]?.text?.toString();
+        };
+        const matches = (e: XmlElement): boolean => {
+            if (e.name !== 'Reference' || !e.attributes?.Include) { return false; }
+
+            const name = e.attributes.Include.split(',')[0].trim();
+            if (name !== reference.name) { return false; }
+
+            if (reference.hintPath) {
+                const hintPath = getHintPath(e);
+                return !!hintPath && normalize(hintPath) === normalize(reference.hintPath);
+            }
+
+            return true;
+        };
+
+        let changed = false;
+        for (let i = project.elements.length - 1; i >= 0; i--) {
+            const group: XmlElement = project.elements[i];
+            if (group.name !== 'ItemGroup' || !group.elements) { continue; }
+
+            const before = group.elements.length;
+            group.elements = group.elements.filter((e: XmlElement) => !matches(e));
+            if (group.elements.length === before) { continue; }
+
+            changed = true;
+            if (group.elements.length === 0) {
+                project.elements.splice(i, 1);
+            }
+        }
+
+        if (changed) {
+            await this.saveProject();
+        }
+    }
+    public async addReference(reference: Reference): Promise<void> {
+        const itemGroup = this.checkCurrentItemGroup();
+        if (!itemGroup) { return; }
+        
+        const referenceElement = {
+            type: 'element',
+            name: 'Reference',
+            attributes: { Include: reference.name },
+            elements: [] as any
+        }
+        if (reference.hintPath) {
+            referenceElement.elements.push({ 
+                type: 'element',
+                name: 'HintPath',
+                elements: [{type: 'text', text: reference.hintPath.replace(/\//g, '\\')}]
+            });
+        }
+        itemGroup.elements.push(referenceElement);
+        await this.saveProject();
     }
 }

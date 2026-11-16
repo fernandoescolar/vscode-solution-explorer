@@ -133,6 +133,9 @@ export class SolutionExplorerCommands {
         this.commands['removePackage'] = [new cmds.DeleteUnifiedCommand(),
             cps(ContextValues.projectReferencedPackage)];
 
+        this.commands['removeAssembly'] = [new cmds.DeleteUnifiedCommand(),
+            both(ContextValues.projectReferencedAssembly)];
+
         this.commands['removeProject'] = [new cmds.DeleteUnifiedCommand(),
             both(ContextValues.project)];
 
@@ -183,6 +186,9 @@ export class SolutionExplorerCommands {
 
         this.commands['deleteMultiple'] = [new cmds.DeleteUnifiedCommand(),
             [ContextValues.multipleSelection]];
+
+        this.commands['addAssemblies'] = [new cmds.AddAssembliesReferenceCommand(provider),
+            both(ContextValues.project, ContextValues.projectReferencedAssemblies)];
     }
 
     public register() {

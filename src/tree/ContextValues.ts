@@ -9,6 +9,8 @@ export class ContextValues {
     public static readonly projectReferencedPackages = 'project-referenced-packages';
     public static readonly projectReferencedPackage = 'project-referenced-package';
     public static readonly projectReferencedPackageDependency = 'project-referenced-package-dependency';
+    public static readonly projectReferencedAssemblies = 'project-referenced-assemblies';
+    public static readonly projectReferencedAssembly = 'project-referenced-assembly';
     public static readonly projectFolder = 'project-folder';
     public static readonly projectFile = 'project-file';
     public static readonly error = 'error';
@@ -39,7 +41,9 @@ type SuffixedContextValue =
     typeof ContextValues.projectReferencedPackages |
     typeof ContextValues.projectReferencedProjects |
     typeof ContextValues.projectReferencedPackage |
-    typeof ContextValues.projectReferencedProject;
+    typeof ContextValues.projectReferencedProject |
+    typeof ContextValues.projectReferencedAssemblies |
+    typeof ContextValues.projectReferencedAssembly;
 
 type FSharpContextValue =
     //typeof ContextValues.project |

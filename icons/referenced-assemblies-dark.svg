@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <defs>
+    <style>.canvas{fill: none; opacity: 0;}.light-defaultgrey{fill: #e0e0e0; opacity: 1;}</style>
+  </defs>
+  <title>IconLightReferencedAssemblies</title>
+  <g id="canvas" class="canvas">
+    <path class="canvas" d="M16,16H0V0H16Z" />
+  </g>
+  <g id="level-1">
+    <path class="light-defaultgrey" fill-rule="evenodd" d="M1,3H4V13H1ZM2,7H3V8H2ZM2,10H3V11H2Z" />
+    <path class="light-defaultgrey" fill-rule="evenodd" d="M5,3H8V13H5ZM6,7H7V8H6ZM6,10H7V11H6Z" />
+    <path class="light-defaultgrey" fill-rule="evenodd" d="M8,4L10.72,2.73L14.94,11.8L12.23,13.06ZM10.6,7.2L11.5,6.78L11.93,7.69L11.02,8.11ZM11.86,9.92L12.77,9.5L13.19,10.41L12.29,10.83Z" />
+  </g>
+</svg>
